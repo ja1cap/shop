@@ -2267,3 +2267,27 @@ body {
   }
 
 }
+
+.ui-sortable {
+
+  margin: 10px 0;
+  border-bottom: 1px solid #cccccc;
+
+  li {
+
+    margin: 0;
+    padding: 5px 10px;
+    display: block;
+    border: 1px solid #cccccc;
+    border-bottom: none;
+    height: 35px;
+
+  }
+
+}
+
+.ui-state-highlight {
+
+  height: 35px;
+
+}

@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 /**
 * Gumby Framework
 * ---------------
@@ -17,6 +16,7 @@
 * Free to use under the MIT license.
 * http://www.opensource.org/licenses/mit-license.php
 */
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline; }
 
 html { line-height: 1; }
@@ -1929,7 +1929,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .single-proposal-fancybox .single-proposal .order-proposal-form-container form button[type="submit"] { line-height: 112px; cursor: pointer; display: block; text-align: center; border: none; outline: none; font-size: 40px; color: white; position: absolute; bottom: -125px; left: 0px; width: 415px; height: 112px; background: url("/img/sprite.png") no-repeat -105px -967px; }
 .single-proposal-fancybox .single-proposal .order-proposal-form-container form button[type="submit"]:hover { background: url("/img/sprite.png") no-repeat -774px -967px; }
 
-.admin-container { margin-top: 90px; }
+.admin-container { padding-top: 90px; }
 .admin-container .header-container { color: white; background: #4a4d50; -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); }
 .admin-container .header-container .header { height: 70px; }
 .admin-container .header-container .header .header-logo { overflow: hidden; }
@@ -1975,3 +1975,8 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .actions-block .actions-list .action .action-image .image-container img { width: 180px; }
 .actions-block .actions-list .action .action-body { width: 300px; margin: 0 10px; float: left; }
 .actions-block .actions-list .action .action-body .title { font-size: 20px; margin-bottom: 5px; }
+
+.ui-sortable { margin: 10px 0; border-bottom: 1px solid #cccccc; }
+.ui-sortable li { margin: 0; padding: 5px 10px; display: block; border: 1px solid #cccccc; border-bottom: none; height: 35px; }
+
+.ui-state-highlight { height: 1.5em; line-height: 1.2em; }

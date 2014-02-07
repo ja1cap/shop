@@ -2,7 +2,11 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../../lib/gems/1.9.1/gems/compass-0.12.2" />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/app/cache/dev" />
+      <excludeFolder url="file://$MODULE_DIR$/app/cache/prod" />
+      <excludeFolder url="file://$MODULE_DIR$/web/uploads" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="sass-stdlib" level="application" />

@@ -6,8 +6,8 @@ use Shop\CatalogBundle\Entity\Parameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Form\Type\ParameterOptionType;
 use Shop\CatalogBundle\Form\Type\ParameterType;
-use Shop\MainBundle\Entity\MattressPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -175,6 +175,54 @@ class AdminParameterController extends Controller
         }
 
         return $this->redirect($this->generateUrl('parameters'));
+
+    }
+
+    /**
+     * @param $parameterId
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function updateParameterOptionsAction($parameterId, Request $request){
+
+        $parameterRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter');
+        $parameter = $parameterRepository->findOneBy(array(
+            'id' => $parameterId
+        ));
+
+        if(!$parameter instanceof Parameter){
+            throw $this->createNotFoundException('Parameter not found');
+        }
+
+        $options = $request->get('options');
+        if(is_array($options)){
+
+            $parameter->getOptions()->map(function(ParameterOption $parameterOption) use ($options) {
+
+                if(isset($options[$parameterOption->getId()])){
+
+                    $option = $options[$parameterOption->getId()];
+                    if(is_array($option)){
+
+                        if(isset($option['position'])){
+
+                            $parameterOption->setPosition((int)$option['position']);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+        }
+
+        return new JsonResponse('OK');
 
     }
 

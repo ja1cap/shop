@@ -4,6 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use php_rutils\RUtils;
 
 /**
  * Category
@@ -55,7 +56,7 @@ class Category
     public function setName($name)
     {
         $this->name = $name;
-
+        $this->setSlug(RUtils::translit()->slugify($name));
         return $this;
     }
 

@@ -1,0 +1,16 @@
+<div class="breadcrumb">
+    <ul>
+        {% block breadcrumb_items %}
+            <li class="medium btn default">
+                <a href="{{ path('categories') }}">
+                    Категории
+                </a>
+            </li>
+            <li class="medium btn default">
+                <a href="{{ path('category', {'id' : category.id}) }}">
+                    {{ category.name|default(title)|capitalize }}
+                </a>
+            </li>
+        {% endblock %}
+    </ul>
+</div>

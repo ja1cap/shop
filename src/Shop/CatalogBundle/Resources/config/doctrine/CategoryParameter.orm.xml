@@ -9,6 +9,7 @@
         </id>
         <field name="categoryId" type="integer" column="categoryId"/>
         <field name="parameterId" type="integer" column="parameterId"/>
+        <field name="name" type="string" column="name" nullable="true"/>
         <field name="position" type="integer" column="position"/>
         <field name="isMain" type="boolean" column="isMain"/>
         <many-to-one target-entity="Category" field="category"/>

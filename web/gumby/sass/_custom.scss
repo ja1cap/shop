@@ -2275,19 +2275,31 @@ body {
 
   li {
 
+    line-height: 28px;
+    overflow: hidden;
+    background: white;
+    cursor: move;
     margin: 0;
     padding: 5px 10px;
     display: block;
     border: 1px solid #cccccc;
     border-bottom: none;
-    height: 35px;
+
+    .buttons {
+      float: right;
+    }
+
+    &.ui-sortable-helper {
+      border-bottom: 1px solid #cccccc;
+    }
+
+    &.ui-state-highlight {
+
+      height: 42px;
+      background: #fbdca0;
+
+    }
 
   }
-
-}
-
-.ui-state-highlight {
-
-  height: 35px;
 
 }

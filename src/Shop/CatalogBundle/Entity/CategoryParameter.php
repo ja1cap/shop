@@ -157,6 +157,7 @@ class CategoryParameter
     {
         $this->category = $category;
         $this->setCategoryId($category->getId());
+        $this->setPosition($category->getParameters()->count());
         return $this;
     }
 
@@ -191,5 +192,33 @@ class CategoryParameter
     public function getParameter()
     {
         return $this->parameter;
+    }
+    /**
+     * @var string
+     */
+    private $name;
+
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return CategoryParameter
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name ?: ($this->getParameter() ? $this->getParameter()->getName() : null);
     }
 }

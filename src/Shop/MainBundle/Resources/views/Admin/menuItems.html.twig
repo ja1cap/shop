@@ -10,6 +10,18 @@
     </a>
 </li>
 
+<li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
+    <a href="{{ path('categories') }}" class="">
+        Категории
+    </a>
+</li>
+
+<li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
+    <a href="{{ path('parameters') }}" class="">
+        Параметры
+    </a>
+</li>
+
 <li class="{{ app.request.get('_route') == 'actions' ? 'active' : '' }}">
     <a href="{{ path('actions') }}" class="">
         Акции

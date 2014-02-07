@@ -13,18 +13,35 @@
         </div>
     {% endif %}
     {% if parameter.options and not parameter.options.isEmpty %}
-        <ul id="parameter_options">
-            {% for option in parameter.options %}
-                <li>
-                    {{ option.name }}
-                </li>
-            {% endfor %}
-        </ul>
+        <form id="parameter_options_form">
+            <ul id="parameter_options">
+                {% for option in parameter.options %}
+                    <li class="parameter_option">
+                        <input type="hidden" name="options[{{ option.id }}][id]" value="{{ option.id }}">
+                        <input type="hidden" class="parameter_option_position" name="options[{{ option.id }}][position]" value="{{ option.position }}">
+                        {{ option.name }}
+                        <div class="buttons">
+                            <div class="medium btn default icon-left entypo icon-pencil">
+                                <a href="{{ path('parameter_option', {'parameterId' : parameter.id, 'id' : option.id}) }}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="medium btn danger icon-left entypo icon-trash">
+                                <a href="{{ path('delete_parameter_option', {'id' : option.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </form>
     {% endif %}
     <script>
         $(function() {
 
-            var $parameter_options = $('#parameter_options');
+            var $parameter_options = $('#parameter_options'),
+                $parameter_options_form = $('#parameter_options_form');
 
             $parameter_options.sortable({
                 axis: 'y',
@@ -32,7 +49,24 @@
                 containment: 'parent',
                 revert: 50,
                 tolerance: 'pointer',
-                cursor: 'move'
+                cursor: 'move',
+                stop : function(){
+
+                    $parameter_options.find('.parameter_option').each(function(){
+
+                        var $parameter_option = $(this);
+
+                        var $parameter_option_position = $('.parameter_option_position', $parameter_option);
+                        $parameter_option_position.val($parameter_option.index() + 1);
+
+                    });
+
+                    $.ajax({
+                        url : '{{ path('update_parameter_options', {'parameterId' : parameter.id}) }}',
+                        data : $parameter_options_form.serialize()
+                    });
+
+                }
             });
 
             $parameter_options.disableSelection();

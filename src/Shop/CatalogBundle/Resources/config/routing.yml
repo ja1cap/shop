@@ -21,3 +21,35 @@ parameter_option:
 delete_parameter_option:
     pattern: /admin/deleteParameterOption/{id}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:deleteParameterOption }
+
+update_parameter_options:
+    pattern: /admin/updateParameterOptions/{parameterId}
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:updateParameterOptions}
+
+categories:
+    pattern: /admin/categories
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:categories }
+
+category:
+    pattern: /admin/category/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:category, id: null }
+
+delete_category:
+    pattern: /admin/deleteCategory/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategory }
+
+category_parameter:
+    pattern: /admin/categoryParameter/{categoryId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameter, id: null }
+
+category_parameters:
+    pattern: /admin/categoryParameters/{categoryId}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameters }
+
+delete_category_parameter:
+    pattern: /admin/deleteCategoryParameter/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategoryParameter }
+
+update_category_parameters:
+    pattern: /admin/updateCategoryParameters/{categoryId}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:updateCategoryParameters }

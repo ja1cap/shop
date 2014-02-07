@@ -198,4 +198,13 @@ class Parameter extends AbstractEntity
     {
         return $this->categoryParameters;
     }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
 }

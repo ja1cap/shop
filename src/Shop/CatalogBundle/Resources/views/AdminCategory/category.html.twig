@@ -1,0 +1,16 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig') }}
+    <div>
+        <div class="medium default btn icon-left entypo icon-menu">
+            <a href="{{ path('category_parameters', {'categoryId' : category.id}) }}">
+                Параметры категории
+            </a>
+        </div>
+    </div>
+    <br/>
+    {{ form(form) }}
+{% endblock %}

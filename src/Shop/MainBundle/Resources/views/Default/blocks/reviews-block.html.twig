@@ -1,0 +1,132 @@
+{% if reviews or images %}
+    <div class="reviews-block block-container" id="reviews-block">
+
+        <div class="block-diagonal-bg"></div>
+
+        <h2 class="block-title">
+            {{ settings.reviews_title|default('ИСКЛЮЧИТЕЛЬНО ОТЛИЧНЫЕ ОТЗЫВЫ')|nl2br }}
+        </h2>
+
+        {% if settings.reviews_description %}
+            <div class="block-description">
+                {{ settings.reviews_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+
+            {% if reviews %}
+
+            <div class="row">
+
+                <div class="{{ reviews|length < 4 ? 'centered columns ' ~ word_numbers[(reviews|length * 3)] : ''}}">
+
+                    <div class="reviews-list owl-carousel owl-theme">
+                        {% for review in reviews %}
+
+                            <div class="review {{ review.is_video_review ? 'video-review' : '' }}">
+
+                                <div class="inner-container">
+
+                                    <div class="image-container nailthumb-container">
+                                        <div class="video-review-mark"></div>
+                                        <img src="{{ review.customer_image_url|default('/img/customer-1.png') }}">
+                                    </div>
+
+                                    {% if review.company_image_url %}
+                                        <div class="company-image-container">
+                                            <div class="nailthumb-container">
+                                                <img src="{{ review.company_image_url }}">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="title">
+                                        {{ review.customer_name|nl2br }}
+                                    </div>
+
+                                    {% if review.company_name %}
+                                        <div class="company-name">
+                                            {{ review.company_name|nl2br }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if review.short_description %}
+                                        <div class="description">
+                                            {{ review.short_description|nl2br }}
+                                        </div>
+                                    {% endif %}
+
+                                    <a href="{{ review.is_video_review ? review.video_code : review.review_file_url }}" class="open-review fancybox-media" rel="reviews">
+                                        Смотреть отзыв
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            {% if images %}
+
+            <div class="row images-container">
+
+                <h2 class="block-title">
+                    {{ settings.images_title|default('ФОТО С НАШИМИ КЛИЕНТАМИ')|nl2br }}
+                </h2>
+
+                {% if settings.images_description %}
+                    <div class="block-description">
+                        {{ settings.images_description }}
+                    </div>
+                {% endif %}
+
+                <div class="images-list owl-carousel owl-theme">
+                    {% for image in images %}
+
+                        {% if loop.index % 2 == 1 or loop.first %}
+                            {% if not loop.first %}
+                                </div>
+                            {% endif %}
+                            <div class="item">
+                        {% endif %}
+
+                        <div class="image-item">
+
+                            <div class="inner-container">
+
+                                <a href="{{ image.image_url|default('/img/customer-photo-1.png') }}" class="fancybox" rel="shop_images">
+
+                                    <span class="image-container nailthumb-container">
+                                        <img src="{{ image.image_url|default('/img/customer-photo-1.png') }}">
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        {% if loop.last %}
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+{% endif %}

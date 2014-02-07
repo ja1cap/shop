@@ -1,0 +1,26 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Предложения{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <hr/>
+    {% if proposal_types %}
+        <div class="dashboard">
+            <ul class="tiles two_up">
+                {% for proposal_type in proposal_types %}
+                    <li>
+                        <div class="medium secondary btn" style="display: block; margin-bottom: 10px;">
+                            <a href="{{ path('proposal', {'type' : proposal_type.type}) }}">
+                                Добавить {{ proposal_type.single_name|lower }}
+                            </a>
+                        </div>
+                        <a href="{{ path('type_proposals', {'type' : proposal_type.type}) }}">
+                            Все {{ proposal_type.multiple_name|lower }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'ShopMainBundle:Default:proposals.html.twig' %}
+{% block proposals_left_bar %}
+    {{ parent() }}
+    <form action="{{ path('shop_beds') }}" id="filtersForm">
+        <ul>
+            <li class="field">
+                <label for="sizeId">
+                    Размер кровати (см x см)
+                </label>
+                <div class="picker">
+                    <select name="sizeId" id="sizeId">
+                        <option value="">Выберите размер</option>
+                        {% for value, option in sizes %}
+                            <option value="{{ value }}" {% if value == sizeId %} selected="selected" {% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </li>
+        </ul>
+    </form>
+{% endblock %}

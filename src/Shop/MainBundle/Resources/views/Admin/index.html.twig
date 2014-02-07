@@ -1,0 +1,14 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block body %}
+
+    <div class="admin-container">
+        {{ include("ShopMainBundle:Admin:header.html.twig") }}
+        <div class="row dashboard">
+            <ul class="four_up tiles">
+                {{ include("ShopMainBundle:Admin:menuItems.html.twig") }}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

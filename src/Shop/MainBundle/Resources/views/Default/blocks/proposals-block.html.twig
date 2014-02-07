@@ -1,0 +1,109 @@
+{% if proposals %}
+<div class="proposals-block block-container invert-colors" id="proposals-block">
+
+    <div class="block-img-wrapper">
+        <div class="image-box" style="background-image: url({{ settings.proposals_image_url|default('/img/proposals-block-bg.jpg') }})"></div>
+    </div>
+
+    <div class="row catalog-menu">
+        <div class="columns three">
+            <div class="btn default large">
+                <a href="{{ path('shop_mattresses') }}">
+                    Матрасы
+                </a>
+            </div>
+        </div>
+        <div class="columns three">
+            <div class="btn default large">
+                <a href="{{ path('shop_beds') }}">
+                    Кровати
+                </a>
+            </div>
+        </div>
+        <div class="columns three">
+            <div class="btn default large">
+                <a href="{{ path('shop_bed_bases') }}">
+                    Основания
+                </a>
+            </div>
+        </div>
+        <div class="columns three">
+            <div class="btn default large">
+                <a href="{{ path('shop_pillows') }}">
+                    Подушки
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="block-title">
+        {{ settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+    </h2>
+    <div class="block-description">
+        {{ settings.proposals_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}
+    </div>
+
+    <div class="block-body">
+
+        <div class="row">
+
+            <div class="{{ proposals|length < 4 ? 'centered columns ' ~ word_numbers[(proposals|length * 3)] : ''}}">
+
+                <div class="proposals-list owl-carousel owl-theme">
+                    {% for proposal in proposals %}
+
+                        <div class="proposal {{ proposal.discount_percent ? 'discount-proposal' : '' }}">
+
+                            <a href="{{ path(proposal.route, { 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+
+                                <span class="image-container">
+                                    <span class="nailthumb-container">
+                                        <img src="{{ proposal.thumb_image_url|default('/img/proposal-1.png') }}">
+                                    </span>
+                                </span>
+
+                                {% if proposal.discount_percent %}
+                                    {% if proposal.discount_end_date %}
+                                        <span class="countdown proposal-countdown" data-date="{{ proposal.discount_end_date|date }}"></span>
+                                    {% endif %}
+                                    <span class="proposal-discount-percent">
+                                        -{{ proposal.discount_percent }}%
+                                    </span>
+                                {% endif %}
+
+                                <span class="title">
+                                    {{ proposal.title|nl2br }}
+                                </span>
+                                <span class="description">
+                                    {{ proposal.short_description|nl2br }}
+                                </span>
+                                <span class="price">
+                                    {{ proposal.price|number_format(0, '.', ' ') }} руб
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% if settings.catalog_file_url %}
+    <a href="{{ settings.catalog_file_url }}" class="download-catalog-btn" target="_blank">
+
+        {{ settings.catalog_download_title|default('СКАЧАТЬ PDF-КАТАЛОГ') }}
+
+    </a>
+    {% endif %}
+
+    <div class="block-bottom-shadow"></div>
+
+</div>
+{% endif %}

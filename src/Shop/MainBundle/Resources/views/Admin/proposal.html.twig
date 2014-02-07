@@ -1,0 +1,49 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopMainBundle:Admin:proposalBreadcrumb.html.twig') }}
+    {{ form(form) }}
+    {% if proposal.id %}
+        <hr/>
+        <div class="medium primary btn">
+            <a href="{{ path('proposal_price', {'proposalId' : proposal.id}) }}">
+                Добавить цену
+            </a>
+        </div>
+    {% endif %}
+    {% if proposal.prices and not proposal.prices.isEmpty %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th>Цена</th>
+                <th>Описание</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for price in proposal.prices %}
+                <tr>
+                    <td>
+                        {{ price.value|number_format(0, '.', ' ') }} руб
+                    </td>
+                    <td>{{ price.description|default('-') }}</td>
+                    <td>
+                        <div class="medium btn default" style="width: 100%">
+                            <a href="{{ path('proposal_price', {'proposalId' : proposal.id, 'id' : price.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger" style="width: 100%">
+                            <a href="{{ path('proposal_price_delete', {'proposalId' : proposal.id, 'id' : price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

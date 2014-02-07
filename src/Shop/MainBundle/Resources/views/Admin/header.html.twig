@@ -1,0 +1,25 @@
+<div class="header-container">
+    <div class="row">
+        <div class="header">
+            <div class="header-logo">
+                <a href="{{ path('index') }}">
+                    <span class="image-wrapper">
+                        <img src="/img/cms-logo.png">
+                    </span>
+                    <span class="title">
+                        Dandy | Система управления сайтом
+                    </span>
+                </a>
+            </div>
+            {% set user_name = app.security.getToken().getUser().getUserName() %}
+            {% if user_name %}
+                <div class="user-container">
+                    Привет, {{ user_name }} |
+                    <a href="{{ path('logout') }}">
+                        Выйти
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

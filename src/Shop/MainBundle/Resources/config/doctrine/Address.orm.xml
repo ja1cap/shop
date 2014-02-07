@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Shop\MainBundle\Entity\Address">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="name" type="string" column="name" length="255"/>
+    <field name="phones" type="text" column="phones" nullable="true"/>
+    <field name="workSchedule" type="text" column="work_schedule" nullable="true"/>
+    <field name="description" type="text" column="description" nullable="true"/>
+    <field name="latitude" type="string" column="latitude" length="255"/>
+    <field name="longitude" type="string" column="longitude" length="255"/>
+  </entity>
+</doctrine-mapping>

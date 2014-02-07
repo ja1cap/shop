@@ -1,0 +1,71 @@
+{#<li class="{{ app.request.get('_route') == 'hit_proposal' ? 'active' : '' }}">#}
+    {#<a href="{{ path('hit_proposal') }}" class="">#}
+        {#Топовый товар#}
+    {#</a>#}
+{#</li>#}
+
+<li class="{{ app.request.get('_route') == 'proposals' ? 'active' : '' }}">
+    <a href="{{ path('proposals') }}" class="">
+        Предложения
+    </a>
+</li>
+
+<li class="{{ app.request.get('_route') == 'actions' ? 'active' : '' }}">
+    <a href="{{ path('actions') }}" class="">
+        Акции
+    </a>
+</li>
+
+{#<li class="{{ app.request.get('_route') == 'why_us' ? 'active' : '' }}">#}
+    {#<a href="{{ path('why_us') }}" class="">#}
+        {#Почему мы#}
+    {#</a>#}
+{#</li>#}
+
+<li class="{{ app.request.get('_route') == 'benefits' ? 'active' : '' }}">
+    <a href="{{ path('benefits') }}" class="">
+        Преимущества
+    </a>
+</li>
+
+<li class="{{ app.request.get('_route') == 'reviews' ? 'active' : '' }}">
+    <a href="{{ path('reviews') }}" class="">
+        Отзывы клиентов
+    </a>
+</li>
+
+{#<li class="{{ app.request.get('_route') == 'images' ? 'active' : '' }}">#}
+    {#<a href="{{ path('images') }}" class="">#}
+        {#Фотографии#}
+    {#</a>#}
+{#</li>#}
+
+{#<li class="{{ app.request.get('_route') == 'how_we' ? 'active' : '' }}">#}
+    {#<a href="{{ path('how_we') }}" class="">#}
+        {#Как мы работаем#}
+    {#</a>#}
+{#</li>#}
+
+{#<li class="{{ app.request.get('_route') == 'problems' ? 'active' : '' }}">#}
+    {#<a href="{{ path('problems') }}" class="">#}
+        {#Проблемы#}
+    {#</a>#}
+{#</li>#}
+
+<li class="{{ app.request.get('_route') == 'contacts' ? 'active' : '' }}">
+    <a href="{{ path('contacts') }}" class="">
+        Контакты
+    </a>
+</li>
+
+<li class="{{ app.request.get('_route') == 'mail_templates' ? 'active' : '' }}">
+    <a href="{{ path('mail_templates') }}" class="">
+        Почта
+    </a>
+</li>
+
+<li class="{{ app.request.get('_route') == 'settings' ? 'active' : '' }}">
+    <a href="{{ path('settings') }}" class="">
+        Настройки
+    </a>
+</li>

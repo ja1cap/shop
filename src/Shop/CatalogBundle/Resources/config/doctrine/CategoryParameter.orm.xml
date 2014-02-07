@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Shop\CatalogBundle\Entity\CategoryParameterRepository"
+            name="Shop\CatalogBundle\Entity\CategoryParameter">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="categoryId" type="integer" column="categoryId"/>
+        <field name="parameterId" type="integer" column="parameterId"/>
+        <field name="position" type="integer" column="position"/>
+        <field name="isMain" type="boolean" column="isMain"/>
+        <many-to-one target-entity="Category" field="category"/>
+        <many-to-one target-entity="Parameter" field="parameter"/>
+    </entity>
+</doctrine-mapping>

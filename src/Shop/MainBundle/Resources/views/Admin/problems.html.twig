@@ -1,0 +1,76 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Проблемы и решания{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <div class="row">
+        <div class="six columns">
+            <hr/>
+            <div class="medium primary btn">
+                <a href="{{ path('problem') }}">
+                    Добавить проблему
+                </a>
+            </div>
+            {% if problems %}
+                <table style="margin: 10px 0">
+                    <tbody>
+                    {% for item in problems %}
+                        <tr>
+                            <td>
+                                <div>
+                                    {{ item.description }}
+                                </div>
+                                <div class="medium btn default" style="width: 49%">
+                                    <a href="{{ path('problem', {'id' : item.id}) }}">
+                                        Изменить
+                                    </a>
+                                </div>
+                                <div class="medium btn danger" style="width: 49%">
+                                    <a href="{{ path('problem_delete', {'id' : item.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        Удалить
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>        
+        <div class="six columns">
+            <hr/>
+            <div class="medium primary btn">
+                <a href="{{ path('solution') }}">
+                    Добавить решение
+                </a>
+            </div>
+            {% if solutions %}
+                <table style="margin: 10px 0">
+                    <tbody>
+                    {% for item in solutions %}
+                        <tr>
+                            <td>
+                                <div>
+                                    {{ item.description }}
+                                </div>
+                                <div class="medium btn default" style="width: 49%">
+                                    <a href="{{ path('solution', {'id' : item.id}) }}">
+                                        Изменить
+                                    </a>
+                                </div>
+                                <div class="medium btn danger" style="width: 49%">
+                                    <a href="{{ path('solution_delete', {'id' : item.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        Удалить
+                                    </a>
+                                </div>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

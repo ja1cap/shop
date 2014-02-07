@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\MainBundle\Entity\AbstractPrice" inheritance-type="JOINED">
+
+        <discriminator-column name="type"/>
+
+        <discriminator-map>
+            <discriminator-mapping value="1" class="BedPrice"/>
+            <discriminator-mapping value="2" class="MattressPrice"/>
+            <discriminator-mapping value="3" class="BedBasePrice"/>
+            <discriminator-mapping value="4" class="PillowPrice"/>
+        </discriminator-map>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="proposalId" type="integer" column="proposal_id"/>
+        <field name="value" type="integer" column="value"/>
+
+        <many-to-one target-entity="Proposal" field="proposal"/>
+
+    </entity>
+</doctrine-mapping>

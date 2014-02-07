@@ -1,0 +1,57 @@
+{% if how_we_items %}
+    <div class="how-we-block block-container">
+
+        <div class="block-diagonal-bg"></div>
+
+        <h2 class="block-title">
+            {{ settings.how_we_title|default('КАК МЫ РАБОТАЕМ?')|nl2br }}
+        </h2>
+
+        {% if settings.how_we_description %}
+            <div class="block-description">
+                {{ settings.how_we_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+
+            <div class="row">
+
+                <div class="{{ how_we_items|length == 1 ? 'centered columns four' : ''}}">
+
+                    <div class="how-we-list">
+
+                        {% set columns = word_numbers[((12/how_we_items|length)|round)] %}
+                        {% for item in how_we_items %}
+
+                            <div class="{{ columns }} columns">
+
+                                <div class="dotted-arrow"></div>
+
+                                <div class="image-container">
+                                    <div class="image-wrapper">
+                                        <img src="{{ item.image_url|default('/img/why-us-key.png') }}">
+                                    </div>
+                                </div>
+
+                                <div class="title">
+                                    {{ item.title|nl2br }}
+                                </div>
+                                <div class="description">
+                                    {{ item.description|nl2br }}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endif %}

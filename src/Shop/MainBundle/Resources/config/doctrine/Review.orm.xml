@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\MainBundle\Entity\Review">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="customerName" type="string" column="customer_name" length="255"/>
+        <field name="customerImageFileName" type="string" column="customer_image_file_name" length="255" nullable="true"/>
+        <field name="companyName" type="string" column="company_name" length="255" nullable="true"/>
+        <field name="companyImageFileName" type="string" column="company_image_file_name" length="255" nullable="true"/>
+        <field name="reviewFileName" type="string" column="review_file_name" length="255" nullable="true"/>
+        <field name="body" type="text" column="body" nullable="true"/>
+        <field name="videoCode" type="text" column="video_code" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

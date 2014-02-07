@@ -1,0 +1,67 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ proposal_type.multiple_name }}{% endblock %}
+
+{% block right_bar %}
+
+    {{ include('ShopMainBundle:Admin:typeProposalsBreadcrumb.html.twig') }}
+
+    <div class="medium secondary btn">
+        <a href="{{ path('proposal', {'type' : proposal_type.type}) }}">
+            Добавить {{ proposal_type.single_name|lower }}
+        </a>
+    </div>
+
+    <div class="medium secondary btn">
+        <a href="{{ path('type_proposals_page', {'type' : proposal_type.type}) }}">
+            Редактировать
+        </a>
+    </div>
+
+    {% if proposals %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th style="width: 25%">Наименование</th>
+                <th>Описание</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for proposal in proposals %}
+                <tr>
+                    <td>
+                        {{ proposal.title }}
+                        {#<span style="font-weight: normal;">#}
+                            {#{{ proposal.manufacturer }}#}
+                        {#</span>#}
+                        {% set proposal_price = proposal.prices.current %}
+                        {% if proposal_price %}
+                            <span style="font-weight: normal; display: block">
+                                от {{ proposal_price.value|number_format(0, '.', ' ') }} руб
+                            </span>
+                        {% else %}
+                            <span class="warning label">
+                                Цена не установлена
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ proposal.short_description }}</td>
+                    <td>
+                        <div class="medium btn default" style="width: 100%">
+                            <a href="{{ path('proposal', {'id' : proposal.id, 'type' : proposal_type.type}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger" style="width: 100%">
+                            <a href="{{ path('proposal_delete', {'id' : proposal.id, 'type' : proposal_type.type}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

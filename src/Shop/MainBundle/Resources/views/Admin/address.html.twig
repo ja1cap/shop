@@ -1,0 +1,91 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+
+    {{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.phones) }}
+    {{ form_row(form.work_schedule) }}
+    <div class="primary alert">
+        Укажите адрес на карте перетянув отметку мышкой
+    </div>
+    <div id="map" style="width: 100%; height: 400px; margin-bottom: 10px"></div>
+
+    <div class="row">
+
+        <div class="three columns">
+            {{ form_row(form.latitude) }}
+        </div>
+        <div class="three push_one columns">
+            {{ form_row(form.longitude) }}
+        </div>
+
+    </div>
+    {{ form_row(form.save) }}
+
+    {{ form_end(form) }}
+
+    <script type="text/javascript">
+        $(function(){
+
+            ymaps.ready(init);
+
+            var myMap,
+                myPlacemark;
+
+            var $form_latitude = $('#form_latitude'),
+                form_latitude = $form_latitude.val() ? $form_latitude.val() : 53.9,
+                $form_longitude = $('#form_longitude'),
+                form_longitude = $form_longitude.val() ? $form_longitude.val() : 27.56;
+
+            function populateCoordinates(coordinates){
+                $form_latitude.val(coordinates[0]);
+                $form_longitude.val(coordinates[1]);
+            }
+
+            function init(){
+
+                myMap = new ymaps.Map ("map", {
+                    center: [form_latitude, form_longitude],
+                    zoom: 11,
+                    behaviors:['default', 'scrollZoom']
+                });
+
+                myMap.controls
+                    .add('zoomControl', { left: 5, top: 5 });
+
+                myPlacemark = new ymaps.Placemark(
+                    [form_latitude, form_longitude],
+                    {},
+                    {
+                        draggable: true
+                    }
+                );
+
+                myPlacemark.events.add("dragend", function (event) {
+                    var coordinates = event.get('target').geometry.getCoordinates();
+                    populateCoordinates(coordinates);
+                });
+
+                myMap.events.add('click', function (e) {
+
+                    var coordinates = e.get('coordPosition');
+                    myPlacemark.geometry.setCoordinates(coordinates);
+                    populateCoordinates(coordinates);
+
+                });
+
+                myMap.geoObjects.add(myPlacemark);
+
+            }
+
+        });
+    </script>
+
+{% endblock %}

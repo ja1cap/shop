@@ -1,0 +1,58 @@
+{% if benefits %}
+<div class="benefits-block block-container invert-colors" id="benefits-block">
+
+    <div class="block-top-shadow"></div>
+    <div class="block-diagonal-bg"></div>
+
+    <h2 class="block-title">
+        {{ settings.benefits_title|default('НАШИ ПРЕИМУЩЕСТВА')|nl2br }}
+    </h2>
+    <div class="block-description">
+        {{ settings.benefits_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}
+    </div>
+
+    <div class="block-body">
+
+        <div class="row">
+
+            <div class="{{ benefits|length < 3 ? 'centered columns ' ~ word_numbers[(benefits|length * 4)] : ''}}">
+
+                <ul class="benefits-list">
+                    {% for item in benefits %}
+
+                    {% if(loop.index % 4 == 1 and not loop.first) %}
+                </ul>
+                <ul class="benefits-list">
+                    {% endif %}
+
+                    <li>
+
+                        <div class="image-container">
+                            <div class="image-wrapper">
+                                <img src="{{ item.image_url|default('/img/benefit-1.png') }}">
+                            </div>
+                        </div>
+
+                        <div class="title">
+                            {{ item.title|nl2br }}
+                        </div>
+                        <div class="description">
+                            {{ item.description|nl2br }}
+                        </div>
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="block-bottom-shadow"></div>
+
+</div>
+{% endif %}

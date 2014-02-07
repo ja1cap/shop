@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="shop" pattern="/">
+        <default key="_controller">ShopMainBundle:Default:index</default>
+    </route>
+    <route id="process_request" pattern="/processRequest">
+        <default key="_controller">ShopMainBundle:Default:processRequest</default>
+    </route>
+    <route id="callback" pattern="/callback">
+        <default key="_controller">ShopMainBundle:Default:callback</default>
+    </route>
+    <route id="order_proposal" pattern="/orderProposal/{id}">
+        <default key="_controller">ShopMainBundle:Default:orderProposal</default>
+        <default key="id">null</default>
+    </route>
+    <route id="shop_proposal" pattern="/proposal/{id}">
+        <default key="_controller">ShopMainBundle:Default:proposal</default>
+        <default key="id">null</default>
+    </route>
+    <route id="shop_hit_proposal" pattern="/hitProposal/{id}">
+        <default key="_controller">ShopMainBundle:Default:hitProposal</default>
+        <default key="id">null</default>
+    </route>
+    <route id="shop_beds" pattern="/krovati">
+        <default key="_controller">ShopMainBundle:Default:beds</default>
+    </route>
+    <route id="shop_bed" pattern="/krovati/{slug}">
+        <default key="_controller">ShopMainBundle:Default:bed</default>
+    </route>
+    <route id="shop_mattresses" pattern="/matrasy">
+        <default key="_controller">ShopMainBundle:Default:mattresses</default>
+    </route>
+    <route id="shop_mattress" pattern="/matrasy/{slug}">
+        <default key="_controller">ShopMainBundle:Default:mattress</default>
+    </route>
+    <route id="shop_bed_bases" pattern="/osnovaniya">
+        <default key="_controller">ShopMainBundle:Default:bedBases</default>
+    </route>
+    <route id="shop_bed_base" pattern="/osnovaniya/{slug}">
+        <default key="_controller">ShopMainBundle:Default:bedBase</default>
+    </route>
+    <route id="shop_pillows" pattern="/podushki">
+        <default key="_controller">ShopMainBundle:Default:pillows</default>
+    </route>
+    <route id="shop_pillow" pattern="/podushki/{slug}">
+        <default key="_controller">ShopMainBundle:Default:pillow</default>
+    </route>
+    <route id="index" pattern="/admin">
+        <default key="_controller">ShopMainBundle:Admin:index</default>
+    </route>
+    <route id="hit_proposal" pattern="/admin/hitProposal">
+        <default key="_controller">ShopMainBundle:Admin:hitProposal</default>
+    </route>
+    <route id="why_us" pattern="/admin/whyUs">
+        <default key="_controller">ShopMainBundle:Admin:whyUs</default>
+    </route>
+    <route id="why_us_item" pattern="/admin/whyUsItem/{id}">
+        <default key="_controller">ShopMainBundle:Admin:whyUsItem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="why_us_item_delete" pattern="/admin/deleteWhyUsItem/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteWhyUsItem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="proposal" pattern="/admin/proposal/{type}/{id}">
+        <default key="_controller">ShopMainBundle:Admin:proposal</default>
+        <default key="id">null</default>
+    </route>
+    <route id="proposal_delete" pattern="/admin/proposalDelete/{type}/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteProposal</default>
+        <default key="id">null</default>
+    </route>
+    <route id="proposal_price" pattern="/admin/proposalPrice/{proposalId}/{id}">
+        <default key="_controller">ShopMainBundle:Admin:proposalPrice</default>
+        <default key="id">null</default>
+    </route>
+    <route id="proposal_price_delete" pattern="/admin/proposalPriceDelete/{proposalId}/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteProposalPrice</default>
+        <default key="id">null</default>
+    </route>
+    <route id="proposals" pattern="/admin/proposals">
+        <default key="_controller">ShopMainBundle:Admin:proposals</default>
+    </route>
+    <route id="type_proposals" pattern="/admin/typeProposals/{type}">
+        <default key="_controller">ShopMainBundle:Admin:typeProposals</default>
+    </route>
+    <route id="type_proposals_page" pattern="/admin/typeProposalsPage/{type}">
+        <default key="_controller">ShopMainBundle:Admin:typeProposalsPage</default>
+    </route>
+    <route id="benefits" pattern="/admin/benefits">
+        <default key="_controller">ShopMainBundle:Admin:benefits</default>
+    </route>
+    <route id="benefit" pattern="/admin/benefit/{id}">
+        <default key="_controller">ShopMainBundle:Admin:benefit</default>
+        <default key="id">null</default>
+    </route>
+    <route id="benefit_delete" pattern="/admin/benefitDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteBenefit</default>
+        <default key="id">null</default>
+    </route>
+    <route id="reviews" pattern="/admin/reviews">
+        <default key="_controller">ShopMainBundle:Admin:reviews</default>
+    </route>
+    <route id="review" pattern="/admin/review/{id}">
+        <default key="_controller">ShopMainBundle:Admin:review</default>
+        <default key="id">null</default>
+    </route>
+    <route id="review_delete" pattern="/admin/reviewDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteReview</default>
+        <default key="id">null</default>
+    </route>
+    <route id="images" pattern="/admin/images">
+        <default key="_controller">ShopMainBundle:Admin:images</default>
+    </route>
+    <route id="image" pattern="/admin/image/{id}">
+        <default key="_controller">ShopMainBundle:Admin:image</default>
+        <default key="id">null</default>
+    </route>
+    <route id="image_delete" pattern="/admin/imageDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteImage</default>
+        <default key="id">null</default>
+    </route>
+    <route id="actions" pattern="/admin/actions">
+        <default key="_controller">ShopMainBundle:Admin:actions</default>
+    </route>
+    <route id="action" pattern="/admin/action/{id}">
+        <default key="_controller">ShopMainBundle:Admin:action</default>
+        <default key="id">null</default>
+    </route>
+    <route id="action_delete" pattern="/admin/actionDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteAction</default>
+        <default key="id">null</default>
+    </route>
+    <route id="how_we" pattern="/admin/howWe">
+        <default key="_controller">ShopMainBundle:Admin:howWe</default>
+    </route>
+    <route id="how_we_item" pattern="/admin/howWeItem/{id}">
+        <default key="_controller">ShopMainBundle:Admin:howWeItem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="how_we_item_delete" pattern="/admin/deleteHowWeItem/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteHowWeItem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="problems" pattern="/admin/problems">
+        <default key="_controller">ShopMainBundle:Admin:problems</default>
+    </route>
+    <route id="problem" pattern="/admin/problem/{id}">
+        <default key="_controller">ShopMainBundle:Admin:problem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="problem_delete" pattern="/admin/problemDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteProblem</default>
+        <default key="id">null</default>
+    </route>
+    <route id="solution" pattern="/admin/solution/{id}">
+        <default key="_controller">ShopMainBundle:Admin:solution</default>
+        <default key="id">null</default>
+    </route>
+    <route id="solution_delete" pattern="/admin/solutionDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteSolution</default>
+        <default key="id">null</default>
+    </route>
+    <route id="contacts" pattern="/admin/contacts">
+        <default key="_controller">ShopMainBundle:Admin:contacts</default>
+    </route>
+    <route id="address" pattern="/admin/address/{id}">
+        <default key="_controller">ShopMainBundle:Admin:address</default>
+        <default key="id">null</default>
+    </route>
+    <route id="address_delete" pattern="/admin/addressDelete/{id}">
+        <default key="_controller">ShopMainBundle:Admin:deleteAddress</default>
+        <default key="id">null</default>
+    </route>
+    <route id="mail_templates" pattern="/admin/mailTemplates">
+        <default key="_controller">ShopMainBundle:Admin:mailTemplates</default>
+    </route>
+    <route id="settings" pattern="/admin/settings">
+        <default key="_controller">ShopMainBundle:Admin:settings</default>
+    </route>
+    <route id="login" pattern="/login">
+        <default key="_controller">ShopMainBundle:Auth:login</default>
+    </route>
+    <route id="login_check" pattern="/loginCheck">
+        <default key="_controller">ShopMainBundle:Auth:loginCheck</default>
+    </route>
+    <route id="logout" pattern="/logout">
+        <default key="_controller">ShopMainBundle:Auth:logout</default>
+    </route>
+</routes>

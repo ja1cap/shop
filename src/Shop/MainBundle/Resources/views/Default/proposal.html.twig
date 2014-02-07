@@ -1,0 +1,149 @@
+{% extends 'ShopMainBundle:Default:proposals.html.twig' %}
+{% block title %}{{ proposal.seoTitle|default(proposal.title) }}{% endblock %}
+{% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
+{% block keywords %}{{ proposal.seoKeywords }}{% endblock %}
+{% block proposals_right_bar %}
+
+    <div class="proposal-container">
+
+        <div class="single-proposal single-proposal-{{ proposal.id }}">
+
+            <h1 class="proposal-title title">
+
+                {{ proposal.title|nl2br }}
+
+            </h1>
+
+            <div class="row-fluid">
+
+                <div class="five columns">
+
+                    <div class="proposal-image">
+
+                        <a href="{{ proposal.image_url }}" class="fancybox">
+                            <img src="{{ proposal.thumb_image_url }}">
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="seven columns">
+
+                    {% block proposal_right_bar %}
+
+                        <div class="order-proposal-form-container">
+
+                            {% block proposal_price_block %}
+                                {% if currentPrice %}
+                                    <div class="proposal-price-container">
+                                        <div class="price">
+                                            {{ currentPrice.value|number_format(0, '.', ' ') }} руб
+                                            {% if (prices|length == 1 or not prices) and currentPrice.description %}
+                                                <span class="price-description">
+                                                    {{  currentPrice.description }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        {% if prices and prices|length > 1 %}
+                                            <form>
+                                                <div class="proposal-select">
+                                                    <div class="picker">
+                                                        <select name="sizeId">
+                                                            {% for sizeId, price in prices %}
+                                                                <option value="{{ sizeId }}" {{ sizeId == currentSizeId ? "selected='selected'" : "" }}>{{ price.size }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <script>
+                                        $(function(){
+
+                                            var $proposal_select = $('.proposal-select');
+
+                                            $proposal_select.change(function(){
+
+                                                var $form = $proposal_select.closest('form');
+                                                $form.submit();
+
+                                            });
+
+                                        })
+                                    </script>
+                                {% endif %}
+                            {% endblock %}
+
+                            <form name="form" method="post" action="" class="order-proposal-form form-box">
+
+                                <div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">
+
+                                    <input type="hidden" class="name" value="{{ proposal.title }}">
+                                    <input type="hidden" class="price" value="{{ proposal.price|number_format(0, '.', ' ') }} руб">
+
+                                    <div><label for="proposal_customer_name_{{ proposal.id }}" class="required">КАК К ВАМ ОБРАЩАТЬСЯ*</label>
+                                        <input type="text"
+                                               id="proposal_customer_name_{{ proposal.id }}"
+                                               name="customer_name"
+                                               required="required"
+                                               class="customer-name">
+                                    </div>
+
+                                    <div><label for="proposal_customer_phone_{{ proposal.id }}" class="required">ТЕЛЕФОН*</label>
+                                        <input type="text"
+                                               id="proposal_customer_phone_{{ proposal.id }}"
+                                               name="customer_phone"
+                                               required="required"
+                                               class="customer-phone">
+                                    </div>
+
+                                    <div><label for="proposal_customer_email_{{ proposal.id }}">E-MAIL</label>
+                                        <input type="text"
+                                               id="proposal_customer_email_{{ proposal.id }}"
+                                               name="customer_email"
+                                               class="customer-email">
+                                    </div>
+
+                                    <button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    {% endblock %}
+
+                </div>
+
+            </div>
+
+            <div class="row-fluid">
+                <div class="twelve columns">
+                    <div class="proposal-description">
+
+                        {{ proposal.description|nl2br }}
+
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+
+                $('#proposal_form_{{ proposal.id }} label').inFieldLabels();
+
+                $('.single-proposal-{{ proposal.id }} .proposal-image').nailthumb({
+//                    fitDirection : 'center',
+//                    method : 'resize'
+                    method : 'crop'
+                });
+
+            </script>
+
+        </div>
+
+    </div>
+
+{% endblock %}

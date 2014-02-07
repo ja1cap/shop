@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\MainBundle\Entity\Settings">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="title" type="string" nullable="true"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="keywords" type="text" nullable="true"/>
+
+        <field name="name" type="string" nullable="true"/>
+        <field name="logo_file_name" type="string" nullable="true"/>
+
+        <field name="contacts_title" type="text" nullable="true"/>
+        <field name="phone" type="text" nullable="true"/>
+        <field name="address" type="text" nullable="true"/>
+        <field name="email" type="text" nullable="true"/>
+
+        <field name="customer_email_template" type="text" nullable="true"/>
+        <field name="admin_email" type="string" nullable="true"/>
+        <field name="admin_email_template" type="text" nullable="true"/>
+        <field name="manager_email" type="string" nullable="true"/>
+        <field name="manager_email_template" type="text" nullable="true"/>
+
+        <field name="mailer_host" type="string" nullable="true"/>
+        <field name="mailer_port" type="string" nullable="true"/>
+        <field name="mailer_user" type="string" nullable="true"/>
+        <field name="mailer_password" type="string" nullable="true"/>
+
+        <field name="catalog_file_name" type="string" nullable="true"/>
+        <field name="catalog_download_title" type="string" nullable="true"/>
+
+        <field name="why_us_title" type="string" nullable="true"/>
+        <field name="why_us_description" type="text" nullable="true"/>
+
+        <field name="actions_title" type="string" nullable="true"/>
+        <field name="actions_description" type="text" nullable="true"/>
+
+        <field name="proposals_title" type="string" nullable="true"/>
+        <field name="proposals_description" type="text" nullable="true"/>
+        <field name="proposals_image_file_name" type="string" nullable="true"/>
+
+        <field name="request_title" type="string" nullable="true"/>
+        <field name="request_description" type="text" nullable="true"/>
+        <field name="request_timer_end_date" type="datetime" nullable="true"/>
+
+        <field name="benefits_title" type="string" nullable="true"/>
+        <field name="benefits_description" type="text" nullable="true"/>
+
+        <field name="reviews_title" type="string" nullable="true"/>
+        <field name="reviews_description" type="text" nullable="true"/>
+
+        <field name="images_title" type="string" nullable="true"/>
+        <field name="images_description" type="text" nullable="true"/>
+
+        <field name="how_we_title" type="string" nullable="true"/>
+        <field name="how_we_description" type="text" nullable="true"/>
+
+        <field name="problems_solutions_title" type="string" nullable="true"/>
+        <field name="problems_solutions_description" type="text" nullable="true"/>
+        <field name="problems_title" type="string" nullable="true"/>
+        <field name="solutions_title" type="string" nullable="true"/>
+
+        <field name="footer_description" type="string" nullable="true"/>
+        <field name="vk_url" type="string" nullable="true"/>
+        <field name="fb_url" type="string" nullable="true"/>
+        <field name="google_url" type="string" nullable="true"/>
+
+        <field name="main_link_text" type="string" nullable="true"/>
+        <field name="why_link_text" type="string" nullable="true"/>
+        <field name="more_link_text" type="string" nullable="true"/>
+        <field name="reviews_link_text" type="string" nullable="true"/>
+        <field name="where_link_text" type="string" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

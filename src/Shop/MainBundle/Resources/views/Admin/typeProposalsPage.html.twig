@@ -1,0 +1,10 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ proposal_type.multiple_name }}{% endblock %}
+
+{% block right_bar %}
+
+    {{ include('ShopMainBundle:Admin:typeProposalsPageBreadcrumb.html.twig') }}
+    {{ form(form) }}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+{% block title %}{{ page.seoTitle }}{% endblock %}
+{% block description %}{{ page.seoDescription }}{% endblock %}
+{% block keywords %}{{ page.seoKeywords }}{% endblock %}
+{% block main_container %}
+    <div class="row well-v">
+        <div class="three columns">
+            {% block proposals_left_bar %}
+                {{ include('ShopMainBundle:Default:proposals-left-bar.html.twig') }}
+            {% endblock %}
+        </div>
+        <div class="nine columns">
+            {% block proposals_right_bar %}
+                <ul class="proposals-list tiles three_up">
+                    {% for proposal_data in proposals %}
+
+                        <li class="proposal">
+
+                            {% set proposal = proposal_data.proposal %}
+
+                            <a href="{{ path(proposalRoute, { 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+
+                                <span class="image-container">
+                                    <span class="nailthumb-container">
+                                        <img src="{{ proposal.thumb_image_url|default(proposal.image_url) }}">
+                                    </span>
+                                </span>
+
+                                <span class="title">
+                                    {{ proposal.title|nl2br }}
+                                </span>
+
+                                <span class="description">
+                                    {{ proposal.short_description|nl2br }}
+                                </span>
+
+                                <span class="price">
+                                    {{ proposal_data.price|number_format(0, '.', ' ') }} руб
+                                </span>
+
+                            </a>
+
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+            {% endblock %}
+            {{ page.content|nl2br }}
+        </div>
+    </div>
+    <script>
+        $(function(){
+
+            var $filtersForm = $('#filtersForm');
+
+            $(':input', $filtersForm).change(function(){
+                $filtersForm.submit();
+            });
+
+        });
+    </script>
+{% endblock %}

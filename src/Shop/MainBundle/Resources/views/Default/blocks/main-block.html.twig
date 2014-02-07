@@ -1,0 +1,106 @@
+<div class="main-block block-container invert-colors" id="main-block">
+    <div class="block-img-wrapper">
+        <div class="image-box" style="background-image: url({{ hit_proposal.main_img_url|default('/img/main-block-bg.jpg') }})"></div>
+    </div>
+    <div class="row block-content">
+        <h1 class="block-title">
+            {{ hit_proposal.main_title|default('ИСКУСТВЕННЫЕ ЕЛИ В МИНСКЕ')|nl2br }}
+        </h1>
+        <div class="block-description">
+            {{ hit_proposal.main_description|default('Holiday Market - единственная компания в Беларуси, которая оказывает комплексные решения в области новогоднего декора и праздничной иллюминации.')|nl2br }}
+        </div>
+        <div class="block-body hit-container">
+
+            <div class="proposal-container">
+
+                <div class="hit-marker"></div>
+
+                <div class="image-container">
+
+                    <div class="nailthumb-container">
+                        <img src="{{ hit_proposal.image_url|default('/img/tree.jpg') }}">
+                    </div>
+
+                </div>
+
+                <div class="proposal-body-container">
+
+                    <div class="proposal-body">
+
+                        <div>
+                            {{ hit_proposal.legend|default('Закажи прямо сейчас') }}
+                        </div>
+
+                        <div class="proposal-name">
+                            {{ hit_proposal.name|default('ЕЛЬ') }}
+                        </div>
+
+                        <div class="proposal-description">
+                            {{ hit_proposal.short_description|default('Сосна, 2.5м, на подставке') }}
+                        </div>
+
+                        <a href="{{ path('shop_hit_proposal', { 'id' : hit_proposal.id }) }}" class="proposal-fancybox order-proposal-btn" data-fancybox-type="ajax" rel="proposals">
+
+                            {{ hit_proposal.price_legend|default('По супер цене') }}
+
+                            <span class="hit-price">
+                                {{ hit_proposal.discount_price|default(350000)|number_format(0, '.', ' ') }} руб
+                            </span>
+
+                            <span class="regular-price">
+                                {{ hit_proposal.regular_price|default(385000)|number_format(0, '.', ' ') }} руб
+                            </span>
+
+                        </a>
+
+                        {% if hit_proposal.bonus %}
+
+                            <div class="hit-bonus-container {{ hit_proposal.bonus_image_url ? 'with-image' : '' }}">
+
+                                {% if hit_proposal.bonus_image_url %}
+                                    <div class="image-container">
+                                        <div class="image-wrapper nailthumb-container">
+                                            <img src="{{ hit_proposal.bonus_image_url }}">
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="bonus-body">
+                                    <div>
+                                        {{ hit_proposal.bonus|nl2br }}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="order-proposal-container">
+
+                <div class="countdown" data-date="{{ hit_proposal.timer_end_date|date }}"></div>
+
+                {#<div class="countdown" data-date="2020/01/01 00:00:00"><span class="number-wrapper"><div class="caption">дней</div><div class="line"></div><span class="number day">01</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">часов</div><div class="line"></div><span class="number hour">20</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">минут</div><div class="line"></div><span class="number min">09</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">секунд</div><div class="line"></div><span class="number sec">13</span></span></div>#}
+
+                <div class="order-proposal-form-container">
+
+                    <div class="order-proposal-title">
+                        {{ hit_proposal.timer_legend|default('Внимание! Количество елей ограницено. Успейте купить ель до завершения акции!')|nl2br }}
+                    </div>
+
+                    {{ form(hit_proposal_form) }}
+
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+shop_catalog:
+    resource: "@ShopCatalogBundle/Resources/config/routing.yml"
+    prefix:   /
+
+shop_main:
+    resource: "@ShopMainBundle/Resources/config/routing.xml"
+    prefix:   /
+

@@ -1,0 +1,72 @@
+{% if problems or solutions %}
+    <div class="problems-block block-container">
+
+        <div class="block-diagonal-bg"></div>
+
+        <h2 class="block-title">
+            {{ settings.problems_solutions_title|default('КАКИХ ПРОБЛЕМ ВЫ МОЖЕТЕ ИЗБЕЖАТЬ?')|nl2br }}
+        </h2>
+        <div class="block-description">
+            {{ settings.problems_solutions_description|default('Мы предлагем огромный выбор товаров: от обычных LED-гирлянд, детских хлопушек и небольшой шумовой завесы до иллюминационных комплектов для домов, ракетниц до 150 выстрелов и шумного корпоратива.')|nl2br }}
+        </div>
+
+        <div class="block-body">
+
+            <div class="row">
+
+                {% if problems and solutions %}
+                    {% set columns = word_numbers[6] %}
+                {% else %}
+                    {% set columns = word_numbers[12] %}
+                {% endif %}
+
+                {% if problems %}
+                    <div class="problems-container {{ columns }} columns">
+                        <h3 class="title">
+                            {{ settings.problems_title|default('ТИПИЧНЫЕ НАИБОЛЕЕ РАСПРОСТРАНЕННЫЕ ПРОБЛЕМЫ')|nl2br }}
+                        </h3>
+                        {% for item in problems %}
+                            <div class="item">
+                                <div class="image-container">
+                                    <div class="nailthumb-container">
+                                        <img src="{{ item.image_url }}">
+                                    </div>
+                                    <div class="mark"></div>
+                                </div>
+                                <div class="description valign">
+                                    <div>
+                                        {{ item.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if solutions %}
+                    <div class="solutions-container {{ columns }} columns">
+                        <h3 class="title">
+                            {{ settings.solutions_title|default('ПРОСТЫЕ ПОНЯТНЫЕ РЕШЕНИЕ, КОТОРЫЕ ПОЗВОЛЯТ ИЗБЕЖАТЬ ОШИБОК')|nl2br }}
+                        </h3>
+                        {% for item in solutions %}
+                            <div class="item">
+                                <div class="image-container">
+                                    <img src="{{ item.image_url }}">
+                                    <div class="mark"></div>
+                                </div>
+                                <div class="description valign">
+                                    <div>
+                                        {{ item.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+{% endif %}

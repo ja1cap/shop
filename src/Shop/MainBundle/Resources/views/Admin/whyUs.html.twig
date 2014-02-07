@@ -1,0 +1,44 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Почему мы{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <hr/>
+    <div class="medium primary btn">
+        <a href="{{ path('why_us_item') }}">
+            Добавить элемент
+        </a>
+    </div>
+    {% if items %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th>Заголовок</th>
+                <th>Описание</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>
+                        <div class="medium btn default" style="width: 100%">
+                            <a href="{{ path('why_us_item', {'id' : item.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger" style="width: 100%">
+                            <a href="{{ path('why_us_item_delete', {'id' : item.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

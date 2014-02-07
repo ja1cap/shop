@@ -1,0 +1,8 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopMainBundle:Admin:proposalPriceBreadcrumb.html.twig') }}
+    {{ form(form) }}
+{% endblock %}

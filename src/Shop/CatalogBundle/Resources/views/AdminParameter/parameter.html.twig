@@ -1,0 +1,42 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    {% if parameter.id %}
+        <hr/>
+        <div class="medium primary btn">
+            <a href="{{ path('parameter_option', {'parameterId' : parameter.id}) }}">
+                Добавить опцию
+            </a>
+        </div>
+    {% endif %}
+    {% if parameter.options and not parameter.options.isEmpty %}
+        <ul id="parameter_options">
+            {% for option in parameter.options %}
+                <li>
+                    {{ option.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <script>
+        $(function() {
+
+            var $parameter_options = $('#parameter_options');
+
+            $parameter_options.sortable({
+                axis: 'y',
+                placeholder: 'ui-state-highlight',
+                containment: 'parent',
+                revert: 50,
+                tolerance: 'pointer',
+                cursor: 'move'
+            });
+
+            $parameter_options.disableSelection();
+
+        });
+    </script>
+{% endblock %}

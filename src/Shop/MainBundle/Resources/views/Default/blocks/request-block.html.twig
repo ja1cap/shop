@@ -1,0 +1,34 @@
+{% if settings.request_title %}
+    <div class="request-block block-container">
+
+        <div class="block-diagonal-bg"></div>
+
+        <div class="percent-left"></div>
+
+        <h2 class="block-title">
+            {{ settings.request_title|nl2br }}
+        </h2>
+        {% if settings.request_description %}
+            <div class="block-description">
+                {{ settings.request_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+
+            <div class="request-form-container">
+
+                {#<div class="countdown" data-date="{{ settings.request_timer_end_date|date }}"></div>#}
+
+                {#<div class="countdown" data-date="2020/01/01 00:00:00"><span class="number-wrapper"><div class="caption">дней</div><div class="line"></div><span class="number day">01</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">часов</div><div class="line"></div><span class="number hour">20</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">минут</div><div class="line"></div><span class="number min">09</span><span class="delimiter">:</span></span><span class="number-wrapper"><div class="caption">секунд</div><div class="line"></div><span class="number sec">13</span></span></div>#}
+
+                {{ form(request_form) }}
+
+            </div>
+
+        </div>
+
+        <div class="percent-right"></div>
+
+    </div>
+{% endif %}

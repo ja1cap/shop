@@ -1,0 +1,16 @@
+<div class="breadcrumb">
+    <ul>
+        {% block breadcrumb_items %}
+            <li class="medium btn default">
+                <a href="{{ path('proposals') }}">
+                    Предложения
+                </a>
+            </li>
+            <li class="medium btn default">
+                <a href="{{ path('type_proposals', {'type' : proposal_type.type}) }}">
+                    {{ proposal_type.multiple_name|capitalize }}
+                </a>
+            </li>
+        {% endblock %}
+    </ul>
+</div>

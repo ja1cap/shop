@@ -1,0 +1,88 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Почта{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <h6>
+        Переменные значения в письмах
+    </h6>
+    {% verbatim %}
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    {{customer_name}}
+                </td>
+                <td>
+                    имя покупателя
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{customer_phone}}
+                </td>
+                <td>
+                    телефон покупателя
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{customer_email}}
+                </td>
+                <td>
+                    email покупателя
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{customer_comment}}
+                </td>
+                <td>
+                    комментарий покупателя
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{proposal_information}}
+                </td>
+                <td>
+                    информация о заказе
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{shop_name}}
+                </td>
+                <td>
+                    название магазина
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{shop_address}}
+                </td>
+                <td>
+                    адрес магазина
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{shop_phone}}
+                </td>
+                <td>
+                    телефон магазина
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{shop_email}}
+                </td>
+                <td>
+                    email магазина
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    {% endverbatim %}
+{% endblock %}

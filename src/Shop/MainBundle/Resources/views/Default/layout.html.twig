@@ -1,0 +1,10 @@
+{% extends '::base.html.twig' %}
+{% set word_numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'] %}
+{% block body %}
+    {{ include('ShopMainBundle:Default:header.html.twig') }}
+    <div class="main-container">
+        {% block main_container %}
+        {% endblock %}
+        {{ include('ShopMainBundle:Default:footer.html.twig') }}
+    </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "::base.html.twig" %}
+{% block title %}Система управления сайтом{% endblock %}
+{% block body %}
+    <div class="admin-container">
+        {{ include("ShopMainBundle:Admin:header.html.twig") }}
+        <div class="row vertical tabs">
+            {% block left_bar %}
+                {{ include("ShopMainBundle:Admin:menu.html.twig") }}
+            {% endblock %}
+            <div class="nine columns tab-content active">
+                {% block right_bar %}
+                    {{ form(form) }}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/autosize-master/jquery.autosize.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/js/chosen/chosen.min.css">
+    <script type="text/javascript" src="/js/chosen/chosen.jquery.min.js"></script>
+
+    <script src="/js/maxlength/jquery.maxlength.min.js"></script>
+    <link href="/js/maxlength/jquery.maxlength.css" type="text/css" rel="stylesheet">
+
+    <script>
+        $(function(){
+
+            $('select[multiple="multiple"]').chosen();
+
+            $('textarea').autosize();
+
+            $.maxlength.setDefaults({
+                feedbackText : 'Осталось символов {r} ({m} максимальное кол-во)',
+                overflowText : '{o} - слишком большое кол-во символов ({m} максимальное кол-во)'
+            });
+
+            $('.maxlength').each(function(){
+                $(this).maxlength($(this).data());
+            });
+
+        });
+    </script>
+
+{% endblock %}

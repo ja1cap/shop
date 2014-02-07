@@ -1,0 +1,42 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Отзывы клиентов{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <hr/>
+    <div class="medium primary btn">
+        <a href="{{ path('review') }}">
+            Добавить отзыв
+        </a>
+    </div>
+    {% if items %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th>Имя клиент</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.customer_name }}</td>
+                    <td>
+                        <div class="medium btn default" style="width: 100%">
+                            <a href="{{ path('review', {'id' : item.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger" style="width: 100%">
+                            <a href="{{ path('review_delete', {'id' : item.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

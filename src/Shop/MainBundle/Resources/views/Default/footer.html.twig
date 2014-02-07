@@ -1,0 +1,213 @@
+<div class="footer">
+
+    <div class="row">
+
+        <div class="footer-info three columns">
+            <div class="footer-name">
+                {{ date()|date("Y") }} {{ settings.name }}
+            </div>
+            <div class="footer-description">
+                {{ settings.footer_description }}
+            </div>
+            {#<div class="author">#}
+                {#<div class="design">#}
+                    {#Дизайн: <a href="http://lebedevmedia.com/" target="_blank">Lebedev Media</a>#}
+                {#</div>#}
+                {#<div class="powered">#}
+                    {#Разработка: <a href="https://twitter.com/ja1cap" target="_blank">@ja1cap</a>#}
+                {#</div>#}
+            {#</div>#}
+        </div>
+
+        <div class="footer-contacts three columns">
+            <div class="phone">
+                {{ settings.phone }}
+            </div>
+            <div class="callback">
+                <a href="{{ path('callback') }}" class="callback-fancy-box">
+                    Заказать обратный звонок
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-social six columns">
+
+            <div class="row">
+
+                {% if settings.vk_url %}
+                    <div class="vk four columns">
+                        <a href="{{ settings.vk_url }}" target="_blank">
+                            Вконтакте
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if settings.fb_url %}
+                    <div class="fb four columns">
+                        <a href="{{ settings.fb_url }}" target="_blank">
+                            facebook
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if settings.google_url %}
+                    <div class="google four columns">
+                        <a href="{{ settings.google_url }}" target="_blank">
+                            Google+
+                        </a>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+
+        $('.countdown').countDown();
+        $('label').inFieldLabels();
+
+        $('.proposals-block .proposals-list').owlCarousel({
+            items : 4,
+            navigation : true,
+            pagination : false
+        });
+
+        $('.reviews-list').owlCarousel({
+            items : 4,
+            navigation : true,
+            pagination : false
+        });
+
+        $('.images-list').owlCarousel({
+            items : 4,
+            navigation : true,
+            pagination : false
+        });
+
+        $('.actions-list').owlCarousel({
+            items : 2,
+            navigation : true,
+            pagination : false
+        });
+
+        $(document).delegate('.request-form', 'submit', function(e){
+
+            e.preventDefault();
+
+            var $form = $(this),
+                    $customer_name = $form.find('.customer-name'),
+                    $customer_phone = $form.find('.customer-phone'),
+                    $customer_email = $form.find('.customer-email');
+
+            var data = {
+                customer_name : $customer_name.val(),
+                customer_phone : $customer_phone.val(),
+                customer_email : $customer_email.val()
+            };
+
+            if(data.customer_name && data.customer_phone){
+
+                $.ajax({
+                    url : '{{ path('process_request') }}',
+                    data : data,
+                    success : function(response){
+                        alert(response);
+                        $customer_name.val([]).trigger('blur');
+                        $customer_phone.val([]).trigger('blur');
+                        $customer_email.val([]).trigger('blur');
+                    }
+                });
+
+            }
+
+        });
+
+        $(document).delegate('.callback-form', 'submit', function(e){
+
+            e.preventDefault();
+
+            var $form = $(this),
+                    $customer_name = $form.find('.customer-name'),
+                    $customer_phone = $form.find('.customer-phone'),
+                    $customer_email = $form.find('.customer-email'),
+                    $comment = $form.find('.comment');
+
+            var data = {
+                customer_name : $customer_name.val(),
+                customer_phone : $customer_phone.val(),
+                customer_email : $customer_email.val(),
+                comment : $comment.val()
+            };
+
+            if(data.customer_name && data.customer_phone){
+
+                $.ajax({
+                    url : '{{ path('callback') }}',
+                    data : data,
+                    type : 'POST',
+                    success : function(response){
+                        alert(response);
+                        var $fancybox = $form.closest('.fancybox-wrap'),
+                                $close = $fancybox.find('.fancybox-close');
+                        $close.trigger('click');
+                    }
+                });
+
+            }
+
+        });
+
+        $(document).delegate('.order-proposal-form', 'submit', function(e){
+
+            e.preventDefault();
+
+            var $form = $(this),
+                    $price = $form.find('.price'),
+                    $name = $form.find('.name'),
+                    $customer_name = $form.find('.customer-name'),
+                    $customer_phone = $form.find('.customer-phone'),
+                    $customer_email = $form.find('.customer-email');
+
+            var data = {
+                price : $price.val(),
+                name : $name.val(),
+                customer_name : $customer_name.val(),
+                customer_phone : $customer_phone.val(),
+                customer_email : $customer_email.val()
+            };
+
+            if(data.customer_name && data.customer_phone){
+
+                $.ajax({
+                    url : '{{ path('order_proposal') }}',
+                    data : data,
+                    type : 'POST',
+                    success : function(response){
+
+                        alert(response);
+
+                        var $fancybox = $form.closest('.fancybox-wrap'),
+                            $close = $fancybox.find('.fancybox-close');
+
+                        if($close.length > 0){
+                            $close.trigger('click');
+                        } else{
+                            $customer_name.val([]).trigger('blur');
+                            $customer_phone.val([]).trigger('blur');
+                            $customer_email.val([]).trigger('blur');
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+
+    })
+</script>

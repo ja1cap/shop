@@ -1,0 +1,58 @@
+{% if why_us_items %}
+    <div class="why-us-block block-container" id="why-us-block">
+
+        <div class="block-diagonal-bg"></div>
+
+        <h2 class="block-title">
+            {{ settings.why_us_title|default('ПОЧЕМУ 90% КЛИЕНТОВ ВЫБИРАЮТ НАС')|nl2br }}
+        </h2>
+
+        {% if settings.why_us_description %}
+            <div class="block-description">
+                {{ settings.why_us_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+
+            <div class="row">
+
+                <div class="{{ why_us_items|length < 4 ? 'centered columns ' ~ word_numbers[(why_us_items|length * 3)] : ''}}">
+
+                    <ul class="why-us-list">
+                        {% for item in why_us_items %}
+
+                        {% if(loop.index % 4 == 1 and not loop.first) %}
+                    </ul>
+                    <ul class="why-us-list">
+                        {% endif %}
+
+                        <li>
+
+                            <div class="image-container">
+                                <div class="image-wrapper">
+                                    <img src="{{ item.image_url|default('/img/why-us-key.png') }}">
+                                </div>
+                            </div>
+
+                            <div class="title">
+                                {{ item.title|nl2br }}
+                            </div>
+                            <div class="description">
+                                {{ item.description|nl2br }}
+                            </div>
+
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endif %}

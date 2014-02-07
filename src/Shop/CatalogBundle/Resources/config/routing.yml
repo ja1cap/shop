@@ -1,0 +1,23 @@
+shop_catalog_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ShopCatalogBundle:Default:index }
+
+parameters:
+    pattern: /admin/parameters
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:parameters }
+
+parameter:
+    pattern: /admin/parameter/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:parameter, id: null }
+
+delete_parameter:
+    pattern: /admi/deleteParameter/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:deleteParameter }
+
+parameter_option:
+    pattern: /admin/parameterOption/{parameterId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:parameterOption, id: null }
+
+delete_parameter_option:
+    pattern: /admin/deleteParameterOption/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminParameter:deleteParameterOption }

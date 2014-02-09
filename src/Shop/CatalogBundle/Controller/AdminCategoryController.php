@@ -25,7 +25,7 @@ class AdminCategoryController extends Controller
     {
 
         $categories = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(array(), array(
-            'name' => 'DESC',
+            'name' => 'ASC',
         ));
 
         return $this->render('ShopCatalogBundle:AdminCategory:categories.html.twig', array(
@@ -73,7 +73,6 @@ class AdminCategoryController extends Controller
                 'title' => $isNew ? 'Добавление категории' : 'Изменение категории',
                 'form' => $form->createView(),
                 'category' => $entity,
-                'total_parameters_amount' => count($this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findAll()),
             ));
 
         }
@@ -119,6 +118,7 @@ class AdminCategoryController extends Controller
 
         return $this->render('ShopCatalogBundle:AdminCategory:categoryParameters.html.twig', array(
             'category' => $category,
+            'total_parameters_amount' => count($this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findAll()),
         ));
 
     }
@@ -173,8 +173,8 @@ class AdminCategoryController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('category', array(
-                'id' => $category->getId(),
+            return $this->redirect($this->generateUrl('category_parameters', array(
+                'categoryId' => $category->getId(),
             )));
 
         } else {
@@ -183,6 +183,7 @@ class AdminCategoryController extends Controller
                 'title' => $isNew ? 'Добавление параметра категории' : 'Изменение параметра категории',
                 'form' => $form->createView(),
                 'category' => $category,
+                'category_parameter' => $categoryParameter,
             ));
 
         }

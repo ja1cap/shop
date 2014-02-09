@@ -1,24 +1,6 @@
-{#<li class="{{ app.request.get('_route') == 'hit_proposal' ? 'active' : '' }}">#}
-    {#<a href="{{ path('hit_proposal') }}" class="">#}
-        {#Топовый товар#}
-    {#</a>#}
-{#</li>#}
-
-<li class="{{ app.request.get('_route') == 'proposals' ? 'active' : '' }}">
-    <a href="{{ path('proposals') }}" class="">
-        Предложения
-    </a>
-</li>
-
 <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
     <a href="{{ path('categories') }}" class="">
-        Категории
-    </a>
-</li>
-
-<li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
-    <a href="{{ path('parameters') }}" class="">
-        Параметры
+        Каталог
     </a>
 </li>
 

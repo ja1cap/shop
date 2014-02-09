@@ -1,0 +1,9 @@
+{% extends 'ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig' %}
+{% block breadcrumb_items %}
+    {{ parent() }}
+    <li class="medium btn default">
+        <a href="{{ path('proposals', {'categoryId' : category.id}) }}">
+            Товары
+        </a>
+    </li>
+{% endblock %}

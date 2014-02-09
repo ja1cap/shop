@@ -35,45 +35,53 @@
                         <div class="order-proposal-form-container">
 
                             {% block proposal_price_block %}
-                                {% if currentPrice %}
-                                    <div class="proposal-price-container">
+                                <div class="proposal-price-container">
+                                    {% if currentPrice %}
                                         <div class="price">
                                             {{ currentPrice.value|number_format(0, '.', ' ') }} руб
-                                            {% if (prices|length == 1 or not prices) and currentPrice.description %}
-                                                <span class="price-description">
-                                                    {{  currentPrice.description }}
-                                                </span>
-                                            {% endif %}
                                         </div>
-                                        {% if prices and prices|length > 1 %}
-                                            <form>
-                                                <div class="proposal-select">
-                                                    <div class="picker">
-                                                        <select name="sizeId">
-                                                            {% for sizeId, price in prices %}
-                                                                <option value="{{ sizeId }}" {{ sizeId == currentSizeId ? "selected='selected'" : "" }}>{{ price.size }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                        {% if currentPrice.description %}
+                                            <div class="price-description">
+                                                {{  currentPrice.description|nl2br }}
+                                            </div>
                                         {% endif %}
-                                    </div>
-                                    <script>
-                                        $(function(){
-
-                                            var $proposal_select = $('.proposal-select');
-
-                                            $proposal_select.change(function(){
-
-                                                var $form = $proposal_select.closest('form');
-                                                $form.submit();
-
-                                            });
-
-                                        })
-                                    </script>
+                                    {% endif %}
+                                </div>
+                                {% if parametersData %}
+                                    <form>
+                                        {% for parameterData in parametersData %}
+                                            <div class="proposal-select">
+                                                <label for="parameter_{{ parameterData.parameter.id }}">
+                                                    {{ parameterData.parameter.name }}
+                                                </label>
+                                                <div class="picker">
+                                                    <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                        <option value="">Не важно</option>
+                                                        {% for option in parameterData.options %}
+                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
+                                                                {{ option.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </form>
                                 {% endif %}
+                                <script>
+                                    $(function(){
+
+                                        var $proposal_select = $('.proposal-select');
+
+                                        $proposal_select.change(function(){
+
+                                            var $form = $proposal_select.closest('form');
+                                            $form.submit();
+
+                                        });
+
+                                    })
+                                </script>
                             {% endblock %}
 
                             <form name="form" method="post" action="" class="order-proposal-form form-box">

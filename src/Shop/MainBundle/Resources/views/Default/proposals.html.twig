@@ -18,7 +18,7 @@
 
                             {% set proposal = proposal_data.proposal %}
 
-                            <a href="{{ path(proposalRoute, { 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
 
                                 <span class="image-container">
                                     <span class="nailthumb-container">

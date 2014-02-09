@@ -1,0 +1,41 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Управление производителями{% endblock %}
+
+{% block right_bar %}
+
+    {{ include('ShopCatalogBundle:AdminManufacturer:breadcrumb/manufacturersBreadcrumb.html.twig') }}
+
+    <div class="medium primary btn">
+        <a href="{{ path('manufacturer') }}">
+            Добавить производителя
+        </a>
+    </div>
+
+    {% if manufacturers %}
+        <table style="margin: 10px 0;">
+            <tbody>
+            {% for manufacturer in manufacturers %}
+                <tr>
+                    <td>
+                        {{ manufacturer.name }}
+                    </td>
+                    <td>
+                        <div class="medium btn default icon-left entypo icon-pencil">
+                            <a href="{{ path('manufacturer', {'id' : manufacturer.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger icon-left entypo icon-trash">
+                            <a href="{{ path('delete_manufacturer', {'id' : manufacturer.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

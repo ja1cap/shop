@@ -183,4 +183,42 @@ class Category
     {
         return $this->parameters;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $proposals;
+
+
+    /**
+     * Add proposals
+     *
+     * @param \Shop\CatalogBundle\Entity\Proposal $proposals
+     * @return Category
+     */
+    public function addProposal(Proposal $proposals)
+    {
+        $this->proposals[] = $proposals;
+        $proposals->setCategory($this);
+        return $this;
+    }
+
+    /**
+     * Remove proposals
+     *
+     * @param \Shop\CatalogBundle\Entity\Proposal $proposals
+     */
+    public function removeProposal(Proposal $proposals)
+    {
+        $this->proposals->removeElement($proposals);
+    }
+
+    /**
+     * Get proposals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProposals()
+    {
+        return $this->proposals;
+    }
 }

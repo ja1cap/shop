@@ -1789,6 +1789,8 @@ body .block-container.how-we-block .block-body .how-we-list .columns .image-cont
 body .block-container.how-we-block .block-body .how-we-list .columns .title { text-align: center; font-size: 20px; padding: 0 10px; }
 body .block-container.how-we-block .block-body .how-we-list .columns .description { text-align: center; padding: 20px 10px 0; }
 body .block-container.proposals-block .catalog-menu { margin-bottom: 10px; width: 800px; min-width: 800px; position: relative; z-index: 5; }
+body .block-container.proposals-block .catalog-menu .tiles { margin-left: 0; }
+body .block-container.proposals-block .catalog-menu .tiles.four_up > li { margin-left: 0; width: 25%; }
 body .block-container.proposals-block .catalog-menu .btn { width: 100%; text-align: center; background: white; }
 body .block-container.proposals-block .catalog-menu .btn a { color: #34495e; }
 body .block-container.proposals-block .catalog-menu .btn:hover { background: #34495e; }
@@ -1958,8 +1960,8 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .proposal-container .order-proposal-form-container { margin: 0 0 20px 20px; background-color: #f14854; padding: 15px 20px; }
 .proposal-container .order-proposal-form-container .proposal-price { color: white; font-size: 30px; line-height: 36px; margin-bottom: 15px; }
 .proposal-container .order-proposal-form-container .proposal-price-container { overflow: hidden; margin-bottom: 15px; }
-.proposal-container .order-proposal-form-container .proposal-price-container .price { color: white; font-size: 30px; line-height: 36px; float: left; }
-.proposal-container .order-proposal-form-container .proposal-price-container .price .price-description { font-size: 14px; line-height: 14px; }
+.proposal-container .order-proposal-form-container .proposal-price-container .price { color: white; font-size: 30px; line-height: 36px; }
+.proposal-container .order-proposal-form-container .proposal-price-container .price-description { font-size: 14px; }
 .proposal-container .order-proposal-form-container .proposal-price-container form { float: right; }
 .proposal-container .order-proposal-form-container .proposal-price-container form .proposal-select .picker { display: block; margin: 0; }
 .proposal-container .order-proposal-form-container form { margin: 0; }

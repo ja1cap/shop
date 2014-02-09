@@ -4,6 +4,19 @@
 
 {% block right_bar %}
 
+    <div style="margin-bottom: 10px">
+        <div class="medium default btn icon-left entypo icon-book">
+            <a href="{{ path('manufacturers') }}">
+                Производители
+            </a>
+        </div>
+        <div class="medium default btn icon-left entypo icon-menu">
+            <a href="{{ path('parameters') }}">
+                Параметры
+            </a>
+        </div>
+    </div>
+
     <div class="medium primary btn">
         <a href="{{ path('category') }}">
             Добавить категорию

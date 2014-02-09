@@ -2,16 +2,11 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\MainBundle\Entity\Bed;
-use Shop\MainBundle\Entity\BedBase;
-use Shop\MainBundle\Entity\BedBasePrice;
-use Shop\MainBundle\Entity\BedPrice;
+use Shop\CatalogBundle\Entity\ParameterValue;
+use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\Price;
+use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Address;
-use Shop\MainBundle\Entity\HitProposal;
-use Shop\MainBundle\Entity\Mattress;
-use Shop\MainBundle\Entity\MattressPrice;
-use Shop\MainBundle\Entity\Pillow;
-use Shop\MainBundle\Entity\PillowPrice;
 use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -26,54 +21,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-
-//        $hit_proposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:HitProposal')->findOneBy(array());
-//
-//        $hit_proposal_form = $this->createFormBuilder(null, array(
-//                'attr' => array(
-//                    'class' => 'order-proposal-form form-box',
-//                ),
-//            ))
-//            ->add('name', 'hidden', array(
-//                'required' => true,
-//                'attr' => array(
-//                    'class' => 'name',
-//                    'value' => $hit_proposal ? $hit_proposal['name'] : null,
-//                ),
-//            ))
-//            ->add('price', 'hidden', array(
-//                'required' => true,
-//                'attr' => array(
-//                    'class' => 'price',
-//                    'value' => $hit_proposal ? number_format($hit_proposal['discount_price'], 0, '.', ' ') . ' руб' : null,
-//                ),
-//            ))
-//            ->add('customer_name', 'text', array(
-//                'label' => 'КАК К ВАМ ОБРАЩАТЬСЯ*',
-//                'required' => true,
-//                'attr' => array(
-//                    'class' => 'customer-name',
-//                ),
-//            ))
-//            ->add('customer_phone', 'text', array(
-//                'label' => 'ТЕЛЕФОН*',
-//                'attr' => array(
-//                    'class' => 'customer-phone',
-//                ),
-//            ))
-//            ->add('customer_email', 'text', array(
-//                'label' => 'E-MAIL',
-//                'attr' => array(
-//                    'class' => 'customer-email',
-//                ),
-//            ))
-//            ->add('save', 'submit', array(
-//                'label' => 'КУПИТЬ СЕЙЧАС',
-//                'attr' => array(
-//                    'class' => 'submit-btn',
-//                ),
-//            ))
-//            ->getForm();
 
         $request_form = $this->createFormBuilder(null, array(
                 'attr' => array(
@@ -141,12 +88,11 @@ class DefaultController extends Controller
 
         return $this->render('ShopMainBundle:Default:index.html.twig', array(
             'settings' => $this->getSettings(),
-//            'hit_proposal' => $hit_proposal,
-//            'hit_proposal_form' => $hit_proposal_form->createView(),
             'request_form' => $request_form->createView(),
 //            'footer_request_form' => $footer_request_form->createView(),
 //            'why_us_items' => $this->getWhyUsItems(),
             'benefits' => $this->getBenefits(),
+            'categories' => $this->getCategories(),
             'proposals' => $this->getProposals(),
             'actions' => $this->getActions(),
             'reviews' => $this->getReviews(),
@@ -155,41 +101,6 @@ class DefaultController extends Controller
 //            'problems' => $this->getProblems(),
 //            'solutions' => $this->getSolutions(),
             'addresses' => $this->getAddresses(),
-        ));
-
-    }
-
-    /**
-     * @param $id
-     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function hitProposalAction($id){
-
-        $hitProposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:HitProposal')->findOneBy(array(
-            'id' => (int)$id,
-        ));
-
-        if(!$hitProposal instanceof HitProposal){
-            return new JsonResponse(false, 404);
-        }
-
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
-
-        $proposal = array(
-            'id' => $hitProposal->getId(),
-            'title' => $hitProposal->getName(),
-            'image_url' => $hitProposal->getImageUrl(),
-            'price' => $hitProposal->getDiscountPrice(),
-            'short_description' => $hitProposal->getShortDescription(),
-            'description' => $hitProposal->getDescription(),
-        );
-
-        return $this->render('ShopMainBundle:Default:proposal.html.twig', array(
-            'settings' => $settings,
-            'proposal' => $proposal,
         ));
 
     }
@@ -384,7 +295,7 @@ class DefaultController extends Controller
      */
     protected function getProposals(){
 
-        $proposals = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Proposal')->findBy(array(
+        $proposals = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Proposal')->findBy(array(
             'showOnHomePage' => true
         ));
 
@@ -392,304 +303,56 @@ class DefaultController extends Controller
 
     }
 
-    public function bedsAction(Request $request){
-
-        $sizeIdParameterName = 'sizeId';
-        $sizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-
-        $pageHash = 'type_proposals_page_' . Bed::TYPE;
-        $page = $this->getDoctrine()->getRepository('ShopMainBundle:Page')->findOneBy(array(
-            'hash' => $pageHash,
+    /**
+     * @return array
+     */
+    protected function getCategories(){
+        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(array(), array(
+            'name' => 'ASC',
         ));
+    }
+
+    /**
+     * @param $slug
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function categoryAction($slug, Request $request){
+
+        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+            'slug' => $slug,
+        ));
+
+        if(!$category instanceof Category){
+            return $this->redirect($this->generateUrl('shop'));
+        }
 
         /**
-         * @var $bedRepository \Shop\MainBundle\Entity\BedRepository
+         * @var $proposalsRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $bedRepository = $this->getDoctrine()->getRepository('ShopMainBundle:Bed');
-        $beds = $bedRepository->getBeds($sizeId);
+        $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposals = $proposalsRepository->findProposals($category->getId());
 
         $viewParameters = array(
-            'sizes' => BedPrice::$sizes,
-            'sizeId' => $sizeId,
-            'page' => $page,
-            'proposals' => $beds,
-            'settings' => $this->getSettings(),
-            'proposalRoute' => 'shop_bed',
-        );
-
-        $response = $this->render('ShopMainBundle:Default:proposals/beds.html.twig', $viewParameters);
-        $response->headers->setCookie(new Cookie($sizeIdParameterName, $sizeId));
-
-        return $response;
-
-    }
-
-    public function bedAction($slug, Request $request){
-
-        $criteria = array();
-
-        if(is_numeric($slug)){
-            $criteria['id'] = (int)$slug;
-        } else if(is_string($slug)) {
-            $criteria['seoSlug'] = (string)$slug;
-        }
-
-        $proposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Bed')->findOneBy($criteria);
-
-        if(!$proposal instanceof Bed){
-            throw $this->createNotFoundException();
-        }
-
-        $sizeIdParameterName = 'sizeId';
-        $currentSizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-        $prices = array();
-        $lowestPrice = null;
-        $currentPrice = null;
-
-        $proposal->getPrices()->map(function(BedPrice $price) use (&$prices, &$lowestPrice){
-
-            if(!$lowestPrice || ($lowestPrice instanceof BedPrice && $lowestPrice->getValue() > $price->getValue())){
-                $lowestPrice = $price;
-            }
-
-            $prices[$price->getSizeId()] = $price;
-
-        });
-
-        if($prices && $lowestPrice instanceof BedPrice){
-
-            if(isset($prices[$currentSizeId])){
-                $currentPrice = $prices[$currentSizeId];
-            } else {
-                $currentSizeId = $lowestPrice->getSizeId();
-                $currentPrice = $lowestPrice;
-            }
-
-        }
-
-        return $this->render('ShopMainBundle:Default:proposal/bed.html.twig', array(
-            'settings' => $this->getSettings(),
-            'proposal' => $proposal,
-            'currentSizeId' => $currentSizeId,
-            'currentPrice' => $currentPrice,
-            'prices' => $prices,
-            'currentCategoryPath' => 'shop_beds'
-        ));
-
-    }
-
-    public function mattressesAction(Request $request){
-
-        $pageHash = 'type_proposals_page_' . Mattress::TYPE;
-        $page = $this->getDoctrine()->getRepository('ShopMainBundle:Page')->findOneBy(array(
-            'hash' => $pageHash,
-        ));
-
-        $sizeIdParameterName = 'sizeId';
-        $sizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-
-        $manufacturerIdParameterName = 'manufacturerId';
-        $manufacturerId = $request->get($manufacturerIdParameterName, $request->cookies->get($manufacturerIdParameterName));
-
-        /**
-         * @var $mattressRepository \Shop\MainBundle\Entity\MattressRepository
-         */
-        $mattressRepository = $this->getDoctrine()->getRepository('ShopMainBundle:Mattress');
-        $mattresses = $mattressRepository->getMattresses($sizeId, $manufacturerId);
-
-        $viewParameters = array(
-            'manufacturers' => Mattress::$manufacturers,
-            'manufacturerId' => $manufacturerId,
-            'sizes' => MattressPrice::$sizes,
-            'sizeId' => $sizeId,
-            'proposals' => $mattresses,
-            'settings' => $this->getSettings(),
-            'page' => $page,
-            'proposalRoute' => 'shop_mattress',
-        );
-
-        $response = $this->render('ShopMainBundle:Default:proposals/mattresses.html.twig', $viewParameters);
-        $response->headers->setCookie(new Cookie($sizeIdParameterName, $sizeId));
-        $response->headers->setCookie(new Cookie($manufacturerIdParameterName, $manufacturerId));
-
-        return $response;
-
-    }
-
-    public function mattressAction($slug, Request $request){
-
-        $criteria = array();
-
-        if(is_numeric($slug)){
-            $criteria['id'] = (int)$slug;
-        } else if(is_string($slug)) {
-            $criteria['seoSlug'] = (string)$slug;
-        }
-
-        $proposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Mattress')->findOneBy($criteria);
-
-        if(!$proposal instanceof Mattress){
-            throw $this->createNotFoundException();
-        }
-
-        $sizeIdParameterName = 'sizeId';
-        $currentSizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-        $prices = array();
-        $lowestPrice = null;
-        $currentPrice = null;
-
-        $proposal->getPrices()->map(function(MattressPrice $price) use (&$prices, &$lowestPrice){
-
-            if(!$lowestPrice || ($lowestPrice instanceof MattressPrice && $lowestPrice->getValue() > $price->getValue())){
-                $lowestPrice = $price;
-            }
-
-            $prices[$price->getSizeId()] = $price;
-
-        });
-
-        if($prices && $lowestPrice instanceof MattressPrice){
-
-            if(isset($prices[$currentSizeId])){
-                $currentPrice = $prices[$currentSizeId];
-            } else {
-                $currentSizeId = $lowestPrice->getSizeId();
-                $currentPrice = $lowestPrice;
-            }
-
-        }
-
-        return $this->render('ShopMainBundle:Default:proposal/mattress.html.twig', array(
-            'settings' => $this->getSettings(),
-            'proposal' => $proposal,
-            'currentSizeId' => $currentSizeId,
-            'currentPrice' => $currentPrice,
-            'prices' => $prices,
-            'currentCategoryPath' => 'shop_mattresses'
-        ));
-
-    }
-
-    public function bedBasesAction(Request $request){
-
-        $pageHash = 'type_proposals_page_' . BedBase::TYPE;
-        $page = $this->getDoctrine()->getRepository('ShopMainBundle:Page')->findOneBy(array(
-            'hash' => $pageHash,
-        ));
-
-        $sizeIdParameterName = 'sizeId';
-        $sizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-
-//        $manufacturerIdParameterName = 'manufacturerId';
-//        $manufacturerId = $request->get($manufacturerIdParameterName, $request->cookies->get($manufacturerIdParameterName));
-        $manufacturerId = null;
-
-        /**
-         * @var $bedBaseRepository \Shop\MainBundle\Entity\BedBaseRepository
-         */
-        $bedBaseRepository = $this->getDoctrine()->getRepository('ShopMainBundle:BedBase');
-        $bedBases = $bedBaseRepository->getBases($sizeId, $manufacturerId);
-
-        $viewParameters = array(
-            'manufacturers' => BedBase::$manufacturers,
-            'manufacturerId' => $manufacturerId,
-            'sizes' => BedBasePrice::$sizes,
-            'sizeId' => $sizeId,
-            'proposals' => $bedBases,
-            'settings' => $this->getSettings(),
-            'page' => $page,
-            'proposalRoute' => 'shop_bed_base',
-        );
-
-        $response = $this->render('ShopMainBundle:Default:proposals/bedBases.html.twig', $viewParameters);
-        $response->headers->setCookie(new Cookie($sizeIdParameterName, $sizeId));
-//        $response->headers->setCookie(new Cookie($manufacturerIdParameterName, $manufacturerId));
-
-        return $response;
-
-    }
-
-    public function bedBaseAction($slug, Request $request){
-
-        $criteria = array();
-
-        if(is_numeric($slug)){
-            $criteria['id'] = (int)$slug;
-        } else if(is_string($slug)) {
-            $criteria['seoSlug'] = (string)$slug;
-        }
-
-        $proposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:BedBase')->findOneBy($criteria);
-
-        if(!$proposal instanceof BedBase){
-            throw $this->createNotFoundException();
-        }
-
-        $sizeIdParameterName = 'sizeId';
-        $currentSizeId = $request->get($sizeIdParameterName, $request->cookies->get($sizeIdParameterName));
-        $prices = array();
-        $lowestPrice = null;
-        $currentPrice = null;
-
-        $proposal->getPrices()->map(function(BedBasePrice $price) use (&$prices, &$lowestPrice){
-
-            if(!$lowestPrice || ($lowestPrice instanceof BedBasePrice && $lowestPrice->getValue() > $price->getValue())){
-                $lowestPrice = $price;
-            }
-
-            $prices[$price->getSizeId()] = $price;
-
-        });
-
-        if($prices && $lowestPrice instanceof BedBasePrice){
-
-            if(isset($prices[$currentSizeId])){
-                $currentPrice = $prices[$currentSizeId];
-            } else {
-                $currentSizeId = $lowestPrice->getSizeId();
-                $currentPrice = $lowestPrice;
-            }
-
-        }
-
-        return $this->render('ShopMainBundle:Default:proposal/bedBase.html.twig', array(
-            'settings' => $this->getSettings(),
-            'proposal' => $proposal,
-            'currentSizeId' => $currentSizeId,
-            'currentPrice' => $currentPrice,
-            'prices' => $prices,
-            'currentCategoryPath' => 'shop_bed_bases'
-        ));
-
-    }
-
-    public function pillowsAction(){
-
-        $pageHash = 'type_proposals_page_' . Pillow::TYPE;
-        $page = $this->getDoctrine()->getRepository('ShopMainBundle:Page')->findOneBy(array(
-            'hash' => $pageHash,
-        ));
-
-        /**
-         * @var $repository \Shop\MainBundle\Entity\PillowRepository
-         */
-        $repository = $this->getDoctrine()->getRepository('ShopMainBundle:Pillow');
-        $proposals = $repository->getPillows();
-
-        $viewParameters = array(
+            'category' => $category,
+            'categories' => $this->getCategories(),
             'proposals' => $proposals,
             'settings' => $this->getSettings(),
-            'page' => $page,
-            'proposalRoute' => 'shop_pillow',
         );
 
-        $response = $this->render('ShopMainBundle:Default:proposals/pillows.html.twig', $viewParameters);
+        $response = $this->render('ShopMainBundle:Default:proposals.html.twig', $viewParameters);
 
         return $response;
 
     }
 
-    public function pillowAction($slug, Request $request){
+    /**
+     * @param $slug
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function proposalAction($slug, Request $request){
 
         $criteria = array();
 
@@ -699,36 +362,111 @@ class DefaultController extends Controller
             $criteria['seoSlug'] = (string)$slug;
         }
 
-        $proposal = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Pillow')->findOneBy($criteria);
+        /**
+         * @var $proposalsRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalsRepository->findOneBy($criteria);
 
-        if(!$proposal instanceof Pillow){
-            throw $this->createNotFoundException();
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
         }
 
-        $prices = array();
+        $category = $proposal->getCategory();
+
+        $filteredParameterValues = $request->get('parameters');
+        if(is_array($filteredParameterValues)){
+            $filteredParameterValues = array_filter($filteredParameterValues);
+        } else {
+            $filteredParameterValues = array();
+        }
+
+//        $prices = $proposalsRepository->findProposalPrices($proposal->getId(), $filteredParameterValues);
+        $prices = $proposal->getPrices();
         $lowestPrice = null;
-        $currentPrice = null;
 
-        $proposal->getPrices()->map(function(PillowPrice $price) use (&$prices, &$lowestPrice){
+        $parametersData = array();
 
-            if(!$lowestPrice || ($lowestPrice instanceof PillowPrice && $lowestPrice->getValue() > $price->getValue())){
-                $lowestPrice = $price;
+        /**
+         * @var $price Price
+         */
+        foreach($prices as $price){
+
+            $parameterValues = $price->getParameterValues();
+            $filteredPriceParameterValues = array();
+
+            /**
+             * @var $parameterValue ParameterValue
+             */
+            foreach($parameterValues as $parameterValue){
+
+                if(!isset($parametersData[$parameterValue->getParameterId()])){
+
+                    $parametersData[$parameterValue->getParameterId()] = array(
+                        'parameter' => $parameterValue->getParameter(),
+                        'options' => array(),
+                    );
+
+                }
+
+                $option = $parameterValue->getOption();
+
+                if($filteredParameterValues && isset($filteredParameterValues[$parameterValue->getParameterId()])){
+
+                    $parametersData[$parameterValue->getParameterId()]['options'][$option->getId()] = array(
+                        'id' => $option->getId(),
+                        'name' => $option->getName()
+                    );
+
+                    if($filteredParameterValues[$parameterValue->getParameterId()] == $option->getId()){
+
+                        $filteredPriceParameterValues[$parameterValue->getParameterId()] = $option->getId();
+
+                    }
+
+                }
+
             }
 
-            $prices[$price->getId()] = $price;
+            if(!$filteredParameterValues || ($filteredPriceParameterValues == $filteredParameterValues)) {
 
-        });
+                /**
+                 * @var $parameterValue ParameterValue
+                 */
+                foreach($parameterValues as $parameterValue){
 
-        if($prices && $lowestPrice instanceof PillowPrice){
-            $currentPrice = $lowestPrice;
+                    $option = $parameterValue->getOption();
+                    $parametersData[$parameterValue->getParameterId()]['options'][$option->getId()] = array(
+                        'id' => $option->getId(),
+                        'name' => $option->getName()
+                    );
+
+                }
+
+                if(
+                    !$lowestPrice
+                    || (
+                        $lowestPrice instanceof Price
+                        && $lowestPrice->getValue() > $price->getValue()
+                    )
+                ) {
+
+                    $lowestPrice = $price;
+
+                }
+
+            }
+
         }
 
-        return $this->render('ShopMainBundle:Default:proposal/pillow.html.twig', array(
+        return $this->render('ShopMainBundle:Default:proposal.html.twig', array(
             'settings' => $this->getSettings(),
+            'category' => $category,
+            'categories' => $this->getCategories(),
             'proposal' => $proposal,
-            'currentPrice' => $currentPrice,
-            'prices' => $prices,
-            'currentCategoryPath' => 'shop_pillows'
+            'parametersData' => $parametersData,
+            'currentPrice' => $lowestPrice,
+            'filteredParameterValues' => $filteredParameterValues
         ));
 
     }

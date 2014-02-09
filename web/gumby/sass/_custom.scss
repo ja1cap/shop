@@ -788,6 +788,15 @@ body {
         min-width: 800px;
         position: relative;
         z-index: 5;
+
+        .tiles {
+          margin-left: 0;
+          &.four_up > li {
+            margin-left: 0;
+            width: 25%;
+          }
+        }
+
         .btn {
           width: 100%;
           text-align: center;
@@ -2140,13 +2149,11 @@ body {
         color: white;
         font-size: 30px;
         line-height: 36px;
-        float: left;
 
-        .price-description {
-          font-size: 14px;
-          line-height: 14px;
-        }
+      }
 
+      .price-description {
+        font-size: 14px;
       }
 
       form {

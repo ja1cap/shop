@@ -2,32 +2,13 @@
     Каталог
 </h1>
 <ul class="left-bar-menu">
-    <li>
-        <div class="btn default medium {{ currentCategoryPath|default(app.request.get('_route')) == 'shop_mattresses' ? 'active' : '' }}">
-            <a href="{{ path('shop_mattresses') }}">
-                Матрасы
-            </a>
-        </div>
-    </li>
-    <li>
-        <div class="btn default medium {{ currentCategoryPath|default(app.request.get('_route')) == 'shop_beds' ? 'active' : '' }}">
-            <a href="{{ path('shop_beds') }}">
-                Кровати
-            </a>
-        </div>
-    </li>
-    <li>
-        <div class="btn default medium {{ currentCategoryPath|default(app.request.get('_route')) == 'shop_bed_bases' ? 'active' : '' }}">
-            <a href="{{ path('shop_bed_bases') }}">
-                Основания
-            </a>
-        </div>
-    </li>
-    <li>
-        <div class="btn default medium {{ currentCategoryPath|default(app.request.get('_route')) == 'shop_pillows' ? 'active' : '' }}">
-            <a href="{{ path('shop_pillows') }}">
-                Подушки
-            </a>
-        </div>
-    </li>
+    {% for _category in categories %}
+        <li>
+            <div class="btn default medium {{ _category.id == category.id ? 'active' : '' }}">
+                <a href="{{ path('shop_category', {'slug' : _category.slug}) }}">
+                    {{ _category.name }}
+                </a>
+            </div>
+        </li>
+    {% endfor %}
 </ul>

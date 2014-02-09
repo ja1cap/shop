@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\CatalogBundle\Entity\Proposal" repository-class="Shop\CatalogBundle\Entity\ProposalRepository">
+        
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="manufacturerId" type="integer" column="manufacturerId"/>
+        <field name="categoryId" type="integer" column="categoryId"/>
+
+        <field name="title" type="string" column="title" length="255"/>
+        <field name="shortDescription" type="string" column="short_description" length="255"/>
+        <field name="description" type="text" column="description"/>
+        <field name="thumbImageFileName" type="string" column="thumb_image_file_name" length="255" nullable="true"/>
+        <field name="imageFileName" type="string" column="image_file_name" length="255" nullable="true"/>
+
+        <field name="showOnHomePage" type="boolean" nullable="true"/>
+
+        <field name="seoTitle" type="string" nullable="true"/>
+        <field name="seoDescription" type="text" nullable="true"/>
+        <field name="seoKeywords" type="text" nullable="true"/>
+        <field name="seoSlug" type="string" nullable="true"/>
+
+        <one-to-many target-entity="ParameterValue" mapped-by="proposal" field="parameterValues">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="Price" mapped-by="proposal" field="prices">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <order-by>
+                <order-by-field name="value" direction="ASC"/>
+            </order-by>
+        </one-to-many>
+
+        <many-to-one target-entity="Category" field="category">
+            <join-columns>
+                <join-column name="categoryId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one target-entity="Manufacturer" field="manufacturer">
+            <join-columns>
+                <join-column name="manufacturerId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

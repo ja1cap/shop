@@ -1,0 +1,9 @@
+{% extends 'ShopCatalogBundle:AdminManufacturer:breadcrumb/manufacturersBreadcrumb.html.twig' %}
+{% block breadcrumb_items %}
+    {{ parent() }}
+    <li class="medium btn default">
+        <a href="{{ path('manufacturer', {'id' : manufacturer.id}) }}">
+            {{ title }}
+        </a>
+    </li>
+{% endblock %}

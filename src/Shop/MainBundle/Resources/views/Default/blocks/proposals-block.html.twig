@@ -6,34 +6,17 @@
     </div>
 
     <div class="row catalog-menu">
-        <div class="columns three">
-            <div class="btn default large">
-                <a href="{{ path('shop_mattresses') }}">
-                    Матрасы
-                </a>
-            </div>
-        </div>
-        <div class="columns three">
-            <div class="btn default large">
-                <a href="{{ path('shop_beds') }}">
-                    Кровати
-                </a>
-            </div>
-        </div>
-        <div class="columns three">
-            <div class="btn default large">
-                <a href="{{ path('shop_bed_bases') }}">
-                    Основания
-                </a>
-            </div>
-        </div>
-        <div class="columns three">
-            <div class="btn default large">
-                <a href="{{ path('shop_pillows') }}">
-                    Подушки
-                </a>
-            </div>
-        </div>
+        <ul class="tiles four_up">
+            {% for category in categories %}
+                <li>
+                    <div class="btn default large">
+                        <a href="{{ path('shop_category', {'slug' : category.slug}) }}">
+                            {{ category.name|capitalize }}
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
     <h2 class="block-title">
@@ -54,7 +37,7 @@
 
                         <div class="proposal {{ proposal.discount_percent ? 'discount-proposal' : '' }}">
 
-                            <a href="{{ path(proposal.route, { 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+                            <a href="{{ path('shop_proposal', { 'categorySlug' : proposal.category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
 
                                 <span class="image-container">
                                     <span class="nailthumb-container">

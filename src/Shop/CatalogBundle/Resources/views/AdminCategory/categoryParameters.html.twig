@@ -5,7 +5,6 @@
 {% block right_bar %}
     {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryParametersBreadcrumb.html.twig') }}
     {% if category.id and category.parameters.count < total_parameters_amount %}
-        <hr/>
         <div class="medium primary btn">
             <a href="{{ path('category_parameter', {'categoryId' : category.id}) }}">
                 Добавить параметр

@@ -137,4 +137,49 @@ class ParameterOption
     {
         return $this->parameter;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $optionValues;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->optionValues = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add optionValues
+     *
+     * @param \Shop\CatalogBundle\Entity\ParameterValue $optionValues
+     * @return ParameterOption
+     */
+    public function addOptionValue(\Shop\CatalogBundle\Entity\ParameterValue $optionValues)
+    {
+        $this->optionValues[] = $optionValues;
+
+        return $this;
+    }
+
+    /**
+     * Remove optionValues
+     *
+     * @param \Shop\CatalogBundle\Entity\ParameterValue $optionValues
+     */
+    public function removeOptionValue(\Shop\CatalogBundle\Entity\ParameterValue $optionValues)
+    {
+        $this->optionValues->removeElement($optionValues);
+    }
+
+    /**
+     * Get optionValues
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOptionValues()
+    {
+        return $this->optionValues;
+    }
 }

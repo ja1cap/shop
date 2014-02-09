@@ -11,12 +11,24 @@
         <field name="type" type="integer" column="type"/>
         <one-to-many target-entity="ParameterOption" mapped-by="parameter" field="options">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
+                <cascade-remove/>
             </cascade>
             <order-by>
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
         </one-to-many>
-        <one-to-many target-entity="CategoryParameter" mapped-by="parameter" field="categoryParameters"/>
+        <one-to-many target-entity="CategoryParameter" mapped-by="parameter" field="categoryParameters">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+        <one-to-many target-entity="ParameterValue" mapped-by="parameter" field="values">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

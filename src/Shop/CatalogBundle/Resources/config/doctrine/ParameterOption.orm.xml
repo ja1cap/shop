@@ -9,7 +9,12 @@
         </id>
         <field name="name" type="string" column="name" length="255"/>
         <field name="position" type="integer" column="position"/>
-        <field name="parameterId" type="integer" column="parameter_id"/>
-        <many-to-one target-entity="Parameter" field="parameter"/>
+        <field name="parameterId" type="integer" column="parameterId"/>
+        <one-to-many target-entity="ParameterValue" mapped-by="option" field="optionValues"/>
+        <many-to-one target-entity="Parameter" field="parameter">
+            <join-columns>
+                <join-column name="parameterId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

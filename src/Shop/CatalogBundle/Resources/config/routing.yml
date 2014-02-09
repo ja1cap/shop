@@ -38,13 +38,13 @@ delete_category:
     pattern: /admin/deleteCategory/{id}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategory }
 
-category_parameter:
-    pattern: /admin/categoryParameter/{categoryId}/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameter, id: null }
-
 category_parameters:
     pattern: /admin/categoryParameters/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameters }
+
+category_parameter:
+    pattern: /admin/categoryParameter/{categoryId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameter, id: null }
 
 delete_category_parameter:
     pattern: /admin/deleteCategoryParameter/{id}
@@ -53,3 +53,35 @@ delete_category_parameter:
 update_category_parameters:
     pattern: /admin/updateCategoryParameters/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:updateCategoryParameters }
+
+proposals:
+    pattern: /admin/proposals/{categoryId}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }
+
+proposal:
+    pattern: /admin/proposal/{categoryId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, id: null }
+
+delete_proposal:
+    pattern: /admin/deleteProposal/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposal }
+
+proposal_price:
+    pattern: /admin/proposalPrice/{proposalId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }
+
+delete_proposal_price:
+    pattern: /admin/deleteProposalPrice/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalPrice }
+
+manufacturers:
+    pattern: /admin/manufacturers
+    defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturers }
+
+manufacturer:
+    pattern: /admin/manufacturer/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturer, id: null }
+
+delete_manufacturer:
+    pattern: /admin/deleteManufacturer/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }

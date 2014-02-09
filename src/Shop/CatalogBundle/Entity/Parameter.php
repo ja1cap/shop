@@ -207,4 +207,42 @@ class Parameter extends AbstractEntity
         return $this->getName();
     }
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $values;
+
+
+    /**
+     * Add values
+     *
+     * @param \Shop\CatalogBundle\Entity\ParameterValue $values
+     * @return Parameter
+     */
+    public function addValue(ParameterValue $values)
+    {
+        $this->values[] = $values;
+        $values->setParameter($this);
+        return $this;
+    }
+
+    /**
+     * Remove values
+     *
+     * @param \Shop\CatalogBundle\Entity\ParameterValue $values
+     */
+    public function removeValue(ParameterValue $values)
+    {
+        $this->values->removeElement($values);
+    }
+
+    /**
+     * Get values
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
 }

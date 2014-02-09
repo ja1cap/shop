@@ -12,7 +12,15 @@
         <field name="name" type="string" column="name" nullable="true"/>
         <field name="position" type="integer" column="position"/>
         <field name="isMain" type="boolean" column="isMain"/>
-        <many-to-one target-entity="Category" field="category"/>
-        <many-to-one target-entity="Parameter" field="parameter"/>
+        <many-to-one target-entity="Category" field="category">
+            <join-columns>
+                <join-column name="categoryId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one target-entity="Parameter" field="parameter">
+            <join-columns>
+                <join-column name="parameterId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
     </entity>
 </doctrine-mapping>

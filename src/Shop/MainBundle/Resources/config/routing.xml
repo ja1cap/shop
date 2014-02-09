@@ -14,13 +14,11 @@
         <default key="_controller">ShopMainBundle:Default:orderProposal</default>
         <default key="id">null</default>
     </route>
-    <route id="shop_proposal" pattern="/proposal/{id}">
-        <default key="_controller">ShopMainBundle:Default:proposal</default>
-        <default key="id">null</default>
+    <route id="shop_category" pattern="/catalog/{slug}">
+        <default key="_controller">ShopMainBundle:Default:category</default>
     </route>
-    <route id="shop_hit_proposal" pattern="/hitProposal/{id}">
-        <default key="_controller">ShopMainBundle:Default:hitProposal</default>
-        <default key="id">null</default>
+    <route id="shop_proposal" pattern="/catalog/{categorySlug}/{slug}">
+        <default key="_controller">ShopMainBundle:Default:proposal</default>
     </route>
     <route id="shop_beds" pattern="/krovati">
         <default key="_controller">ShopMainBundle:Default:beds</default>
@@ -49,9 +47,6 @@
     <route id="index" pattern="/admin">
         <default key="_controller">ShopMainBundle:Admin:index</default>
     </route>
-    <route id="hit_proposal" pattern="/admin/hitProposal">
-        <default key="_controller">ShopMainBundle:Admin:hitProposal</default>
-    </route>
     <route id="why_us" pattern="/admin/whyUs">
         <default key="_controller">ShopMainBundle:Admin:whyUs</default>
     </route>
@@ -62,31 +57,6 @@
     <route id="why_us_item_delete" pattern="/admin/deleteWhyUsItem/{id}">
         <default key="_controller">ShopMainBundle:Admin:deleteWhyUsItem</default>
         <default key="id">null</default>
-    </route>
-    <route id="proposal" pattern="/admin/proposal/{type}/{id}">
-        <default key="_controller">ShopMainBundle:Admin:proposal</default>
-        <default key="id">null</default>
-    </route>
-    <route id="proposal_delete" pattern="/admin/proposalDelete/{type}/{id}">
-        <default key="_controller">ShopMainBundle:Admin:deleteProposal</default>
-        <default key="id">null</default>
-    </route>
-    <route id="proposal_price" pattern="/admin/proposalPrice/{proposalId}/{id}">
-        <default key="_controller">ShopMainBundle:Admin:proposalPrice</default>
-        <default key="id">null</default>
-    </route>
-    <route id="proposal_price_delete" pattern="/admin/proposalPriceDelete/{proposalId}/{id}">
-        <default key="_controller">ShopMainBundle:Admin:deleteProposalPrice</default>
-        <default key="id">null</default>
-    </route>
-    <route id="proposals" pattern="/admin/proposals">
-        <default key="_controller">ShopMainBundle:Admin:proposals</default>
-    </route>
-    <route id="type_proposals" pattern="/admin/typeProposals/{type}">
-        <default key="_controller">ShopMainBundle:Admin:typeProposals</default>
-    </route>
-    <route id="type_proposals_page" pattern="/admin/typeProposalsPage/{type}">
-        <default key="_controller">ShopMainBundle:Admin:typeProposalsPage</default>
     </route>
     <route id="benefits" pattern="/admin/benefits">
         <default key="_controller">ShopMainBundle:Admin:benefits</default>

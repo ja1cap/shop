@@ -24,7 +24,7 @@ class AdminParameterController extends Controller
     {
 
         $parameters = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findBy(array(), array(
-            'name' => 'DESC',
+            'name' => 'ASC',
         ));
 
         return $this->render('ShopCatalogBundle:AdminParameter:parameters.html.twig', array(

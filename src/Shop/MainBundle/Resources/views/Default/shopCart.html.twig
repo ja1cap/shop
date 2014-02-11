@@ -1,0 +1,38 @@
+{% if shopCartSummary.priceIds %}
+    {% for categoryData in shopCartSummary.categories %}
+        <div>
+            <a href="{{ path('shop_category', {'slug' : categoryData.category.slug}) }}">
+                {{ categoryData.category.name }}
+            </a>
+        </div>
+        <div>
+            {% for proposalData in categoryData.proposals %}
+                <div>
+                    <a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">
+                        {{ proposalData.proposal.title }}
+                    </a>
+                </div>
+                <div>
+                    {% for priceData in proposalData.prices %}
+                        <div>
+                            {{ priceData.price.value|number_format(0, '.', ' ') }} руб
+                            x
+                            {{ priceData.amount }}
+                            =
+                            {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                            <div>
+                                {{ priceData.price.description }}
+                            </div>
+                            <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                Убрать
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <div>
+        {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
+    </div>
+{% endif %}

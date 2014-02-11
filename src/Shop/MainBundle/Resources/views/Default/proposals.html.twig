@@ -7,6 +7,7 @@
         <div class="three columns">
             {% block proposals_left_bar %}
                 {{ include('ShopMainBundle:Default:proposals-left-bar.html.twig') }}
+                {% include('ShopMainBundle:Default:shopCart.html.twig') %}
                 {% if extraParametersData %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">

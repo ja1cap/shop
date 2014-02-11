@@ -33,6 +33,7 @@
                             <img src="{{ proposal.thumb_image_url }}">
                         </a>
                     </div>
+                    {% include('ShopMainBundle:Default:shopCart.html.twig') %}
                 </div>
                 <div class="eight columns">
 
@@ -85,13 +86,28 @@
                                                             {{  currentPrice.description|nl2br }}
                                                         </div>
                                                     {% endif %}
+                                                    {% if currentPrice.id not in shopCartSummary.priceIds %}
+                                                        <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
+                                                            Добавить {{ category.singular_name|lower }} в корзину
+                                                        </a>
+                                                        {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
+                                                            <br/>
+                                                            <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
+                                                                Заменить {{ category.singular_name|lower }} в корзине
+                                                            </a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
+                                                            Убрать из корзины
+                                                        </a>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         {% endblock %}
 
-                                        <form name="form" method="post" action="" class="order-proposal-form form-box">
+                                        {#<form name="form" method="post" action="" class="order-proposal-form form-box">#}
 
-                                            <div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">
+                                            {#<div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">#}
 
                                                 {#<input type="hidden" class="name" value="{{ proposal.title }}">#}
                                                 {#<input type="hidden" class="price" value="{{ proposal.price|number_format(0, '.', ' ') }} руб">#}
@@ -119,11 +135,11 @@
                                                 {#class="customer-email">#}
                                                 {#</div>#}
 
-                                                <button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>
+                                                {#<button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>#}
 
-                                            </div>
+                                            {#</div>#}
 
-                                        </form>
+                                        {#</form>#}
 
                                     </div>
                                 </div>
@@ -181,6 +197,10 @@
 
                                             </a>
 
+                                            <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ additionalProposal.categoryId }},"proposalId":{{ additionalProposal.id }},"priceId":{{ additionalProposalData.priceId }}}'>
+                                                Добавить в корзину
+                                            </a>
+
                                         </li>
 
                                     {% endfor %}
@@ -198,21 +218,23 @@
 
             <script type="text/javascript">
 
-                var $proposal_select = $('.proposal-select');
+                $(function(){
 
-                $proposal_select.change(function(){
+                    var $proposal_select = $('.proposal-select');
 
-                    var $form = $proposal_select.closest('form');
-                    $form.submit();
+                    $proposal_select.change(function(){
+                        var $form = $proposal_select.closest('form');
+                        $form.submit();
+                    });
 
-                });
+                    $('#proposal_form_{{ proposal.id }} label').inFieldLabels();
 
-                $('#proposal_form_{{ proposal.id }} label').inFieldLabels();
-
-                $('.single-proposal-{{ proposal.id }} .proposal-image').nailthumb({
+                    $('.single-proposal-{{ proposal.id }} .proposal-image').nailthumb({
 //                    fitDirection : 'center',
 //                    method : 'resize'
-                    method : 'crop'
+                        method : 'crop'
+                    });
+
                 });
 
             </script>

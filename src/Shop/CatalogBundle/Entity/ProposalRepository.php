@@ -156,27 +156,27 @@ class ProposalRepository extends EntityRepository {
         $sql = '
             SELECT
                 p.*,
-                MIN(pp.value) AS price
+                pp.id AS priceId,
+                pp.value AS price
             FROM Proposal AS p
         ';
 
-        $sql .= ' JOIN Price AS pp ON pp.proposal_id = p.id';
-        if($priceParametersExpr){
-
-            $sql .= ' AND pp.id IN (
+        $sql .= '
+            JOIN (
                 SELECT
-                    pp.id
+                    pp.id,
+                    pp.value,
+                    pp.proposal_id AS proposalId
                 FROM Price AS pp
                 JOIN Proposal AS p ON p.id = pp.proposal_id
                 JOIN Category AS c ON c.id = p.categoryId
-                JOIN ParameterValue AS ppv ON ppv.priceId = pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
+                LEFT JOIN ParameterValue AS ppv ON ppv.priceId = pp.id' . ($priceParametersExpr ? ' AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')' : '') . '
                 WHERE c.id  = :category_id
                 GROUP BY pp.id
                 HAVING COUNT(ppv.id) >= :price_values_amount
                 ORDER BY pp.value
-            )';
-
-        }
+            ) AS pp ON pp.proposalId = p.id
+        ';
 
         $sql .= ' LEFT JOIN ParameterValue AS pv ON pv.proposalId = p.id';
         if($parametersExpr){
@@ -202,6 +202,7 @@ class ProposalRepository extends EntityRepository {
             $rsm->addFieldResult('p', $columnName, $fieldName);
         }
 
+        $rsm->addScalarResult('priceId', 'priceId', 'integer');
         $rsm->addScalarResult('price', 'price');
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);

@@ -5,11 +5,14 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
+use Shop\MainBundle\Entity\AbstractEntity;
+use Shop\MainBundle\Utils\WordInflector;
 
 /**
- * Category
+ * Class Category
+ * @package Shop\CatalogBundle\Entity
  */
-class Category
+class Category extends AbstractEntity
 {
     /**
      * @var integer
@@ -34,8 +37,12 @@ class Category
     /**
      * @var string
      */
-    private $multipleName;
+    private $singularGenitiveName;
 
+    /**
+     * @var string
+     */
+    private $multipleName;
 
     /**
      * Get id
@@ -102,7 +109,7 @@ class Category
     public function setSingularName($singularName)
     {
         $this->singularName = $singularName;
-
+        $this->setSingularGenitiveName(WordInflector::inflect($singularName, WordInflector::CASE_GENITIVE));
         return $this;
     }
 
@@ -114,6 +121,22 @@ class Category
     public function getSingularName()
     {
         return $this->singularName;
+    }
+
+    /**
+     * @param string $singularGenitiveName
+     */
+    public function setSingularGenitiveName($singularGenitiveName)
+    {
+        $this->singularGenitiveName = $singularGenitiveName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSingularGenitiveName()
+    {
+        return $this->singularGenitiveName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_GENITIVE);
     }
 
     /**
@@ -221,4 +244,51 @@ class Category
     {
         return $this->proposals;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $additionalCategories;
+
+
+    /**
+     * Add additionalCategories
+     *
+     * @param \Shop\CatalogBundle\Entity\Category $additionalCategories
+     * @return Category
+     */
+    public function addAdditionalCategory(Category $additionalCategories)
+    {
+        $this->additionalCategories[] = $additionalCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove additionalCategories
+     *
+     * @param \Shop\CatalogBundle\Entity\Category $additionalCategories
+     */
+    public function removeAdditionalCategory(Category $additionalCategories)
+    {
+        $this->additionalCategories->removeElement($additionalCategories);
+    }
+
+    /**
+     * Get additionalCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAdditionalCategories()
+    {
+        return $this->additionalCategories;
+    }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
 }

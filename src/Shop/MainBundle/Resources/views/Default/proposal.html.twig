@@ -1,144 +1,211 @@
-{% extends 'ShopMainBundle:Default:proposals.html.twig' %}
+{#{% extends 'ShopMainBundle:Default:proposals.html.twig' %}#}
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+
 {% block title %}{{ proposal.seoTitle|default(proposal.title) }}{% endblock %}
 {% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
 {% block keywords %}{{ proposal.seoKeywords }}{% endblock %}
-{% block proposals_right_bar %}
 
-    <div class="proposal-container">
+{#{% block proposals_right_bar %}#}
+{% block main_container %}
+
+    <div class="proposal-container row well-v">
+
+        <div class="proposal-breadcrumb">
+            <ul>
+                <li>
+                    <a href="{{ path('shop_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
+                    <span class="delimiter">/</span>
+                </li>
+                <li>
+                    <span class="current">
+                        {{ proposal.title|capitalize }}
+                    </span>
+                </li>
+            </ul>
+        </div>
 
         <div class="single-proposal single-proposal-{{ proposal.id }}">
 
-            <h1 class="proposal-title title">
-
-                {{ proposal.title|nl2br }}
-
-            </h1>
-
-            <div class="row-fluid">
-
-                <div class="five columns">
-
+            <div class="row">
+                <div class="four columns">
                     <div class="proposal-image">
-
                         <a href="{{ proposal.image_url }}" class="fancybox">
                             <img src="{{ proposal.thumb_image_url }}">
                         </a>
-
                     </div>
-
                 </div>
+                <div class="eight columns">
 
-                <div class="seven columns">
+                    <h1 class="proposal-title title">
+                        {{ proposal.title|nl2br }}
+                    </h1>
 
                     {% block proposal_right_bar %}
 
-                        <div class="order-proposal-form-container">
+                        <div class="row">
 
-                            {% block proposal_price_block %}
-                                <div class="proposal-price-container">
-                                    {% if currentPrice %}
-                                        <div class="price">
-                                            {{ currentPrice.value|number_format(0, '.', ' ') }} руб
-                                        </div>
-                                        {% if currentPrice.description %}
-                                            <div class="price-description">
-                                                {{  currentPrice.description|nl2br }}
-                                            </div>
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
-                                {% if parametersData %}
-                                    <form>
-                                        {% for parameterData in parametersData %}
-                                            <div class="proposal-select">
-                                                <label for="parameter_{{ parameterData.parameter.id }}">
-                                                    {{ parameterData.parameter.name }}
-                                                </label>
-                                                <div class="picker">
-                                                    <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
-                                                        <option value="">Не важно</option>
-                                                        {% for option in parameterData.options %}
-                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
-                                                                {{ option.name }}
-                                                            </option>
-                                                        {% endfor %}
-                                                    </select>
+                            {% if parametersData %}
+                                <div class="six columns">
+                                    <div class="filters-form-container">
+                                        <form>
+                                            {% for parameterData in parametersData %}
+                                                <div class="proposal-select">
+                                                    <label for="parameter_{{ parameterData.parameter.id }}">
+                                                        {{ parameterData.parameter.name }}
+                                                    </label>
+                                                    <div class="picker">
+                                                        <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                            <option value="">Не важно</option>
+                                                            {% for option in parameterData.options %}
+                                                                <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
+                                                                    {{ option.name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        {% endfor %}
-                                    </form>
-                                {% endif %}
-                                <script>
-                                    $(function(){
-
-                                        var $proposal_select = $('.proposal-select');
-
-                                        $proposal_select.change(function(){
-
-                                            var $form = $proposal_select.closest('form');
-                                            $form.submit();
-
-                                        });
-
-                                    })
-                                </script>
-                            {% endblock %}
-
-                            <form name="form" method="post" action="" class="order-proposal-form form-box">
-
-                                <div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">
-
-                                    <input type="hidden" class="name" value="{{ proposal.title }}">
-                                    <input type="hidden" class="price" value="{{ proposal.price|number_format(0, '.', ' ') }} руб">
-
-                                    <div><label for="proposal_customer_name_{{ proposal.id }}" class="required">КАК К ВАМ ОБРАЩАТЬСЯ*</label>
-                                        <input type="text"
-                                               id="proposal_customer_name_{{ proposal.id }}"
-                                               name="customer_name"
-                                               required="required"
-                                               class="customer-name">
+                                            {% endfor %}
+                                        </form>
                                     </div>
-
-                                    <div><label for="proposal_customer_phone_{{ proposal.id }}" class="required">ТЕЛЕФОН*</label>
-                                        <input type="text"
-                                               id="proposal_customer_phone_{{ proposal.id }}"
-                                               name="customer_phone"
-                                               required="required"
-                                               class="customer-phone">
-                                    </div>
-
-                                    <div><label for="proposal_customer_email_{{ proposal.id }}">E-MAIL</label>
-                                        <input type="text"
-                                               id="proposal_customer_email_{{ proposal.id }}"
-                                               name="customer_email"
-                                               class="customer-email">
-                                    </div>
-
-                                    <button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>
-
                                 </div>
+                            {% endif %}
 
-                            </form>
+                            {% if currentPrice %}
+                                <div class="six columns">
+                                    <div class="order-proposal-form-container">
+
+                                        {% block proposal_price_block %}
+                                            <div class="proposal-price-container">
+                                                {% if currentPrice %}
+                                                    <div class="price">
+                                                        {{ currentPrice.value|number_format(0, '.', ' ') }} руб
+                                                    </div>
+                                                    {% if currentPrice.description %}
+                                                        <div class="price-description">
+                                                            {{  currentPrice.description|nl2br }}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        {% endblock %}
+
+                                        <form name="form" method="post" action="" class="order-proposal-form form-box">
+
+                                            <div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">
+
+                                                {#<input type="hidden" class="name" value="{{ proposal.title }}">#}
+                                                {#<input type="hidden" class="price" value="{{ proposal.price|number_format(0, '.', ' ') }} руб">#}
+
+                                                {#<div><label for="proposal_customer_name_{{ proposal.id }}" class="required">КАК К ВАМ ОБРАЩАТЬСЯ*</label>#}
+                                                {#<input type="text"#}
+                                                {#id="proposal_customer_name_{{ proposal.id }}"#}
+                                                {#name="customer_name"#}
+                                                {#required="required"#}
+                                                {#class="customer-name">#}
+                                                {#</div>#}
+
+                                                {#<div><label for="proposal_customer_phone_{{ proposal.id }}" class="required">ТЕЛЕФОН*</label>#}
+                                                {#<input type="text"#}
+                                                {#id="proposal_customer_phone_{{ proposal.id }}"#}
+                                                {#name="customer_phone"#}
+                                                {#required="required"#}
+                                                {#class="customer-phone">#}
+                                                {#</div>#}
+
+                                                {#<div><label for="proposal_customer_email_{{ proposal.id }}">E-MAIL</label>#}
+                                                {#<input type="text"#}
+                                                {#id="proposal_customer_email_{{ proposal.id }}"#}
+                                                {#name="customer_email"#}
+                                                {#class="customer-email">#}
+                                                {#</div>#}
+
+                                                <button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            {% endif %}
 
                         </div>
 
                     {% endblock %}
 
-                </div>
-
-            </div>
-
-            <div class="row-fluid">
-                <div class="twelve columns">
                     <div class="proposal-description">
-
                         {{ proposal.description|nl2br }}
-
                     </div>
+
+                    {% if additionalCategoriesData %}
+
+                        <div>
+                            Дополнительные товары
+                        </div>
+
+                        {% for additionalCategoryData in additionalCategoriesData %}
+
+                            <div>
+
+                                <div>
+                                    {{ additionalCategoryData.category.name }}
+                                </div>
+
+                                <ul class="proposals-list tiles three_up">
+
+                                    {% for additionalProposalData in additionalCategoryData.proposals|slice(0, 3) %}
+
+                                        {% set additionalProposal = additionalProposalData.proposal %}
+
+                                        <li class="proposal">
+
+                                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : additionalProposal.seoSlug|default(additionalProposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+
+                                                <span class="image-container">
+                                                    <span class="nailthumb-container">
+                                                        <img src="{{ additionalProposal.thumb_image_url|default(additionalProposal.image_url) }}">
+                                                    </span>
+                                                </span>
+
+                                                <span class="title">
+                                                    {{ additionalProposal.title|nl2br }}
+                                                </span>
+
+                                                <span class="description">
+                                                    {{ additionalProposal.short_description|nl2br }}
+                                                </span>
+
+                                                <span class="price">
+                                                    {{ additionalProposalData.price|number_format(0, '.', ' ') }} руб
+                                                </span>
+
+                                            </a>
+
+                                        </li>
+
+                                    {% endfor %}
+
+                                </ul>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
                 </div>
             </div>
 
             <script type="text/javascript">
+
+                var $proposal_select = $('.proposal-select');
+
+                $proposal_select.change(function(){
+
+                    var $form = $proposal_select.closest('form');
+                    $form.submit();
+
+                });
 
                 $('#proposal_form_{{ proposal.id }} label').inFieldLabels();
 

@@ -9,6 +9,7 @@
         <field name="name" type="string" column="name" length="255"/>
         <field name="slug" type="string" column="slug" length="255"/>
         <field name="singularName" type="string" column="singularName" length="255"/>
+        <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255"/>
         <field name="multipleName" type="string" column="multipleName" length="255"/>
         <one-to-many target-entity="CategoryParameter" mapped-by="category" field="parameters">
             <cascade>
@@ -23,5 +24,10 @@
                 <order-by-field name="title" direction="ASC"/>
             </order-by>
         </one-to-many>
+        <many-to-many target-entity="Category" field="additionalCategories">
+            <order-by>
+                <order-by-field name="name" direction="ASC"/>
+            </order-by>
+        </many-to-many>
     </entity>
 </doctrine-mapping>

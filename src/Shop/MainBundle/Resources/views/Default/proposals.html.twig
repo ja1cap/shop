@@ -7,10 +7,87 @@
         <div class="three columns">
             {% block proposals_left_bar %}
                 {{ include('ShopMainBundle:Default:proposals-left-bar.html.twig') }}
+                {% if extraParametersData %}
+                    <div class="filters-form-container extraFiltersForm-container">
+                        <div class="title">
+                            Дополнительные фильтры
+                        </div>
+                        <form id="extraFiltersForm" class="extraFiltersForm">
+                            {% for parameterData in extraParametersData %}
+                                <div class="proposal-select">
+                                    <label for="parameter_{{ parameterData.parameter.id }}">
+                                        {{ parameterData.parameter.name }}
+                                    </label>
+                                    <div class="picker">
+                                        <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                            <option value="">Не важно</option>
+                                            {% for option in parameterData.options %}
+                                                <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
+                                                    {{ option.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </form>
+                    </div>
+                {% endif %}
             {% endblock %}
         </div>
         <div class="nine columns">
             {% block proposals_right_bar %}
+                {% if parametersData or (manufacturers and manufacturers|length > 1) %}
+                    <div class="">
+                        <div class="filters-form-container">
+                            <div class="title">
+                                Подбор {{ category.singular_genitive_name }}
+                            </div>
+                            <form id="filtersForm" class="mainFiltersForm">
+                                <ul class="tiles three_up">
+                                    {% if manufacturers and manufacturers|length > 1 %}
+                                        <li>
+                                            <div class="proposal-select">
+                                                <label for="manufacturers">
+                                                    Производитель
+                                                </label>
+                                                <div class="picker">
+                                                    <select id="manufacturers" name="manufacturer">
+                                                        <option value="">Не важно</option>
+                                                        {% for manufacturer in manufacturers %}
+                                                            <option value="{{ manufacturer.id }}" {{ filteredManufacturer == manufacturer.id ? "selected='selected'" : "" }}>
+                                                                {{ manufacturer.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                    {% for parameterData in parametersData %}
+                                        <li>
+                                            <div class="proposal-select">
+                                                <label for="parameter_{{ parameterData.parameter.id }}">
+                                                    {{ parameterData.parameter.name }}
+                                                </label>
+                                                <div class="picker">
+                                                    <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                        <option value="">Не важно</option>
+                                                        {% for option in parameterData.options %}
+                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
+                                                                {{ option.name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
                 <ul class="proposals-list tiles three_up">
                     {% for proposal_data in proposals %}
 
@@ -52,10 +129,14 @@
     <script>
         $(function(){
 
-            var $filtersForm = $('#filtersForm');
+            var $filtersForm = $('#filtersForm, #extraFiltersForm');
+
+            var categoryUrl = '{{ path('shop_category', {'slug' : category.slug}) }}';
 
             $(':input', $filtersForm).change(function(){
-                $filtersForm.submit();
+
+                document.location = categoryUrl + '?' +$filtersForm.serialize();
+
             });
 
         });

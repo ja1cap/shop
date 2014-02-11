@@ -20,7 +20,7 @@ body {
   .row {
     padding: 0;
     max-width: $row-max-width;
-    min-width: $row-max-width;
+//    min-width: $row-max-width;
   }
 
   h1.title {
@@ -2117,18 +2117,185 @@ body {
   @include pie-clearfix;
 }
 
+//$proposal-image-side : 296px;
+$proposal-image-side : 300px;
+
+.proposal-breadcrumb {
+
+  ul {
+
+    overflow: hidden;
+    margin-bottom: 15px;
+
+    li {
+
+      position: relative;
+      padding: 0 15px 0 0;
+      margin: 0;
+      float: left;
+
+      a {
+        line-height: 30px;
+        color: #34495e;
+        font-size: 25px;
+      }
+
+      .delimiter {
+        display: block;
+        position: absolute;
+        right: 5px;
+        top: 0;
+        color: #CCCCCC;
+        padding: 3px 0 0;
+      }
+
+      .current {
+
+        padding: 5px 0 0;
+        display: block
+
+      }
+
+    }
+
+  }
+
+}
+
+.filters-form-container {
+
+  margin-bottom: 20px;
+
+  > .title {
+
+    display: block;
+    margin: 0;
+    font-size: 25px;
+    line-height: 25px;
+    padding: 0 0 20px 20px;
+
+  }
+
+  &.extraFiltersForm-container {
+
+    > .title {
+      font-size: 16px;
+      padding: 0 0 20px;
+    }
+
+  }
+
+  form {
+
+    &.extraFiltersForm {
+
+      background: #f2f2f2;
+      border-bottom: 5px solid #6BC95E;
+
+      .picker {
+
+        border-color: #ccc;
+        background: white;
+
+      }
+
+
+    }
+
+    &.mainFiltersForm {
+
+      margin-left: 20px;
+      background: #f2f2f2;
+      border-bottom: 5px solid #6BC95E;
+
+      .tiles {
+        margin: 0;
+        padding: 10px 0 0;
+        li {
+          width: 32.5%;
+          margin: 0;
+        }
+      }
+
+      .proposal-select {
+
+        padding: 0 0 10px 20px;
+
+        .picker {
+
+          border-color: #ccc;
+          background: white;
+
+          select {
+            font-size: 20px;
+            height: 50px;
+          }
+
+        }
+
+      }
+
+
+    }
+
+    margin: 0;
+    padding: 0;
+
+    .picker {
+
+      width: 100%;
+      margin: 0;
+
+      select {
+        width: 100%;
+      }
+
+    }
+
+    .proposal-select {
+
+      padding: 10px 20px 0;
+
+      &:last-child {
+        padding-bottom: 10px;
+      }
+
+    }
+
+  }
+
+}
+
 .proposal-container {
 
   padding-left: 40px;
 
   .proposal-image {
-    width: 296px;
-    height: 296px;
+    width: $proposal-image-side;
+    height: $proposal-image-side;
+  }
+
+  .filters-form-container {
+
+    form {
+
+      background: #f2f2f2;
+
+      .picker {
+
+        border-color: #ccc;
+        background: white;
+
+      }
+
+    }
+
   }
 
   .order-proposal-form-container {
 
-    margin: 0 0 20px 20px;
+    margin-bottom: 20px;
+    color: white;
     background-color: #f14854;
     padding: 15px 20px;
 
@@ -2183,7 +2350,7 @@ body {
       color: #fff;
       width: 100%;
       font-size: 25px;
-      line-height: 40px;
+      line-height: 43px;
       display: block;
       border: 3px solid white;
       background: #fd5253;
@@ -2193,7 +2360,7 @@ body {
   }
 
   .proposal-description {
-    margin: 20px 0;
+    margin-bottom: 20px;
   }
 
 }

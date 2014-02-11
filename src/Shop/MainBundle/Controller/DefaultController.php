@@ -2,9 +2,10 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\CatalogBundle\Entity\ParameterValue;
+use Shop\CatalogBundle\Entity\Manufacturer;
+use Shop\CatalogBundle\Entity\CategoryParameter;
+use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Settings;
@@ -327,20 +328,92 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('shop'));
         }
 
+        $filteredParametersCookieName = 'filteredParameters';
+        $filteredParametersCookie = $request->cookies->get($filteredParametersCookieName);
+        if($filteredParametersCookie){
+
+            $filteredParametersCookie = json_decode($request->cookies->get($filteredParametersCookieName), true);
+            if(!is_array($filteredParametersCookie)){
+                $filteredParametersCookie = null;
+            }
+
+        }
+
+        $filteredParameterValues = $request->get('parameters', $filteredParametersCookie);
+        if(is_array($filteredParameterValues)){
+            $filteredParameterValues = array_filter($filteredParameterValues);
+        } else {
+            $filteredParameterValues = array();
+        }
+
         /**
          * @var $proposalsRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
         $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
-        $proposals = $proposalsRepository->findProposals($category->getId());
+
+        $manufacturer = $request->get('manufacturer', $request->cookies->get('manufacturer'));
+        $manufacturers = $proposalsRepository->findCategoryManufacturers($category->getId());
+        $manufacturerIds = array_map(function(Manufacturer $manufacturer){
+            return $manufacturer->getId();
+        }, $manufacturers);
+        if(!in_array($manufacturer, $manufacturerIds)){
+            $manufacturer = null;
+        }
+
+        $proposals = $proposalsRepository->findProposals($category->getId(), $manufacturer, $filteredParameterValues);
+
+        $parametersData = array();
+        $parametersOptions = $proposalsRepository->findCategoryParametersOptions($category->getId());
+
+        /**
+         * @var $parameterOption ParameterOption
+         */
+        foreach($parametersOptions as $parameterOption){
+
+            if(!isset($parametersData[$parameterOption->getParameterId()])){
+
+                $parametersData[$parameterOption->getParameterId()] = array(
+                    'parameter' => $parameterOption->getParameter(),
+                    'options' => array(),
+                );
+
+            }
+
+            $parametersData[$parameterOption->getParameterId()]['options'][] = $parameterOption;
+
+        }
+
+        $extraParametersData = array_filter(
+            $category->getParameters()->map(function(CategoryParameter $categoryParameter) use (&$parametersData) {
+
+                if(!$categoryParameter->getIsMain() && isset($parametersData[$categoryParameter->getParameterId()])){
+
+                    $parameterData = $parametersData[$categoryParameter->getParameterId()];
+                    unset($parametersData[$categoryParameter->getParameterId()]);
+                    return $parameterData;
+
+                }
+
+                return false;
+
+            })->toArray()
+        );
 
         $viewParameters = array(
             'category' => $category,
             'categories' => $this->getCategories(),
             'proposals' => $proposals,
             'settings' => $this->getSettings(),
+            'manufacturers' => $manufacturers,
+            'parametersData' => $parametersData,
+            'extraParametersData' => $extraParametersData,
+            'filteredManufacturer' => $manufacturer,
+            'filteredParameterValues' => $filteredParameterValues,
         );
 
         $response = $this->render('ShopMainBundle:Default:proposals.html.twig', $viewParameters);
+        $response->headers->setCookie(new Cookie($filteredParametersCookieName, json_encode($filteredParameterValues)));
+        $response->headers->setCookie(new Cookie('manufacturer', $manufacturer));
 
         return $response;
 
@@ -374,100 +447,81 @@ class DefaultController extends Controller
 
         $category = $proposal->getCategory();
 
-        $filteredParameterValues = $request->get('parameters');
+        $parametersData = array();
+        $parametersOptions = $proposalsRepository->findProposalParametersOptions($proposal->getId());
+
+        /**
+         * @var $parameterOption ParameterOption
+         */
+        foreach($parametersOptions as $parameterOption){
+
+            if(!isset($parametersData[$parameterOption->getParameterId()])){
+
+                $parametersData[$parameterOption->getParameterId()] = array(
+                    'parameter' => $parameterOption->getParameter(),
+                    'options' => array(),
+                );
+
+            }
+
+            $parametersData[$parameterOption->getParameterId()]['options'][] = $parameterOption;
+
+        }
+
+        $filteredParametersCookieName = 'filteredParameters';
+        $filteredParametersCookie = $request->cookies->get($filteredParametersCookieName);
+        if($filteredParametersCookie){
+
+            $filteredParametersCookie = json_decode($request->cookies->get($filteredParametersCookieName), true);
+            if(!is_array($filteredParametersCookie)){
+                $filteredParametersCookie = null;
+            }
+
+        }
+
+        $filteredParameterValues = $request->get('parameters', $filteredParametersCookie);
         if(is_array($filteredParameterValues)){
             $filteredParameterValues = array_filter($filteredParameterValues);
         } else {
             $filteredParameterValues = array();
         }
 
-//        $prices = $proposalsRepository->findProposalPrices($proposal->getId(), $filteredParameterValues);
-        $prices = $proposal->getPrices();
-        $lowestPrice = null;
+        $lowestPrice = $proposalsRepository->findProposalPrice($proposal->getId(), $filteredParameterValues);
 
-        $parametersData = array();
+        $additionalCategories = $category->getAdditionalCategories();
+        $additionalCategoriesData = array();
 
         /**
-         * @var $price Price
+         * @var $additionalCategory Category
          */
-        foreach($prices as $price){
+        foreach($additionalCategories as $additionalCategory){
 
-            $parameterValues = $price->getParameterValues();
-            $filteredPriceParameterValues = array();
+            $additionalCategoryProposals = $proposalsRepository->findProposals($additionalCategory->getId(), null, $filteredParameterValues);
+            if($additionalCategoryProposals){
 
-            /**
-             * @var $parameterValue ParameterValue
-             */
-            foreach($parameterValues as $parameterValue){
-
-                if(!isset($parametersData[$parameterValue->getParameterId()])){
-
-                    $parametersData[$parameterValue->getParameterId()] = array(
-                        'parameter' => $parameterValue->getParameter(),
-                        'options' => array(),
-                    );
-
-                }
-
-                $option = $parameterValue->getOption();
-
-                if($filteredParameterValues && isset($filteredParameterValues[$parameterValue->getParameterId()])){
-
-                    $parametersData[$parameterValue->getParameterId()]['options'][$option->getId()] = array(
-                        'id' => $option->getId(),
-                        'name' => $option->getName()
-                    );
-
-                    if($filteredParameterValues[$parameterValue->getParameterId()] == $option->getId()){
-
-                        $filteredPriceParameterValues[$parameterValue->getParameterId()] = $option->getId();
-
-                    }
-
-                }
-
-            }
-
-            if(!$filteredParameterValues || ($filteredPriceParameterValues == $filteredParameterValues)) {
-
-                /**
-                 * @var $parameterValue ParameterValue
-                 */
-                foreach($parameterValues as $parameterValue){
-
-                    $option = $parameterValue->getOption();
-                    $parametersData[$parameterValue->getParameterId()]['options'][$option->getId()] = array(
-                        'id' => $option->getId(),
-                        'name' => $option->getName()
-                    );
-
-                }
-
-                if(
-                    !$lowestPrice
-                    || (
-                        $lowestPrice instanceof Price
-                        && $lowestPrice->getValue() > $price->getValue()
-                    )
-                ) {
-
-                    $lowestPrice = $price;
-
-                }
+                $additionalCategoriesData[$additionalCategory->getId()] = array(
+                    'category' => $additionalCategory,
+                    'proposals' => $additionalCategoryProposals,
+                );
 
             }
 
         }
 
-        return $this->render('ShopMainBundle:Default:proposal.html.twig', array(
+        $response = $this->render('ShopMainBundle:Default:proposal.html.twig', array(
             'settings' => $this->getSettings(),
             'category' => $category,
             'categories' => $this->getCategories(),
             'proposal' => $proposal,
             'parametersData' => $parametersData,
             'currentPrice' => $lowestPrice,
-            'filteredParameterValues' => $filteredParameterValues
+            'filteredParameterValues' => $filteredParameterValues,
+            'additionalCategoriesData' => $additionalCategoriesData,
         ));
+
+        $response->headers->setCookie(new Cookie($filteredParametersCookieName, json_encode($filteredParameterValues)));
+
+        return $response;
 
     }
 

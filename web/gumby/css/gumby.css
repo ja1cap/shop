@@ -1684,7 +1684,7 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 
 body { overflow-y: scroll; }
 body .ymaps-b-form-button_size_sm .ymaps-b-form-button__content { line-height: 25px; }
-body .row { padding: 0; max-width: 1000px; min-width: 1000px; }
+body .row { padding: 0; max-width: 1000px; }
 body h1.title { display: block; margin: 0; font-size: 25px; line-height: 25px; padding: 0 0 20px; }
 body .left-bar-menu { margin-bottom: 20px; }
 body .left-bar-menu li { padding: 0; margin: 0; }
@@ -1955,9 +1955,34 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .row-fluid { width: 100%; *zoom: 1; }
 .row-fluid:after { content: ""; display: table; clear: both; }
 
+.proposal-breadcrumb ul { overflow: hidden; margin-bottom: 15px; }
+.proposal-breadcrumb ul li { position: relative; padding: 0 15px 0 0; margin: 0; float: left; }
+.proposal-breadcrumb ul li a { line-height: 30px; color: #34495e; font-size: 25px; }
+.proposal-breadcrumb ul li .delimiter { display: block; position: absolute; right: 5px; top: 0; color: #CCCCCC; padding: 3px 0 0; }
+.proposal-breadcrumb ul li .current { padding: 5px 0 0; display: block; }
+
+.filters-form-container { margin-bottom: 20px; }
+.filters-form-container > .title { display: block; margin: 0; font-size: 25px; line-height: 25px; padding: 0 0 20px 20px; }
+.filters-form-container.extraFiltersForm-container > .title { font-size: 16px; padding: 0 0 20px; }
+.filters-form-container form { margin: 0; padding: 0; }
+.filters-form-container form.extraFiltersForm { background: #f2f2f2; border-bottom: 5px solid #6BC95E; }
+.filters-form-container form.extraFiltersForm .picker { border-color: #ccc; background: white; }
+.filters-form-container form.mainFiltersForm { margin-left: 20px; background: #f2f2f2; border-bottom: 5px solid #6BC95E; }
+.filters-form-container form.mainFiltersForm .tiles { margin: 0; padding: 10px 0 0; }
+.filters-form-container form.mainFiltersForm .tiles li { width: 32.5%; margin: 0; }
+.filters-form-container form.mainFiltersForm .proposal-select { padding: 0 0 10px 20px; }
+.filters-form-container form.mainFiltersForm .proposal-select .picker { border-color: #ccc; background: white; }
+.filters-form-container form.mainFiltersForm .proposal-select .picker select { font-size: 20px; height: 50px; }
+.filters-form-container form .picker { width: 100%; margin: 0; }
+.filters-form-container form .picker select { width: 100%; }
+.filters-form-container form .proposal-select { padding: 10px 20px 0; }
+.filters-form-container form .proposal-select:last-child { padding-bottom: 10px; }
+
 .proposal-container { padding-left: 40px; }
-.proposal-container .proposal-image { width: 296px; height: 296px; }
-.proposal-container .order-proposal-form-container { margin: 0 0 20px 20px; background-color: #f14854; padding: 15px 20px; }
+.proposal-container .proposal-image { width: 300px; height: 300px; }
+.proposal-container .filters-form-container form { background: #f2f2f2; }
+.proposal-container .filters-form-container form .picker { border-color: #ccc; background: white; }
+.proposal-container .order-proposal-form-container { margin-bottom: 20px; color: white; background-color: #f14854; padding: 15px 20px; }
 .proposal-container .order-proposal-form-container .proposal-price { color: white; font-size: 30px; line-height: 36px; margin-bottom: 15px; }
 .proposal-container .order-proposal-form-container .proposal-price-container { overflow: hidden; margin-bottom: 15px; }
 .proposal-container .order-proposal-form-container .proposal-price-container .price { color: white; font-size: 30px; line-height: 36px; }
@@ -1965,8 +1990,8 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .proposal-container .order-proposal-form-container .proposal-price-container form { float: right; }
 .proposal-container .order-proposal-form-container .proposal-price-container form .proposal-select .picker { display: block; margin: 0; }
 .proposal-container .order-proposal-form-container form { margin: 0; }
-.proposal-container .order-proposal-form-container button[type="submit"] { cursor: pointer; text-align: center; color: #fff; width: 100%; font-size: 25px; line-height: 40px; display: block; border: 3px solid white; background: #fd5253; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; }
-.proposal-container .proposal-description { margin: 20px 0; }
+.proposal-container .order-proposal-form-container button[type="submit"] { cursor: pointer; text-align: center; color: #fff; width: 100%; font-size: 25px; line-height: 43px; display: block; border: 3px solid white; background: #fd5253; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; }
+.proposal-container .proposal-description { margin-bottom: 20px; }
 
 .actions-block .block-body { margin-top: 20px; margin-bottom: 10px; background-color: transparent; }
 .actions-block .actions-list .owl-buttons .owl-prev { margin-top: -45px; bottom: auto; top: 50%; background-position: -491px -428px; }

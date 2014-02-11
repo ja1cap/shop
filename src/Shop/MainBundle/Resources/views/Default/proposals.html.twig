@@ -1,7 +1,7 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
-{% block title %}{{ page.seoTitle }}{% endblock %}
-{% block description %}{{ page.seoDescription }}{% endblock %}
-{% block keywords %}{{ page.seoKeywords }}{% endblock %}
+{% block title %}{{ page.seoTitle|default(category.name) }}{% endblock %}
+{% block description %}{{ page.seoDescription|default(category.name) }}{% endblock %}
+{% block keywords %}{{ page.seoKeywords|default(category.name) }}{% endblock %}
 {% block main_container %}
     <div class="row well-v">
         <div class="three columns">

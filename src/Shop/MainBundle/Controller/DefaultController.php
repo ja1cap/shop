@@ -370,6 +370,8 @@ class DefaultController extends Controller
          */
         foreach($parametersOptions as $parameterOption){
 
+            //@TODO delete filtered option id if it doesn't exists in parameter options list
+
             if(!isset($parametersData[$parameterOption->getParameterId()])){
 
                 $parametersData[$parameterOption->getParameterId()] = array(

@@ -25,7 +25,8 @@
 
         <one-to-many target-entity="CustomerOrderProposal" mapped-by="order" field="proposals">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
+                <cascade-remove/>
             </cascade>
         </one-to-many>
 

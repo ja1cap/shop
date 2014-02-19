@@ -2053,9 +2053,9 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .actions-block .actions-list .owl-buttons .owl-next { margin-top: -45px; bottom: auto; top: 50%; background-position: -530px -428px; }
 .actions-block .actions-list .action { width: 480px; }
 .actions-block .actions-list .action .inner-container { overflow: hidden; }
-.actions-block .actions-list .action .action-image { width: 180px; float: left; }
-.actions-block .actions-list .action .action-image .image-container img { width: 180px; }
-.actions-block .actions-list .action .action-body { width: 280px; margin: 0 10px; float: left; }
+.actions-block .actions-list .action .action-image { width: 215px; float: left; }
+.actions-block .actions-list .action .action-image .image-container img { width: 215px; }
+.actions-block .actions-list .action .action-body { width: 245px; margin: 0 10px; float: left; }
 .actions-block .actions-list .action .action-body .title { font-size: 20px; margin-bottom: 5px; }
 
 .ui-sortable { margin: 10px 0; border-bottom: 1px solid #cccccc; }

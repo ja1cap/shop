@@ -107,3 +107,11 @@ shop_cart:
 shop_cart_order:
     pattern: /shopCart/order
     defaults: { _controller: ShopCatalogBundle:ShopCart:order }
+
+orders:
+    pattern: /admin/orders
+    defaults: { _controller: ShopCatalogBundle:AdminOrder:orders }
+
+order:
+    pattern: /admin/order/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminOrder:order }

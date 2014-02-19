@@ -134,10 +134,14 @@ class ShopCartController extends Controller
 
             $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);
 
-            return $this->render('ShopCatalogBundle:ShopCart:order.html.twig', array(
+            $response = $this->render('ShopCatalogBundle:ShopCart:order.html.twig', array(
                 'title' => 'Заказ оформлен',
                 'settings' => $this->getSettings(),
             ));
+
+            $response->headers->clearCookie('shopCart');
+
+            return $response;
 
         } else {
 

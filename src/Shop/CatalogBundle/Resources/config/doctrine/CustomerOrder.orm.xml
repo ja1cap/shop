@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Shop\CatalogBundle\Entity\CustomerOrderRepository"
+            name="Shop\CatalogBundle\Entity\CustomerOrder">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="status" type="integer"/>
+
+        <field name="customerName" type="string" column="customerName" length="255"/>
+        <field name="customerPhone" type="string" column="customerPhone" length="255"/>
+        <field name="customerEmail" type="string" column="customerEmail" length="255" nullable="true"/>
+        <field name="customerComment" type="text" column="customerComment" nullable="true"/>
+
+        <field name="createDate" type="datetime" column="createDate"/>
+        <field name="acceptDate" type="datetime" column="acceptDate" nullable="true"/>
+        <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
+        <field name="denyDate" type="datetime" column="denyDate" nullable="true"/>
+        <field name="denyComment" type="text" column="denyComment" nullable="true"/>
+
+        <field name="actionId" type="integer" column="actionId" nullable="true"/>
+
+        <one-to-many target-entity="CustomerOrderProposal" mapped-by="order" field="proposals">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <many-to-one target-entity="Action" field="action">
+            <join-columns>
+                <join-column name="actionId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

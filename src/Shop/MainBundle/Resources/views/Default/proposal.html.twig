@@ -10,208 +10,146 @@
 
     <div class="proposal-container row well-v">
 
-        <div class="proposal-breadcrumb">
-            <ul>
-                <li>
-                    <a href="{{ path('shop_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
-                    <span class="delimiter">/</span>
-                </li>
-                <li>
-                    <span class="current">
-                        {{ proposal.title|capitalize }}
-                    </span>
-                </li>
-            </ul>
-        </div>
-
         <div class="single-proposal single-proposal-{{ proposal.id }}">
 
             <div class="row">
-                <div class="four columns">
-                    <div class="proposal-image">
-                        <a href="{{ proposal.image_url }}" class="fancybox">
-                            <img src="{{ proposal.thumb_image_url }}">
-                        </a>
-                    </div>
+                <div class="three columns">
                     {% include('ShopMainBundle:Default:shopCart.html.twig') %}
+                    {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
                 </div>
-                <div class="eight columns">
+                <div class="nine columns">
 
-                    <h1 class="proposal-title title">
-                        {{ proposal.title|nl2br }}
-                    </h1>
+                    <div style="margin-left: 20px">
 
-                    {% block proposal_right_bar %}
+                        <div class="proposal-breadcrumb">
+                            <ul>
+                                <li>
+                                    <a href="{{ path('shop_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
+                                    <span class="delimiter">/</span>
+                                </li>
+                                <li>
+                                    <h1 class="proposal-title title current">
+                                        {{ proposal.title|nl2br }}
+                                    </h1>
+                                </li>
+                            </ul>
+                        </div>
 
                         <div class="row">
 
-                            {% if parametersData %}
-                                <div class="six columns">
-                                    <div class="filters-form-container">
-                                        <form>
-                                            {% for parameterData in parametersData %}
-                                                <div class="proposal-select">
-                                                    <label for="parameter_{{ parameterData.parameter.id }}">
-                                                        {{ parameterData.parameter.name }}
-                                                    </label>
-                                                    <div class="picker">
-                                                        <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
-                                                            <option value="">Не важно</option>
-                                                            {% for option in parameterData.options %}
-                                                                <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
-                                                                    {{ option.name }}
-                                                                </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </form>
-                                    </div>
+                            <div class="six columns">
+                                <div class="proposal-image">
+                                    <a href="{{ proposal.image_url }}" class="fancybox">
+                                        <img src="{{ proposal.thumb_image_url }}">
+                                    </a>
                                 </div>
-                            {% endif %}
+                            </div>
 
-                            {% if currentPrice %}
-                                <div class="six columns">
-                                    <div class="order-proposal-form-container">
+                            <div class="six columns">
 
-                                        {% block proposal_price_block %}
-                                            <div class="proposal-price-container">
-                                                {% if currentPrice %}
-                                                    <div class="price">
-                                                        {{ currentPrice.value|number_format(0, '.', ' ') }} руб
-                                                    </div>
-                                                    {% if currentPrice.description %}
-                                                        <div class="price-description">
-                                                            {{  currentPrice.description|nl2br }}
+                                <div class="proposal-information-container">
+
+                                    {% if price %}
+                                        <div class="order-proposal-form-container">
+
+                                            {% block proposal_price_block %}
+                                                <div class="proposal-price-container">
+                                                    {% if price %}
+                                                        <div class="price">
+                                                            {{ price.value|number_format(0, '.', ' ') }} руб
                                                         </div>
-                                                    {% endif %}
-                                                    {% if currentPrice.id not in shopCartSummary.priceIds %}
-                                                        <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
-                                                            Добавить {{ category.singular_name|lower }} в корзину
-                                                        </a>
-                                                        {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
-                                                            <br/>
-                                                            <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
-                                                                Заменить {{ category.singular_name|lower }} в корзине
-                                                            </a>
+                                                        {% if price.description %}
+                                                            <div class="price-description">
+                                                                {{  price.description|nl2br }}
+                                                            </div>
                                                         {% endif %}
-                                                    {% else %}
-                                                        <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ currentPrice.id }}}'>
-                                                            Убрать из корзины
+                                                    {% endif %}
+                                                </div>
+
+                                                {% if price.id not in shopCartSummary.priceIds %}
+                                                    <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                                        Добавить {{ category.singularAccusativusName|lower }} в корзину
+                                                    </a>
+                                                    {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
+                                                        <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                                            Заменить {{ category.singularAccusativusName|lower }} в корзине
                                                         </a>
                                                     {% endif %}
+                                                {% else %}
+                                                    <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                                        Убрать из корзины
+                                                    </a>
                                                 {% endif %}
-                                            </div>
-                                        {% endblock %}
 
-                                        {#<form name="form" method="post" action="" class="order-proposal-form form-box">#}
+                                            {% endblock %}
 
-                                            {#<div id="proposal_form_{{ proposal.id }}" class="order-proposal-form form-box">#}
+                                        </div>
+                                    {% endif %}
 
-                                                {#<input type="hidden" class="name" value="{{ proposal.title }}">#}
-                                                {#<input type="hidden" class="price" value="{{ proposal.price|number_format(0, '.', ' ') }} руб">#}
+                                    {% if parametersData %}
+                                        <div class="filters-form-container">
+                                            <form>
+                                                {% for parameterData in parametersData %}
+                                                    <div class="proposal-select">
+                                                        <label for="parameter_{{ parameterData.parameter.id }}">
+                                                            {{ parameterData.parameter.name }}
+                                                        </label>
+                                                        <div class="picker">
+                                                            <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                                <option value="">Не важно</option>
+                                                                {% for option in parameterData.options %}
+                                                                    <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
+                                                                        {{ option.name }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </form>
+                                        </div>
+                                    {% endif %}
 
-                                                {#<div><label for="proposal_customer_name_{{ proposal.id }}" class="required">КАК К ВАМ ОБРАЩАТЬСЯ*</label>#}
-                                                {#<input type="text"#}
-                                                {#id="proposal_customer_name_{{ proposal.id }}"#}
-                                                {#name="customer_name"#}
-                                                {#required="required"#}
-                                                {#class="customer-name">#}
-                                                {#</div>#}
-
-                                                {#<div><label for="proposal_customer_phone_{{ proposal.id }}" class="required">ТЕЛЕФОН*</label>#}
-                                                {#<input type="text"#}
-                                                {#id="proposal_customer_phone_{{ proposal.id }}"#}
-                                                {#name="customer_phone"#}
-                                                {#required="required"#}
-                                                {#class="customer-phone">#}
-                                                {#</div>#}
-
-                                                {#<div><label for="proposal_customer_email_{{ proposal.id }}">E-MAIL</label>#}
-                                                {#<input type="text"#}
-                                                {#id="proposal_customer_email_{{ proposal.id }}"#}
-                                                {#name="customer_email"#}
-                                                {#class="customer-email">#}
-                                                {#</div>#}
-
-                                                {#<button type="submit" id="form_save_{{ proposal.id }}" name="save" class="submit-btn">КУПИТЬ</button>#}
-
-                                            {#</div>#}
-
-                                        {#</form>#}
-
-                                    </div>
                                 </div>
-                            {% endif %}
-
-                        </div>
-
-                    {% endblock %}
-
-                    <div class="proposal-description">
-                        {{ proposal.description|nl2br }}
-                    </div>
-
-                    {% if additionalCategoriesData %}
-
-                        <div>
-                            Дополнительные товары
-                        </div>
-
-                        {% for additionalCategoryData in additionalCategoriesData %}
-
-                            <div>
-
-                                <div>
-                                    {{ additionalCategoryData.category.name }}
-                                </div>
-
-                                <ul class="proposals-list tiles three_up">
-
-                                    {% for additionalProposalData in additionalCategoryData.proposals|slice(0, 3) %}
-
-                                        {% set additionalProposal = additionalProposalData.proposal %}
-
-                                        <li class="proposal">
-
-                                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : additionalProposal.seoSlug|default(additionalProposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
-
-                                                <span class="image-container">
-                                                    <span class="nailthumb-container">
-                                                        <img src="{{ additionalProposal.thumb_image_url|default(additionalProposal.image_url) }}">
-                                                    </span>
-                                                </span>
-
-                                                <span class="title">
-                                                    {{ additionalProposal.title|nl2br }}
-                                                </span>
-
-                                                <span class="description">
-                                                    {{ additionalProposal.short_description|nl2br }}
-                                                </span>
-
-                                                <span class="price">
-                                                    {{ additionalProposalData.price|number_format(0, '.', ' ') }} руб
-                                                </span>
-
-                                            </a>
-
-                                            <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ additionalProposal.categoryId }},"proposalId":{{ additionalProposal.id }},"priceId":{{ additionalProposalData.priceId }}}'>
-                                                Добавить в корзину
-                                            </a>
-
-                                        </li>
-
-                                    {% endfor %}
-
-                                </ul>
 
                             </div>
 
-                        {% endfor %}
+                        </div>
 
-                    {% endif %}
+                        <div class="proposal-description">
+                            {{ proposal.description|nl2br }}
+                        </div>
+
+                        {% if actions %}
+                            <div class="large-title">
+                                Можете выбрать подарок
+                            </div>
+                            <div class="proposal-actions-container">
+                                <div class="proposal-actions owl-carousel owl-theme">
+                                    {% for action in actions %}
+                                        <div class="proposal-action">
+                                            {#<a href="#">#}
+                                                <span class="proposal-action-image-container">
+                                                    <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
+                                                </span>
+                                            {#</a>#}
+                                            {#<div style="text-align: center">#}
+                                                {#<div style="font-size: 18px; margin: 10px 0;">#}
+                                                    {#{{ action.title }}#}
+                                                {#</div>#}
+                                                {#<div style="margin-bottom: 10px">#}
+                                                    {#{{ action.description }}#}
+                                                {#</div>#}
+                                            {#</div>#}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% include "ShopMainBundle:Default:proposalAdditionalCategories.html.twig" %}
+
+                    </div>
 
                 </div>
             </div>
@@ -227,12 +165,26 @@
                         $form.submit();
                     });
 
-                    $('#proposal_form_{{ proposal.id }} label').inFieldLabels();
+//                    $('.manufacturer-image-container').nailthumb({
+//                        method : 'resize'
+//                    });
+//
+//                    $('.manufactures-list').owlCarousel({
+//                        autoPlay: 3000,
+//                        navigation : false,
+//                        pagination : false,
+//                        singleItem: true
+//                    });
 
-                    $('.single-proposal-{{ proposal.id }} .proposal-image').nailthumb({
-//                    fitDirection : 'center',
-//                    method : 'resize'
-                        method : 'crop'
+                    $('.proposal-actions').owlCarousel({
+                        autoPlay: 5000,
+                        navigation : true,
+                        pagination : false,
+                        items : 3
+                    });
+
+                    $('.proposal-action-image-container').nailthumb({
+                        method : 'resize'
                     });
 
                 });

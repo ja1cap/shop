@@ -3,7 +3,7 @@
 
 
 // Grid Settings
-$row-max-width: 1000px !default;    				// 940px
+$row-max-width: 960px !default;    				// 940px
 $gutter-in-px: 0px !default;      				// 20px
 $cols: 12 !default;              				// 12 Column Default Grid
 $hybrid: 16 !default;							// 16 Column Default Hybrid Grid
@@ -72,8 +72,8 @@ $header-font-color: #000000 !default;
 $header-link-color: #0087ff !default;
 $header-link-hover-color: #0087ff!default;
 $body-font-color: #000000 !default;
-$body-link-color: #0087ff !default;
-$body-link-hover-color: #0087ff !default;
+$body-link-color: #34495e !default;
+$body-link-hover-color: #34495e !default;
 
 // User Interface Colors
 $global-bg-color: #fff;

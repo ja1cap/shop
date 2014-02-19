@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\CatalogBundle\Entity\Action" repository-class="Shop\CatalogBundle\Entity\ActionRepository">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="position" type="integer"/>
+        <field name="title" type="string" column="title" length="255"/>
+        <field name="description" type="text" column="description"/>
+        <field name="thumbImageFileName" type="string" column="thumbImageFileName" length="255" nullable="true"/>
+        <field name="imageFileName" type="string" column="imageFileName" length="255" nullable="true"/>
+        <field name="minOrderSummary" type="integer" column="minOrderSummary" nullable="true"/>
+        <field name="maxOrderSummary" type="integer" column="maxOrderSummary" nullable="true"/>
+        <many-to-many target-entity="Category" field="categories">
+            <order-by>
+                <order-by-field name="name" direction="ASC"/>
+            </order-by>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

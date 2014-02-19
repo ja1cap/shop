@@ -40,6 +40,18 @@ class Category extends AbstractEntity
     private $singularGenitiveName;
 
     /**
+     * @TODO save to database
+     * @var string
+     */
+    private $singularAblativusName;
+
+    /**
+     * @TODO save to database
+     * @var string
+     */
+    private $singularAccusativusName;
+
+    /**
      * @var string
      */
     private $multipleName;
@@ -137,6 +149,22 @@ class Category extends AbstractEntity
     public function getSingularGenitiveName()
     {
         return $this->singularGenitiveName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_GENITIVE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSingularAccusativusName()
+    {
+        return $this->singularAccusativusName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_ACCUSATIVUS);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSingularAblativusName()
+    {
+        return $this->singularAblativusName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_ABLATIVUS);
     }
 
     /**

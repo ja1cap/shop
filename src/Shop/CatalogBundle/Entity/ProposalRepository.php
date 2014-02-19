@@ -42,45 +42,31 @@ class ProposalRepository extends EntityRepository {
     }
 
     /**
+     * @param $categoryId
      * @param $proposalId
      * @param $filteredParameterValues
      * @return mixed
      */
-    public function findProposalPrice($proposalId, $filteredParameterValues){
+    public function findProposalPrice($categoryId, $proposalId, $filteredParameterValues){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select(array(
                 'pp',
-                'COUNT(DISTINCT pv.id) AS HIDDEN values_amount',
+                'COUNT(DISTINCT ppv.id) AS HIDDEN values_amount',
             ))
             ->from('ShopCatalogBundle:Proposal', 'p')
             ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->eq('pp.proposalId', 'p.id'))
-            ->leftJoin('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->eq('pv.priceId', 'pp.id'));
+            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->eq('ppv.priceId', 'pp.id'));
 
         $qb->andWhere($qb->expr()->eq('p.id', $proposalId));
 
-        if(is_array($filteredParameterValues)){
+        $parametersExprList = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
+        $priceParametersExpr = $parametersExprList[1];
 
-            $parametersExpr = array();
-            $filteredParameterValues = array_filter($filteredParameterValues);
-
-            foreach($filteredParameterValues as $parameterId => $optionId){
-
-                $parametersExpr[] = $qb->expr()->andX(
-                    $qb->expr()->eq('pv.parameterId', $parameterId),
-                    $qb->expr()->eq('pv.optionId', $optionId)
-                );
-
-            }
-
-            if($parametersExpr){
-
-                $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr));
-                $qb->andHaving($qb->expr()->gte('values_amount', count($filteredParameterValues)));
-
-            }
-
+        if($priceParametersExpr){
+            $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr));
+            $qb->andHaving($qb->expr()->gte('values_amount', count($priceParametersExpr)));
         }
 
         $qb
@@ -94,58 +80,19 @@ class ProposalRepository extends EntityRepository {
 
     }
 
-    public function findProposals($categoryId, $manufacturerId, $filteredParameterValues){
+    /**
+     * @param $categoryId
+     * @param $manufacturerId
+     * @param $filteredParameterValues
+     * @param null $page
+     * @param null $perPage
+     * @return array
+     */
+    public function findProposals($categoryId, $manufacturerId, $filteredParameterValues, $page = null, $perPage = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $parametersExpr = array();
-        $priceParametersExpr = array();
-
-        if(is_array($filteredParameterValues)){
-
-            $filteredParameterValues = array_filter($filteredParameterValues);
-
-            if($filteredParameterValues){
-
-                $parameterIds = array_keys($filteredParameterValues);
-                $categoryParameters = $this->getEntityManager()->getRepository('ShopCatalogBundle:CategoryParameter')->findBy(array(
-                    'categoryId' => $categoryId,
-                    'parameterId' => $parameterIds,
-                ));
-
-                /**
-                 * @var $categoryParameter \Shop\CatalogBundle\Entity\CategoryParameter
-                 */
-                foreach($categoryParameters as $categoryParameter){
-
-                    if(isset($filteredParameterValues[$categoryParameter->getParameterId()])){
-
-                        $parameter = $categoryParameter->getParameter();
-                        $optionId = $filteredParameterValues[$parameter->getId()];
-
-                        if($parameter->getIsPriceParameter()){
-
-                            $priceParametersExpr[] = $qb->expr()->andX(
-                                $qb->expr()->eq('ppv.parameterId', $parameter->getId()),
-                                $qb->expr()->eq('ppv.optionId', (int)$optionId)
-                            );
-
-                        } else {
-
-                            $parametersExpr[] = $qb->expr()->andX(
-                                $qb->expr()->eq('pv.parameterId', $parameter->getId()),
-                                $qb->expr()->eq('pv.optionId', (int)$optionId)
-                            );
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
+        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
 
         $queryParameters = array(
             'category_id' => (int)$categoryId,
@@ -166,9 +113,9 @@ class ProposalRepository extends EntityRepository {
                 SELECT
                     pp.id,
                     pp.value,
-                    pp.proposal_id AS proposalId
+                    pp.proposalId
                 FROM Price AS pp
-                JOIN Proposal AS p ON p.id = pp.proposal_id
+                JOIN Proposal AS p ON p.id = pp.proposalId
                 JOIN Category AS c ON c.id = p.categoryId
                 LEFT JOIN ParameterValue AS ppv ON ppv.priceId = pp.id' . ($priceParametersExpr ? ' AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')' : '') . '
                 WHERE c.id  = :category_id
@@ -195,6 +142,10 @@ class ProposalRepository extends EntityRepository {
             ORDER BY price
         ';
 
+        if($page && $perPage){
+            $sql .= ' LIMIT ' . ($page > 1 ? (int)$page . ',' : '') . $perPage;
+        }
+
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addEntityResult('ShopCatalogBundle:Proposal', 'p', 'proposal');
 
@@ -214,24 +165,61 @@ class ProposalRepository extends EntityRepository {
 
     /**
      * @param $categoryId
+     * @param $filteredParameterValues
      * @return array
      */
-    public function findCategoryManufacturers($categoryId){
+    public function findCategoryManufacturers($categoryId, $filteredParameterValues = array()){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb
-            ->select('m')
-            ->from('ShopCatalogBundle:Manufacturer', 'm')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('p.categoryId', $categoryId),
-                $qb->expr()->eq('p.manufacturerId', 'm.id')
-            ));
+        $queryParameters = array(
+            'categoryId' => (int)$categoryId,
+        );
 
-        $qb->addOrderBy('m.name');
-        $qb->addGroupBy('m.id');
+        $sql = '
+            SELECT
+                m.*
+            FROM Manufacturer AS m
+            JOIN Proposal AS p ON p.categoryId = :categoryId AND p.manufacturerId = m.id
+            JOIN Price AS pp ON pp.proposalId = p.id
+        ';
 
-        return $qb->getQuery()->getResult();
+        list($parametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
+
+        if($parametersExpr){
+
+            $queryParameters['valuesAmount'] = count($parametersExpr);
+            $sql .= ' LEFT JOIN ParameterValue AS pv ON pv.proposalId = p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')';
+
+        }
+
+        $sql .= '
+            GROUP BY m.id
+        ';
+
+        if($parametersExpr){
+
+            $sql .= '
+                HAVING COUNT(pv.id) >= :valuesAmount
+            ';
+
+        }
+
+        $sql .= '
+            ORDER BY m.name
+        ';
+
+        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+        $rsm->addEntityResult('ShopCatalogBundle:Manufacturer', 'm');
+
+        foreach($this->getEntityManager()->getClassMetadata('ShopCatalogBundle:Manufacturer')->fieldNames as $columnName => $fieldName){
+            $rsm->addFieldResult('m', $columnName, $fieldName);
+        }
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameters($queryParameters);
+
+        return $query->getResult();
 
     }
 
@@ -274,6 +262,67 @@ class ProposalRepository extends EntityRepository {
 
         return $qb->getQuery()->getResult();
 
+    }
+
+    /**
+     * @param $categoryId
+     * @param $filteredParameterValues
+     * @param $qb
+     * @return array
+     */
+    protected function createParametersExprList($categoryId, $filteredParameterValues, $qb)
+    {
+        $parametersExpr = array();
+        $priceParametersExpr = array();
+
+        if (is_array($filteredParameterValues)) {
+
+            $filteredParameterValues = array_filter($filteredParameterValues);
+
+            if ($filteredParameterValues) {
+
+                $parameterIds = array_keys($filteredParameterValues);
+                $categoryParameters = $this->getEntityManager()->getRepository('ShopCatalogBundle:CategoryParameter')->findBy(array(
+                    'categoryId' => $categoryId,
+                    'parameterId' => $parameterIds,
+                ));
+
+                /**
+                 * @var $categoryParameter \Shop\CatalogBundle\Entity\CategoryParameter
+                 */
+                foreach ($categoryParameters as $categoryParameter) {
+
+                    if (isset($filteredParameterValues[$categoryParameter->getParameterId()])) {
+
+                        $parameter = $categoryParameter->getParameter();
+                        $optionId = $filteredParameterValues[$parameter->getId()];
+
+                        if ($parameter->getIsPriceParameter()) {
+
+                            $priceParametersExpr[] = $qb->expr()->andX(
+                                $qb->expr()->eq('ppv.parameterId', $parameter->getId()),
+                                $qb->expr()->eq('ppv.optionId', (int)$optionId)
+                            );
+
+                        } else {
+
+                            $parametersExpr[] = $qb->expr()->andX(
+                                $qb->expr()->eq('pv.parameterId', $parameter->getId()),
+                                $qb->expr()->eq('pv.optionId', (int)$optionId)
+                            );
+
+                        }
+
+                    }
+
+                }
+                return array($parametersExpr, $priceParametersExpr);
+
+            }
+            return array($parametersExpr, $priceParametersExpr);
+
+        }
+        return array($parametersExpr, $priceParametersExpr);
     }
 
 } 

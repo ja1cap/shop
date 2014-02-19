@@ -7,7 +7,11 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+
         <field name="name" type="string" column="name" length="255"/>
+        <field name="thumbImageFileName" type="string" column="thumb_image_file_name" length="255" nullable="true"/>
+        <field name="imageFileName" type="string" column="image_file_name" length="255" nullable="true"/>
+
         <one-to-many target-entity="Proposal" mapped-by="manufacturer" field="proposals">
             <cascade>
                 <cascade-remove/>

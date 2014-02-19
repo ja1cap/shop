@@ -85,3 +85,25 @@ manufacturer:
 delete_manufacturer:
     pattern: /admin/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
+
+actions:
+    pattern: /admin/actions
+    defaults: { _controller: ShopCatalogBundle:AdminAction:actions }
+
+update_actions_positions:
+    pattern: /admin/actions/updatePositions
+    defaults: { _controller: ShopCatalogBundle:AdminAction:updateActionsPosition }
+
+action:
+    pattern: /admin/action/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminAction:action, id: null }
+
+delete_action:
+    pattern: /admin/deleteAction/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminAction:deleteAction }
+shop_cart:
+    pattern: /shopCart
+    defaults: { _controller: ShopCatalogBundle:ShopCart:default }
+shop_cart_order:
+    pattern: /shopCart/order
+    defaults: { _controller: ShopCatalogBundle:ShopCart:order }

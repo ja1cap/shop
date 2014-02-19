@@ -1,0 +1,48 @@
+<h3>
+    Сумма заказа: {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
+</h3>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Товар
+            </th>
+            <th>
+                Сумма
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for categoryData in shopCartSummary.categories %}
+        {% for proposalData in categoryData.proposals %}
+            <tr>
+                <td>
+                    {{ categoryData.category.singularName|capitalize }} - {{ proposalData.proposal.title }}
+                </td>
+                <td>
+                    {% for priceData in proposalData.prices %}
+                        <div>
+                            {{ priceData.price.value|number_format(0, '.', ' ') }} руб x {{ priceData.amount }} {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                            <div>
+                                {{ priceData.price.description }}
+                            </div>
+                        </div>
+                        <br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+{% if action %}
+    <h4>
+        Вы выбрали подарок
+    </h4>
+    <div>
+        {{ action.title }}
+    </div>
+    <div>
+        {{ action.description|nl2br }}
+    </div>
+{% endif %}

@@ -1,0 +1,229 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+
+{% block main_container %}
+
+    <div class="shop-cart-container row well-v">
+
+        {% if shopCartSummary.priceIds %}
+            <div class="row">
+                <div class="seven columns">
+                    <h1 class="title">
+                        Оформление заказа
+                    </h1>
+                    <div class="shop-cart">
+                        {% for categoryData in shopCartSummary.categories %}
+                            <div class="shop-cart-category">
+                                <a href="{{ path('shop_category', { 'slug' : categoryData.category.slug }) }}">
+                                    {{ categoryData.category.name }}
+                                </a>
+                            </div>
+                            <div class="shop-cart-category-proposals">
+                                {% for proposalData in categoryData.proposals %}
+                                    <div class="shop-cart-category-proposal">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td class="image-cell">
+                                                <span class="shop-cart-proposal-image">
+                                                    <span class="nailthumb-container">
+                                                        <img src="{{ proposalData.proposal.thumbImageUrl }}">
+                                                    </span>
+                                                </span>
+                                                </td>
+                                                <td class="information-cell">
+                                                    <div class="shop-cart-proposal-name">
+                                                        <a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">
+                                                            {{ proposalData.proposal.title }}
+                                                        </a>
+                                                    </div>
+                                                    {#<div class="shop-cart-proposal-description">#}
+                                                        {#{{ proposalData.proposal.shortDescription|nl2br }}#}
+                                                    {#</div>#}
+                                                </td>
+                                                <td>
+                                                    <div class="shop-cart-proposal-prices">
+                                                        {% for priceData in proposalData.prices %}
+                                                            <div class="shop-cart-proposal-price">
+                                                                <div>
+                                                                <span class="price">
+                                                                    {{ priceData.price.value|number_format(0, '.', ' ') }} руб
+                                                                </span>
+                                                                    {% if priceData.amount > 1 %}
+                                                                        x
+                                                                        {{ priceData.amount }}
+                                                                        <div class="price-summary">
+                                                                            {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div>
+                                                                    {{ priceData.price.description }}
+                                                                </div>
+                                                                <div class="shop-cart-buttons">
+
+                                                                    <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                                        +1
+                                                                    </a>
+
+                                                                    {% if priceData.amount > 1 %}
+                                                                        <a href="#" class="decrease-amount-in-cart"  data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                                            -1
+                                                                        </a>
+                                                                    {% endif %}
+
+                                                                    <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                                        Убрать
+                                                                    </a>
+
+                                                                </div>
+
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="shop-cart-summary">
+                        Сумма заказа:
+                        <span class="summary-value">
+                            {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
+                        </span>
+                    </div>
+                    <form id="order-form" method="post" action="{{ path('shop_cart_order') }}">
+
+                        <input name="actionId" type="hidden" id="actionId" value="{{ actions|length == 1 ? (actions|first).id : '' }}">
+
+                        <div class="large-title">
+                            Ваши контакты
+                        </div>
+
+                        <div class="order-contacts">
+
+                            <div class="field">
+                                <label for="customerName">
+                                    Имя*
+                                </label>
+                                <input class="input" required="true" type="text" name="customerName" id="customerName">
+                            </div>
+
+                            <div class="field">
+                                <label for="customerPhone">
+                                    ТЕЛЕФОН*
+                                </label>
+                                <input class="input" required="true" type="text" name="customerPhone" id="customerPhone">
+                            </div>
+
+                            <div class="field">
+                                <label for="customerEmail">
+                                    E-MAIL
+                                </label>
+                                <input class="input" type="email" name="customerEmail" id="customerEmail">
+                            </div>
+
+                            <div class="field">
+                                <label for="customerComment">КОММЕНТАРИЙ</label>
+                                <textarea class="input textarea" id="customerComment" name="customerComment"></textarea>
+                            </div>
+
+                            <div class="submit-btn-field">
+                                <button type="submit" id="order-submit">
+                                    Оформить заказ
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="five columns">
+                    <div class="shop-cart-left-bar">
+
+                        {% if actions %}
+                            <div class="large-title">
+                                {% if actions|length > 1 %}
+                                    Выберите подарок
+                                {% else %}
+                                    Ваш подарок
+                                {% endif %}
+                            </div>
+                            <div class="proposal-actions-container {{ actions|length == 1 ? 'single-action' : '' }}">
+                                <div class="proposal-actions owl-carousel owl-theme">
+                                    {% for action in actions %}
+                                        <div class="proposal-action">
+                                            <a href="#">
+                                                <span class="proposal-action-image-container">
+                                                    <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
+                                                </span>
+                                            </a>
+                                            <a href="#" class="select-action" data-action_id="{{ action.id }}">
+                                                Выбрать
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div>
+                            <div class="large-title">
+                                Доставка и оплата
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+
+        $(function(){
+
+            $('.proposal-actions').owlCarousel({
+                navigation : true,
+                pagination : false,
+                singleItem: true
+            });
+
+            $('.proposal-action-image-container').nailthumb({
+                method : 'resize'
+            });
+
+            var $select_action_buttons = $('.select-action');
+
+            $select_action_buttons.click(function(e){
+
+                e.preventDefault();
+
+                var $btn = $(this);
+                var actionId = $btn.data('action_id');
+                var $actionId = $('#actionId');
+
+                if($btn.hasClass('active')){
+
+                    $actionId.val([]);
+                    $select_action_buttons.removeClass('active').text('Выбрать');
+
+                } else {
+
+                    $actionId.val(actionId);
+                    $select_action_buttons.removeClass('active').text('Выбрать');
+                    $btn.addClass('active').text('Отменить');
+
+                }
+
+            });
+
+        });
+
+    </script>
+{% endblock %}

@@ -1,38 +1,75 @@
 {% if shopCartSummary.priceIds %}
-    {% for categoryData in shopCartSummary.categories %}
-        <div>
-            <a href="{{ path('shop_category', {'slug' : categoryData.category.slug}) }}">
-                {{ categoryData.category.name }}
-            </a>
-        </div>
-        <div>
-            {% for proposalData in categoryData.proposals %}
-                <div>
-                    <a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">
-                        {{ proposalData.proposal.title }}
-                    </a>
-                </div>
-                <div>
-                    {% for priceData in proposalData.prices %}
-                        <div>
-                            {{ priceData.price.value|number_format(0, '.', ' ') }} руб
-                            x
-                            {{ priceData.amount }}
-                            =
-                            {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
-                            <div>
-                                {{ priceData.price.description }}
-                            </div>
-                            <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
-                                Убрать
+    <h1 class="title">
+        Корзина
+    </h1>
+    <div class="shop-cart">
+        {% for categoryData in shopCartSummary.categories %}
+            <div class="shop-cart-category">
+                <a href="{{ path('shop_category', {'slug':categoryData.category.slug}) }}">
+                    {{ categoryData.category.name }}
+                </a>
+            </div>
+            <div class="shop-cart-category-proposals">
+                {% for proposalData in categoryData.proposals %}
+                    <div class="shop-cart-category-proposal">
+                        {#<a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">#}
+                        {#<span class="shop-cart-proposal-image">#}
+                            {#<span class="nailthumb-container">#}
+                                {#<img src="{{ proposalData.proposal.thumbImageUrl }}">#}
+                            {#</span>#}
+                        {#</span>#}
+                        {#</a>#}
+                        <div class="shop-cart-proposal-name">
+                            <a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">
+                                {{ proposalData.proposal.title }}
                             </a>
                         </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+                        <div class="shop-cart-proposal-prices">
+                            {% for priceData in proposalData.prices %}
+                                <div class="shop-cart-proposal-price">
+                                    <span class="ttip" data-tooltip="{{ priceData.price.description|default('Нет описания') }}">
+                                        <i class="icon-info"></i>
+                                        <span class="price">
+                                            {{ priceData.price.value|number_format(0, '.', ' ') }} руб
+                                        </span>
+                                    </span>
+                                    {% if priceData.amount > 1 %}
+                                        x
+                                        {{ priceData.amount }}
+                                        <div class="price-summary">
+                                            {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                                        </div>
+                                    {% endif %}
+                                    <div class="shop-cart-buttons">
+
+                                        <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                            +1
+                                        </a>
+
+                                        {% if priceData.amount > 1 %}
+                                            <a href="#" class="decrease-amount-in-cart"  data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                -1
+                                            </a>
+                                        {% endif %}
+
+                                        <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                            Убрать
+                                        </a>
+
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <div class="shop-cart-summary">
+            {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
         </div>
-    {% endfor %}
-    <div>
-        {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
+        <a href="{{ path('shop_cart') }}" class="purchase-btn">
+            Купить
+        </a>
     </div>
 {% endif %}

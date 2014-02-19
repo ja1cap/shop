@@ -204,9 +204,51 @@ $(function(){
                     amount : 1
                 });
 
-                cart.updateStorage();
+            } else {
+
+                $.each(cart.getCategory(categoryId).proposalPrices, function(i, proposalPrice){
+
+                    if(proposalPrice.id == priceId){
+                        proposalPrice.amount++;
+                    }
+
+                });
 
             }
+
+            cart.updateStorage();
+
+            return cart;
+
+        };
+
+        /**
+         *
+         * @param categoryId
+         * @param priceId
+         * @returns {ShopCart}
+         */
+        cart.decreaseProposalPriceAmount = function(categoryId, priceId){
+
+            $.each(cart.getCategory(categoryId).proposalPrices, function(i, proposalPrice){
+
+                if(proposalPrice.id == priceId){
+
+                    if(proposalPrice.amount <= 1){
+
+                        cart.removeProposalPrice(categoryId, priceId);
+
+                    } else {
+
+                        proposalPrice.amount--;
+
+                    }
+
+                }
+
+            });
+
+            cart.updateStorage();
 
             return cart;
 
@@ -301,6 +343,25 @@ $(function(){
                 priceId = proposalCartData['priceId'];
 
             $.shopCart.removeProposalPrice(categoryId, priceId);
+            $.shopCart.refreshCartSummary();
+
+        }
+
+        return false;
+
+    });
+
+    $(document).on('click', '.decrease-amount-in-cart', function(){
+
+        var $btn = $(this);
+
+        var proposalCartData = $btn.data('cart');
+        if(proposalCartData){
+
+            var categoryId = proposalCartData['categoryId'],
+                priceId = proposalCartData['priceId'];
+
+            $.shopCart.decreaseProposalPriceAmount(categoryId, priceId);
             $.shopCart.refreshCartSummary();
 
         }

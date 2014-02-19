@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}{{ settings.title }}{% endblock %}</title>
+        <title>{% block title %}{{ title|default(settings.title) }}{% endblock %}</title>
         <meta name="description" content="{% block description %}{{ settings.description }}{% endblock %}">
         <meta name="keywords" content="{% block keywords %}{{ settings.keywords }}{% endblock %}">
         {% block stylesheets %}{% endblock %}

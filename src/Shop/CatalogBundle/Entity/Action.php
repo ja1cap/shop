@@ -1,8 +1,10 @@
 <?php
 
-namespace Shop\MainBundle\Entity;
+namespace Shop\CatalogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\MainBundle\Entity\AbstractEntity;
 
 /**
  * Class Action
@@ -161,4 +163,143 @@ class Action extends AbstractEntity
         return $this->getFileUrl($this->getImageFileName());
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
+
+    /**
+     * @var integer
+     */
+    private $minOrderSummary;
+
+    /**
+     * @var integer
+     */
+    private $maxOrderSummary;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $categories;
+
+
+    /**
+     * Set minOrderSummary
+     *
+     * @param integer $minOrderSummary
+     * @return Action
+     */
+    public function setMinOrderSummary($minOrderSummary)
+    {
+        $this->minOrderSummary = $minOrderSummary;
+
+        return $this;
+    }
+
+    /**
+     * Get minOrderSummary
+     *
+     * @return integer 
+     */
+    public function getMinOrderSummary()
+    {
+        return $this->minOrderSummary;
+    }
+
+    /**
+     * Set maxOrderSummary
+     *
+     * @param integer $maxOrderSummary
+     * @return Action
+     */
+    public function setMaxOrderSummary($maxOrderSummary)
+    {
+        $this->maxOrderSummary = $maxOrderSummary;
+
+        return $this;
+    }
+
+    /**
+     * Get maxOrderSummary
+     *
+     * @return integer 
+     */
+    public function getMaxOrderSummary()
+    {
+        return $this->maxOrderSummary;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \Shop\CatalogBundle\Entity\Category $categories
+     * @return Action
+     */
+    public function addCategory(Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Shop\CatalogBundle\Entity\Category $categories
+     */
+    public function removeCategory(Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoriesNames(){
+        return $this->getCategories()->map(function(Category $category){
+            return $category->getName();
+        })->toArray();
+    }
+    /**
+     * @var integer
+     */
+    private $position;
+
+
+    /**
+     * Set position
+     *
+     * @param integer $position
+     * @return Action
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer 
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
 }

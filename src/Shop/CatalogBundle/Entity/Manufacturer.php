@@ -2,12 +2,14 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\MainBundle\Entity\AbstractEntity;
 
 /**
  * Manufacturer
  */
-class Manufacturer
+class Manufacturer extends AbstractEntity
 {
     /**
      * @var integer
@@ -62,7 +64,7 @@ class Manufacturer
      */
     public function __construct()
     {
-        $this->proposals = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->proposals = new ArrayCollection();
     }
 
     /**
@@ -71,7 +73,7 @@ class Manufacturer
      * @param \Shop\CatalogBundle\Entity\Proposal $proposals
      * @return Manufacturer
      */
-    public function addProposal(\Shop\CatalogBundle\Entity\Proposal $proposals)
+    public function addProposal(Proposal $proposals)
     {
         $this->proposals[] = $proposals;
 
@@ -83,7 +85,7 @@ class Manufacturer
      *
      * @param \Shop\CatalogBundle\Entity\Proposal $proposals
      */
-    public function removeProposal(\Shop\CatalogBundle\Entity\Proposal $proposals)
+    public function removeProposal(Proposal $proposals)
     {
         $this->proposals->removeElement($proposals);
     }
@@ -96,5 +98,85 @@ class Manufacturer
     public function getProposals()
     {
         return $this->proposals;
+    }
+    /**
+     * @var string
+     */
+    private $thumbImageFileName;
+
+    /**
+     * @var string
+     */
+    private $imageFileName;
+
+
+    /**
+     * Set thumbImageFileName
+     *
+     * @param string $thumbImageFileName
+     * @return Manufacturer
+     */
+    public function setThumbImageFileName($thumbImageFileName)
+    {
+        $this->thumbImageFileName = $thumbImageFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbImageFileName
+     *
+     * @return string 
+     */
+    public function getThumbImageFileName()
+    {
+        return $this->thumbImageFileName;
+    }
+
+    public function getThumbImage(){
+        return $this->getFile('thumbImageFileName');
+    }
+
+    public function setThumbImage($file = null){
+        return $this->setFile('thumbImageFileName', $file);
+    }
+
+    public function getThumbImageUrl(){
+        return $this->getFileUrl($this->getThumbImageFileName()) ?: $this->getImageUrl();
+    }
+
+    public function getImage(){
+        return $this->getFile('imageFileName');
+    }
+
+    public function setImage($file = null){
+        return $this->setFile('imageFileName', $file);
+    }
+
+    public function getImageUrl(){
+        return $this->getFileUrl($this->getImageFileName());
+    }
+
+    /**
+     * Set imageFileName
+     *
+     * @param string $imageFileName
+     * @return Manufacturer
+     */
+    public function setImageFileName($imageFileName)
+    {
+        $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageFileName
+     *
+     * @return string 
+     */
+    public function getImageFileName()
+    {
+        return $this->imageFileName;
     }
 }

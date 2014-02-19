@@ -7,8 +7,8 @@ use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
-use Shop\CatalogBundle\Entity\ProposalRepository;
 use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -171,7 +171,7 @@ class DefaultController extends Controller
             'customer_phone' => $request->get('customer_phone'),
             'customer_email' => $request->get('customer_email'),
             'customer_comment' => $request->get('comment'),
-            'proposal_information' => $proposal_information,
+            'order_information' => $proposal_information,
             'shop_name' => $settings->getName(),
             'shop_address' => $settings->getAddress(),
             'shop_phone' => $settings->getPhone(),
@@ -220,7 +220,9 @@ class DefaultController extends Controller
      * @return array
      */
     protected function getActions(){
-        return $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Action')->findAll();
+        return $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Action')->findBy(array(), array(
+            'position' => 'ASC'
+        ));
     }
 
     /**
@@ -423,18 +425,11 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Товар не найден');
         }
 
-        $category = $proposal->getCategory();
-
         $parametersOptions = $proposalRepository->findProposalParametersOptions($proposal->getId());
         list($parametersData, $parametersOptionsIds) = $this->buildParametersData($parametersOptions);
         list($filteredParameterCookieName, $filteredParameterValues) = $this->getFilteredParameterValues($request);
 
-        $lowestPrice = $proposalRepository->findProposalPrice(
-            $proposal->getId(),
-            array_filter($filteredParameterValues, function($parameterOptionId) use ($parametersOptionsIds) {
-                return in_array($parameterOptionId, $parametersOptionsIds);
-            })
-        );
+        $category = $proposal->getCategory();
 
         $additionalCategories = $category->getAdditionalCategories();
         $additionalCategoriesData = array();
@@ -444,28 +439,67 @@ class DefaultController extends Controller
          */
         foreach($additionalCategories as $additionalCategory){
 
-            $additionalCategoryProposals = $proposalRepository->findProposals($additionalCategory->getId(), null, $filteredParameterValues);
+            $additionalCategoryProposals = $proposalRepository->findProposals($additionalCategory->getId(), null, $filteredParameterValues, 1, 1);
             if($additionalCategoryProposals){
 
                 $additionalCategoriesData[$additionalCategory->getId()] = array(
                     'category' => $additionalCategory,
-                    'proposals' => $additionalCategoryProposals,
+                    'proposalData' => current($additionalCategoryProposals),
+//                    'manufacturers' => $proposalRepository->findCategoryManufacturers($additionalCategory->getId(), $filteredParameterValues),
                 );
 
             }
 
         }
 
+        $price = $proposalRepository->findProposalPrice(
+            $category->getId(),
+            $proposal->getId(),
+            array_filter($filteredParameterValues, function($parameterOptionId) use ($parametersOptionsIds) {
+                return in_array($parameterOptionId, $parametersOptionsIds);
+            })
+        );
+
+        $shopCartSummary = $this->getShopCart($request)->getSummary();
+
+        $actions = array();
+        if($price instanceof Price){
+
+            $shopCartSummaryPrice = $shopCartSummary['summaryPrice'];
+            $shopCartPricesIds = $shopCartSummary['priceIds'];
+
+            if(!in_array($price->getId(), $shopCartPricesIds)){
+                $possibleSummaryPrice = ($shopCartSummaryPrice + floatval($price->getValue()));
+            } else {
+                $possibleSummaryPrice = $shopCartSummaryPrice;
+            }
+
+            $shopCartCategoriesIds = $shopCartSummary['categoriesIds'];
+            $possibleCategoriesIds = array_unique(array_merge($shopCartCategoriesIds, array($category->getId())));
+
+            if($possibleSummaryPrice && $possibleCategoriesIds){
+
+                /**
+                 * @var $actionRepository \Shop\CatalogBundle\Entity\ActionRepository
+                 */
+                $actionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action');
+                $actions = $actionRepository->findActions($possibleCategoriesIds, $possibleSummaryPrice);
+
+            }
+
+        }
+
         $response = $this->render('ShopMainBundle:Default:proposal.html.twig', array(
-            'shopCartSummary' => $this->getShopCart($request)->getSummary(),
             'settings' => $this->getSettings(),
             'category' => $category,
             'categories' => $this->getCategories(),
-            'proposal' => $proposal,
-            'parametersData' => $parametersData,
-            'currentPrice' => $lowestPrice,
-            'filteredParameterValues' => $filteredParameterValues,
             'additionalCategoriesData' => $additionalCategoriesData,
+            'proposal' => $proposal,
+            'price' => $price,
+            'actions' => $actions,
+            'shopCartSummary' => $shopCartSummary,
+            'parametersData' => $parametersData,
+            'filteredParameterValues' => $filteredParameterValues,
         ));
 
         $response->headers->setCookie(new Cookie($filteredParameterCookieName, json_encode($filteredParameterValues)));

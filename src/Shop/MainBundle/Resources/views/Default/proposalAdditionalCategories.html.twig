@@ -1,0 +1,48 @@
+{% if additionalCategoriesData %}
+
+    <div class="large-title">
+        С {{ category.singularAblativusName|lower }} покупают
+    </div>
+
+    <ul class="tiles three_up" style="margin-bottom: 20px">
+
+        {% for additionalCategoryData in additionalCategoriesData %}
+
+            <li style="text-align: center;">
+
+                <div class="manufactures-list">
+                    <div class="item">
+                        <a href="{{ path('shop_category', {'slug' : additionalCategoryData.category.slug }) }}">
+                                                    <span class="manufacturer-image-container">
+                                                        <span class="nailthumb-container">
+                                                            <img src="{{ additionalCategoryData.proposalData.proposal.thumbImageUrl }}" alt="{{ additionalCategoryData.category.name }}">
+                                                        </span>
+                                                    </span>
+                        </a>
+                    </div>
+                    {% for manufacturer in additionalCategoryData.manufacturers %}
+                        <div class="item" style="padding: 0 15px">
+                            <div class="manufacturer-image-container" style="width: 200px; height: 200px">
+                                <img src="{{ manufacturer.thumb_image_url }}" alt="{{ manufacturer.name }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div style="font-size: 18px; margin-bottom: 5px">
+                    <a href="{{ path('shop_category', {'slug' : additionalCategoryData.category.slug }) }}">
+                        {{ additionalCategoryData.category.name }}
+                    </a>
+                </div>
+
+                <div style="font-size: 16px">
+                    от {{ additionalCategoryData.proposalData.price|number_format(0, '.', ' ') }} руб
+                </div>
+
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+{% endif %}

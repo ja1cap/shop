@@ -2,7 +2,7 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\MainBundle\Entity\Action;
+use Shop\CatalogBundle\Entity\Action;
 use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Benefit;
 use Shop\MainBundle\Entity\HowWeItem;
@@ -402,134 +402,6 @@ class AdminController extends Controller
         }
 
         return $this->redirect($this->generateUrl('reviews'));
-
-    }
-
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function actionsAction(Request $request){
-
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
-
-        $form = $this->createFormBuilder($settings)
-            ->add('actions_title', 'textarea', array(
-                'required' => true,
-                'label' => 'Заголовок блока',
-            ))
-            ->add('actions_description', 'textarea', array(
-                'required' => false,
-                'label' => 'Описание блока',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if($request->getMethod() == 'POST' && $form->isValid()){
-
-            $em = $this->getDoctrine()->getManager();
-
-            if(!$settings->getId()){
-                $em->persist($settings);
-            }
-
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('index'));
-
-        } else {
-
-            $items = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Action')->findAll();
-
-            return $this->render('ShopMainBundle:Admin:actions.html.twig', array(
-                'form' => $form->createView(),
-                'items' => $items,
-            ));
-
-        }
-
-    }
-
-    public function actionAction($id, Request $request)
-    {
-
-        $item = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Action')->findOneBy(array(
-            'id' => $id
-        ));
-
-        if(!$item){
-            $item = new Action();
-        }
-
-        $form = $this->createFormBuilder($item)
-            ->add('title', 'textarea', array(
-                'required' => true,
-                'label' => 'Название',
-            ))
-            ->add('description', 'textarea', array(
-                'required' => true,
-                'label' => 'Описание',
-            ))
-            ->add('thumbImage', 'file', array(
-                'required' => false,
-                'label' => 'Маленькая картинка',
-            ))
-            ->add('image', 'file', array(
-                'required' => false,
-                'label' => 'Большая картинка',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if($request->getMethod() == 'POST' && $form->isValid()){
-
-            $em = $this->getDoctrine()->getManager();
-
-            if(!$item->getId()){
-                $em->persist($item);
-            }
-
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('actions'));
-
-        } else {
-
-            return $this->render('ShopMainBundle:Admin:form.html.twig', array(
-                'title' => $item->getId() ? 'Изменение акции' : 'Добавление акции',
-                'form' => $form->createView(),
-            ));
-
-        }
-
-    }
-
-    public function deleteActionAction($id){
-
-        $item = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Action')->findOneBy(array(
-            'id' => $id
-        ));
-
-        if($item){
-
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($item);
-            $em->flush();
-
-        }
-
-        return $this->redirect($this->generateUrl('actions'));
 
     }
 

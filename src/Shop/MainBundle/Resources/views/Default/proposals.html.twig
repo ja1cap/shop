@@ -6,8 +6,8 @@
     <div class="row well-v">
         <div class="three columns">
             {% block proposals_left_bar %}
-                {{ include('ShopMainBundle:Default:proposals-left-bar.html.twig') }}
                 {% include('ShopMainBundle:Default:shopCart.html.twig') %}
+                {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
                 {% if extraParametersData %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">

@@ -21,6 +21,10 @@ class ManufacturerType extends AbstractType {
             ->add('name', 'text', array(
                 'required' => true,
                 'label' => 'Название',
+            ))
+            ->add('image', 'file', array(
+                'required' => false,
+                'label' => 'Логотип',
             ));
 
         $builder

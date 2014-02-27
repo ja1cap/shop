@@ -4,6 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class ProposalRepository
@@ -21,12 +22,22 @@ class ProposalRepository extends EntityRepository {
         $qb
             ->select('po')
             ->from('ShopCatalogBundle:ParameterOption', 'po')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', $proposalId))
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('p.status', Proposal::STATUS_ON),
+                $qb->expr()->eq('p.id', $proposalId)
+            ))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('c.status', Category::STATUS_ON),
+                $qb->expr()->eq('c.id', 'p.categoryId')
+            ))
             ->join('ShopCatalogBundle:CategoryParameter', 'cp', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('cp.categoryId', 'p.categoryId'),
                 $qb->expr()->eq('cp.parameterId', 'po.parameterId')
             ))
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->eq('pp.proposalId', 'p.id'))
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.status', Price::STATUS_ON),
+                $qb->expr()->eq('pp.proposalId', 'p.id')
+            ))
             ->join('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('pv.optionId', 'po.id'),
                 $qb->expr()->eq('pv.priceId', 'pp.id')
@@ -53,10 +64,18 @@ class ProposalRepository extends EntityRepository {
         $qb
             ->select(array(
                 'pp',
+                '(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS HIDDEN price',
                 'COUNT(DISTINCT ppv.id) AS HIDDEN values_amount',
             ))
             ->from('ShopCatalogBundle:Proposal', 'p')
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->eq('pp.proposalId', 'p.id'))
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.status', Price::STATUS_ON),
+                $qb->expr()->eq('pp.proposalId', 'p.id')
+            ))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
             ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->eq('ppv.priceId', 'pp.id'));
 
         $qb->andWhere($qb->expr()->eq('p.id', $proposalId));
@@ -70,7 +89,7 @@ class ProposalRepository extends EntityRepository {
         }
 
         $qb
-            ->addOrderBy('pp.value', 'ASC')
+            ->addOrderBy('price', 'ASC')
             ->addGroupBy('pp.id');
 
         $query = $qb->getQuery();
@@ -95,6 +114,9 @@ class ProposalRepository extends EntityRepository {
         list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
 
         $queryParameters = array(
+            'price_status' => Price::STATUS_ON,
+            'proposal_status' => Proposal::STATUS_ON,
+            'category_status' => Category::STATUS_ON,
             'category_id' => (int)$categoryId,
             'values_amount' => count($parametersExpr),
             'price_values_amount' => count($priceParametersExpr),
@@ -104,7 +126,7 @@ class ProposalRepository extends EntityRepository {
             SELECT
                 p.*,
                 pp.id AS priceId,
-                pp.value AS price
+                pp.price AS price
             FROM Proposal AS p
         ';
 
@@ -112,16 +134,20 @@ class ProposalRepository extends EntityRepository {
             JOIN (
                 SELECT
                     pp.id,
-                    pp.value,
+                    (CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS price,
                     pp.proposalId
                 FROM Price AS pp
                 JOIN Proposal AS p ON p.id = pp.proposalId
                 JOIN Category AS c ON c.id = p.categoryId
+                LEFT JOIN ContractorCurrency AS ccu ON ccu.contractorId = pp.contractorId AND ccu.numericCode = pp.currencyNumericCode
                 LEFT JOIN ParameterValue AS ppv ON ppv.priceId = pp.id' . ($priceParametersExpr ? ' AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')' : '') . '
-                WHERE c.id  = :category_id
+                WHERE c.id = :category_id
+                    AND pp.status = :price_status
+                    AND p.status = :proposal_status
+                    AND c.status = :category_status
                 GROUP BY pp.id
                 HAVING COUNT(ppv.id) >= :price_values_amount
-                ORDER BY pp.value
+                ORDER BY price DESC
             ) AS pp ON pp.proposalId = p.id
         ';
 
@@ -173,6 +199,7 @@ class ProposalRepository extends EntityRepository {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $queryParameters = array(
+            'priceStatus' => Price::STATUS_ON,
             'categoryId' => (int)$categoryId,
         );
 
@@ -181,7 +208,7 @@ class ProposalRepository extends EntityRepository {
                 m.*
             FROM Manufacturer AS m
             JOIN Proposal AS p ON p.categoryId = :categoryId AND p.manufacturerId = m.id
-            JOIN Price AS pp ON pp.proposalId = p.id
+            JOIN Price AS pp ON pp.proposalId = p.id AND pp.status = :priceStatus
         ';
 
         list($parametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
@@ -239,11 +266,16 @@ class ProposalRepository extends EntityRepository {
             ))
             ->join('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->eq('pv.optionId', 'po.id'))
             ->leftJoin('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('p.status', Proposal::STATUS_ON),
                 $qb->expr()->eq('p.categoryId', $categoryId),
                 $qb->expr()->eq('p.id', 'pv.proposalId')
             ))
-            ->leftJoin('ShopCatalogBundle:Proposal', '_p', Expr\Join::WITH, $qb->expr()->eq('_p.categoryId', $categoryId))
+            ->leftJoin('ShopCatalogBundle:Proposal', '_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('_p.status', Proposal::STATUS_ON),
+                $qb->expr()->eq('_p.categoryId', $categoryId)
+            ))
             ->leftJoin('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.status', Price::STATUS_ON),
                 $qb->expr()->eq('pp.proposalId', '_p.id'),
                 $qb->expr()->eq('pp.id', 'pv.priceId')
             ));
@@ -267,10 +299,10 @@ class ProposalRepository extends EntityRepository {
     /**
      * @param $categoryId
      * @param $filteredParameterValues
-     * @param $qb
+     * @param QueryBuilder $qb
      * @return array
      */
-    protected function createParametersExprList($categoryId, $filteredParameterValues, $qb)
+    protected function createParametersExprList($categoryId, $filteredParameterValues, QueryBuilder $qb)
     {
         $parametersExpr = array();
         $priceParametersExpr = array();

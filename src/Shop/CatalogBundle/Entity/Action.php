@@ -12,6 +12,10 @@ use Shop\MainBundle\Entity\AbstractEntity;
  */
 class Action extends AbstractEntity
 {
+
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
     /**
      * @var integer
      */
@@ -36,6 +40,14 @@ class Action extends AbstractEntity
      * @var string
      */
     private $imageFileName;
+
+    /**
+     * @var array
+     */
+    public static $statuses = array(
+        self::STATUS_ON => 'Вкл',
+        self::STATUS_OFF => 'Выкл',
+    );
 
     /**
      * Get id
@@ -301,5 +313,33 @@ class Action extends AbstractEntity
     public function getPosition()
     {
         return $this->position;
+    }
+    /**
+     * @var integer
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Action
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

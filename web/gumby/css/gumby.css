@@ -1819,7 +1819,7 @@ body .block-container.request-block .block-diagonal-bg { background-color: white
 body .block-container.benefits-block { background: #6BC95E; }
 body .block-container.benefits-block .block-diagonal-bg { background: url("/img/triangle_bg.png") repeat left top; }
 body .block-container.benefits-block .block-body { background-color: transparent; color: white; margin-bottom: 30px; }
-body .block-container.benefits-block .block-body .benefits-list { overflow: hidden; padding: 0; margin: 0; }
+body .block-container.benefits-block .block-body .benefits-list { overflow: hidden; padding: 0; margin: 0 0 10px; }
 body .block-container.benefits-block .block-body .benefits-list:last-child { background: none; }
 body .block-container.benefits-block .block-body .benefits-list li { padding: 0; margin: 0; width: 320px; float: left; }
 body .block-container.benefits-block .block-body .benefits-list li .image-container { width: 133px; margin: 0 auto 20px; }

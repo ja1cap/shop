@@ -70,6 +70,10 @@ proposal_price:
     pattern: /admin/proposalPrice/{proposalId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }
 
+proposal_prices:
+    pattern: /admin/proposalPrices/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrices }
+
 delete_proposal_price:
     pattern: /admin/deleteProposalPrice/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalPrice }
@@ -115,3 +119,55 @@ orders:
 order:
     pattern: /admin/order/{id}
     defaults: { _controller: ShopCatalogBundle:AdminOrder:order }
+
+contractors:
+    pattern: /admin/contractors
+    defaults: { _controller: ShopCatalogBundle:AdminContractor:contractors }
+
+contractor:
+    pattern: /admin/contractor/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminContractor:contractor, id: null }
+
+delete_contractor:
+    pattern: /admin/deleteContractor/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminContractor:deleteContractor }
+
+contractor_currency:
+    pattern: /admin/contractor/{contractorId}/currency/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminContractor:contractorCurrency, id: null }
+
+delete_contractor_currency:
+    pattern: /admin/contractor/{contractorId}/deleteCurrency/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminContractor:deleteContractorCurrency }
+
+price_lists:
+    pattern: /admin/priceLists
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }
+
+price_list:
+    pattern: /admin/priceList
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList }
+
+download_price_list:
+    pattern: /admin/downloadPriceList/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:downloadPriceList }
+
+parse_price_list:
+    pattern: /admin/parsePriceList/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:parsePriceList }
+
+delete_price_list:
+    pattern: /admin/deletePriceList/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:deletePriceList }
+
+shipping_methods:
+    pattern: /admin/shippingMethods
+    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:shippingMethods }
+
+shipping_method:
+    pattern: /admin/shippingMethod/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:shippingMethod, id: null }
+
+delete_shipping_method:
+    pattern: /admin/deleteShippingMethod/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:deleteShippingMethod }

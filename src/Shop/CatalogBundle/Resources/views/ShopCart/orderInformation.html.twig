@@ -22,7 +22,7 @@
                 <td>
                     {% for priceData in proposalData.prices %}
                         <div>
-                            {{ priceData.price.value|number_format(0, '.', ' ') }} руб x {{ priceData.amount }} {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                            {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб x {{ priceData.amount }} = {{ (priceData.price.exchangedValue * priceData.amount)|number_format(0, '.', ' ') }} руб
                             <div>
                                 {{ priceData.price.description }}
                             </div>
@@ -42,7 +42,9 @@
     <div>
         {{ action.title }}
     </div>
+    <br/>
     <div>
         {{ action.description|nl2br }}
     </div>
+    <br/>
 {% endif %}

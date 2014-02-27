@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Shop\CatalogBundle\Entity\PriceListRepository" name="Shop\CatalogBundle\Entity\PriceList">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="name" type="string" column="name" length="255"/>
+        <field name="fileName" type="string" column="fileName" length="255"/>
+        <field name="createDate" type="datetime" column="createDate"/>
+        <field name="updateDate" type="datetime" column="updateDate"/>
+        <field name="status" type="integer" column="status"/>
+        <field name="contractorId" type="integer" column="contractorId"/>
+        <many-to-one target-entity="Contractor" field="contractor">
+            <join-columns>
+                <join-column name="contractorId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

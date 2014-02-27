@@ -14,6 +14,10 @@ use Shop\MainBundle\Utils\WordInflector;
  */
 class Category extends AbstractEntity
 {
+
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
     /**
      * @var integer
      */
@@ -55,6 +59,14 @@ class Category extends AbstractEntity
      * @var string
      */
     private $multipleName;
+
+    /**
+     * @var array
+     */
+    public static $statuses = array(
+        self::STATUS_ON => 'Вкл',
+        self::STATUS_OFF => 'Выкл',
+    );
 
     /**
      * Get id
@@ -319,4 +331,32 @@ class Category extends AbstractEntity
         return $this->getName();
     }
 
+    /**
+     * @var integer
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Category
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

@@ -10,6 +10,17 @@ use Shop\MainBundle\Entity\AbstractEntity;
  */
 class Price extends AbstractEntity {
 
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
+    /**
+     * @var array
+     */
+    public static $statuses = array(
+        self::STATUS_ON => 'Вкл',
+        self::STATUS_OFF => 'Выкл',
+    );
+
     /**
      * @var string
      */
@@ -29,6 +40,30 @@ class Price extends AbstractEntity {
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExchangedValue(){
+
+        $exchangedValue = $this->getValue();
+
+        //@TODO refactor
+        if($this->getCurrencyNumericCode() != ContractorCurrency::BLR_CURRENCY_NUMERIC_CODE){
+
+            $priceCurrencyNumericCode = $this->getCurrencyNumericCode();
+            $currency = $this->getContractor()->getCurrencies()->filter(function(ContractorCurrency $currency) use ($priceCurrencyNumericCode) {
+                return $currency->getNumericCode() == $priceCurrencyNumericCode;
+            })->current();
+
+            if($currency instanceof ContractorCurrency){
+                $exchangedValue = $this->getValue() * $currency->getValue();
+            }
+
+        }
+
+        return $exchangedValue;
     }
 
     /**
@@ -171,4 +206,165 @@ class Price extends AbstractEntity {
 
     }
 
+    /**
+     * @var integer
+     */
+    private $contractorId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Contractor
+     */
+    private $contractor;
+
+
+    /**
+     * Set contractorId
+     *
+     * @param integer $contractorId
+     * @return Price
+     */
+    public function setContractorId($contractorId)
+    {
+        $this->contractorId = $contractorId;
+
+        return $this;
+    }
+
+    /**
+     * Get contractorId
+     *
+     * @return integer 
+     */
+    public function getContractorId()
+    {
+        return $this->contractorId;
+    }
+
+    /**
+     * Set contractor
+     *
+     * @param \Shop\CatalogBundle\Entity\Contractor $contractor
+     * @return Price
+     */
+    public function setContractor(Contractor $contractor = null)
+    {
+        $this->contractor = $contractor;
+        $this->contractorId = $contractor ? $contractor->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get contractor
+     *
+     * @return \Shop\CatalogBundle\Entity\Contractor 
+     */
+    public function getContractor()
+    {
+        return $this->contractor;
+    }
+    /**
+     * @var integer
+     */
+    private $currencyNumericCode;
+
+
+    /**
+     * Set currencyNumericCode
+     *
+     * @param integer $currencyNumericCode
+     * @return Price
+     */
+    public function setCurrencyNumericCode($currencyNumericCode)
+    {
+        $this->currencyNumericCode = $currencyNumericCode;
+
+        return $this;
+    }
+
+    /**
+     * Get currencyNumericCode
+     *
+     * @return integer 
+     */
+    public function getCurrencyNumericCode()
+    {
+        return $this->currencyNumericCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCurrencyName(){
+        if(!isset(ContractorCurrency::$currencyNames[$this->getCurrencyNumericCode()])){
+            return false;
+        }
+        return ContractorCurrency::$currencyNames[$this->getCurrencyNumericCode()];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCurrencyShortName(){
+        if(!isset(ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()])){
+            return false;
+        }
+        return ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()];
+    }
+
+    /**
+     * @var string
+     */
+    private $sku;
+
+
+    /**
+     * Set sku
+     *
+     * @param string $sku
+     * @return Price
+     */
+    public function setSku($sku)
+    {
+        $this->sku = $sku;
+
+        return $this;
+    }
+
+    /**
+     * Get sku
+     *
+     * @return string 
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+    /**
+     * @var integer
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Price
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

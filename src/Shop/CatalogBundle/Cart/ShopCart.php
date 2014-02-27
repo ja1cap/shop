@@ -118,7 +118,7 @@ class ShopCart {
                                     if($price instanceof Price){
 
                                         $priceIds[] = $priceId;
-                                        $summaryPrice += (floatval($price->getValue()) * $amount);
+                                        $summaryPrice += (floatval($price->getExchangedValue()) * $amount);
 
                                         $categoryProposalsSummary[$categoryId]['proposals'][$proposalId]['prices'][$priceId] = array(
                                             'price' => $price,

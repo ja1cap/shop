@@ -27,11 +27,12 @@
             {% for proposal in proposals %}
                 <tr>
                     <td>
-                        {{ proposal.title }}
-                        {% set proposal_price = proposal.prices.current %}
-                        {% if proposal_price %}
+                        <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
+                            {{ proposal.title }}
+                        </span>
+                        {% if proposal.price %}
                             <span style="font-weight: normal; display: block">
-                                от {{ proposal_price.value|number_format(0, '.', ' ') }} руб
+                                от {{ proposal.price|number_format(0, '.', ' ') }} руб
                             </span>
                         {% else %}
                             <span class="warning label">

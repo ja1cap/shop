@@ -1,0 +1,44 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Управление способами доставки{% endblock %}
+
+{% block right_bar %}
+
+    <div class="medium primary btn">
+        <a href="{{ path('shipping_method') }}">
+            Добавить способ доставки
+        </a>
+    </div>
+
+    {% if shippingMethods %}
+        <table style="margin: 10px 0;">
+            <tbody>
+            {% for shippingMethod in shippingMethods %}
+                <tr>
+                    <td>
+                        <span class="{% if shippingMethod.status == constant('STATUS_OFF', shippingMethod) %}danger label{% endif %}">
+                            {{ shippingMethod.name }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ shippingMethod.description|nl2br }}
+                    </td>
+                    <td>
+                        <div class="medium btn default icon-left entypo icon-pencil">
+                            <a href="{{ path('shipping_method', {'id' : shippingMethod.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger icon-left entypo icon-trash">
+                            <a href="{{ path('delete_shipping_method', {'id' : shippingMethod.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

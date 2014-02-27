@@ -38,9 +38,11 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{ item.title }}
+                                    <span class="{% if item.status == constant('STATUS_OFF', item) %}danger label{% endif %}">
+                                        {{ item.title }}
+                                    </span>
                                     <div style="margin: 5px 0 10px">
-                                        {{ item.description|raw }}
+                                        {{ item.description|nl2br }}
                                     </div>
                                     {% set categoriesNames = item.categoriesNames %}
                                     {% if categoriesNames %}

@@ -3,6 +3,8 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block right_bar %}
-    {{ include('ShopMainBundle:Admin:proposalPriceBreadcrumb.html.twig') }}
+
+    {{ include('ShopCatalogBundle:AdminContractor:breadcrumb/contractorBreadcrumb.html.twig') }}
     {{ form(form) }}
+
 {% endblock %}

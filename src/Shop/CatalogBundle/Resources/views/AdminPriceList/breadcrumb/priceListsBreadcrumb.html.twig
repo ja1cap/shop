@@ -2,13 +2,13 @@
     <ul>
         {% block breadcrumb_items %}
             <li class="medium btn default">
-                <a href="{{ path('proposals') }}">
-                    Предложения
+                <a href="{{ path('categories') }}">
+                    Каталог
                 </a>
             </li>
             <li class="medium btn default">
-                <a href="{{ path('type_proposals', {'type' : proposal_type.type}) }}">
-                    {{ proposal_type.multiple_name|capitalize }}
+                <a href="{{ path('price_lists') }}">
+                    Прайс-листы
                 </a>
             </li>
         {% endblock %}

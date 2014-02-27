@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Shop\CatalogBundle\Entity\ContractorCurrencyRepository"
+            name="Shop\CatalogBundle\Entity\ContractorCurrency">
+        <indexes>
+            <index columns="contractorId,numericCode" name="uniqueContractorCurrency"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="contractorId" type="integer" column="contractorId"/>
+        <field name="numericCode" type="integer" column="numericCode"/>
+        <field name="value" type="float" column="value"/>
+        <many-to-one target-entity="Contractor" field="contractor">
+            <join-columns>
+                <join-column name="contractorId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

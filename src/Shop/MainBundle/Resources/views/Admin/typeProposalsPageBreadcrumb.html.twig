@@ -1,9 +1,0 @@
-{% extends 'ShopMainBundle:Admin:typeProposalsBreadcrumb.html.twig' %}
-{% block breadcrumb_items %}
-    {{ parent() }}
-    <li class="medium btn default">
-        <a href="{{ path('type_proposals_page', {'type' : proposal_type.type}) }}">
-            Редактирование
-        </a>
-    </li>
-{% endblock %}

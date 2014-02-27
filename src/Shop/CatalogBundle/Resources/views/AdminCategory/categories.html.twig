@@ -10,6 +10,16 @@
                 Производители
             </a>
         </div>
+        <div class="medium default btn icon-left entypo icon-suitcase">
+            <a href="{{ path('contractors') }}">
+                Контрагенты
+            </a>
+        </div>
+        <div class="medium default btn icon-left entypo icon-doc-text">
+            <a href="{{ path('price_lists') }}">
+                Прайс-листы
+            </a>
+        </div>
         <div class="medium default btn icon-left entypo icon-menu">
             <a href="{{ path('parameters') }}">
                 Параметры
@@ -29,7 +39,9 @@
             {% for category in categories %}
                 <tr>
                     <td>
-                        {{ category.name }}
+                        <span class="{% if category.status == constant('STATUS_OFF', category) %}danger label{% endif %}">
+                            {{ category.name }}
+                        </span>
                     </td>
                     <td>
                         <div class="medium btn default icon-left entypo icon-pencil">

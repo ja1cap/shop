@@ -1,0 +1,58 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+
+    {{ include('ShopCatalogBundle:AdminContractor:breadcrumb/contractorBreadcrumb.html.twig') }}
+    {{ form(form) }}
+
+    {% if contractor.id and canAddCurrency %}
+        <hr/>
+        <div class="medium primary btn">
+            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id}) }}">
+                Добавить валюту
+            </a>
+        </div>
+    {% endif %}
+    {% if contractor.currencies and not contractor.currencies.isEmpty %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th>Код</th>
+                <th>Валюта</th>
+                <th>Курс</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for currency in contractor.currencies %}
+                <tr>
+                    <td>
+                        {{ currency.numericCode }}
+                    </td>
+                    <td>
+                        {{ currency.name }}
+                    </td>
+                    <td>
+                        1 {{ currency.shortName }} = {{ currency.value|number_format(0, '.', ' ') }} {{ contractor.defaultCurrencyShortName }}
+                    </td>
+                    <td>
+                        <div class="medium btn default" style="width: 100%">
+                            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger" style="width: 100%">
+                            <a href="{{ path('delete_contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

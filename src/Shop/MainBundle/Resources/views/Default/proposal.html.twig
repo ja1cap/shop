@@ -56,7 +56,7 @@
                                                 <div class="proposal-price-container">
                                                     {% if price %}
                                                         <div class="price">
-                                                            {{ price.value|number_format(0, '.', ' ') }} руб
+                                                            {{ price.exchangedValue|number_format(0, '.', ' ') }} руб
                                                         </div>
                                                         {% if price.description %}
                                                             <div class="price-description">

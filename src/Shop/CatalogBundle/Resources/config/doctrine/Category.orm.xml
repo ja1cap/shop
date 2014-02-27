@@ -6,6 +6,7 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <field name="status" type="integer"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="slug" type="string" column="slug" length="255"/>
         <field name="singularName" type="string" column="singularName" length="255"/>

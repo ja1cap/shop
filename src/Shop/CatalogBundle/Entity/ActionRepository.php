@@ -26,6 +26,7 @@ class ActionRepository extends EntityRepository {
         ';
 
         $expr = $qb->expr()->andX(
+            $qb->expr()->eq('a.status', Action::STATUS_ON),
             $qb->expr()->in('ac.category_id', $categoriesIds),
             $qb->expr()->orX(
                 $qb->expr()->isNull('a.minOrderSummary'),

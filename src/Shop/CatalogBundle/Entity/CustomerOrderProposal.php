@@ -238,7 +238,7 @@ class CustomerOrderProposal extends AbstractEntity
     {
         $this->price = $price;
         $this->proposalId = $price->getId();
-        $this->priceValue = $price->getValue();
+        $this->priceValue = $price->getExchangedValue();
         return $this;
     }
 

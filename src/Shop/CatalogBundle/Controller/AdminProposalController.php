@@ -217,6 +217,33 @@ class AdminProposalController extends Controller
     }
 
     /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function proposalPricesAction($id){
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalRepository->findOneBy(array(
+            'id' => $id
+        ));
+
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
+        }
+
+        return $this->render('ShopCatalogBundle:AdminProposal:proposalPrices.html.twig', array(
+            'title' => 'Цены',
+            'category' => $proposal->getCategory(),
+            'proposal' => $proposal,
+        ));
+
+    }
+
+    /**
      * @param $proposalId
      * @param $id
      * @param Request $request
@@ -244,6 +271,7 @@ class AdminProposalController extends Controller
         ));
         if(!$price instanceof Price){
             $price = new Price();
+            $price->setContractor($proposal->getDefaultContractor());
         }
 
         $isNew = !$price->getId();
@@ -324,9 +352,13 @@ class AdminProposalController extends Controller
 
             }
 
+            if($isNew){
+                $proposal->addPrice($price);
+            }
+
             $em->flush();
 
-            return $this->redirect($this->generateUrl('proposal', array('categoryId' => $category->getId(), 'id' => $proposal->getId())));
+            return $this->redirect($this->generateUrl('proposal_prices', array('id' => $proposal->getId())));
 
         } else {
 
@@ -373,13 +405,12 @@ class AdminProposalController extends Controller
         }
 
         $proposalId = $price->getProposalId();
-        $categoryId = $price->getProposal()->getCategoryId();
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($price);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('proposal', array('categoryId' => $categoryId, 'id' => $proposalId)));
+        return $this->redirect($this->generateUrl('proposal_prices', array('id' => $proposalId)));
 
     }
 

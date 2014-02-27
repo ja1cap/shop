@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Shop\CatalogBundle\Entity\Action;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -35,6 +36,13 @@ class ActionType extends AbstractType {
             ->add('image', 'file', array(
                 'required' => false,
                 'label' => 'Большая картинка',
+            ));
+
+        $builder
+            ->add('status', 'choice', array(
+                'required' => true,
+                'choices' => Action::$statuses,
+                'label' => 'Статус',
             ));
 
         $builder

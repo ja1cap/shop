@@ -8,8 +8,10 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <field name="status" type="integer"/>
         <field name="manufacturerId" type="integer" column="manufacturerId"/>
         <field name="categoryId" type="integer" column="categoryId"/>
+        <field name="defaultContractorId" type="integer" column="defaultContractorId" nullable="true"/>
 
         <field name="title" type="string" column="title" length="255"/>
         <field name="shortDescription" type="string" column="short_description" length="255"/>
@@ -50,6 +52,12 @@
         <many-to-one target-entity="Manufacturer" field="manufacturer">
             <join-columns>
                 <join-column name="manufacturerId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one target-entity="Contractor" field="defaultContractor">
+            <join-columns>
+                <join-column name="defaultContractorId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
 

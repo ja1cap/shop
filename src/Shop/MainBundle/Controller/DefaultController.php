@@ -3,6 +3,7 @@
 namespace Shop\MainBundle\Controller;
 
 use Shop\CatalogBundle\Cart\ShopCart;
+use Shop\CatalogBundle\Entity\Action;
 use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
@@ -184,7 +185,7 @@ class DefaultController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($data['customer_email'])
-                ->setBody($twig->render($settings->getCustomerEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getCustomerEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 
@@ -196,7 +197,7 @@ class DefaultController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($settings->getManagerEmail())
-                ->setBody($twig->render($settings->getManagerEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getManagerEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 
@@ -208,7 +209,7 @@ class DefaultController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($settings->getAdminEmail())
-                ->setBody($twig->render($settings->getAdminEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getAdminEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 
@@ -220,9 +221,14 @@ class DefaultController extends Controller
      * @return array
      */
     protected function getActions(){
-        return $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Action')->findBy(array(), array(
-            'position' => 'ASC'
-        ));
+        return $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Action')->findBy(
+            array(
+                'status' => Action::STATUS_ON,
+            ),
+            array(
+                'position' => 'ASC',
+            )
+        );
     }
 
     /**
@@ -301,6 +307,7 @@ class DefaultController extends Controller
     protected function getProposals(){
 
         $proposals = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Proposal')->findBy(array(
+            'status' => Category::STATUS_ON,
             'showOnHomePage' => true
         ));
 
@@ -312,9 +319,14 @@ class DefaultController extends Controller
      * @return array
      */
     protected function getCategories(){
-        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(array(), array(
-            'name' => 'ASC',
-        ));
+        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(
+            array(
+                'status' => Category::STATUS_ON
+            ),
+            array(
+                'name' => 'ASC',
+            )
+        );
     }
 
     /**
@@ -469,7 +481,7 @@ class DefaultController extends Controller
             $shopCartPricesIds = $shopCartSummary['priceIds'];
 
             if(!in_array($price->getId(), $shopCartPricesIds)){
-                $possibleSummaryPrice = ($shopCartSummaryPrice + floatval($price->getValue()));
+                $possibleSummaryPrice = ($shopCartSummaryPrice + floatval($price->getExchangedValue()));
             } else {
                 $possibleSummaryPrice = $shopCartSummaryPrice;
             }

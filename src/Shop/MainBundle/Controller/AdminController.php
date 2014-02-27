@@ -2,7 +2,6 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\CatalogBundle\Entity\Action;
 use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Benefit;
 use Shop\MainBundle\Entity\HowWeItem;

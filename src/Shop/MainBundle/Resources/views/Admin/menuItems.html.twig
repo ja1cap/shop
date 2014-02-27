@@ -4,6 +4,12 @@
     </a>
 </li>
 
+<li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
+    <a href="{{ path('shipping_methods') }}" class="">
+        Способы доставки
+    </a>
+</li>
+
 <li class="{{ app.request.get('_route') == 'actions' ? 'active' : '' }}">
     <a href="{{ path('actions') }}" class="">
         Акции

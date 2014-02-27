@@ -13,6 +13,9 @@ use Shop\MainBundle\Entity\AbstractEntity;
 class Proposal extends AbstractEntity
 {
 
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
     /**
      * @var integer
      */
@@ -37,6 +40,14 @@ class Proposal extends AbstractEntity
      * @var string
      */
     private $imageFileName;
+
+    /**
+     * @var array
+     */
+    public static $statuses = array(
+        self::STATUS_ON => 'Вкл',
+        self::STATUS_OFF => 'Выкл',
+    );
 
     /**
      * Get id
@@ -202,10 +213,15 @@ class Proposal extends AbstractEntity
      * @return null|string
      */
     public function getPrice(){
-        $price = $this->getPrices()->current();
+
+        $price = $this->getPrices()->filter(function(Price $price){
+            return $price->getStatus() == Price::STATUS_ON;
+        })->current();
+
         if($price instanceof Price){
-            return $price->getValue();
+            return $price->getExchangedValue();
         }
+
         return null;
     }
 
@@ -540,5 +556,89 @@ class Proposal extends AbstractEntity
     public function getManufacturer()
     {
         return $this->manufacturer;
+    }
+    /**
+     * @var integer
+     */
+    private $defaultContractorId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Contractor
+     */
+    private $defaultContractor;
+
+
+    /**
+     * Set defaultContractorId
+     *
+     * @param integer $defaultContractorId
+     * @return Proposal
+     */
+    public function setDefaultContractorId($defaultContractorId)
+    {
+        $this->defaultContractorId = $defaultContractorId;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultContractorId
+     *
+     * @return integer 
+     */
+    public function getDefaultContractorId()
+    {
+        return $this->defaultContractorId;
+    }
+
+    /**
+     * Set defaultContractor
+     *
+     * @param \Shop\CatalogBundle\Entity\Contractor $defaultContractor
+     * @return Proposal
+     */
+    public function setDefaultContractor(Contractor $defaultContractor = null)
+    {
+        $this->defaultContractor = $defaultContractor;
+        $this->defaultContractorId = $defaultContractor ? $defaultContractor->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get defaultContractor
+     *
+     * @return \Shop\CatalogBundle\Entity\Contractor 
+     */
+    public function getDefaultContractor()
+    {
+        return $this->defaultContractor;
+    }
+    /**
+     * @var integer
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Proposal
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

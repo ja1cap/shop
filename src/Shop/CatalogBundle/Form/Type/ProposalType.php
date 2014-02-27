@@ -1,6 +1,8 @@
 <?php
 namespace Shop\CatalogBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
+use Shop\CatalogBundle\Entity\Proposal;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Shop\CatalogBundle\Entity\Category;
@@ -54,6 +56,24 @@ class ProposalType extends AbstractType {
                 'class' => 'ShopCatalogBundle:Manufacturer',
                 'property' => 'name',
                 'label' => 'Производитель',
+            ));
+
+        $builder->add('defaultContractor', 'entity', array(
+            'required' => false,
+            'empty_value' => 'Выберите контрагента',
+            'class' => 'ShopCatalogBundle:Contractor',
+            'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+            'label' => 'Контрагент поумолчанию',
+        ));
+
+        $builder
+            ->add('status', 'choice', array(
+                'required' => true,
+                'choices' => Proposal::$statuses,
+                'label' => 'Статус',
             ));
 
         /**

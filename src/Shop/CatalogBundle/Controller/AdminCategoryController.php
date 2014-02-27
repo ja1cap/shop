@@ -31,6 +31,7 @@ class AdminCategoryController extends Controller
         return $this->render('ShopCatalogBundle:AdminCategory:categories.html.twig', array(
             'categories' => $categories,
         ));
+
     }
 
     /**

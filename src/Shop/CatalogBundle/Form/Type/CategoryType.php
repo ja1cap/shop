@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Shop\CatalogBundle\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -30,6 +31,13 @@ class CategoryType extends AbstractType {
             ->add('multipleName', 'text', array(
                 'required' => true,
                 'label' => 'Название товара в множественном числе',
+            ));
+
+        $builder
+            ->add('status', 'choice', array(
+                'required' => true,
+                'choices' => Category::$statuses,
+                'label' => 'Статус',
             ));
 
         $builder->add('additionalCategories', 'entity', array(

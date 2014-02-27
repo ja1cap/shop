@@ -1,0 +1,9 @@
+{% extends 'ShopCatalogBundle:AdminPriceList:breadcrumb/priceListsBreadcrumb.html.twig' %}
+{% block breadcrumb_items %}
+    {{ parent() }}
+    <li class="medium btn default">
+        <a href="{{ path('price_list', {'id' : priceList.id}) }}">
+            {{ priceList.name|default(title) }}
+        </a>
+    </li>
+{% endblock %}

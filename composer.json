@@ -19,7 +19,8 @@
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
-        "andre_487/php_rutils": "dev-master"
+        "andre_487/php_rutils": "dev-master",
+        "phpexcel/phpexcel" : "*"
     },
     "scripts": {
         "post-install-cmd": [

@@ -8,8 +8,12 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <field name="status" type="integer"/>
+        <field name="sku" type="string" column="sku"/>
         <field name="proposalId" type="integer" column="proposalId"/>
+        <field name="contractorId" type="integer" column="contractorId" nullable="true"/>
         <field name="value" type="integer" column="value"/>
+        <field name="currencyNumericCode" type="integer" column="currencyNumericCode"/>
 
         <one-to-many target-entity="ParameterValue" mapped-by="price" field="parameterValues">
             <cascade>
@@ -17,9 +21,16 @@
                 <cascade-remove/>
             </cascade>
         </one-to-many>
+
         <many-to-one target-entity="Proposal" field="proposal">
             <join-columns>
                 <join-column name="proposalId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one target-entity="Contractor" field="contractor">
+            <join-columns>
+                <join-column name="contractorId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
 

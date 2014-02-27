@@ -1,0 +1,60 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalPricesBreadcrumb.html.twig') }}
+    <div class="medium secondary btn">
+        <a href="{{ path('proposal_price', {'proposalId' : proposal.id}) }}">
+            Добавить цену
+        </a>
+    </div>
+    {% if proposal.prices and not proposal.prices.isEmpty %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th style="width: 10%">Код</th>
+                <th>Артикул</th>
+                <th>Цена</th>
+                <th>Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for price in proposal.prices %}
+                <tr>
+                    <td>
+                        {{ price.id }}
+                        <div>
+                            <div class="medium btn default" style="width: 100%">
+                                <a href="{{ path('proposal_price', {'proposalId' : proposal.id, 'id' : price.id}) }}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="medium btn danger" style="width: 100%">
+                                <a href="{{ path('delete_proposal_price', {'proposalId' : proposal.id, 'id' : price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {{ price.sku|default('-') }}
+                    </td>
+                    <td>
+                        <span class="{% if price.status == constant('STATUS_OFF', price) %}danger label{% endif %}">
+                            {{ (price.value|number_format(0, '.', ' ') ~ ' ' ~ price.currencyShortName) }}
+                        </span>
+                        {% set contractor = price.contractor|default(proposal.defaultContractor) %}
+                        {% if contractor %}
+                            <div>
+                                ({{ contractor.name }})
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ price.description|default('-')|nl2br }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

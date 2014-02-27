@@ -46,13 +46,13 @@
                                                             <div class="shop-cart-proposal-price">
                                                                 <div>
                                                                 <span class="price">
-                                                                    {{ priceData.price.value|number_format(0, '.', ' ') }} руб
+                                                                    {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб
                                                                 </span>
                                                                     {% if priceData.amount > 1 %}
                                                                         x
                                                                         {{ priceData.amount }}
                                                                         <div class="price-summary">
-                                                                            {{ (priceData.price.value * priceData.amount)|number_format(0, '.', ' ') }} руб
+                                                                            {{ (priceData.price.exchangedValue * priceData.amount)|number_format(0, '.', ' ') }} руб
                                                                         </div>
                                                                     {% endif %}
                                                                 </div>
@@ -153,7 +153,7 @@
                                     Ваш подарок
                                 {% endif %}
                             </div>
-                            <div class="proposal-actions-container {{ actions|length == 1 ? 'single-action' : '' }}">
+                            <div class="proposal-actions-container {{ actions|length == 1 ? 'single-action' : '' }}" style="margin-bottom: 20px">
                                 <div class="proposal-actions owl-carousel owl-theme">
                                     {% for action in actions %}
                                         <div class="proposal-action">
@@ -175,10 +175,29 @@
                             <div class="large-title">
                                 Доставка и оплата
                             </div>
+                            <div class="shipping-methods">
+                                {% for shippingMethod in shippingMethods %}
+                                    <div class="shipping-method" style="margin: 10px 0">
+                                        <h5>
+                                            {{ shippingMethod.name }}
+                                        </h5>
+                                        <div>
+                                            {{ shippingMethod.description|nl2br }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
 
                     </div>
                 </div>
+            </div>
+        {% else %}
+            <div class="row well-v">
+                <p>
+                    Ваша корзина сейчас пуста. Воспользуйтесь нашим каталогом, чтобы ее заполнить.
+                    Помните, что полная корзина олицетворяет изобилие!
+                </p>
             </div>
         {% endif %}
 

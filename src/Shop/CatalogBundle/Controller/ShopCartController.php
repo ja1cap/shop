@@ -42,10 +42,15 @@ class ShopCartController extends Controller
 
         }
 
+        $shippingMethods = $this->getDoctrine()->getRepository('ShopCatalogBundle:ShippingMethod')->findBy(array(), array(
+            'name' => 'ASC',
+        ));
+
         return $this->render('ShopCatalogBundle:ShopCart:default.html.twig', array(
             'title' => 'Оформление заказа',
             'settings' => $this->getSettings(),
             'actions' => $actions,
+            'shippingMethods' => $shippingMethods,
             'shopCartSummary' => $shopCartSummary,
         ));
 
@@ -188,7 +193,7 @@ class ShopCartController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($data['customer_email'])
-                ->setBody($twig->render($settings->getCustomerEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getCustomerEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 
@@ -200,7 +205,7 @@ class ShopCartController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($settings->getManagerEmail())
-                ->setBody($twig->render($settings->getManagerEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getManagerEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 
@@ -212,7 +217,7 @@ class ShopCartController extends Controller
                 ->setSubject($settings->getName())
                 ->setFrom($settings->getEmail())
                 ->setTo($settings->getAdminEmail())
-                ->setBody($twig->render($settings->getAdminEmailTemplate(), $data));
+                ->setBody($twig->render($settings->getAdminEmailTemplate(), $data), 'text/html');
 
             $this->get('mailer')->send($message);
 

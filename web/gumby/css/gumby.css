@@ -1753,7 +1753,7 @@ body .request-form-container form { padding: 55px 50px 35px; display: block; }
 body .request-form-container form .submit-btn { margin: 40px auto 0; cursor: pointer; display: block; text-align: center; outline: none; font-size: 35px; color: white; width: 430px; line-height: 70px; border: 3px solid white; background: #fd5253; -webkit-border-radius: 10px; -moz-border-radius: 10px; -ms-border-radius: 10px; -o-border-radius: 10px; border-radius: 10px; }
 body .manufacturer-image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 30px auto 20px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
 body .manufacturer-image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
-body .proposals-list .proposal { height: 395px; display: block; cursor: pointer; background: white; text-align: center; }
+body .proposals-list .proposal { height: 410px; display: block; cursor: pointer; background: white; text-align: center; }
 body .proposals-list .proposal .inner-container { padding: 0 10px 20px; display: block; position: relative; color: #000000; }
 body .proposals-list .proposal .image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 10px auto 30px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
 body .proposals-list .proposal .image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
@@ -1973,7 +1973,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .filters-form-container form.extraFiltersForm .picker { border-color: #ccc; background: white; }
 .filters-form-container form.mainFiltersForm { margin-left: 20px; background: #f2f2f2; border-bottom: 5px solid #6BC95E; }
 .filters-form-container form.mainFiltersForm .tiles { margin: 0; padding: 10px 0 0; }
-.filters-form-container form.mainFiltersForm .tiles li { width: 32.5%; margin: 0; }
+.filters-form-container form.mainFiltersForm .tiles li { width: 48.5%; margin: 0; }
 .filters-form-container form.mainFiltersForm .proposal-select { padding: 0 0 10px 20px; }
 .filters-form-container form.mainFiltersForm .proposal-select .picker { border-color: #ccc; background: white; }
 .filters-form-container form.mainFiltersForm .proposal-select .picker select { font-size: 20px; height: 50px; }

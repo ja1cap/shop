@@ -64,7 +64,7 @@ class AdminProposalController extends Controller
          */
         $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
         $proposal = $proposalRepository->findOneBy(array(
-            'id' => $id
+            'id' => $id,
         ));
 
         if(!$proposal instanceof Proposal){
@@ -92,9 +92,9 @@ class AdminProposalController extends Controller
 
                 $parameterElementName = 'parameter' . $categoryParameter->getParameterId();
                 if(isset($formData[$parameterElementName])){
-
                     $parameterValuesData[$categoryParameter->getParameterId()] = $formData[$parameterElementName];
-
+                } else if(!$categoryParameter->getParameter()->getIsPriceParameter()) {
+                    $parameterValuesData[$categoryParameter->getParameterId()] = null;
                 }
 
             });
@@ -291,9 +291,9 @@ class AdminProposalController extends Controller
 
                 $parameterElementName = 'parameter' . $categoryParameter->getParameterId();
                 if(isset($formData[$parameterElementName])){
-
                     $parameterValuesData[$categoryParameter->getParameterId()] = $formData[$parameterElementName];
-
+                } else if($categoryParameter->getParameter()->getIsPriceParameter()) {
+                    $parameterValuesData[$categoryParameter->getParameterId()] = null;
                 }
 
             });

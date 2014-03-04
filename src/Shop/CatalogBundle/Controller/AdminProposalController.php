@@ -117,6 +117,7 @@ class AdminProposalController extends Controller
                         $parameterValue->setOption($parameterOption);
                     } else {
                         $proposal->removeParameterValue($parameterValue);
+                        $em->remove($parameterValue);
                     }
 
                     unset($parameterValuesData[$parameterValue->getParameterId()]);
@@ -316,6 +317,7 @@ class AdminProposalController extends Controller
                         $parameterValue->setOption($parameterOption);
                     } else {
                         $price->removeParameterValue($parameterValue);
+                        $em->remove($parameterValue);
                     }
 
                     unset($parameterValuesData[$parameterValue->getParameterId()]);

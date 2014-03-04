@@ -13,11 +13,11 @@
         <field name="value" type="string" column="value" length="255" nullable="true"/>
         <field name="optionId" type="integer" column="optionId" nullable="true"/>
         <many-to-one target-entity="Price" field="price">
-            <join-column name="priceId" referenced-column-name="id"/>
+            <join-column name="priceId" referenced-column-name="id" nullable="true"/>
         </many-to-one>
         <many-to-one target-entity="Proposal" field="proposal">
             <join-columns>
-                <join-column name="proposalId" referenced-column-name="id"/>
+                <join-column name="proposalId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
         <many-to-one target-entity="Parameter" field="parameter">

@@ -44,6 +44,9 @@
         </one-to-many>
 
         <many-to-one target-entity="Category" field="category">
+            <cascade>
+                <cascade-all/>
+            </cascade>
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>
             </join-columns>

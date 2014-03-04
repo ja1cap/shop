@@ -81,7 +81,7 @@ class AdminProposalController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if($isNew){
-                $em->persist($proposal);
+                $category->addProposal($proposal);
             }
 
             $formData = $request->get($form->getName());

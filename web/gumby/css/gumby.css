@@ -1803,8 +1803,8 @@ body .block-container.proposals-block .block-body { margin-top: 0; background-co
 body .block-container.proposals-block .block-body .owl-item { width: 240px !important; padding-top: 30px; }
 body .block-container.proposals-block .block-body .proposals-list .owl-prev, body .block-container.proposals-block .block-body .proposals-list .owl-next { bottom: 160px; }
 body .block-container.proposals-block .block-body .proposals-list .owl-item:first-child .proposal .inner-container { border-left-color: #bdccd4; }
-body .block-container.proposals-block .block-body .proposals-list .proposal { width: 240px; height: 445px; }
-body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container { display: block; min-height: 445px; max-height: 445px; position: relative; padding: 35px 20px; border: 1px solid #bdccd4; border-left-color: rgba(255, 255, 255, 0.5); color: #000000; }
+body .block-container.proposals-block .block-body .proposals-list .proposal { width: 240px; height: 455px; }
+body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container { display: block; min-height: 455px; max-height: 455px; position: relative; padding: 35px 20px; border: 1px solid #bdccd4; border-left-color: rgba(255, 255, 255, 0.5); color: #000000; }
 body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container:hover { color: white; }
 body .block-container.proposals-block .block-body .proposals-list .proposal:hover { background: #34495e; }
 body .block-container.proposals-block .block-body .proposals-list .proposal:hover .inner-container { border-left-color: #bdccd4; }

@@ -874,12 +874,12 @@ body {
           .proposal {
 
             width: $row-max-width / 4;
-            height: 445px;
+            height: 455px;
 
             .inner-container {
               display: block;
-              min-height: 445px;
-              max-height: 445px;
+              min-height: 455px;
+              max-height: 455px;
               position: relative;
               padding: 35px 20px;
               border: 1px solid rgb(189, 204, 212);

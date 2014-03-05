@@ -306,13 +306,17 @@ class ProposalRepository extends EntityRepository {
 
         }
 
-        $sql .= '
+        $sql .= "
             WHERE
                 po.parameterId = :parameterId
                 AND p.categoryId = :categoryId
+                " . ($manufacturerId ? 'AND p.manufacturerId = :manufacturerId' : '') . "
+                AND pp.status = :proposalStatus
+                AND p.status = :priceStatus
+
             GROUP BY
                 po.id;
-        ';
+        ";
 
         $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
         $optionsAmounts = array();

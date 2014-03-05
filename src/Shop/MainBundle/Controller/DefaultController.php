@@ -344,24 +344,41 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('shop'));
         }
 
-        list($filteredParameterCookieName, $filteredParameterValues) = $this->getFilteredParameterValues($request);
+        list($filteredParametersCookieName, $filteredParametersValues) = $this->getFilteredParametersValues($request);
 
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
         $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
 
-        $manufacturer = $request->get('manufacturer', $request->cookies->get('manufacturer'));
+        $manufacturerId = $request->get('manufacturer', $request->cookies->get('manufacturer'));
         $manufacturers = $proposalRepository->findCategoryManufacturers($category->getId());
         $manufacturerIds = array_map(function(Manufacturer $manufacturer){
             return $manufacturer->getId();
         }, $manufacturers);
-        if(!in_array($manufacturer, $manufacturerIds)){
-            $manufacturer = null;
+        if(!in_array($manufacturerId, $manufacturerIds)){
+            $manufacturerId = null;
         }
 
         $parametersOptions = $proposalRepository->findCategoryParametersOptions($category->getId());
         list($parametersData, $parametersOptionsIds) = $this->buildParametersData($parametersOptions);
+
+        $parametersOptionsAmounts = array();
+        foreach($category->getParameters() as $categoryParameter){
+
+            if($categoryParameter instanceof CategoryParameter){
+
+                $filteredParameterValues = $filteredParametersValues;
+
+                if(isset($filteredParameterValues[$categoryParameter->getParameterId()])){
+                    unset($filteredParameterValues[$categoryParameter->getParameterId()]);
+                }
+
+                $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $manufacturerId, $filteredParameterValues);
+
+            }
+
+        }
 
         $extraParametersData = array_filter(
             $category->getParameters()->map(function(CategoryParameter $categoryParameter) use (&$parametersData) {
@@ -381,8 +398,8 @@ class DefaultController extends Controller
 
         $proposals = $proposalRepository->findProposals(
             $category->getId(),
-            $manufacturer,
-            array_filter($filteredParameterValues, function($parameterOptionId) use ($parametersOptionsIds) {
+            $manufacturerId,
+            array_filter($filteredParametersValues, function($parameterOptionId) use ($parametersOptionsIds) {
                 return in_array($parameterOptionId, $parametersOptionsIds);
             })
         );
@@ -396,15 +413,16 @@ class DefaultController extends Controller
             'manufacturers' => $manufacturers,
             'parametersData' => $parametersData,
             'extraParametersData' => $extraParametersData,
-            'filteredManufacturer' => $manufacturer,
-            'filteredParameterValues' => $filteredParameterValues,
+            'parametersOptionsAmounts' => $parametersOptionsAmounts,
+            'filteredManufacturer' => $manufacturerId,
+            'filteredParameterValues' => $filteredParametersValues,
         );
 
         $response = $this->render('ShopMainBundle:Default:proposals.html.twig', $viewParameters);
-        $response->headers->setCookie(new Cookie($filteredParameterCookieName, json_encode($filteredParameterValues)));
+        $response->headers->setCookie(new Cookie($filteredParametersCookieName, json_encode($filteredParametersValues)));
 
         if($request->query->has('manufacturer')){
-            $response->headers->setCookie(new Cookie('manufacturer', $manufacturer));
+            $response->headers->setCookie(new Cookie('manufacturer', $manufacturerId));
         }
 
         return $response;
@@ -439,7 +457,7 @@ class DefaultController extends Controller
 
         $parametersOptions = $proposalRepository->findProposalParametersOptions($proposal->getId());
         list($parametersData, $parametersOptionsIds) = $this->buildParametersData($parametersOptions);
-        list($filteredParameterCookieName, $filteredParameterValues) = $this->getFilteredParameterValues($request);
+        list($filteredParameterCookieName, $filteredParameterValues) = $this->getFilteredParametersValues($request);
 
         $category = $proposal->getCategory();
 
@@ -536,7 +554,7 @@ class DefaultController extends Controller
      * @param Request $request
      * @return array
      */
-    protected function getFilteredParameterValues(Request $request)
+    protected function getFilteredParametersValues(Request $request)
     {
         $filteredParameterCookieName = 'filteredParameters';
         $filteredParameterCookie = $request->cookies->get($filteredParameterCookieName);

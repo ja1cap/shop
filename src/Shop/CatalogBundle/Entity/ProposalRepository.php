@@ -146,7 +146,7 @@ class ProposalRepository extends EntityRepository {
                     AND p.status = :proposal_status
                     AND c.status = :category_status
                 GROUP BY pp.id
-                HAVING COUNT(ppv.id) >= :price_values_amount
+                HAVING COUNT(DISTINCT ppv.id) >= :price_values_amount
                 ORDER BY price DESC
             ) AS pp ON pp.proposalId = p.id
         ';
@@ -164,7 +164,7 @@ class ProposalRepository extends EntityRepository {
 
         $sql .= '
             GROUP BY p.id
-            HAVING COUNT(pv.id) >= :values_amount
+            HAVING COUNT(DISTINCT pv.id) >= :values_amount
             ORDER BY price
         ';
 
@@ -184,8 +184,144 @@ class ProposalRepository extends EntityRepository {
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameters($queryParameters);
+//        echo($query->getSQL());
+//        var_dump($queryParameters);
 
-        return $query->getResult();
+        $result = $query->getResult();
+        //var_dump($result);
+
+        return $result;
+
+    }
+
+    /**
+     * @param Parameter $parameter
+     * @param $categoryId
+     * @param $manufacturerId
+     * @param $filteredParameterValues
+     * @return array
+     */
+    public function getParameterOptionsAmounts(Parameter $parameter, $categoryId, $manufacturerId, $filteredParameterValues){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
+
+        $queryParameters = array(
+            'priceStatus' => Price::STATUS_ON,
+            'proposalStatus' => Proposal::STATUS_ON,
+            'categoryStatus' => Category::STATUS_ON,
+            'parameterId' => $parameter->getId(),
+            'categoryId' => (int)$categoryId,
+            'manufacturerId' => (int)$manufacturerId,
+            'valuesAmount' => count($parametersExpr),
+            'priceValuesAmount' => count($priceParametersExpr),
+        );
+
+        $filterSubQuerySql = '';
+
+        if($parametersExpr || $priceParametersExpr){
+
+            $parameterValueJoin = '';
+            if($parametersExpr){
+                $parameterValueJoin = '
+                    LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
+                ';
+            }
+
+            $priceParameterValueJoin = '';
+            if($priceParametersExpr){
+
+                $priceParameterValueJoin = '
+                    LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
+                ';
+
+            }
+
+            $filterSubQuerySql = "
+                SELECT
+                    _p.id
+                FROM Proposal AS _p
+                JOIN Price AS _pp ON _pp.proposalId = _p.id
+                $parameterValueJoin
+                $priceParameterValueJoin
+                WHERE
+                    _p.categoryId = :categoryId
+                    " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
+                    AND _pp.status = :proposalStatus
+                    AND _p.status = :priceStatus
+                GROUP BY
+                    _p.id
+            ";
+
+            if($parametersExpr){
+
+                $filterSubQuerySql .= '
+                    HAVING
+                        COUNT(DISTINCT pv.id) >= :valuesAmount
+                ';
+
+            }
+
+            if($priceParametersExpr){
+
+                if($parametersExpr){
+
+                    $filterSubQuerySql .= ' AND ';
+
+                } else {
+
+                    $filterSubQuerySql .= ' HAVING  ';
+
+                }
+
+                $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
+
+            }
+
+        }
+
+
+        $sql = '
+            SELECT
+                po.id,
+                COUNT(DISTINCT p.id) AS proposalsAmount
+            FROM
+                ParameterOption AS po
+            JOIN ParameterValue AS popv ON popv.optionId = po.id
+        ';
+
+        if($parameter->getIsPriceParameter()){
+
+            $sql .= '
+                JOIN Price AS pp ON pp.id = popv.priceId ' . ($filterSubQuerySql ? ' AND pp.proposalId IN (' . $filterSubQuerySql . ')' : '') . '
+                JOIN Proposal AS p ON p.id = pp.proposalId
+            ';
+
+        } else {
+
+            $sql .= '
+                JOIN Proposal AS p ON p.id = popv.proposalId ' . ($filterSubQuerySql ? ' AND p.id IN (' . $filterSubQuerySql . ')' : '') . '
+                JOIN Price AS pp ON pp.proposalId = p.id
+            ';
+
+        }
+
+        $sql .= '
+            WHERE
+                po.parameterId = :parameterId
+                AND p.categoryId = :categoryId
+            GROUP BY
+                po.id;
+        ';
+
+        $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
+        $optionsAmounts = array();
+
+        foreach($result as $optionAmounts){
+            $optionsAmounts[$optionAmounts['id']] = $optionAmounts;
+        }
+
+        return $optionsAmounts;
 
     }
 
@@ -227,7 +363,7 @@ class ProposalRepository extends EntityRepository {
         if($parametersExpr){
 
             $sql .= '
-                HAVING COUNT(pv.id) >= :valuesAmount
+                HAVING COUNT(DISTINCT pv.id) >= ' . count($parametersExpr) . '
             ';
 
         }

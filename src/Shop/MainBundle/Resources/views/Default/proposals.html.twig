@@ -23,8 +23,9 @@
                                         <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
                                             <option value="">Не важно</option>
                                             {% for option in parameterData.options %}
-                                                <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
-                                                    {{ option.name }}
+                                                {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
+                                                <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                    {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }} шт.)
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -75,8 +76,9 @@
                                                     <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
                                                         <option value="">Не важно</option>
                                                         {% for option in parameterData.options %}
-                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
-                                                                {{ option.name }}
+                                                            {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
+                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                                {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }} шт.)
                                                             </option>
                                                         {% endfor %}
                                                     </select>
@@ -110,6 +112,15 @@
 
                                 <span class="description">
                                     {{ proposal.short_description|nl2br }}
+                                    {#<br/>#}
+                                    {#{{ proposal_data.valuesAmount }}#}
+                                    {#<br/>#}
+                                    {#{% for parameterValue in proposal.parameterValues %}#}
+                                        {#<span style="font-weight: bold">#}
+                                            {#{{ parameterValue.parameter.name }} - {{ parameterValue.option.name }}#}
+                                        {#</span>#}
+                                        {#<br/>#}
+                                    {#{% endfor %}#}
                                 </span>
 
                                 <span class="price">

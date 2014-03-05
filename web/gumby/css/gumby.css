@@ -1754,11 +1754,11 @@ body .request-form-container form .submit-btn { margin: 40px auto 0; cursor: poi
 body .manufacturer-image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 30px auto 20px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
 body .manufacturer-image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
 body .proposals-list .proposal { height: 410px; display: block; cursor: pointer; background: white; text-align: center; }
-body .proposals-list .proposal .inner-container { padding: 0 10px 20px; display: block; position: relative; color: #000000; }
+body .proposals-list .proposal .inner-container { padding: 0 5px 20px; display: block; position: relative; color: #000000; }
 body .proposals-list .proposal .image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 10px auto 30px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
 body .proposals-list .proposal .image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
 body .proposals-list .proposal .title { padding: 0 5px; display: block; font-size: 20px; margin-bottom: 5px; }
-body .proposals-list .proposal .description { display: block; font-size: 14px; margin-bottom: 20px; }
+body .proposals-list .proposal .description { display: block; font-size: 14px; margin-bottom: 5px; }
 body .proposals-list .proposal .price { display: block; font-size: 20px; }
 body .block-container { position: relative; padding: 30px 0; }
 body .block-container .block-content { position: relative; z-index: 2; }

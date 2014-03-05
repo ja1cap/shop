@@ -40,7 +40,18 @@
                             </span>
                         {% endif %}
                     </td>
-                    <td>{{ proposal.short_description }}</td>
+                    <td>
+                        {{ proposal.short_description }}
+                        {% if not proposal.parameterValues.isEmpty %}
+                        <div style="margin-top: 5px;">
+                            {% for parameterValue in proposal.parameterValues %}
+                                <div style="font-weight: bold">
+                                    {{ parameterValue.parameter.name }} - {{ parameterValue.option.name }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </td>
                     <td>
                         <div class="medium btn default" style="width: 100%">
                             <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">

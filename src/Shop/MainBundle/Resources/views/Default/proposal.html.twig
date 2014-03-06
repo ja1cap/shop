@@ -14,8 +14,11 @@
 
             <div class="row">
                 <div class="three columns">
+
                     {% include('ShopMainBundle:Default:shopCart.html.twig') %}
+
                     {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
+
                 </div>
                 <div class="nine columns">
 
@@ -35,44 +38,36 @@
                             </ul>
                         </div>
 
-                        <div class="row">
+                        <table class="proposal-header-table">
+                            <tbody>
+                                <tr>
+                                    <td class="image-cell">
+                                        <div class="proposal-image">
+                                            <a href="{{ proposal.image_url }}" class="fancybox">
+                                                <img src="{{ proposal.thumb_image_url }}">
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="price-cell">
 
-                            <div class="six columns">
-                                <div class="proposal-image">
-                                    <a href="{{ proposal.image_url }}" class="fancybox">
-                                        <img src="{{ proposal.thumb_image_url }}">
-                                    </a>
-                                </div>
-                            </div>
+                                        {% if price %}
+                                            <div class="order-proposal-form-container">
 
-                            <div class="six columns">
-
-                                <div class="proposal-information-container">
-
-                                    {% if price %}
-                                        <div class="order-proposal-form-container">
-
-                                            {% block proposal_price_block %}
                                                 <div class="proposal-price-container">
                                                     {% if price %}
                                                         <div class="price">
                                                             {{ price.exchangedValue|number_format(0, '.', ' ') }} руб
                                                         </div>
-                                                        {% if price.description %}
-                                                            <div class="price-description">
-                                                                {{  price.description|nl2br }}
-                                                            </div>
-                                                        {% endif %}
                                                     {% endif %}
                                                 </div>
 
                                                 {% if price.id not in shopCartSummary.priceIds %}
                                                     <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                        Добавить {{ category.singularAccusativusName|lower }} в корзину
+                                                        Добавить {{ category.singularName|lower }} в корзину
                                                     </a>
                                                     {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
                                                         <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                            Заменить {{ category.singularAccusativusName|lower }} в корзине
+                                                            Заменить {{ category.singularName|lower }} в корзине
                                                         </a>
                                                     {% endif %}
                                                 {% else %}
@@ -81,15 +76,26 @@
                                                     </a>
                                                 {% endif %}
 
-                                            {% endblock %}
+                                                <a href="{{ path('shop_category', {'slug' : category.slug}) }}" class="show-more-proposals">
+                                                    Посмотреть другие модели
+                                                </a>
 
-                                        </div>
-                                    {% endif %}
+                                            </div>
+                                        {% endif %}
 
-                                    {% if parametersData %}
-                                        <div class="filters-form-container">
-                                            <form>
-                                                {% for parameterData in parametersData %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="proposal-information-container">
+
+                            {% if parametersData %}
+                                <div class="filters-form-container">
+                                    <form>
+                                        <ul class="tiles two_up">
+                                            {% for parameterData in parametersData %}
+                                                <li>
                                                     <div class="proposal-select">
                                                         <label for="parameter_{{ parameterData.parameter.id }}">
                                                             {{ parameterData.parameter.name }}
@@ -98,23 +104,42 @@
                                                             <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
                                                                 <option value="">Не важно</option>
                                                                 {% for option in parameterData.options %}
-                                                                    <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }}>
-                                                                        {{ option.name }}
+                                                                    {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
+                                                                    <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.pricesAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                                        {{ option.name }} ({{ optionAmounts.pricesAmount|default(0) }} шт.)
                                                                     </option>
                                                                 {% endfor %}
                                                             </select>
                                                         </div>
                                                     </div>
-                                                {% endfor %}
-                                            </form>
-                                        </div>
-                                    {% endif %}
-
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </form>
                                 </div>
-
-                            </div>
+                            {% endif %}
 
                         </div>
+
+                        {% if proposalFeatures %}
+                            <div class="large-title" style="margin-bottom: 10px">
+                                Особенности модели
+                            </div>
+                            <table>
+                                <tbody>
+                                {% for parameterValue in proposalFeatures if parameterValue.id %}
+                                    <tr>
+                                        <td>
+                                            {{ parameterValue.parameter.name }}
+                                        </td>
+                                        <td>
+                                            {{ parameterValue.option.name }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
 
                         <div class="proposal-description">
                             {{ proposal.description|nl2br }}
@@ -129,17 +154,17 @@
                                     {% for action in actions %}
                                         <div class="proposal-action">
                                             {#<a href="#">#}
-                                                <span class="proposal-action-image-container">
+                                            <span class="proposal-action-image-container">
                                                     <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
                                                 </span>
                                             {#</a>#}
                                             {#<div style="text-align: center">#}
-                                                {#<div style="font-size: 18px; margin: 10px 0;">#}
-                                                    {#{{ action.title }}#}
-                                                {#</div>#}
-                                                {#<div style="margin-bottom: 10px">#}
-                                                    {#{{ action.description }}#}
-                                                {#</div>#}
+                                            {#<div style="font-size: 18px; margin: 10px 0;">#}
+                                            {#{{ action.title }}#}
+                                            {#</div>#}
+                                            {#<div style="margin-bottom: 10px">#}
+                                            {#{{ action.description }}#}
+                                            {#</div>#}
                                             {#</div>#}
                                         </div>
                                     {% endfor %}

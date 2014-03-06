@@ -60,7 +60,6 @@ class AdminParameterController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if($isNew){
-                $entity->setType(Parameter::TYPE_SELECT);
                 $em->persist($entity);
             }
 

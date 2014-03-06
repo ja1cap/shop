@@ -1,6 +1,7 @@
 <?php
 namespace Shop\CatalogBundle\Form\Type;
 
+use Shop\CatalogBundle\Entity\Parameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -21,6 +22,10 @@ class ParameterType extends AbstractType {
             ->add('name', 'text', array(
                 'required' => true,
                 'label' => 'Название',
+            ))
+            ->add('type', 'choice', array(
+                'choices' => Parameter::$types,
+                'label' => 'Тип елемента',
             ))
             ->add('isPriceParameter', 'choice', array(
                 'choices' => array(

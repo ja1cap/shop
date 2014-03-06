@@ -198,10 +198,11 @@ class ProposalRepository extends EntityRepository {
      * @param Parameter $parameter
      * @param $categoryId
      * @param $manufacturerId
+     * @param $proposalId
      * @param $filteredParameterValues
      * @return array
      */
-    public function getParameterOptionsAmounts(Parameter $parameter, $categoryId, $manufacturerId, $filteredParameterValues){
+    public function getParameterOptionsAmounts(Parameter $parameter, $categoryId, $manufacturerId, $filteredParameterValues, $proposalId = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
         list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
@@ -211,33 +212,113 @@ class ProposalRepository extends EntityRepository {
             'proposalStatus' => Proposal::STATUS_ON,
             'categoryStatus' => Category::STATUS_ON,
             'parameterId' => $parameter->getId(),
+            'proposalId' => (int)$proposalId,
             'categoryId' => (int)$categoryId,
             'manufacturerId' => (int)$manufacturerId,
             'valuesAmount' => count($parametersExpr),
             'priceValuesAmount' => count($priceParametersExpr),
         );
 
-        $filterSubQuerySql = '';
+        $sql = '
+            SELECT
+                po.id,
+                COUNT(DISTINCT p.id) AS proposalsAmount,
+                COUNT(DISTINCT pp.id) AS pricesAmount
+            FROM
+                ParameterOption AS po
+            JOIN ParameterValue AS popv ON popv.optionId = po.id
+        ';
 
-        if($parametersExpr || $priceParametersExpr){
+        if($parameter->getIsPriceParameter()){
 
-            $parameterValueJoin = '';
-            if($parametersExpr){
-                $parameterValueJoin = '
-                    LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
-                ';
+            $filterSubQuerySql = '';
+
+            if($parametersExpr || $priceParametersExpr){
+
+                $parameterValueJoin = '';
+                if($parametersExpr){
+                    $parameterValueJoin = '
+                        LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
+                    ';
+                }
+
+                $priceParameterValueJoin = '';
+                if($priceParametersExpr){
+                    $priceParameterValueJoin = '
+                        LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
+                    ';
+                }
+
+                $filterSubQuerySql = "
+                    SELECT
+                        _pp.id
+                    FROM Proposal AS _p
+                    JOIN Price AS _pp ON _pp.proposalId = _p.id
+                    $parameterValueJoin
+                    $priceParameterValueJoin
+                    WHERE
+                        _p.categoryId = :categoryId
+                        " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
+                        " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
+                        AND _pp.status = :proposalStatus
+                        AND _p.status = :priceStatus
+                    GROUP BY
+                        _pp.id
+                ";
+
+                if($parametersExpr){
+
+                    $filterSubQuerySql .= "
+                        HAVING
+                            COUNT(DISTINCT pv.id) >= :valuesAmount
+                    ";
+
+                }
+
+                if($priceParametersExpr){
+
+                    if($parametersExpr){
+
+                        $filterSubQuerySql .= ' AND ';
+
+                    } else {
+
+                        $filterSubQuerySql .= ' HAVING  ';
+
+                    }
+
+                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
+
+                }
+
             }
 
-            $priceParameterValueJoin = '';
-            if($priceParametersExpr){
+            $sql .= '
+                JOIN Price AS pp ON pp.id = popv.priceId ' . ($filterSubQuerySql ? ' AND pp.id IN (' . $filterSubQuerySql . ')' : '') . '
+                JOIN Proposal AS p ON p.id = pp.proposalId
+            ';
 
-                $priceParameterValueJoin = '
+        } else {
+
+            if($parametersExpr || $priceParametersExpr){
+
+                $parameterValueJoin = '';
+                if($parametersExpr){
+                    $parameterValueJoin = '
+                    LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
+                ';
+                }
+
+                $priceParameterValueJoin = '';
+                if($priceParametersExpr){
+
+                    $priceParameterValueJoin = '
                     LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
                 ';
 
-            }
+                }
 
-            $filterSubQuerySql = "
+                $filterSubQuerySql = "
                 SELECT
                     _p.id
                 FROM Proposal AS _p
@@ -246,6 +327,7 @@ class ProposalRepository extends EntityRepository {
                 $priceParameterValueJoin
                 WHERE
                     _p.categoryId = :categoryId
+                    " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
                     " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
                     AND _pp.status = :proposalStatus
                     AND _p.status = :priceStatus
@@ -253,51 +335,32 @@ class ProposalRepository extends EntityRepository {
                     _p.id
             ";
 
-            if($parametersExpr){
+                if($parametersExpr){
 
-                $filterSubQuerySql .= '
+                    $filterSubQuerySql .= '
                     HAVING
                         COUNT(DISTINCT pv.id) >= :valuesAmount
                 ';
 
-            }
+                }
 
-            if($priceParametersExpr){
+                if($priceParametersExpr){
 
-                if($parametersExpr){
+                    if($parametersExpr){
 
-                    $filterSubQuerySql .= ' AND ';
+                        $filterSubQuerySql .= ' AND ';
 
-                } else {
+                    } else {
 
-                    $filterSubQuerySql .= ' HAVING  ';
+                        $filterSubQuerySql .= ' HAVING  ';
+
+                    }
+
+                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
 
                 }
 
-                $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
-
             }
-
-        }
-
-
-        $sql = '
-            SELECT
-                po.id,
-                COUNT(DISTINCT p.id) AS proposalsAmount
-            FROM
-                ParameterOption AS po
-            JOIN ParameterValue AS popv ON popv.optionId = po.id
-        ';
-
-        if($parameter->getIsPriceParameter()){
-
-            $sql .= '
-                JOIN Price AS pp ON pp.id = popv.priceId ' . ($filterSubQuerySql ? ' AND pp.proposalId IN (' . $filterSubQuerySql . ')' : '') . '
-                JOIN Proposal AS p ON p.id = pp.proposalId
-            ';
-
-        } else {
 
             $sql .= '
                 JOIN Proposal AS p ON p.id = popv.proposalId ' . ($filterSubQuerySql ? ' AND p.id IN (' . $filterSubQuerySql . ')' : '') . '
@@ -310,13 +373,19 @@ class ProposalRepository extends EntityRepository {
             WHERE
                 po.parameterId = :parameterId
                 AND p.categoryId = :categoryId
+                " . ($proposalId ? 'AND p.id = :proposalId' : '') . "
                 " . ($manufacturerId ? 'AND p.manufacturerId = :manufacturerId' : '') . "
                 AND pp.status = :proposalStatus
                 AND p.status = :priceStatus
-
             GROUP BY
                 po.id;
         ";
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
 
         $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
         $optionsAmounts = array();
@@ -438,22 +507,22 @@ class ProposalRepository extends EntityRepository {
 
     /**
      * @param $categoryId
-     * @param $filteredParameterValues
+     * @param $filteredParametersValues
      * @param QueryBuilder $qb
      * @return array
      */
-    protected function createParametersExprList($categoryId, $filteredParameterValues, QueryBuilder $qb)
+    protected function createParametersExprList($categoryId, $filteredParametersValues, QueryBuilder $qb)
     {
         $parametersExpr = array();
         $priceParametersExpr = array();
 
-        if (is_array($filteredParameterValues)) {
+        if (is_array($filteredParametersValues)) {
 
-            $filteredParameterValues = array_filter($filteredParameterValues);
+            $filteredParametersValues = array_filter($filteredParametersValues);
 
-            if ($filteredParameterValues) {
+            if ($filteredParametersValues) {
 
-                $parameterIds = array_keys($filteredParameterValues);
+                $parameterIds = array_keys($filteredParametersValues);
                 $categoryParameters = $this->getEntityManager()->getRepository('ShopCatalogBundle:CategoryParameter')->findBy(array(
                     'categoryId' => $categoryId,
                     'parameterId' => $parameterIds,
@@ -464,24 +533,48 @@ class ProposalRepository extends EntityRepository {
                  */
                 foreach ($categoryParameters as $categoryParameter) {
 
-                    if (isset($filteredParameterValues[$categoryParameter->getParameterId()])) {
+                    if (isset($filteredParametersValues[$categoryParameter->getParameterId()])) {
 
                         $parameter = $categoryParameter->getParameter();
-                        $optionId = $filteredParameterValues[$parameter->getId()];
+                        $filteredParameterValue = $filteredParametersValues[$parameter->getId()];
 
-                        if ($parameter->getIsPriceParameter()) {
+                        if(is_array($filteredParameterValue)){
 
-                            $priceParametersExpr[] = $qb->expr()->andX(
-                                $qb->expr()->eq('ppv.parameterId', $parameter->getId()),
-                                $qb->expr()->eq('ppv.optionId', (int)$optionId)
-                            );
+                            if ($parameter->getIsPriceParameter()) {
+
+                                $priceParametersExpr[] = $qb->expr()->andX(
+                                    $qb->expr()->eq('ppv.parameterId', $parameter->getId()),
+                                    $qb->expr()->in('ppv.optionId', $filteredParameterValue)
+                                );
+
+                            } else {
+
+                                $parametersExpr[] = $qb->expr()->andX(
+                                    $qb->expr()->eq('pv.parameterId', $parameter->getId()),
+                                    $qb->expr()->in('pv.optionId', $filteredParameterValue)
+                                );
+
+                            }
 
                         } else {
 
-                            $parametersExpr[] = $qb->expr()->andX(
-                                $qb->expr()->eq('pv.parameterId', $parameter->getId()),
-                                $qb->expr()->eq('pv.optionId', (int)$optionId)
-                            );
+                            $optionId = (int)$filteredParameterValue;
+
+                            if ($parameter->getIsPriceParameter()) {
+
+                                $priceParametersExpr[] = $qb->expr()->andX(
+                                    $qb->expr()->eq('ppv.parameterId', $parameter->getId()),
+                                    $qb->expr()->eq('ppv.optionId', $optionId)
+                                );
+
+                            } else {
+
+                                $parametersExpr[] = $qb->expr()->andX(
+                                    $qb->expr()->eq('pv.parameterId', $parameter->getId()),
+                                    $qb->expr()->eq('pv.optionId', $optionId)
+                                );
+
+                            }
 
                         }
 

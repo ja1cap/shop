@@ -13,6 +13,15 @@ class Parameter extends AbstractEntity
 {
 
     const TYPE_SELECT = 1;
+    const TYPE_CHECKBOXES = 2;
+
+    /**
+     * @var array
+     */
+    public static $types = array(
+        self::TYPE_SELECT => 'Выпадающий список',
+        self::TYPE_CHECKBOXES => 'Флажки',
+    );
 
     /**
      * @var integer

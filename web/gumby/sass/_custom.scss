@@ -5,8 +5,35 @@ $header-height : 100px;
 
 body {
 
+  background: #f1f1f1;
+
   .chosen-select {
     width: 100%;
+  }
+
+  .checkboxes {
+
+    label {
+
+      padding-left: 20px;
+      position: relative;
+      font-size: 12px;
+      line-height: 14px;
+
+      input[type="checkbox"] {
+        position: absolute;
+        margin-left: -20px;
+        margin-top: 2px;
+      }
+
+      .amount {
+        color: #808080;
+        font-size: 10px;
+        font-weight: normal;
+      }
+
+    }
+
   }
 
   .ymaps-b-form-button_size_sm .ymaps-b-form-button__content {
@@ -423,7 +450,7 @@ body {
     padding-top: $header-height;
     margin: 0 auto;
     overflow: hidden;
-//    background: #f5f5f5;
+    background: white;
     @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px, 0)
 
   }
@@ -1986,6 +2013,7 @@ body {
 .admin-container {
 
   padding-top: 90px;
+  background: white;
 
   .header-container {
 
@@ -2190,6 +2218,7 @@ $proposal-image-side : 284px;
 .filters-form-container {
 
   margin-bottom: 20px;
+  margin-left: 20px;
 
   > .title {
 
@@ -2197,11 +2226,14 @@ $proposal-image-side : 284px;
     margin: 0;
     font-size: 25px;
     line-height: 25px;
-    padding: 0 0 20px 20px;
+    padding: 0 0 20px 0;
 
   }
 
   &.extraFiltersForm-container {
+
+    margin-left: 0;
+    margin-right: 0;
 
     > .title {
       font-size: 16px;
@@ -2214,7 +2246,7 @@ $proposal-image-side : 284px;
 
     &.extraFiltersForm {
 
-      background: #f2f2f2;
+      background: #f1f1f1;
       border-bottom: 5px solid #6BC95E;
 
       .picker {
@@ -2229,8 +2261,7 @@ $proposal-image-side : 284px;
 
     &.mainFiltersForm {
 
-      margin-left: 20px;
-      background: #f2f2f2;
+      background: #f1f1f1;
       border-bottom: 5px solid #6BC95E;
 
       .tiles {
@@ -2279,10 +2310,16 @@ $proposal-image-side : 284px;
 
     .proposal-select {
 
-      padding: 10px 20px 0;
+      padding: 10px 0 0 20px;
 
       &:last-child {
         padding-bottom: 10px;
+      }
+
+      .picker-box {
+
+        margin-right: 20px;
+
       }
 
     }
@@ -2302,7 +2339,7 @@ $proposal-image-side : 284px;
       @include border-radius(7px 7px 0 0);
     }
     padding: 5px 18px;
-    background: #f2f2f2;
+    background: #f1f1f1;
     a {
       color: $body-font-color;
     }
@@ -2646,6 +2683,37 @@ $proposal-image-side : 284px;
 
   padding-left: 40px;
 
+  .proposal-header-table {
+
+    border: none;
+    margin: 0 0 10px;
+
+    td {
+
+      font-weight: normal;
+      border: none;
+      vertical-align: middle;
+      padding: 0;
+
+      &.image-cell, &.price-cell {
+        width: 50%;
+      }
+
+      &.image-cell {
+
+        .proposal-image {
+
+          margin: 0;
+
+        }
+
+      }
+
+    }
+
+  }
+
+
   .proposal-image {
 //    width: $proposal-image-side;
 //    height: $proposal-image-side;
@@ -2653,14 +2721,32 @@ $proposal-image-side : 284px;
     img {
 //      width: $proposal-image-side;
       min-width: 100%;
+      vertical-align: middle;
+
     }
   }
 
   .filters-form-container {
 
+    margin: 0;
+
+    .tiles {
+
+      margin: 0;
+
+      li {
+
+        width: 48.5%;
+        margin: 0;
+
+      }
+
+    }
+
     form {
 
-      background: #f2f2f2;
+      border-bottom: 5px solid #6BC95E;
+      background: #f1f1f1;
 
       .picker {
 
@@ -2674,7 +2760,7 @@ $proposal-image-side : 284px;
   }
 
   .proposal-information-container {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .order-proposal-form-container {
@@ -2684,7 +2770,7 @@ $proposal-image-side : 284px;
 //    border-bottom: 5px solid #6BC95E;
 //    padding: 15px 20px;
 
-    .add-to-cart, .remove-from-cart {
+    .add-to-cart, .remove-from-cart, .show-more-proposals {
 
       line-height: 30px;
       font-size: 18px;
@@ -2700,17 +2786,24 @@ $proposal-image-side : 284px;
         background-color: #f14854;
       }
 
+      &.show-more-proposals {
+        background-color: #f86916;
+      }
+
       &.remove-other {
-        margin-bottom: 10px;
-        line-height: 18px;
-        font-size: 14px;
-        padding-top: 0;
-        background-color: transparent;
-        color: #34495e;
-        text-decoration: underline;
+        background-color: #0e90d2;
+//        margin-bottom: 10px;
+//        line-height: 18px;
+//        font-size: 14px;
+//        padding-top: 0;
+//        background-color: transparent;
+//        color: #34495e;
+//        text-decoration: underline;
       }
 
     }
+
+    margin-bottom: 20px;
 
     .proposal-price {
       font-size: 30px;
@@ -2906,7 +2999,7 @@ $proposal-image-side : 284px;
         display: block;
         width: 215px;
         height: 330px;
-        background: #f2f2f2;
+        background: #f1f1f1;
 
       }
 

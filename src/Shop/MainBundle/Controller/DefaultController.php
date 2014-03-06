@@ -397,13 +397,36 @@ class DefaultController extends Controller
             })->toArray()
         );
 
+        $categoryFilteredParametersValues = array();
+        foreach($filteredParametersValues as $parameterId => $filteredParameterValue){
+
+            if(is_array($filteredParameterValue)){
+
+                $filteredParameterOptionsIds = array();
+
+                foreach($filteredParameterValue as $parameterOptionId){
+                    if($parameterOptionId && in_array($parameterOptionId, $parametersOptionsIds)){
+                        $filteredParameterOptionsIds[] = $parameterOptionId;
+                    }
+                }
+
+                if($filteredParameterOptionsIds){
+                    $categoryFilteredParametersValues[$parameterId] = $filteredParameterOptionsIds;
+                }
+
+            } else {
+
+                if($filteredParameterValue && in_array($filteredParameterValue, $parametersOptionsIds)){
+                    $categoryFilteredParametersValues[$parameterId] = $filteredParameterValue;
+                }
+
+            }
+        }
+
         $proposals = $proposalRepository->findProposals(
             $category->getId(),
             $manufacturerId,
-            $filteredParametersValues
-//            array_filter($filteredParametersValues, function($parameterOptionId) use ($parametersOptionsIds) {
-//                return in_array($parameterOptionId, $parametersOptionsIds);
-//            })
+            array_filter($categoryFilteredParametersValues)
         );
 
         $viewParameters = array(

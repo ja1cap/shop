@@ -79,7 +79,7 @@ class AdminShippingMethodController extends Controller
     public function deleteShippingMethodAction($id)
     {
 
-        $entity = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Manufacturer')->findOneBy(array(
+        $entity = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:ShippingMethod')->findOneBy(array(
             'id' => $id
         ));
 

@@ -364,12 +364,14 @@ class DefaultController extends Controller
         $parametersOptions = $proposalRepository->findCategoryParametersOptions($category->getId());
         list($parametersData, $parametersOptionsIds) = $this->buildParametersData($parametersOptions);
 
+        $parametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filteredParametersValues, $parametersOptionsIds);
+
         $parametersOptionsAmounts = array();
         foreach($category->getParameters() as $categoryParameter){
 
             if($categoryParameter instanceof CategoryParameter){
 
-                $filteredParameterValues = $filteredParametersValues;
+                $filteredParameterValues = $parametersValuesFilteredByOptionsIds;
 
                 if(isset($filteredParameterValues[$categoryParameter->getParameterId()])){
                     unset($filteredParameterValues[$categoryParameter->getParameterId()]);
@@ -397,36 +399,10 @@ class DefaultController extends Controller
             })->toArray()
         );
 
-        $categoryFilteredParametersValues = array();
-        foreach($filteredParametersValues as $parameterId => $filteredParameterValue){
-
-            if(is_array($filteredParameterValue)){
-
-                $filteredParameterOptionsIds = array();
-
-                foreach($filteredParameterValue as $parameterOptionId){
-                    if($parameterOptionId && in_array($parameterOptionId, $parametersOptionsIds)){
-                        $filteredParameterOptionsIds[] = $parameterOptionId;
-                    }
-                }
-
-                if($filteredParameterOptionsIds){
-                    $categoryFilteredParametersValues[$parameterId] = $filteredParameterOptionsIds;
-                }
-
-            } else {
-
-                if($filteredParameterValue && in_array($filteredParameterValue, $parametersOptionsIds)){
-                    $categoryFilteredParametersValues[$parameterId] = $filteredParameterValue;
-                }
-
-            }
-        }
-
         $proposals = $proposalRepository->findProposals(
             $category->getId(),
             $manufacturerId,
-            array_filter($categoryFilteredParametersValues)
+            $parametersValuesFilteredByOptionsIds
         );
 
         $viewParameters = array(
@@ -484,14 +460,14 @@ class DefaultController extends Controller
         list($parametersData, $parametersOptionsIds) = $this->buildParametersData($parametersOptions);
         list($filteredParameterCookieName, $filteredParametersValues) = $this->getFilteredParametersValues($request);
 
+        $parametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filteredParametersValues, $parametersOptionsIds);
+
         $category = $proposal->getCategory();
 
         $price = $proposalRepository->findProposalPrice(
             $category->getId(),
             $proposal->getId(),
-            array_filter($filteredParametersValues, function($parameterOptionId) use ($parametersOptionsIds) {
-                return in_array($parameterOptionId, $parametersOptionsIds);
-            })
+            $parametersValuesFilteredByOptionsIds
         );
 
         $proposalFeatures = array();
@@ -505,7 +481,7 @@ class DefaultController extends Controller
 
                 if($categoryParameter->getParameter()->getIsPriceParameter()){
 
-                    $filteredParameterValues = $filteredParametersValues;
+                    $filteredParameterValues = $parametersValuesFilteredByOptionsIds;
 
                     if(isset($filteredParameterValues[$categoryParameter->getParameterId()])){
                         unset($filteredParameterValues[$categoryParameter->getParameterId()]);
@@ -688,6 +664,44 @@ class DefaultController extends Controller
         $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
         $shopCart = new ShopCart($categoryRepository, $proposalsRepository, $priceRepository, $shopCartStorageData);
         return $shopCart;
+    }
+
+    /**
+     * @param $filteredParametersValues
+     * @param $parametersOptionsIds
+     * @return array
+     */
+    protected function filterParametersValuesByOptionsIds($filteredParametersValues, $parametersOptionsIds)
+    {
+
+        $newFilteredParametersValues = array();
+
+        foreach ($filteredParametersValues as $parameterId => $filteredParameterValue) {
+
+            if (is_array($filteredParameterValue)) {
+
+                $filteredParameterOptionsIds = array();
+
+                foreach ($filteredParameterValue as $parameterOptionId) {
+                    if ($parameterOptionId && in_array($parameterOptionId, $parametersOptionsIds)) {
+                        $filteredParameterOptionsIds[] = $parameterOptionId;
+                    }
+                }
+
+                if ($filteredParameterOptionsIds) {
+                    $newFilteredParametersValues[$parameterId] = $filteredParameterOptionsIds;
+                }
+
+            } else {
+
+                if ($filteredParameterValue && in_array($filteredParameterValue, $parametersOptionsIds)) {
+                    $newFilteredParametersValues[$parameterId] = $filteredParameterValue;
+                }
+
+            }
+        }
+
+        return $newFilteredParametersValues;
     }
 
 }

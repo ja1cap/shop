@@ -27,7 +27,7 @@
                         <div class="shop-cart-proposal-prices">
                             {% for priceData in proposalData.prices %}
                                 <div class="shop-cart-proposal-price">
-                                    <span class="ttip" data-tooltip="{{ priceData.price.description|default('Нет описания') }}">
+                                    <span class="ttip" data-tooltip="{{ priceData.price.description|nl2br|default('Нет описания') }}">
                                         <i class="icon-info"></i>
                                         <span class="price">
                                             {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб

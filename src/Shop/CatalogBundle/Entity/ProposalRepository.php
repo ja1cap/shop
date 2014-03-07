@@ -67,14 +67,10 @@ class ProposalRepository extends AbstractRepository {
 
         $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
         $pricesFilterSubQb
-            ->select('pp.id')
+            ->select('DISTINCT pp.id')
             ->from('ShopCatalogBundle:Price', 'pp')
             ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('ppv.priceId', 'pp.id'),
-                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
-            ))
             ->where($qb->expr()->andX(
                 $qb->expr()->eq('c.id', ':category_id'),
                 $qb->expr()->eq('c.status', ':category_status'),
@@ -82,9 +78,34 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('p.id', ':proposal_id'),
                 $qb->expr()->eq('p.status', ':proposal_status')
             ))
-            ->groupBy('pp.id')
-            ->having($qb->expr()->gte('COUNT(DISTINCT ppv.id)', ':price_values_amount'))
         ;
+
+        if($priceParametersExpr){
+
+            /**
+             * @var $priceParameterExpr \Doctrine\ORM\Query\Expr\Andx
+             */
+            foreach($priceParametersExpr as $i => $priceParameterExpr){
+
+                $alias = "ppv$i";
+                $comparisons = array();
+
+                /**
+                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
+                 */
+                foreach($priceParameterExpr->getParts() as $comparison){
+                    $comparisons[] = str_replace("ppv", $alias, $comparison);
+                }
+
+                $pricesFilterSubQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $qb->expr()->andX(
+                    $qb->expr()->eq("$alias.priceId", 'pp.id'),
+                    call_user_func_array(array($qb->expr(), 'andX'), $comparisons)
+                ));
+
+            }
+
+        }
+
         $this->convertDqlToSql($pricesFilterSubQb);
         $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
@@ -172,6 +193,12 @@ class ProposalRepository extends AbstractRepository {
             ->from('ShopCatalogBundle:Price', 'pp')
             ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
         ;
 
         if($priceParametersExpr){
@@ -200,14 +227,6 @@ class ProposalRepository extends AbstractRepository {
 
         }
 
-        $pricesFilterSubQb
-            ->where($qb->expr()->andX(
-                $qb->expr()->eq('c.id', ':category_id'),
-                $qb->expr()->eq('c.status', ':category_status'),
-                $qb->expr()->eq('pp.status', ':price_status'),
-                $qb->expr()->eq('p.status', ':proposal_status')
-            ))
-        ;
         $this->convertDqlToSql($pricesFilterSubQb);
         $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 

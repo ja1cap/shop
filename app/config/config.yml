@@ -26,7 +26,7 @@ framework:
 
 # Twig Configuration
 twig:
-    cache:            false
+#    cache:            false
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 

@@ -168,25 +168,68 @@ class ProposalRepository extends AbstractRepository {
 
         $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
         $pricesFilterSubQb
-            ->select('pp.id')
+            ->select('DISTINCT pp.id')
             ->from('ShopCatalogBundle:Price', 'pp')
             ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('ppv.priceId', 'pp.id'),
-                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
-            ))
+        ;
+
+        if($priceParametersExpr){
+
+            /**
+             * @var $priceParameterExpr \Doctrine\ORM\Query\Expr\Andx
+             */
+            foreach($priceParametersExpr as $i => $priceParameterExpr){
+
+                $alias = "ppv$i";
+                $comparisons = array();
+
+                /**
+                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
+                 */
+                foreach($priceParameterExpr->getParts() as $comparison){
+                    $comparisons[] = str_replace("ppv", $alias, $comparison);
+                }
+
+                $pricesFilterSubQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $qb->expr()->andX(
+                    $qb->expr()->eq("$alias.priceId", 'pp.id'),
+                    call_user_func_array(array($qb->expr(), 'andX'), $comparisons)
+                ));
+
+            }
+
+        }
+
+        $pricesFilterSubQb
             ->where($qb->expr()->andX(
                 $qb->expr()->eq('c.id', ':category_id'),
                 $qb->expr()->eq('c.status', ':category_status'),
                 $qb->expr()->eq('pp.status', ':price_status'),
                 $qb->expr()->eq('p.status', ':proposal_status')
             ))
-            ->groupBy('pp.id')
-            ->having($qb->expr()->gte('COUNT(DISTINCT ppv.id)', ':price_values_amount'))
         ;
         $this->convertDqlToSql($pricesFilterSubQb);
         $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
+
+//        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
+//        $pricesFilterSubQb
+//            ->select('pp.id')
+//            ->from('ShopCatalogBundle:Price', 'pp')
+//            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
+//            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+//            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
+//                $qb->expr()->eq('ppv.priceId', 'pp.id'),
+//                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
+//            ))
+//            ->where($qb->expr()->andX(
+//                $qb->expr()->eq('c.id', ':category_id'),
+//                $qb->expr()->eq('c.status', ':category_status'),
+//                $qb->expr()->eq('pp.status', ':price_status'),
+//                $qb->expr()->eq('p.status', ':proposal_status')
+//            ))
+//        ;
+//        $this->convertDqlToSql($pricesFilterSubQb);
+//        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
         $qb
             ->select(array(
@@ -232,17 +275,16 @@ class ProposalRepository extends AbstractRepository {
 
         $result = $query->getResult();
 
-//        foreach($queryParameters as $key => $value){
-//            $sql = str_replace(':' . $key, $value, $sql);
-//        }
-//        echo($sql);
-//        echo("<br/>");
-//        die;
+        foreach($queryParameters as $key => $value){
+            $sql = str_replace(':' . $key, $value, $sql);
+        }
+        echo($sql);
+        echo("<br/>");
+        die;
 
         return $result;
 
     }
-
     /**
      * @param Parameter $parameter
      * @param $categoryId

@@ -68,6 +68,18 @@
 <script type="text/javascript">
     $(function(){
 
+        $('.tooltip').each(function(){
+
+            $(this).tooltip({
+                content: $(this).attr('title'),
+                position: {
+                    my: "center bottom-10",
+                    at: "center top"
+                }
+            });
+
+        });
+
         $('.countdown').countDown();
         $('.request-form-container label').inFieldLabels();
 

@@ -1684,6 +1684,7 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 
 body { background: #f1f1f1; overflow-y: scroll; }
 body .chosen-select { width: 100%; }
+body .ui-tooltip { max-width: 100%; }
 body .checkboxes label { padding-left: 20px; position: relative; font-size: 12px; line-height: 14px; }
 body .checkboxes label input[type="checkbox"] { position: absolute; margin-left: -20px; margin-top: 2px; }
 body .checkboxes label .amount { color: #808080; font-size: 10px; font-weight: normal; }
@@ -1997,8 +1998,8 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .shop-cart .shop-cart-category-proposals .shop-cart-category-proposal .shop-cart-proposal-name { font-size: 16px; }
 .shop-cart .shop-cart-proposal-price { margin-top: 10px; }
 .shop-cart .shop-cart-proposal-price:first-child { margin-top: 0; }
-.shop-cart .shop-cart-proposal-price .ttip .icon-info { margin: 0; top: -1px; position: relative; }
-.shop-cart .shop-cart-proposal-price .ttip .price { display: inline-block; line-height: 30px; }
+.shop-cart .shop-cart-proposal-price .tooltip .icon-info { margin: 0; top: -2px; position: relative; }
+.shop-cart .shop-cart-proposal-price .tooltip .price { display: inline-block; line-height: 30px; }
 .shop-cart .shop-cart-proposal-price .price-summary { font-size: 18px; border-top: 1px dashed #C0B8B8; margin: 5px 0 5px 23px; padding: 5px 0 0; }
 .shop-cart .shop-cart-buttons { margin-left: 23px; overflow: hidden; }
 .shop-cart .shop-cart-buttons > a { float: left; display: block; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; background-color: #f2f2f2; margin: 3px 5px 0 0; padding: 0 10px; text-align: center; }
@@ -2007,14 +2008,15 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .shop-cart .shop-cart-summary { text-align: center; font-size: 30px; line-height: 60px; }
 .shop-cart .purchase-btn { line-height: 30px; font-size: 25px; -webkit-border-radius: 0 0 6px 6px; -moz-border-radius: 0 0 6px 6px; -ms-border-radius: 0 0 6px 6px; -o-border-radius: 0 0 6px 6px; border-radius: 0 0 6px 6px; color: white; background-color: #6BC95E; display: block; margin: 0; padding: 10px 20px; text-align: center; }
 
+.shop-cart-container .shop-cart .shop-cart-proposal-price:first-child { margin-top: 5px; }
 .shop-cart-container .shop-cart-category-proposal table { margin: 0; border: none; }
 .shop-cart-container .shop-cart-category-proposal table td { vertical-align: middle; border: none; }
-.shop-cart-container .shop-cart-category-proposal table .image-cell { width: 20%; }
-.shop-cart-container .shop-cart-category-proposal table .information-cell { width: 35%; }
+.shop-cart-container .shop-cart-category-proposal table .image-cell { width: 30%; }
+.shop-cart-container .shop-cart-category-proposal table .information-cell { width: 60%; }
 .shop-cart-container .shop-cart-category-proposal table .information-cell .shop-cart-proposal-description { padding: 10px 0; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .price { font-size: 16px; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .price-summary { margin-left: 0; font-size: 20px; }
-.shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .shop-cart-buttons { margin-left: 0; }
+.shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .shop-cart-buttons { margin-top: 5px; margin-left: 0; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-image { width: 106px; height: 106px; margin: 10px auto; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-image .nailthumb-container { width: 100px; height: 100px; }
 .shop-cart-container .shop-cart-summary { text-align: right; font-size: 20px; margin-bottom: 20px; }

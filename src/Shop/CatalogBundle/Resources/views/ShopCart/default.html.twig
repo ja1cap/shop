@@ -39,15 +39,24 @@
                                                     {#<div class="shop-cart-proposal-description">#}
                                                         {#{{ proposalData.proposal.shortDescription|nl2br }}#}
                                                     {#</div>#}
-                                                </td>
-                                                <td>
+                                                {#</td>#}
+                                                {#<td>#}
                                                     <div class="shop-cart-proposal-prices">
                                                         {% for priceData in proposalData.prices %}
                                                             <div class="shop-cart-proposal-price">
                                                                 <div>
-                                                                <span class="price">
-                                                                    {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб
-                                                                </span>
+
+                                                                    {#<span class="tooltip" title="{{ priceData.price.description|raw|default('Нет описания') }}">#}
+                                                                        {#<i class="icon-info"></i>#}
+                                                                        {#<span class="price">#}
+                                                                            {#{{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб#}
+                                                                        {#</span>#}
+                                                                    {#</span>#}
+
+                                                                    <span class="price">
+                                                                        {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб
+                                                                    </span>
+
                                                                     {% if priceData.amount > 1 %}
                                                                         x
                                                                         {{ priceData.amount }}
@@ -57,7 +66,7 @@
                                                                     {% endif %}
                                                                 </div>
                                                                 <div>
-                                                                    {{ priceData.price.description|nl2br }}
+                                                                    {{ priceData.price.description|raw }}
                                                                 </div>
                                                                 <div class="shop-cart-buttons">
 

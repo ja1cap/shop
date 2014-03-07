@@ -198,9 +198,9 @@ class Price extends AbstractEntity {
      */
     public function getDescription(){
 
-        return implode("\n", $this->getParameterValues()->map(function(ParameterValue $parameterValue){
+        return implode('', $this->getParameterValues()->map(function(ParameterValue $parameterValue){
 
-            return $parameterValue->getParameter()->getName() . ': ' . $parameterValue->getOption()->getName();
+            return '<div>' . $parameterValue->getParameter()->getName() . ': ' . $parameterValue->getOption()->getName() . '</div>';
 
         })->toArray());
 

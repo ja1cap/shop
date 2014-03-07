@@ -275,12 +275,12 @@ class ProposalRepository extends AbstractRepository {
 
         $result = $query->getResult();
 
-        foreach($queryParameters as $key => $value){
-            $sql = str_replace(':' . $key, $value, $sql);
-        }
-        echo($sql);
-        echo("<br/>");
-        die;
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
 
         return $result;
 

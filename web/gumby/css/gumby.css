@@ -1716,7 +1716,7 @@ body .clear { clear: both; }
 body .image-wrapper { display: block; }
 body .image-wrapper > div { text-align: center; vertical-align: middle; display: table-cell; }
 body .image-wrapper > div img { max-height: 100%; }
-body .nailthumb-container { margin: 0; }
+body .nailthumb-container { display: block; margin: 0; }
 body .owl-carousel .owl-buttons .owl-prev, body .owl-carousel .owl-buttons .owl-next { text-indent: -99999px; height: 90px; width: 45px; bottom: 130px; position: absolute; display: block; background: url("/img/sprite.png") no-repeat; }
 body .owl-carousel .owl-buttons .owl-prev { left: -45px; background-position: -484px -325px; }
 body .owl-carousel .owl-buttons .owl-next { right: -45px; background-position: -531px -325px; }

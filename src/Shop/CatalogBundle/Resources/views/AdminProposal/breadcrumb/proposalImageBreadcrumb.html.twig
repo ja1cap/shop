@@ -1,0 +1,9 @@
+{% extends 'ShopCatalogBundle:AdminProposal:breadcrumb/proposalImagesBreadcrumb.html.twig' %}
+{% block breadcrumb_items %}
+    {{ parent() }}
+    <li class="medium btn default">
+        <a href="{{ path('proposal_price', {'proposalId' : proposal.id, 'id' : image.id}) }}">
+            {{ title }}
+        </a>
+    </li>
+{% endblock %}

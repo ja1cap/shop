@@ -5,9 +5,10 @@ namespace Shop\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Image
+ * Class Image
+ * @package Shop\MainBundle\Entity
  */
-class Image extends AbstractEntity
+abstract class Image extends AbstractEntity
 {
     /**
      * @var integer
@@ -18,7 +19,6 @@ class Image extends AbstractEntity
      * @var string
      */
     private $imageFileName;
-
 
     /**
      * Get id
@@ -44,6 +44,35 @@ class Image extends AbstractEntity
     }
 
     /**
+     * @var string
+     */
+    private $thumbImageFileName;
+
+
+    /**
+     * Set thumbImageFileName
+     *
+     * @param string $thumbImageFileName
+     * @return Image
+     */
+    public function setThumbImageFileName($thumbImageFileName)
+    {
+        $this->thumbImageFileName = $thumbImageFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbImageFileName
+     *
+     * @return string
+     */
+    public function getThumbImageFileName()
+    {
+        return $this->thumbImageFileName;
+    }
+
+    /**
      * Get imageFileName
      *
      * @return string 
@@ -61,9 +90,20 @@ class Image extends AbstractEntity
         return $this->setFile('imageFileName', $file);
     }
 
-    public function getImageUrl(){
+    public function getThumbImage(){
+        return $this->getFile('thumbImageFileName');
+    }
+
+    public function setThumbImage($file = null){
+        return $this->setFile('thumbImageFileName', $file);
+    }
+
+    public function getUrl(){
         return $this->getFileUrl($this->getImageFileName());
     }
 
+    public function getThumbUrl(){
+        return $this->getFileUrl($this->getThumbImageFileName()) ?: $this->getUrl();
+    }
 
 }

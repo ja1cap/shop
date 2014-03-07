@@ -151,14 +151,6 @@ class ProposalType extends AbstractType {
         ));
 
         $builder
-            ->add('thumbImage', 'file', array(
-                'required' => false,
-                'label' => 'Маленькая картинка',
-            ))
-            ->add('image', 'file', array(
-                'required' => false,
-                'label' => 'Большая картинка',
-            ))
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
             ));

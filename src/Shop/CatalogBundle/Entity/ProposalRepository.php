@@ -2,15 +2,15 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\QueryBuilder;
+use Shop\MainBundle\Entity\AbstractRepository;
 
 /**
  * Class ProposalRepository
  * @package Shop\CatalogBundle\Entity
  */
-class ProposalRepository extends EntityRepository {
+class ProposalRepository extends AbstractRepository {
 
     /**
      * @param $proposalId
@@ -61,41 +61,84 @@ class ProposalRepository extends EntityRepository {
     public function findProposalPrice($categoryId, $proposalId, $filteredParameterValues){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->select(array(
-                'pp',
-                '(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS HIDDEN price',
-                'COUNT(DISTINCT ppv.id) AS HIDDEN values_amount',
-            ))
-            ->from('ShopCatalogBundle:Proposal', 'p')
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('pp.status', Price::STATUS_ON),
-                $qb->expr()->eq('pp.proposalId', 'p.id')
-            ))
-            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
-                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
-            ))
-            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->eq('ppv.priceId', 'pp.id'));
-
-        $qb->andWhere($qb->expr()->eq('p.id', $proposalId));
 
         $parametersExprList = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
         $priceParametersExpr = $parametersExprList[1];
 
-        if($priceParametersExpr){
-            $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr));
-            $qb->andHaving($qb->expr()->gte('values_amount', count($priceParametersExpr)));
-        }
+        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
+        $pricesFilterSubQb
+            ->select('pp.id')
+            ->from('ShopCatalogBundle:Price', 'pp')
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ppv.priceId', 'pp.id'),
+                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
+            ))
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.id', ':proposal_id'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
+            ->groupBy('pp.id')
+            ->having($qb->expr()->gte('COUNT(DISTINCT ppv.id)', ':price_values_amount'))
+        ;
+        $this->convertDqlToSql($pricesFilterSubQb);
+        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
         $qb
+            ->select(array(
+                'pp.*',
+                '(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS price',
+                'MAX((CASE WHEN all_ccu.id IS NOT NULL THEN all_pp.value * all_ccu.value ELSE all_pp.value END)) AS maxPrice',
+            ))
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->in('pp.id', $pricesFilterSubQuerySql))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+            ->leftJoin('ShopCatalogBundle:Price', 'all_pp', Expr\Join::WITH, $qb->expr()->in('all_pp.id', $pricesFilterSubQuerySql))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'all_ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('all_ccu.contractorId', 'all_pp.contractorId'),
+                $qb->expr()->eq('all_ccu.numericCode', 'all_pp.currencyNumericCode')
+            ))
+            ->andWhere($qb->expr()->eq('p.id', ':proposal_id'))
             ->addOrderBy('price', 'ASC')
-            ->addGroupBy('pp.id');
+            ->addGroupBy('pp.id')
+        ;
 
-        $query = $qb->getQuery();
-        $query->setMaxResults(1);
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb . ' LIMIT 1';
 
-        return current($query->getResult());
+        $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Price', 'pp', 'priceEntity');
+        $rsm->addScalarResult('price', 'price');
+        $rsm->addScalarResult('maxPrice', 'maxPrice');
+
+        $queryParameters = array(
+            'price_status' => Price::STATUS_ON,
+            'proposal_id' => $proposalId,
+            'proposal_status' => Proposal::STATUS_ON,
+            'category_id' => (int)$categoryId,
+            'category_status' => Category::STATUS_ON,
+            'price_values_amount' => count($priceParametersExpr),
+        );
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameters($queryParameters);
+        $result = $query->getResult();
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
+
+        return current($result);
+
 
     }
 
@@ -118,77 +161,83 @@ class ProposalRepository extends EntityRepository {
             'proposal_status' => Proposal::STATUS_ON,
             'category_status' => Category::STATUS_ON,
             'category_id' => (int)$categoryId,
+            'manufacturer_id' => (int)$manufacturerId,
             'values_amount' => count($parametersExpr),
             'price_values_amount' => count($priceParametersExpr),
         );
 
-        $sql = '
-            SELECT
-                p.*,
-                pp.id AS priceId,
-                pp.price AS price
-            FROM Proposal AS p
-        ';
+        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
+        $pricesFilterSubQb
+            ->select('pp.id')
+            ->from('ShopCatalogBundle:Price', 'pp')
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ppv.priceId', 'pp.id'),
+                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
+            ))
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
+            ->groupBy('pp.id')
+            ->having($qb->expr()->gte('COUNT(DISTINCT ppv.id)', ':price_values_amount'))
+        ;
+        $this->convertDqlToSql($pricesFilterSubQb);
+        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
-        $sql .= '
-            JOIN (
-                SELECT
-                    pp.id,
-                    (CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS price,
-                    pp.proposalId
-                FROM Price AS pp
-                JOIN Proposal AS p ON p.id = pp.proposalId
-                JOIN Category AS c ON c.id = p.categoryId
-                LEFT JOIN ContractorCurrency AS ccu ON ccu.contractorId = pp.contractorId AND ccu.numericCode = pp.currencyNumericCode
-                LEFT JOIN ParameterValue AS ppv ON ppv.priceId = pp.id' . ($priceParametersExpr ? ' AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')' : '') . '
-                WHERE c.id = :category_id
-                    AND pp.status = :price_status
-                    AND p.status = :proposal_status
-                    AND c.status = :category_status
-                GROUP BY pp.id
-                HAVING COUNT(DISTINCT ppv.id) >= :price_values_amount
-                ORDER BY price DESC
-            ) AS pp ON pp.proposalId = p.id
-        ';
+        $qb
+            ->select(array(
+                'p.*',
+                'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS price',
+                'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
+            ))
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.proposalId', 'p.id'),
+                $qb->expr()->in('pp.id', $pricesFilterSubQuerySql)
+            ))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+            ->leftJoin('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pv.proposalId', 'p.id'),
+                ($parametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr) : null)
+            ))
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('p.categoryId', ':category_id'),
+                ($manufacturerId ? $qb->expr()->eq('p.manufacturerId', ':manufacturer_id') : null)
+            ))
+            ->groupBy('p.id')
+            ->andHaving($qb->expr()->gte('COUNT(DISTINCT pv.id)', ':values_amount'))
+            ->addOrderBy('price')
+        ;
 
-        $sql .= ' LEFT JOIN ParameterValue AS pv ON pv.proposalId = p.id';
-        if($parametersExpr){
-            $sql .= ' AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')';
-        }
-
-        $sql .= ' WHERE p.categoryId = :category_id';
-        if($manufacturerId){
-            $queryParameters['manufacturer_id'] = (int)$manufacturerId;
-            $sql .= ' AND p.manufacturerId = :manufacturer_id';
-        }
-
-        $sql .= '
-            GROUP BY p.id
-            HAVING COUNT(DISTINCT pv.id) >= :values_amount
-            ORDER BY price
-        ';
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb;
 
         if($page && $perPage){
             $sql .= ' LIMIT ' . ($page > 1 ? (int)$page . ',' : '') . $perPage;
         }
 
-        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addEntityResult('ShopCatalogBundle:Proposal', 'p', 'proposal');
-
-        foreach($this->getClassMetadata()->fieldNames as $columnName => $fieldName){
-            $rsm->addFieldResult('p', $columnName, $fieldName);
-        }
-
-        $rsm->addScalarResult('priceId', 'priceId', 'integer');
+        $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Proposal', 'p', 'proposal');
         $rsm->addScalarResult('price', 'price');
+        $rsm->addScalarResult('maxPrice', 'maxPrice');
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameters($queryParameters);
-//        echo($query->getSQL());
-//        var_dump($queryParameters);
 
         $result = $query->getResult();
-        //var_dump($result);
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
 
         return $result;
 
@@ -229,9 +278,9 @@ class ProposalRepository extends EntityRepository {
             JOIN ParameterValue AS popv ON popv.optionId = po.id
         ';
 
-        if($parameter->getIsPriceParameter()){
+        $filterSubQuerySql = null;
 
-            $filterSubQuerySql = '';
+        if($parameter->getIsPriceParameter()){
 
             if($parametersExpr || $priceParametersExpr){
 

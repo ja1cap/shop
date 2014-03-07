@@ -145,16 +145,6 @@ class Settings extends AbstractEntity
     /**
      * @var string
      */
-    private $images_title;
-
-    /**
-     * @var string
-     */
-    private $images_description;
-
-    /**
-     * @var string
-     */
     private $how_we_title;
 
     /**

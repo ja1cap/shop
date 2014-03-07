@@ -9,6 +9,12 @@
         <field name="name" type="string" column="name" length="255"/>
         <field name="isPriceParameter" type="boolean" column="isPriceParameter"/>
         <field name="type" type="integer" column="type"/>
+        <field name="defaultOptionId" type="integer" column="defaultOptionId" nullable="true"/>
+        <one-to-one field="defaultOption" target-entity="ParameterOption">
+            <join-columns>
+                <join-column name="defaultOptionId" referenced-column-name="id"/>
+            </join-columns>
+        </one-to-one>
         <one-to-many target-entity="ParameterOption" mapped-by="parameter" field="options">
             <cascade>
                 <cascade-persist/>

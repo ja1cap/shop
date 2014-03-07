@@ -78,6 +78,22 @@ delete_proposal_price:
     pattern: /admin/deleteProposalPrice/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalPrice }
 
+proposal_image:
+    pattern: /admin/proposalImages/{proposalId}/image/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImage, id: null }
+
+proposal_set_main_image:
+    pattern: /admin/proposalImages/{proposalId}/setMainImage/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalSetMainImage }
+
+proposal_images:
+    pattern: /admin/proposalImages/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImages }
+
+delete_proposal_image:
+    pattern: /admin/proposalImages/{proposalId}/deleteImage/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalImage }
+
 manufacturers:
     pattern: /admin/manufacturers
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturers }

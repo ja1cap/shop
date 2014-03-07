@@ -9,8 +9,10 @@ use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
+use Shop\CatalogBundle\Entity\ProposalImage;
 use Shop\CatalogBundle\Form\Type\PriceType;
 use Shop\CatalogBundle\Form\Type\ProposalType;
+use Shop\MainBundle\Form\Type\ImageType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -369,7 +371,7 @@ class AdminProposalController extends Controller
 
                 $price->getParameterValues()->map(function(ParameterValue $value) use ($form) {
 
-                    try{
+                    try {
 
                         $element = $form->get('parameter' . $value->getParameterId());
                         $element->setData($value->getOptionId());
@@ -414,6 +416,170 @@ class AdminProposalController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('proposal_prices', array('id' => $proposalId)));
+
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function proposalImagesAction($id){
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalRepository->findOneBy(array(
+            'id' => $id
+        ));
+
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
+        }
+
+        return $this->render('ShopCatalogBundle:AdminProposal:proposalImages.html.twig', array(
+            'title' => 'Фотографии',
+            'category' => $proposal->getCategory(),
+            'proposal' => $proposal,
+        ));
+
+    }
+
+    /**
+     * @param $proposalId
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function proposalImageAction($proposalId, $id, Request $request)
+    {
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalRepository->findOneBy(array(
+            'id' => $proposalId
+        ));
+
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
+        }
+
+        $category = $proposal->getCategory();
+
+        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$image instanceof ProposalImage){
+            $image = new ProposalImage();
+        }
+
+        $isNew = !$image->getId();
+        $form = $this->createForm(new ImageType(), $image);
+
+        $form->handleRequest($request);
+
+        if($request->getMethod() == 'POST' && $form->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+
+            if($isNew){
+                $proposal->addImage($image);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('proposal_images', array('id' => $proposal->getId())));
+
+        } else {
+
+            return $this->render('ShopCatalogBundle:AdminProposal:proposalImage.html.twig', array(
+                'title' => $isNew ? 'Добавление' : 'Изменение',
+                'form' => $form->createView(),
+                'category' => $category,
+                'proposal' => $proposal,
+                'image' => $image,
+            ));
+
+        }
+
+    }
+
+    /**
+     * @param $proposalId
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function proposalSetMainImageAction($proposalId, $id){
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalRepository->findOneBy(array(
+            'id' => $proposalId
+        ));
+
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
+        }
+
+        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$image instanceof ProposalImage){
+            throw $this->createNotFoundException('Фотография не найдена');
+        }
+
+        $proposal->setMainImage($image);
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('proposal_images', array('id' => $proposal->getId())));
+
+
+    }
+
+    /**
+     * @param $proposalId
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function deleteProposalImageAction($proposalId, $id)
+    {
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposal = $proposalRepository->findOneBy(array(
+            'id' => $proposalId
+        ));
+
+        if(!$proposal instanceof Proposal){
+            throw $this->createNotFoundException('Товар не найден');
+        }
+
+        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$image instanceof ProposalImage){
+            throw $this->createNotFoundException('Фотография не найдена');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($image);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('proposal_images', array('id' => $proposal->getId())));
 
     }
 

@@ -80,17 +80,6 @@
         <default key="_controller">ShopMainBundle:Admin:deleteReview</default>
         <default key="id">null</default>
     </route>
-    <route id="images" pattern="/admin/images">
-        <default key="_controller">ShopMainBundle:Admin:images</default>
-    </route>
-    <route id="image" pattern="/admin/image/{id}">
-        <default key="_controller">ShopMainBundle:Admin:image</default>
-        <default key="id">null</default>
-    </route>
-    <route id="image_delete" pattern="/admin/imageDelete/{id}">
-        <default key="_controller">ShopMainBundle:Admin:deleteImage</default>
-        <default key="id">null</default>
-    </route>
     <route id="how_we" pattern="/admin/howWe">
         <default key="_controller">ShopMainBundle:Admin:howWe</default>
     </route>

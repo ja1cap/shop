@@ -42,16 +42,16 @@ class AdminParameterController extends Controller
     {
 
         $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter');
-        $entity = $repository->findOneBy(array(
+        $parameter = $repository->findOneBy(array(
             'id' => $id
         ));
 
-        if(!$entity instanceof Parameter){
-            $entity = new Parameter;
+        if(!$parameter instanceof Parameter){
+            $parameter = new Parameter;
         }
 
-        $isNew = !$entity->getId();
-        $form = $this->createForm(new ParameterType(), $entity);
+        $isNew = !$parameter->getId();
+        $form = $this->createForm(new ParameterType($parameter), $parameter);
 
         $form->handleRequest($request);
 
@@ -60,7 +60,7 @@ class AdminParameterController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if($isNew){
-                $em->persist($entity);
+                $em->persist($parameter);
             }
 
             $em->flush();
@@ -72,7 +72,7 @@ class AdminParameterController extends Controller
             return $this->render('ShopCatalogBundle:AdminParameter:parameter.html.twig', array(
                 'title' => $isNew ? 'Добавление параметра' : 'Изменение параметра',
                 'form' => $form->createView(),
-                'parameter' => $entity,
+                'parameter' => $parameter,
             ));
 
         }

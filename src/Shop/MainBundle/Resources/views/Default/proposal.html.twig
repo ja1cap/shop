@@ -43,9 +43,23 @@
                                 <tr>
                                     <td class="image-cell">
                                         <div class="proposal-image">
-                                            <a href="{{ proposal.image_url }}" class="fancybox">
+                                            <a href="{{ proposal.image_url }}" class="fancybox" rel="proposalImages">
                                                 <img src="{{ proposal.thumb_image_url }}">
                                             </a>
+                                        </div>
+                                        <div style="margin-top: 5px; text-align: center">
+                                            {% set imageUrls = [] %}
+                                            {% if proposal.images|length > 1 %}
+                                                {% for image in proposal.images %}
+                                                    {% set imageUrls = imageUrls|merge([image.url]) %}
+                                                    <a href="{{ image.url }}" class="fancybox" rel="proposalImages" style="display: none;">
+                                                        <img src="{{ image.thumb_url }}">
+                                                    </a>
+                                                {% endfor %}
+                                                <a href="#" onclick="$.fancybox.open({{ imageUrls|json_encode }}, {openEffect: 'none', closeEffect: 'none', padding: 0, loop : false, helpers: {overlay: {locked: false}}}); return false;">
+                                                    Просмотреть фотографии
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                     <td class="price-cell">
@@ -56,7 +70,11 @@
                                                 <div class="proposal-price-container">
                                                     {% if price %}
                                                         <div class="price">
-                                                            {{ price.exchangedValue|number_format(0, '.', ' ') }} руб
+                                                            {#{{ priceData.maxPrice }}#}
+                                                            {% if priceData.maxPrice > priceData.price %}
+                                                                от
+                                                            {% endif %}
+                                                            {{ priceData.price|number_format(0, '.', ' ') }} руб
                                                         </div>
                                                     {% endif %}
                                                 </div>
@@ -106,7 +124,7 @@
                                                                 {% for option in parameterData.options %}
                                                                     {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
                                                                     <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.pricesAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                                        {{ option.name }} ({{ optionAmounts.pricesAmount|default(0) }} шт.)
+                                                                        {{ option.name }} ({{ optionAmounts.pricesAmount|default(0) }})
                                                                     </option>
                                                                 {% endfor %}
                                                             </select>

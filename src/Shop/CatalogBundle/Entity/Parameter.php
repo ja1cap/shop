@@ -254,4 +254,59 @@ class Parameter extends AbstractEntity
     {
         return $this->values;
     }
+    /**
+     * @var integer
+     */
+    private $defaultOptionId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\ParameterOption
+     */
+    private $defaultOption;
+
+    /**
+     * Set defaultOptionId
+     *
+     * @param integer $defaultOptionId
+     * @return Parameter
+     */
+    public function setDefaultOptionId($defaultOptionId)
+    {
+        $this->defaultOptionId = $defaultOptionId;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultOptionId
+     *
+     * @return integer 
+     */
+    public function getDefaultOptionId()
+    {
+        return $this->defaultOptionId;
+    }
+
+    /**
+     * Set defaultOption
+     *
+     * @param \Shop\CatalogBundle\Entity\ParameterOption $defaultOption
+     * @return Parameter
+     */
+    public function setDefaultOption(ParameterOption $defaultOption = null)
+    {
+        $this->defaultOption = $defaultOption;
+        $this->defaultOptionId = $defaultOption ? $defaultOption->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get defaultOption
+     *
+     * @return \Shop\CatalogBundle\Entity\ParameterOption 
+     */
+    public function getDefaultOption()
+    {
+        return $this->defaultOption;
+    }
 }

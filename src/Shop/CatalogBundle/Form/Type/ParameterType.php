@@ -12,6 +12,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ParameterType extends AbstractType {
 
     /**
+     * @var Parameter
+     */
+    protected $parameter;
+
+    /**
+     * @param Parameter $parameter
+     */
+    function __construct(Parameter $parameter = null)
+    {
+        $this->parameter = $parameter;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -33,7 +46,19 @@ class ParameterType extends AbstractType {
                     'да',
                 ),
                 'label' => 'Относится к цене',
+            ))
+        ;
+
+        if($this->parameter && $this->parameter->getId()){
+
+            $builder->add('defaultOption', 'entity', array(
+                'required' => false,
+                'choices' => $this->parameter->getOptions(),
+                'class' => 'ShopCatalogBundle:ParameterOption',
+                'label' => 'Опция поумолчанию',
             ));
+
+        }
 
         $builder
             ->add('save', 'submit', array(

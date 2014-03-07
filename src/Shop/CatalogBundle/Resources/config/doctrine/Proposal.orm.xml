@@ -16,8 +16,6 @@
         <field name="title" type="string" column="title" length="255"/>
         <field name="shortDescription" type="string" column="short_description" length="255"/>
         <field name="description" type="text" column="description"/>
-        <field name="thumbImageFileName" type="string" column="thumb_image_file_name" length="255" nullable="true"/>
-        <field name="imageFileName" type="string" column="image_file_name" length="255" nullable="true"/>
 
         <field name="showOnHomePage" type="boolean" nullable="true"/>
 
@@ -25,6 +23,13 @@
         <field name="seoDescription" type="text" nullable="true"/>
         <field name="seoKeywords" type="text" nullable="true"/>
         <field name="seoSlug" type="string" nullable="true"/>
+        <field name="mainImageId" type="integer" nullable="true"/>
+
+        <one-to-one field="mainImage" target-entity="ProposalImage">
+            <join-columns>
+                <join-column name="mainImageId" referenced-column-name="id"/>
+            </join-columns>
+        </one-to-one>
 
         <one-to-many target-entity="ParameterValue" mapped-by="proposal" field="parameterValues">
             <cascade>
@@ -41,6 +46,13 @@
             <order-by>
                 <order-by-field name="value" direction="ASC"/>
             </order-by>
+        </one-to-many>
+
+        <one-to-many target-entity="ProposalImage" mapped-by="proposal" field="images">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
         </one-to-many>
 
         <many-to-one target-entity="Category" field="category">

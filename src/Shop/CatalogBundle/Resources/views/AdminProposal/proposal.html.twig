@@ -11,6 +11,11 @@
                     Цены
                 </a>
             </div>
+            <div class="medium primary btn icon-left entypo icon-picture">
+                <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
+                    Фотографии
+                </a>
+            </div>
         </div>
     {% endif %}
     {{ form(form) }}

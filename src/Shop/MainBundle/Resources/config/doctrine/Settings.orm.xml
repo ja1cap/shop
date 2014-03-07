@@ -54,9 +54,6 @@
         <field name="reviews_title" type="string" nullable="true"/>
         <field name="reviews_description" type="text" nullable="true"/>
 
-        <field name="images_title" type="string" nullable="true"/>
-        <field name="images_description" type="text" nullable="true"/>
-
         <field name="how_we_title" type="string" nullable="true"/>
         <field name="how_we_description" type="text" nullable="true"/>
 

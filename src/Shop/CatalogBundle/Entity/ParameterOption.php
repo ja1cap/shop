@@ -2,6 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -147,7 +148,7 @@ class ParameterOption
      */
     public function __construct()
     {
-        $this->optionValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->optionValues = new ArrayCollection();
     }
 
     /**
@@ -156,7 +157,7 @@ class ParameterOption
      * @param \Shop\CatalogBundle\Entity\ParameterValue $optionValues
      * @return ParameterOption
      */
-    public function addOptionValue(\Shop\CatalogBundle\Entity\ParameterValue $optionValues)
+    public function addOptionValue(ParameterValue $optionValues)
     {
         $this->optionValues[] = $optionValues;
 
@@ -168,7 +169,7 @@ class ParameterOption
      *
      * @param \Shop\CatalogBundle\Entity\ParameterValue $optionValues
      */
-    public function removeOptionValue(\Shop\CatalogBundle\Entity\ParameterValue $optionValues)
+    public function removeOptionValue(ParameterValue $optionValues)
     {
         $this->optionValues->removeElement($optionValues);
     }
@@ -182,4 +183,13 @@ class ParameterOption
     {
         return $this->optionValues;
     }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
 }

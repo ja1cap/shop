@@ -37,9 +37,9 @@ class Proposal extends AbstractEntity
     private $description;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $imageFileName;
+    private $images;
 
     /**
      * @var array
@@ -128,39 +128,8 @@ class Proposal extends AbstractEntity
         return $this->description;
     }
 
-    /**
-     * Set imageFileName
-     *
-     * @param string $imageFileName
-     * @return Proposal
-     */
-    public function setImageFileName($imageFileName)
-    {
-        $this->imageFileName = $imageFileName;
-
-        return $this;
-    }
-
-    /**
-     * Get imageFileName
-     *
-     * @return string 
-     */
-    public function getImageFileName()
-    {
-        return $this->imageFileName;
-    }
-
-    public function getImage(){
-        return $this->getFile('imageFileName');
-    }
-
-    public function setImage($file = null){
-        return $this->setFile('imageFileName', $file);
-    }
-
     public function getImageUrl(){
-        return $this->getFileUrl($this->getImageFileName());
+        return $this->getMainImage() ? $this->getMainImage()->getUrl() : null;
     }
 
     /**
@@ -174,6 +143,7 @@ class Proposal extends AbstractEntity
     public function __construct()
     {
         $this->prices = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -309,45 +279,12 @@ class Proposal extends AbstractEntity
     {
         return $this->seoKeywords;
     }
-    /**
-     * @var string
-     */
-    private $thumbImageFileName;
-
 
     /**
-     * Set thumbImageFileName
-     *
-     * @param string $thumbImageFileName
-     * @return Proposal
+     * @return null|string
      */
-    public function setThumbImageFileName($thumbImageFileName)
-    {
-        $this->thumbImageFileName = $thumbImageFileName;
-
-        return $this;
-    }
-
-    /**
-     * Get thumbImageFileName
-     *
-     * @return string 
-     */
-    public function getThumbImageFileName()
-    {
-        return $this->thumbImageFileName;
-    }
-
-    public function getThumbImage(){
-        return $this->getFile('thumbImageFileName');
-    }
-
-    public function setThumbImage($file = null){
-        return $this->setFile('thumbImageFileName', $file);
-    }
-
     public function getThumbImageUrl(){
-        return $this->getFileUrl($this->getThumbImageFileName()) ?: $this->getImageUrl();
+        return $this->getMainImage() ? $this->getMainImage()->getThumbUrl() : null;
     }
 
     /**
@@ -445,6 +382,7 @@ class Proposal extends AbstractEntity
     {
         return $this->parameterValues;
     }
+
     /**
      * @var integer
      */
@@ -640,5 +578,94 @@ class Proposal extends AbstractEntity
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Add images
+     *
+     * @param \Shop\CatalogBundle\Entity\ProposalImage $image
+     * @return Proposal
+     */
+    public function addImage(ProposalImage $image)
+    {
+        $this->images[] = $image;
+        $image->setProposal($this);
+        return $this;
+    }
+
+    /**
+     * Remove images
+     *
+     * @param \Shop\CatalogBundle\Entity\ProposalImage $images
+     */
+    public function removeImage(ProposalImage $images)
+    {
+        $this->images->removeElement($images);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    /**
+     * @var integer
+     */
+    private $mainImageId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\ProposalImage
+     */
+    private $mainImage;
+
+
+    /**
+     * Set mainImageId
+     *
+     * @param integer $mainImageId
+     * @return Proposal
+     */
+    public function setMainImageId($mainImageId)
+    {
+        $this->mainImageId = $mainImageId;
+
+        return $this;
+    }
+
+    /**
+     * Get mainImageId
+     *
+     * @return integer 
+     */
+    public function getMainImageId()
+    {
+        return $this->mainImageId;
+    }
+
+    /**
+     * Set mainImage
+     *
+     * @param \Shop\CatalogBundle\Entity\ProposalImage $mainImage
+     * @return Proposal
+     */
+    public function setMainImage(ProposalImage $mainImage = null)
+    {
+        $this->mainImage = $mainImage;
+        $this->mainImageId = $mainImage ? $mainImage->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get mainImage
+     *
+     * @return \Shop\CatalogBundle\Entity\ProposalImage 
+     */
+    public function getMainImage()
+    {
+        return $this->mainImage;
     }
 }

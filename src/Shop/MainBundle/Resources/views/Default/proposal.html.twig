@@ -120,7 +120,7 @@
                                                         </label>
                                                         <div class="picker">
                                                             <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
-                                                                <option value="">Не важно</option>
+                                                                <option value="-1">Не важно</option>
                                                                 {% for option in parameterData.options %}
                                                                     {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
                                                                     <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.pricesAmount <= 0 ? "disabled='disabled'" : "" }}>

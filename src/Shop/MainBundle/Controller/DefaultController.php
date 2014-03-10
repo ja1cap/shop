@@ -362,6 +362,28 @@ class DefaultController extends Controller
 
         $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
 
+        $priceIntervalsData = $proposalRepository->getPriceIntervalsData($category->getId(), $manufacturerId, $filterParametersValuesFilteredByOptionsIds);
+        $priceInterval = $priceIntervalsData['interval'];
+        $validFilterPrices = array_keys($priceIntervalsData['intervals']);
+
+        $filterPrices = $request->get('prices', json_decode($request->cookies->get('prices' . $category->getId()), true));
+
+        if(is_array($filterPrices)){
+            $filterPrices = array_filter($filterPrices, function($filterPrice) use ($validFilterPrices){
+                return in_array($filterPrice, $validFilterPrices);
+            });
+        } else {
+            $filterPrices = array();
+        }
+
+        $filterPricesRanges = array();
+        foreach($filterPrices as $i => $filterPrice){
+            $filterPricesRanges[$i] = array(
+                'min' => $filterPrice,
+                'max' => $filterPrice + $priceInterval,
+            );
+        }
+
         $parametersOptionsAmounts = array();
         foreach($category->getParameters() as $categoryParameter){
 
@@ -373,7 +395,7 @@ class DefaultController extends Controller
                     unset($filterParameterValues[$categoryParameter->getParameterId()]);
                 }
 
-                $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $manufacturerId, $filterParameterValues);
+                $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $manufacturerId, $filterParameterValues, $filterPricesRanges);
 
             }
 
@@ -398,7 +420,8 @@ class DefaultController extends Controller
         $proposals = $proposalRepository->findProposals(
             $category->getId(),
             $manufacturerId,
-            $filterParametersValuesFilteredByOptionsIds
+            $filterParametersValuesFilteredByOptionsIds,
+            $filterPricesRanges
         );
 
         $viewParameters = array(
@@ -408,6 +431,8 @@ class DefaultController extends Controller
             'proposals' => $proposals,
             'settings' => $this->getSettings(),
             'manufacturers' => $manufacturers,
+            'priceIntervalsData' => $priceIntervalsData,
+            'filteredPrices' => $filterPrices,
             'parametersData' => $parametersData,
             'extraParametersData' => $extraParametersData,
             'parametersOptionsAmounts' => $parametersOptionsAmounts,
@@ -420,6 +445,10 @@ class DefaultController extends Controller
 
         if($request->query->has('manufacturer')){
             $response->headers->setCookie(new Cookie('manufacturer', $manufacturerId));
+        }
+
+        if($request->query->has('prices')){
+            $response->headers->setCookie(new Cookie('prices' . $category->getId(), json_encode($filterPrices)));
         }
 
         return $response;
@@ -442,10 +471,8 @@ class DefaultController extends Controller
             $criteria['seoSlug'] = (string)$slug;
         }
 
-        /**
-         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
-         */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->getProposalRepository();
+
         $proposal = $proposalRepository->findOneBy($criteria);
 
         if(!$proposal instanceof Proposal){
@@ -456,9 +483,31 @@ class DefaultController extends Controller
         $parametersData = $this->buildParametersData($parametersOptions);
         $filterParametersValues = $this->getFilterParametersValues($request);
 
-        $parametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
+        $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
 
         $category = $proposal->getCategory();
+
+        $priceIntervalsData = $proposalRepository->getPriceIntervalsData($category->getId(), $proposal->getManufacturerId(), $filterParametersValuesFilteredByOptionsIds, $proposal->getId());
+        $priceInterval = $priceIntervalsData['interval'];
+        $validFilterPrices = array_keys($priceIntervalsData['intervals']);
+
+        $filterPrices = $request->get('prices', json_decode($request->cookies->get('prices' . $category->getId()), true));
+
+        if(is_array($filterPrices)){
+            $filterPrices = array_filter($filterPrices, function($filterPrice) use ($validFilterPrices){
+                return in_array($filterPrice, $validFilterPrices);
+            });
+        } else {
+            $filterPrices = array();
+        }
+
+        $filterPricesRanges = array();
+        foreach($filterPrices as $i => $filterPrice){
+            $filterPricesRanges[$i] = array(
+                'min' => $filterPrice,
+                'max' => $filterPrice + $priceInterval,
+            );
+        }
 
         $proposalFeatures = array();
         $parametersOptionsAmounts = array();
@@ -471,13 +520,13 @@ class DefaultController extends Controller
 
                 if($categoryParameter->getParameter()->getIsPriceParameter()){
 
-                    $filterParameterValues = $parametersValuesFilteredByOptionsIds;
+                    $filterParameterValues = $filterParametersValuesFilteredByOptionsIds;
 
                     if(isset($filterParameterValues[$categoryParameter->getParameterId()])){
                         unset($filterParameterValues[$categoryParameter->getParameterId()]);
                     }
 
-                    $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $proposal->getManufacturerId(), $filterParameterValues, $proposal->getId());
+                    $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $proposal->getManufacturerId(), $filterParameterValues, $filterPricesRanges, $proposal->getId());
 
                 }
 
@@ -493,11 +542,11 @@ class DefaultController extends Controller
             }
         }
 
-
         $priceData = $proposalRepository->findProposalPrice(
             $category->getId(),
             $proposal->getId(),
-            $parametersValuesFilteredByOptionsIds
+            $filterParametersValuesFilteredByOptionsIds,
+            $filterPricesRanges
         );
         $price = $priceData ? $priceData['priceEntity'] : null;
 
@@ -543,26 +592,7 @@ class DefaultController extends Controller
 
         }
 
-        $additionalCategories = $category->getAdditionalCategories();
-        $additionalCategoriesData = array();
-
-        /**
-         * @var $additionalCategory Category
-         */
-        foreach($additionalCategories as $additionalCategory){
-
-            $additionalCategoryProposals = $proposalRepository->findProposals($additionalCategory->getId(), null, $filterParametersValues, 1, 1);
-            if($additionalCategoryProposals){
-
-                $additionalCategoriesData[$additionalCategory->getId()] = array(
-                    'category' => $additionalCategory,
-                    'proposalData' => current($additionalCategoryProposals),
-//                    'manufacturers' => $proposalRepository->findCategoryManufacturers($additionalCategory->getId(), $filteredParameterValues),
-                );
-
-            }
-
-        }
+        $additionalCategoriesData = $this->getProposalAdditionalCategories($category, $filterParametersValues);
 
         $response = $this->render('ShopMainBundle:Default:proposal.html.twig', array(
             'settings' => $this->getSettings(),
@@ -577,10 +607,16 @@ class DefaultController extends Controller
             'shopCartSummary' => $shopCartSummary,
             'parametersData' => $parametersData,
             'parametersOptionsAmounts' => $parametersOptionsAmounts,
-            'filteredParameterValues' => $parametersValuesFilteredByOptionsIds,
+            'filteredParameterValues' => $filterParametersValuesFilteredByOptionsIds,
+            'priceIntervalsData' => $priceIntervalsData,
+            'filteredPrices' => $filterPrices,
         ));
 
         $response->headers->setCookie(new Cookie(self::CATALOG_FILTER_COOKIE_NAME, json_encode($filterParametersValues)));
+
+        if($request->query->has('prices')){
+            $response->headers->setCookie(new Cookie('prices' . $category->getId(), json_encode($filterPrices)));
+        }
 
         return $response;
 
@@ -733,6 +769,58 @@ class DefaultController extends Controller
 
         return $newFilteredParametersValues;
 
+    }
+
+    /**
+     * @param $category
+     * @param $filterParametersValues
+     * @return array
+     */
+    protected function getProposalAdditionalCategories(Category $category, $filterParametersValues)
+    {
+
+        $proposalRepository = $this->getProposalRepository();
+
+        $additionalCategories = $category->getAdditionalCategories();
+        $additionalCategoriesData = array();
+
+        /**
+         * @var $additionalCategory Category
+         */
+        foreach ($additionalCategories as $additionalCategory) {
+
+            $parametersOptions = $proposalRepository->findCategoryParametersOptions($additionalCategory->getId());
+            $parametersData = $this->buildParametersData($parametersOptions);
+
+            $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
+
+            $additionalCategoryProposals = $proposalRepository->findProposals($additionalCategory->getId(), null, $filterParametersValuesFilteredByOptionsIds, null, 1, 1);
+            if ($additionalCategoryProposals) {
+
+                $additionalCategoriesData[$additionalCategory->getId()] = array(
+                    'category' => $additionalCategory,
+                    'proposalData' => current($additionalCategoryProposals),
+//                    'manufacturers' => $proposalRepository->findCategoryManufacturers($additionalCategory->getId(), $filteredParameterValues),
+                );
+
+            }
+
+        }
+
+        return $additionalCategoriesData;
+
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\ProposalRepository
+     */
+    protected function getProposalRepository()
+    {
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        return $proposalRepository;
     }
 
 }

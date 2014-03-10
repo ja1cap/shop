@@ -8,12 +8,37 @@
             {% block proposals_left_bar %}
                 {% include('ShopMainBundle:Default:shopCart.html.twig') %}
                 {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
-                {% if extraParametersData %}
+                {% if extraParametersData or priceIntervalsData.intervals %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">
                             Дополнительные фильтры
                         </div>
                         <form id="extraFiltersForm" class="extraFiltersForm">
+                            {% if priceIntervalsData.intervals %}
+                                <div class="proposal-select">
+                                    <label for="prices">
+                                        Цена
+                                    </label>
+                                    <div class="checkboxes">
+                                        <input type="hidden" name="prices[]" value="-1">
+                                        {% for intervalData in priceIntervalsData.intervals %}
+                                            <label for="priceStep{{ intervalData.priceStep }}">
+                                                <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                {% if intervalData.priceStep > 0 %}
+                                                    {{ intervalData.priceStep|number_format(0, '.', ' ') }}
+                                                    -
+                                                {% else %}
+                                                    до
+                                                {% endif %}
+                                                {{ (intervalData.priceStep + priceIntervalsData.interval)|number_format(0, '.', ' ') }} руб
+                                                <small class="amount">
+                                                    ({{ intervalData.proposalsAmount|default(0) }})
+                                                </small>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% for parameterData in extraParametersData %}
                                 <div class="proposal-select">
                                     <label for="parameter_{{ parameterData.parameter.id }}">
@@ -35,8 +60,8 @@
                                         </div>
                                     {% elseif parameterData.parameter.type == constant('TYPE_CHECKBOXES', parameterData.parameter) %}
                                         <div class="checkboxes">
+                                            <input type="hidden" name="parameters[{{ parameterData.parameter.id }}][]" value="-1">
                                             {% for option in parameterData.options %}
-                                                <input type="hidden" name="parameters[{{ parameterData.parameter.id }}][]" value="-1">
                                                 {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
                                                 <label for="parameterOption{{ option.id }}">
                                                     <input name="parameters[{{ parameterData.parameter.id }}][]" id="parameterOption{{ option.id }}" value="{{ option.id }}" type="checkbox" {{ (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id]) ? "checked='checked'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>

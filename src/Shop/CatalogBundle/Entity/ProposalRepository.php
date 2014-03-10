@@ -13,57 +13,152 @@ use Shop\MainBundle\Entity\AbstractRepository;
 class ProposalRepository extends AbstractRepository {
 
     /**
-     * @param $proposalId
+     * @param $categoryId
      * @return array
      */
-    public function findProposalParametersOptions($proposalId){
+    public function getProposalPriceRange($categoryId){
+
+        $queryParameters = array(
+            'price_status' => Price::STATUS_ON,
+            'proposal_status' => Proposal::STATUS_ON,
+            'category_status' => Category::STATUS_ON,
+            'category_id' => (int)$categoryId,
+        );
 
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->select('po')
-            ->from('ShopCatalogBundle:ParameterOption', 'po')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('p.status', Proposal::STATUS_ON),
-                $qb->expr()->eq('p.id', $proposalId)
-            ))
-            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('c.status', Category::STATUS_ON),
-                $qb->expr()->eq('c.id', 'p.categoryId')
-            ))
-            ->join('ShopCatalogBundle:CategoryParameter', 'cp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('cp.categoryId', 'p.categoryId'),
-                $qb->expr()->eq('cp.parameterId', 'po.parameterId')
-            ))
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('pp.status', Price::STATUS_ON),
-                $qb->expr()->eq('pp.proposalId', 'p.id')
-            ))
-            ->join('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('pv.optionId', 'po.id'),
-                $qb->expr()->eq('pv.priceId', 'pp.id')
-            ));
 
         $qb
-            ->addOrderBy('cp.position')
-            ->addOrderBy('po.position')
-            ->groupBy('po.id');
+            ->select(array(
+                'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS minPrice',
+                'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
+            ))
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->eq('pp.proposalId', 'p.id'))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
+        ;
 
-        return $qb->getQuery()->getResult();
+        $sql = (string)$this->convertDqlToSql($qb);
+        return $this->getEntityManager()->getConnection()->fetchAssoc($sql, $queryParameters);
 
     }
 
     /**
      * @param $categoryId
-     * @param $proposalId
-     * @param $filteredParameterValues
-     * @return mixed
+     * @param $manufacturerId
+     * @param $filterParametersValues
+     * @param null $proposalId
+     * @return array
      */
-    public function findProposalPrice($categoryId, $proposalId, $filteredParameterValues){
+    public function getPriceIntervalsData($categoryId, $manufacturerId, $filterParametersValues, $proposalId = null){
+
+        $priceStep = $this->getProposalPriceRange($categoryId);
+        $minPrice = $priceStep['minPrice'];
+        $maxPrice = $priceStep['maxPrice'];
+
+//        $minPriceLength = strlen($minPrice);
+//        $maxPriceLength = strlen($maxPrice);
+        $averagePriceLength = strlen(($minPrice + $maxPrice)/2);
+
+//        $minPriceExponent = ($minPriceLength - 1);
+//        $maxPriceExponent = ($maxPriceLength - 1);
+//        $averagePriceExponent = ($averagePriceLength - 1);
+//
+//        var_dump($minPriceExponent);
+//        var_dump($maxPriceExponent);
+//        var_dump($averagePriceExponent);
+//        die;
+
+        $priceExponent = 1;
+        if($averagePriceLength > 1){
+
+            $priceExponent = ($averagePriceLength - 1);
+
+            if($priceExponent > 6){
+
+                $priceExponent = 6;
+
+            }
+
+        }
+
+        $queryParameters = array(
+            'price_status' => Price::STATUS_ON,
+            'proposal_status' => Proposal::STATUS_ON,
+            'category_status' => Category::STATUS_ON,
+            'proposal_id' => (int)$proposalId,
+            'category_id' => (int)$categoryId,
+            'manufacturer_id' => (int)$manufacturerId,
+            'price_exponent' => $priceExponent,
+        );
+
+        $priceInterval = pow(10, $priceExponent);
+        $priceIntervalsAmount = round($maxPrice / $priceInterval);
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $parametersExprList = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
-        $priceParametersExpr = $parametersExprList[1];
+        $qb
+            ->select(array(
+                'FLOOR((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) / POW(10, :price_exponent)) * POW(10, :price_exponent) AS priceStep',
+            ))
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->eq('pp.proposalId', 'p.id'))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('p.categoryId', ':category_id'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
+            ->groupBy('priceStep')
+            ->having($qb->expr()->gte('COUNT(DISTINCT p.id)', 0))
+            ->orderBy('priceStep', 'ASC')
+        ;
+
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb;
+        $existingPriceSteps = $this->getEntityManager()->getConnection()->executeQuery($sql, $queryParameters)->fetchAll(\PDO::FETCH_COLUMN);
+
+        $priceIntervals = array();
+
+        $minPriceStep = floor($minPrice / $priceInterval) * $priceInterval;
+        for($i = 0; $i < $priceIntervalsAmount; $i++){
+
+            $priceStep = $i * $priceInterval;
+
+            if($priceStep >= $minPriceStep && in_array($priceStep, $existingPriceSteps)){
+
+                $priceIntervals[$priceStep] = array(
+                    'priceStep' => $priceStep,
+                    'proposalsAmount' => 0,
+                    'pricesAmount' => 0,
+                );
+
+            }
+
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select(array(
+                'FLOOR((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) / POW(10, :price_exponent)) * POW(10, :price_exponent) AS priceStep',
+                'COUNT(DISTINCT p.id) as proposalsAmount',
+                'COUNT(DISTINCT pp.id) as pricesAmount',
+            ))
+            ->from('ShopCatalogBundle:Proposal', 'p')
+        ;
 
         $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
         $pricesFilterSubQb
@@ -71,7 +166,88 @@ class ProposalRepository extends AbstractRepository {
             ->from('ShopCatalogBundle:Price', 'pp')
             ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->where($qb->expr()->andX(
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status'),
+                ($proposalId ? $qb->expr()->eq('p.id', ':proposal_id') : null)
+            ))
+        ;
+
+        $this->applyParametersFilters($categoryId, $filterParametersValues, $qb, $pricesFilterSubQb);
+
+        $this->convertDqlToSql($pricesFilterSubQb);
+        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
+
+        $qb
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.proposalId', 'p.id'),
+                $qb->expr()->in('pp.id', $pricesFilterSubQuerySql)
+            ))
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+        ;
+
+        $qb
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('p.categoryId', ':category_id'),
+                ($proposalId ? $qb->expr()->eq('p.id', ':proposal_id') : null),
+                ($manufacturerId ? $qb->expr()->eq('p.manufacturerId', ':manufacturer_id') : null)
+            ))
+            ->groupBy('priceStep')
+            ->orderBy('priceStep', 'ASC')
+        ;
+
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb;
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
+
+        $priceStepsAmounts = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
+        foreach($priceStepsAmounts as $priceStepAmounts){
+
+            $priceStep = $priceStepAmounts['priceStep'];
+            if(isset($priceIntervals[$priceStep])){
+                $priceIntervals[$priceStep] = $priceStepAmounts;
+            }
+
+        }
+
+        return array(
+            'minPrice' => $minPrice,
+            'maxPrice' => $maxPrice,
+            'interval' => $priceInterval,
+            'intervals' => $priceIntervals,
+        );
+
+    }
+
+    /**
+     * @param $categoryId
+     * @param $proposalId
+     * @param $filteredParametersValues
+     * @param $filterPricesRanges
+     * @return mixed
+     */
+    public function findProposalPrice($categoryId, $proposalId, $filteredParametersValues, $filterPricesRanges){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
+        $pricesFilterSubQb
+            ->select('DISTINCT pp.id')
+            ->from('ShopCatalogBundle:Price', 'pp')
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->andWhere($qb->expr()->andX(
                 $qb->expr()->eq('c.id', ':category_id'),
                 $qb->expr()->eq('c.status', ':category_status'),
                 $qb->expr()->eq('pp.status', ':price_status'),
@@ -80,32 +256,8 @@ class ProposalRepository extends AbstractRepository {
             ))
         ;
 
-        if($priceParametersExpr){
-
-            /**
-             * @var $priceParameterExpr \Doctrine\ORM\Query\Expr\Andx
-             */
-            foreach($priceParametersExpr as $i => $priceParameterExpr){
-
-                $alias = "ppv$i";
-                $comparisons = array();
-
-                /**
-                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
-                 */
-                foreach($priceParameterExpr->getParts() as $comparison){
-                    $comparisons[] = str_replace("ppv", $alias, $comparison);
-                }
-
-                $pricesFilterSubQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $qb->expr()->andX(
-                    $qb->expr()->eq("$alias.priceId", 'pp.id'),
-                    call_user_func_array(array($qb->expr(), 'andX'), $comparisons)
-                ));
-
-            }
-
-        }
-
+        $this->applyParametersFilters($categoryId, $filteredParametersValues, null, $pricesFilterSubQb);
+        $this->applyPriceFilter($filterPricesRanges, $pricesFilterSubQb);
         $this->convertDqlToSql($pricesFilterSubQb);
         $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
@@ -144,12 +296,10 @@ class ProposalRepository extends AbstractRepository {
             'proposal_status' => Proposal::STATUS_ON,
             'category_id' => (int)$categoryId,
             'category_status' => Category::STATUS_ON,
-            'price_values_amount' => count($priceParametersExpr),
         );
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameters($queryParameters);
-        $result = $query->getResult();
 
 //        foreach($queryParameters as $key => $value){
 //            $sql = str_replace(':' . $key, $value, $sql);
@@ -157,6 +307,8 @@ class ProposalRepository extends AbstractRepository {
 //        echo($sql);
 //        echo("<br/>");
 //        die;
+
+        $result = $query->getResult();
 
         return current($result);
 
@@ -166,16 +318,15 @@ class ProposalRepository extends AbstractRepository {
     /**
      * @param $categoryId
      * @param $manufacturerId
-     * @param $filteredParameterValues
+     * @param $filteredParametersValues
+     * @param $filterPricesRanges
      * @param null $page
      * @param null $perPage
      * @return array
      */
-    public function findProposals($categoryId, $manufacturerId, $filteredParameterValues, $page = null, $perPage = null){
+    public function findProposals($categoryId, $manufacturerId, $filteredParametersValues, $filterPricesRanges, $page = null, $perPage = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
-
-        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
 
         $queryParameters = array(
             'price_status' => Price::STATUS_ON,
@@ -183,72 +334,7 @@ class ProposalRepository extends AbstractRepository {
             'category_status' => Category::STATUS_ON,
             'category_id' => (int)$categoryId,
             'manufacturer_id' => (int)$manufacturerId,
-            'values_amount' => count($parametersExpr),
-            'price_values_amount' => count($priceParametersExpr),
         );
-
-        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
-        $pricesFilterSubQb
-            ->select('DISTINCT pp.id')
-            ->from('ShopCatalogBundle:Price', 'pp')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
-            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->where($qb->expr()->andX(
-                $qb->expr()->eq('c.id', ':category_id'),
-                $qb->expr()->eq('c.status', ':category_status'),
-                $qb->expr()->eq('pp.status', ':price_status'),
-                $qb->expr()->eq('p.status', ':proposal_status')
-            ))
-        ;
-
-        if($priceParametersExpr){
-
-            /**
-             * @var $priceParameterExpr \Doctrine\ORM\Query\Expr\Andx
-             */
-            foreach($priceParametersExpr as $i => $priceParameterExpr){
-
-                $alias = "ppv$i";
-                $comparisons = array();
-
-                /**
-                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
-                 */
-                foreach($priceParameterExpr->getParts() as $comparison){
-                    $comparisons[] = str_replace("ppv", $alias, $comparison);
-                }
-
-                $pricesFilterSubQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $qb->expr()->andX(
-                    $qb->expr()->eq("$alias.priceId", 'pp.id'),
-                    call_user_func_array(array($qb->expr(), 'andX'), $comparisons)
-                ));
-
-            }
-
-        }
-
-        $this->convertDqlToSql($pricesFilterSubQb);
-        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
-
-//        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
-//        $pricesFilterSubQb
-//            ->select('pp.id')
-//            ->from('ShopCatalogBundle:Price', 'pp')
-//            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
-//            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-//            ->leftJoin('ShopCatalogBundle:ParameterValue', 'ppv', Expr\Join::WITH, $qb->expr()->andX(
-//                $qb->expr()->eq('ppv.priceId', 'pp.id'),
-//                ($priceParametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr) : null)
-//            ))
-//            ->where($qb->expr()->andX(
-//                $qb->expr()->eq('c.id', ':category_id'),
-//                $qb->expr()->eq('c.status', ':category_status'),
-//                $qb->expr()->eq('pp.status', ':price_status'),
-//                $qb->expr()->eq('p.status', ':proposal_status')
-//            ))
-//        ;
-//        $this->convertDqlToSql($pricesFilterSubQb);
-//        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
 
         $qb
             ->select(array(
@@ -257,6 +343,29 @@ class ProposalRepository extends AbstractRepository {
                 'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
             ))
             ->from('ShopCatalogBundle:Proposal', 'p')
+        ;
+
+        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
+        $pricesFilterSubQb
+            ->select('DISTINCT pp.id')
+            ->from('ShopCatalogBundle:Price', 'pp')
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('c.id', ':category_id'),
+                $qb->expr()->eq('c.status', ':category_status'),
+                $qb->expr()->eq('pp.status', ':price_status'),
+                $qb->expr()->eq('p.status', ':proposal_status')
+            ))
+        ;
+
+        $this->applyParametersFilters($categoryId, $filteredParametersValues, $qb, $pricesFilterSubQb);
+        $this->applyPriceFilter($filterPricesRanges, $qb);
+
+        $this->convertDqlToSql($pricesFilterSubQb);
+        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
+
+        $qb
             ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('pp.proposalId', 'p.id'),
                 $qb->expr()->in('pp.id', $pricesFilterSubQuerySql)
@@ -265,16 +374,14 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
                 $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
             ))
-            ->leftJoin('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('pv.proposalId', 'p.id'),
-                ($parametersExpr ? call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr) : null)
-            ))
+        ;
+
+        $qb
             ->andWhere($qb->expr()->andX(
                 $qb->expr()->eq('p.categoryId', ':category_id'),
                 ($manufacturerId ? $qb->expr()->eq('p.manufacturerId', ':manufacturer_id') : null)
             ))
             ->groupBy('p.id')
-            ->andHaving($qb->expr()->gte('COUNT(DISTINCT pv.id)', ':values_amount'))
             ->addOrderBy('price')
         ;
 
@@ -304,209 +411,6 @@ class ProposalRepository extends AbstractRepository {
         return $result;
 
     }
-    /**
-     * @param Parameter $parameter
-     * @param $categoryId
-     * @param $manufacturerId
-     * @param $proposalId
-     * @param $filteredParameterValues
-     * @return array
-     */
-    public function getParameterOptionsAmounts(Parameter $parameter, $categoryId, $manufacturerId, $filteredParameterValues, $proposalId = null){
-
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
-
-        $queryParameters = array(
-            'priceStatus' => Price::STATUS_ON,
-            'proposalStatus' => Proposal::STATUS_ON,
-            'categoryStatus' => Category::STATUS_ON,
-            'parameterId' => $parameter->getId(),
-            'proposalId' => (int)$proposalId,
-            'categoryId' => (int)$categoryId,
-            'manufacturerId' => (int)$manufacturerId,
-            'valuesAmount' => count($parametersExpr),
-            'priceValuesAmount' => count($priceParametersExpr),
-        );
-
-        $sql = '
-            SELECT
-                po.id,
-                COUNT(DISTINCT p.id) AS proposalsAmount,
-                COUNT(DISTINCT pp.id) AS pricesAmount
-            FROM
-                ParameterOption AS po
-            JOIN ParameterValue AS popv ON popv.optionId = po.id
-        ';
-
-        $filterSubQuerySql = null;
-
-        if($parameter->getIsPriceParameter()){
-
-            if($parametersExpr || $priceParametersExpr){
-
-                $parameterValueJoin = '';
-                if($parametersExpr){
-                    $parameterValueJoin = '
-                        LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
-                    ';
-                }
-
-                $priceParameterValueJoin = '';
-                if($priceParametersExpr){
-                    $priceParameterValueJoin = '
-                        LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
-                    ';
-                }
-
-                $filterSubQuerySql = "
-                    SELECT
-                        _pp.id
-                    FROM Proposal AS _p
-                    JOIN Price AS _pp ON _pp.proposalId = _p.id
-                    $parameterValueJoin
-                    $priceParameterValueJoin
-                    WHERE
-                        _p.categoryId = :categoryId
-                        " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
-                        " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
-                        AND _pp.status = :proposalStatus
-                        AND _p.status = :priceStatus
-                    GROUP BY
-                        _pp.id
-                ";
-
-                if($parametersExpr){
-
-                    $filterSubQuerySql .= "
-                        HAVING
-                            COUNT(DISTINCT pv.id) >= :valuesAmount
-                    ";
-
-                }
-
-                if($priceParametersExpr){
-
-                    if($parametersExpr){
-
-                        $filterSubQuerySql .= ' AND ';
-
-                    } else {
-
-                        $filterSubQuerySql .= ' HAVING  ';
-
-                    }
-
-                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
-
-                }
-
-            }
-
-            $sql .= '
-                JOIN Price AS pp ON pp.id = popv.priceId ' . ($filterSubQuerySql ? ' AND pp.id IN (' . $filterSubQuerySql . ')' : '') . '
-                JOIN Proposal AS p ON p.id = pp.proposalId
-            ';
-
-        } else {
-
-            if($parametersExpr || $priceParametersExpr){
-
-                $parameterValueJoin = '';
-                if($parametersExpr){
-                    $parameterValueJoin = '
-                    LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
-                ';
-                }
-
-                $priceParameterValueJoin = '';
-                if($priceParametersExpr){
-
-                    $priceParameterValueJoin = '
-                    LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
-                ';
-
-                }
-
-                $filterSubQuerySql = "
-                SELECT
-                    _p.id
-                FROM Proposal AS _p
-                JOIN Price AS _pp ON _pp.proposalId = _p.id
-                $parameterValueJoin
-                $priceParameterValueJoin
-                WHERE
-                    _p.categoryId = :categoryId
-                    " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
-                    " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
-                    AND _pp.status = :proposalStatus
-                    AND _p.status = :priceStatus
-                GROUP BY
-                    _p.id
-            ";
-
-                if($parametersExpr){
-
-                    $filterSubQuerySql .= '
-                    HAVING
-                        COUNT(DISTINCT pv.id) >= :valuesAmount
-                ';
-
-                }
-
-                if($priceParametersExpr){
-
-                    if($parametersExpr){
-
-                        $filterSubQuerySql .= ' AND ';
-
-                    } else {
-
-                        $filterSubQuerySql .= ' HAVING  ';
-
-                    }
-
-                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
-
-                }
-
-            }
-
-            $sql .= '
-                JOIN Proposal AS p ON p.id = popv.proposalId ' . ($filterSubQuerySql ? ' AND p.id IN (' . $filterSubQuerySql . ')' : '') . '
-                JOIN Price AS pp ON pp.proposalId = p.id
-            ';
-
-        }
-
-        $sql .= "
-            WHERE
-                po.parameterId = :parameterId
-                AND p.categoryId = :categoryId
-                " . ($proposalId ? 'AND p.id = :proposalId' : '') . "
-                " . ($manufacturerId ? 'AND p.manufacturerId = :manufacturerId' : '') . "
-                AND pp.status = :proposalStatus
-                AND p.status = :priceStatus
-            GROUP BY
-                po.id;
-        ";
-
-//        foreach($queryParameters as $key => $value){
-//            $sql = str_replace(':' . $key, $value, $sql);
-//        }
-//        echo($sql);
-//        echo("<br/>");
-
-        $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
-        $optionsAmounts = array();
-
-        foreach($result as $optionAmounts){
-            $optionsAmounts[$optionAmounts['id']] = $optionAmounts;
-        }
-
-        return $optionsAmounts;
-
-    }
 
     /**
      * @param $categoryId
@@ -530,7 +434,7 @@ class ProposalRepository extends AbstractRepository {
             JOIN Price AS pp ON pp.proposalId = p.id AND pp.status = :priceStatus
         ';
 
-        list($parametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues, $qb);
+        list($parametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues);
 
         if($parametersExpr){
 
@@ -616,13 +520,285 @@ class ProposalRepository extends AbstractRepository {
     }
 
     /**
-     * @param $categoryId
-     * @param $filteredParametersValues
-     * @param QueryBuilder $qb
+     * @param $proposalId
      * @return array
      */
-    protected function createParametersExprList($categoryId, $filteredParametersValues, QueryBuilder $qb)
+    public function findProposalParametersOptions($proposalId){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('po')
+            ->from('ShopCatalogBundle:ParameterOption', 'po')
+            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('p.status', Proposal::STATUS_ON),
+                $qb->expr()->eq('p.id', $proposalId)
+            ))
+            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('c.status', Category::STATUS_ON),
+                $qb->expr()->eq('c.id', 'p.categoryId')
+            ))
+            ->join('ShopCatalogBundle:CategoryParameter', 'cp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('cp.categoryId', 'p.categoryId'),
+                $qb->expr()->eq('cp.parameterId', 'po.parameterId')
+            ))
+            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pp.status', Price::STATUS_ON),
+                $qb->expr()->eq('pp.proposalId', 'p.id')
+            ))
+            ->join('ShopCatalogBundle:ParameterValue', 'pv', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('pv.optionId', 'po.id'),
+                $qb->expr()->eq('pv.priceId', 'pp.id')
+            ));
+
+        $qb
+            ->addOrderBy('cp.position')
+            ->addOrderBy('po.position')
+            ->groupBy('po.id');
+
+        return $qb->getQuery()->getResult();
+
+    }
+
+    /**
+     * @param Parameter $parameter
+     * @param $categoryId
+     * @param $manufacturerId
+     * @param $filteredParameterValues
+     * @param $filterPricesRanges
+     * @param $proposalId
+     * @return array
+     */
+    public function getParameterOptionsAmounts(Parameter $parameter, $categoryId, $manufacturerId, $filteredParameterValues, $filterPricesRanges, $proposalId = null){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParameterValues);
+
+        $queryParameters = array(
+            'priceStatus' => Price::STATUS_ON,
+            'proposalStatus' => Proposal::STATUS_ON,
+            'categoryStatus' => Category::STATUS_ON,
+            'parameterId' => $parameter->getId(),
+            'proposalId' => (int)$proposalId,
+            'categoryId' => (int)$categoryId,
+            'manufacturerId' => (int)$manufacturerId,
+            'valuesAmount' => count($parametersExpr),
+            'priceValuesAmount' => count($priceParametersExpr),
+        );
+
+        $sql = '
+            SELECT
+                po.id,
+                COUNT(DISTINCT p.id) AS proposalsAmount,
+                COUNT(DISTINCT pp.id) AS pricesAmount
+            FROM
+                ParameterOption AS po
+            JOIN ParameterValue AS popv ON popv.optionId = po.id
+        ';
+//        $qb
+//            ->select(array(
+//                'po.id',
+//                'COUNT(DISTINCT p.id) AS proposalsAmount',
+//                'COUNT(DISTINCT pp.id) AS pricesAmount',
+//            ))
+//            ->from('ShopCatalogBundle:ParameterOption', 'po')
+//            ->join('ShopCatalogBundle:ParameterValue', 'popv', $qb->expr()->eq('popv.optionId', 'po.id'))
+//        ;
+//
+        $filterSubQuerySql = null;
+
+        if($parameter->getIsPriceParameter()){
+
+            if($parametersExpr || $priceParametersExpr){
+
+                $parameterValueJoin = '';
+                if($parametersExpr){
+                    $parameterValueJoin = '
+                        LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
+                    ';
+                }
+
+                $priceParameterValueJoin = '';
+                if($priceParametersExpr){
+                    $priceParameterValueJoin = '
+                        LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
+                    ';
+                }
+
+                $filterSubQuerySql = "
+                    SELECT
+                        _pp.id
+                    FROM Proposal AS _p
+                    JOIN Price AS _pp ON _pp.proposalId = _p.id
+                    $parameterValueJoin
+                    $priceParameterValueJoin
+                    WHERE
+                        _p.categoryId = :categoryId
+                        " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
+                        " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
+                        AND _pp.status = :proposalStatus
+                        AND _p.status = :priceStatus
+                    GROUP BY
+                        _pp.id
+                ";
+
+                if($parametersExpr){
+
+                    $filterSubQuerySql .= "
+                        HAVING
+                            COUNT(DISTINCT pv.id) >= :valuesAmount
+                    ";
+
+                }
+
+                if($priceParametersExpr){
+
+                    if($parametersExpr){
+
+                        $filterSubQuerySql .= ' AND ';
+
+                    } else {
+
+                        $filterSubQuerySql .= ' HAVING  ';
+
+                    }
+
+                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
+
+                }
+
+            }
+
+            $sql .= '
+                JOIN Price AS pp ON pp.id = popv.priceId ' . ($filterSubQuerySql ? ' AND pp.id IN (' . $filterSubQuerySql . ')' : '') . '
+                JOIN Proposal AS p ON p.id = pp.proposalId
+                LEFT JOIN ContractorCurrency AS ccu ON ccu.contractorId = pp.contractorId AND ccu.numericCode = pp.currencyNumericCode
+            ';
+
+        } else {
+
+            if($parametersExpr || $priceParametersExpr){
+
+                $parameterValueJoin = '';
+                if($parametersExpr){
+                    $parameterValueJoin = '
+                    LEFT JOIN ParameterValue AS pv ON pv.proposalId = _p.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $parametersExpr). ')
+                ';
+                }
+
+                $priceParameterValueJoin = '';
+                if($priceParametersExpr){
+
+                    $priceParameterValueJoin = '
+                    LEFT JOIN ParameterValue AS ppv ON ppv.priceId = _pp.id AND (' . call_user_func_array(array($qb->expr(), 'orX'), $priceParametersExpr). ')
+                ';
+
+                }
+
+                $filterSubQuerySql = "
+                    SELECT
+                        _p.id
+                    FROM Proposal AS _p
+                    JOIN Price AS _pp ON _pp.proposalId = _p.id
+                    $parameterValueJoin
+                    $priceParameterValueJoin
+                    WHERE
+                        _p.categoryId = :categoryId
+                        " . ($proposalId ? 'AND _p.id = :proposalId' : '') . "
+                        " . ($manufacturerId ? 'AND _p.manufacturerId = :manufacturerId' : '') . "
+                        AND _pp.status = :proposalStatus
+                        AND _p.status = :priceStatus
+                    GROUP BY
+                        _p.id
+                ";
+
+                if($parametersExpr){
+
+                    $filterSubQuerySql .= '
+                    HAVING
+                        COUNT(DISTINCT pv.id) >= :valuesAmount
+                ';
+
+                }
+
+                if($priceParametersExpr){
+
+                    if($parametersExpr){
+
+                        $filterSubQuerySql .= ' AND ';
+
+                    } else {
+
+                        $filterSubQuerySql .= ' HAVING  ';
+
+                    }
+
+                    $filterSubQuerySql .= 'COUNT(DISTINCT ppv.id) >= :priceValuesAmount';
+
+                }
+
+            }
+
+            $sql .= '
+                JOIN Proposal AS p ON p.id = popv.proposalId ' . ($filterSubQuerySql ? ' AND p.id IN (' . $filterSubQuerySql . ')' : '') . '
+                JOIN Price AS pp ON pp.proposalId = p.id
+                LEFT JOIN ContractorCurrency AS ccu ON ccu.contractorId = pp.contractorId AND ccu.numericCode = pp.currencyNumericCode
+            ';
+
+        }
+
+        $filterPricesExpr = array();
+
+        if($filterPricesRanges){
+
+            foreach($filterPricesRanges as $filterPriceRange){
+                $filterPricesExpr[] = $qb->expr()->andX(
+                    $qb->expr()->gte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterPriceRange['min']),
+                    $qb->expr()->lte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterPriceRange['max'])
+                );
+            }
+
+        }
+
+        $sql .= "
+            WHERE
+                po.parameterId = :parameterId
+                AND p.categoryId = :categoryId
+                " . ($proposalId ? 'AND p.id = :proposalId' : '') . "
+                " . ($manufacturerId ? 'AND p.manufacturerId = :manufacturerId' : '') . "
+                " . ($filterPricesExpr ? 'AND (' . call_user_func_array(array($qb->expr(), 'orX'), $filterPricesExpr) . ')' : '') . "
+                AND pp.status = :proposalStatus
+                AND p.status = :priceStatus
+            GROUP BY
+                po.id;
+        ";
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+
+        $result = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
+        $optionsAmounts = array();
+
+        foreach($result as $optionAmounts){
+            $optionsAmounts[$optionAmounts['id']] = $optionAmounts;
+        }
+
+        return $optionsAmounts;
+
+    }
+
+    /**
+     * @param $categoryId
+     * @param $filteredParametersValues
+     * @return array
+     */
+    protected function createParametersExprList($categoryId, $filteredParametersValues)
     {
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
         $parametersExpr = array();
         $priceParametersExpr = array();
 
@@ -698,6 +874,95 @@ class ProposalRepository extends AbstractRepository {
 
         }
         return array($parametersExpr, $priceParametersExpr);
+    }
+
+    /**
+     * @param $categoryId
+     * @param $filteredParametersValues
+     * @param QueryBuilder $mainQb
+     * @param QueryBuilder $priceQb
+     */
+    public function applyParametersFilters($categoryId, $filteredParametersValues, QueryBuilder $mainQb = null, QueryBuilder $priceQb = null){
+
+        list($parametersExpr, $priceParametersExpr) = $this->createParametersExprList($categoryId, $filteredParametersValues);
+
+        if($parametersExpr && $mainQb){
+
+            /**
+             * @var $parameterExpr \Doctrine\ORM\Query\Expr\Andx
+             */
+            foreach($parametersExpr as $i => $parameterExpr){
+
+                $alias = "pv$i";
+                $comparisons = array();
+
+                /**
+                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
+                 */
+                foreach($parameterExpr->getParts() as $comparison){
+                    $comparisons[] = str_replace("pv", $alias, $comparison);
+                }
+
+                $mainQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $mainQb->expr()->andX(
+                    $mainQb->expr()->eq("$alias.proposalId", 'p.id'),
+                    call_user_func_array(array($mainQb->expr(), 'andX'), $comparisons)
+                ));
+
+            }
+
+        }
+
+        if($priceParametersExpr && $priceQb){
+
+            /**
+             * @var $priceParameterExpr \Doctrine\ORM\Query\Expr\Andx
+             */
+            foreach($priceParametersExpr as $i => $priceParameterExpr){
+
+                $alias = "ppv$i";
+                $comparisons = array();
+
+                /**
+                 * @var $comparison \Doctrine\ORM\Query\Expr\Comparison
+                 */
+                foreach($priceParameterExpr->getParts() as $comparison){
+                    $comparisons[] = str_replace("ppv", $alias, $comparison);
+                }
+
+                $priceQb->join('ShopCatalogBundle:ParameterValue', $alias, Expr\Join::WITH, $priceQb->expr()->andX(
+                    $priceQb->expr()->eq("$alias.priceId", 'pp.id'),
+                    call_user_func_array(array($priceQb->expr(), 'andX'), $comparisons)
+                ));
+
+            }
+
+        }
+
+    }
+
+    /**
+     * @param $filterPricesRanges
+     * @param QueryBuilder $qb
+     */
+    protected function applyPriceFilter($filterPricesRanges, QueryBuilder $qb){
+
+        if(is_array($filterPricesRanges)){
+
+            $filterPricesExpr = array();
+
+            foreach($filterPricesRanges as $filterPriceRange){
+                if(isset($filterPriceRange['min']) && $filterPriceRange['max']){
+                    $filterPricesExpr[] = $qb->expr()->andX(
+                        $qb->expr()->gte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterPriceRange['min']),
+                        $qb->expr()->lte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterPriceRange['max'])
+                    );
+                }
+            }
+
+            $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $filterPricesExpr));
+
+        }
+
     }
 
 } 

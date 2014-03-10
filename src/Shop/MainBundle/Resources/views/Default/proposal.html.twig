@@ -19,6 +19,38 @@
 
                     {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
 
+                    {% if priceIntervalsData.intervals %}
+                        <div class="filters-form-container extraFiltersForm-container">
+                            <form id="extraFiltersForm" class="extraFiltersForm">
+                                {% if priceIntervalsData.intervals %}
+                                    <div class="proposal-select">
+                                        <label for="prices">
+                                            Цена
+                                        </label>
+                                        <div class="checkboxes">
+                                            <input type="hidden" name="prices[]" value="-1">
+                                            {% for intervalData in priceIntervalsData.intervals %}
+                                                <label for="priceStep{{ intervalData.priceStep }}">
+                                                    <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                    {% if intervalData.priceStep > 0 %}
+                                                        {{ intervalData.priceStep|number_format(0, '.', ' ') }}
+                                                        -
+                                                    {% else %}
+                                                        до
+                                                    {% endif %}
+                                                    {{ (intervalData.priceStep + priceIntervalsData.interval)|number_format(0, '.', ' ') }} руб
+                                                    <small class="amount">
+                                                        ({{ intervalData.pricesAmount|default(0) }})
+                                                    </small>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        </div>
+                    {% endif %}
+
                 </div>
                 <div class="nine columns">
 
@@ -110,7 +142,7 @@
 
                             {% if parametersData %}
                                 <div class="filters-form-container">
-                                    <form>
+                                    <form id="filtersForm">
                                         <ul class="tiles two_up">
                                             {% for parameterData in parametersData %}
                                                 <li>
@@ -201,11 +233,14 @@
 
                 $(function(){
 
-                    var $proposal_select = $('.proposal-select');
+                    var $filtersForm = $('#filtersForm, #extraFiltersForm');
 
-                    $proposal_select.change(function(){
-                        var $form = $proposal_select.closest('form');
-                        $form.submit();
+                    var proposalUrl = '{{ path('shop_proposal', {'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id)}) }}';
+
+                    $(':input', $filtersForm).change(function(){
+
+                        document.location = proposalUrl + '?' +$filtersForm.serialize();
+
                     });
 
 //                    $('.manufacturer-image-container').nailthumb({

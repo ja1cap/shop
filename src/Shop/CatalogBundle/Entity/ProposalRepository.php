@@ -133,7 +133,7 @@ class ProposalRepository extends AbstractRepository {
         $priceIntervals = array();
 
         $minPriceStep = floor($minPrice / $priceInterval) * $priceInterval;
-        for($i = 0; $i < $priceIntervalsAmount; $i++){
+        for($i = 0; $i <= $priceIntervalsAmount; $i++){
 
             $priceStep = $i * $priceInterval;
 

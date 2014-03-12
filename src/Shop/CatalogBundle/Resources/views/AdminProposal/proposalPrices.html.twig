@@ -51,7 +51,7 @@
                             </div>
                         {% endif %}
                     </td>
-                    <td>{{ price.description|default('-')|nl2br }}</td>
+                    <td>{{ price.description|default('-')|raw}}</td>
                 </tr>
             {% endfor %}
             </tbody>

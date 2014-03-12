@@ -23,8 +23,12 @@ class PriceListType extends AbstractType {
                 'required' => true,
                 'label' => 'Название',
             ))
+            ->add('identifiersRowIndex', 'text', array(
+                'required' => false,
+                'label' => 'Номер стоки с заголовками(число)',
+            ))
             ->add('priceListFile', 'file', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'Фаил (.xls, .csv, .xlsx)',
             ));
 

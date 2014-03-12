@@ -608,8 +608,8 @@ class DefaultController extends Controller
             'parametersData' => $parametersData,
             'parametersOptionsAmounts' => $parametersOptionsAmounts,
             'filteredParameterValues' => $filterParametersValuesFilteredByOptionsIds,
-            'priceIntervalsData' => $priceIntervalsData,
-            'filteredPrices' => $filterPrices,
+//            'priceIntervalsData' => $priceIntervalsData,
+//            'filteredPrices' => $filterPrices,
         ));
 
         $response->headers->setCookie(new Cookie(self::CATALOG_FILTER_COOKIE_NAME, json_encode($filterParametersValues)));

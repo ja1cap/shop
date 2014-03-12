@@ -13,6 +13,32 @@ use Shop\MainBundle\Entity\AbstractRepository;
 class ProposalRepository extends AbstractRepository {
 
     /**
+     * @param $formattedNames
+     * @return array
+     */
+    public function findProposalsByName($formattedNames){
+
+        if(!$formattedNames){
+            return array();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('p.*')
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->andWhere($qb->expr()->in("REPLACE(LOWER(p.title), ' ', '')", $formattedNames))
+        ;
+
+        $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Proposal', 'p');
+
+        $sql = (string)$this->convertDqlToSql($qb);
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+
+        return $query->getResult();
+
+    }
+
+    /**
      * @param $categoryId
      * @return array
      */

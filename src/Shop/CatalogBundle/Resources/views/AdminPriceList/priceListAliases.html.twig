@@ -1,0 +1,106 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+    <form id="priceListAliases" name="priceListAliases" method="post">
+        <div>
+            <h5>
+                Категория
+            </h5>
+            <div>
+                <select name="categoryId" id="categoryId" required="required">
+                    <option value="">
+                        Выберите
+                    </option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {{ category.id == priceList.categoryId ? 'selected="selected"' : '' }}>
+                            {{ category.name|capitalize }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div style="margin: 5px 0 0">
+                    <label for="categoryId" class="primary alert" style="font-size: 14px">
+                        Категория для всех товаров в прайс листе, для которых не указан столбец с категорией
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div>
+            <h5>
+                Производитель
+            </h5>
+            <div>
+                <select name="manufacturerId" id="manufacturerId" required="required">
+                    <option value="">
+                        Выберите
+                    </option>
+                    {% for manufacturer in manufacturers %}
+                        <option value="{{ manufacturer.id }}" {{ manufacturer.id == priceList.manufacturerId ? 'selected="selected"' : '' }}>
+                            {{ manufacturer.name|capitalize }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div style="margin: 5px 0 0">
+                    <label for="manufacturerId" class="primary alert" style="font-size: 14px">
+                        Производитель для всех товаров в прайс листе, для которых не указан столбец с производителем
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="six columns">
+                <h5>
+                    Столбцы
+                </h5>
+                <ul>
+                    {% for identifier in identifiers %}
+                        <li class="field">
+                            <div>
+                                <label for="identifier{{ identifier.column }}">
+                                    {{ identifier.value|capitalize }}
+                                </label>
+                            </div>
+                            <div class="">
+                                <select id="identifier{{ identifier.column }}" name="identifiers[{{ identifier.column }}]">
+                                    <option value="">
+                                        Не учитывать
+                                    </option>
+                                    {% for alias, title in options %}
+                                        <option value="{{ alias }}" {{ identifier.alias == alias or priceListCurrentColumnsAliases[identifier.column] == alias ? 'selected="selected"' : '' }}>
+                                            {{ title|capitalize }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="six columns">
+                <div style="margin-left: 20px">
+                    <h5>
+                        Обязательные столбцы в прайс листе
+                    </h5>
+                    <div class="warning alert">
+                        <ol style="margin: 5px 20px 0;">
+                            {% for title in requiredAliases %}
+                                <li>
+                                    {{ title|capitalize }}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="large primary btn">
+            <button title="submit" id="save">
+                Сохранить
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -4,14 +4,14 @@ namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryParameter;
-use Shop\CatalogBundle\Entity\Parameter;
-use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Entity\ProposalImage;
 use Shop\CatalogBundle\Form\Type\PriceType;
 use Shop\CatalogBundle\Form\Type\ProposalType;
+use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
+use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
 use Shop\MainBundle\Form\Type\ImageType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,61 +101,8 @@ class AdminProposalController extends Controller
 
             });
 
-            $optionsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:ParameterOption');
-
-            /**
-             * @var $parameterValue ParameterValue
-             */
-            foreach($proposal->getParameterValues() as $parameterValue){
-
-                if(isset($parameterValuesData[$parameterValue ->getParameterId()])){
-
-                    $optionId = $parameterValuesData[$parameterValue->getParameterId()];
-                    $parameterOption = $optionId ? $optionsRepository->findOneBy(array(
-                        'id' => (int)$optionId,
-                    )) : null;
-
-                    if($parameterOption instanceof ParameterOption){
-                        $parameterValue->setOption($parameterOption);
-                    } else {
-                        $proposal->removeParameterValue($parameterValue);
-                        $em->remove($parameterValue);
-                    }
-
-                    unset($parameterValuesData[$parameterValue->getParameterId()]);
-
-                }
-
-            }
-
-            if($parameterValuesData){
-
-                $parametersRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter');
-
-                foreach($parameterValuesData as $parameterId => $optionId){
-
-                    $parameter = $parametersRepository->findOneBy(array(
-                        'id' => (int)$parameterId,
-                    ));
-
-                    $parameterOption = $optionId ? $optionsRepository->findOneBy(array(
-                        'id' => (int)$optionId,
-                    )) : null;
-
-                    if($parameter instanceof Parameter && $parameterOption instanceof ParameterOption){
-
-                        $parameterValue = new ParameterValue();
-                        $parameterValue
-                            ->setParameter($parameter)
-                            ->setOption($parameterOption);
-
-                        $proposal->addParameterValue($parameterValue);
-
-                    }
-
-                }
-
-            }
+            $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->getDoctrine()->getManager(), $proposal);
+            $proposalParameterValuesMapper->mapParameterValues($parameterValuesData);
 
             $em->flush();
 
@@ -301,61 +248,8 @@ class AdminProposalController extends Controller
 
             });
 
-            $optionsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:ParameterOption');
-
-            /**
-             * @var $parameterValue ParameterValue
-             */
-            foreach($price->getParameterValues() as $parameterValue){
-
-                if(isset($parameterValuesData[$parameterValue ->getParameterId()])){
-
-                    $optionId = $parameterValuesData[$parameterValue->getParameterId()];
-                    $parameterOption = $optionId ? $optionsRepository->findOneBy(array(
-                        'id' => (int)$optionId,
-                    )) : null;
-
-                    if($parameterOption instanceof ParameterOption){
-                        $parameterValue->setOption($parameterOption);
-                    } else {
-                        $price->removeParameterValue($parameterValue);
-                        $em->remove($parameterValue);
-                    }
-
-                    unset($parameterValuesData[$parameterValue->getParameterId()]);
-
-                }
-
-            }
-
-            if($parameterValuesData){
-
-                $parametersRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter');
-
-                foreach($parameterValuesData as $parameterId => $optionId){
-
-                    $parameter = $parametersRepository->findOneBy(array(
-                        'id' => (int)$parameterId,
-                    ));
-
-                    $parameterOption = $optionId ? $optionsRepository->findOneBy(array(
-                        'id' => (int)$optionId,
-                    )) : null;
-
-                    if($parameter instanceof Parameter && $parameterOption instanceof ParameterOption){
-
-                        $parameterValue = new ParameterValue();
-                        $parameterValue
-                            ->setParameter($parameter)
-                            ->setOption($parameterOption);
-
-                        $price->addParameterValue($parameterValue);
-
-                    }
-
-                }
-
-            }
+            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->getDoctrine()->getManager(), $price);
+            $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
 
             if($isNew){
                 $proposal->addPrice($price);

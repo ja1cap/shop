@@ -161,8 +161,12 @@ price_lists:
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }
 
 price_list:
-    pattern: /admin/priceList
-    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList }
+    pattern: /admin/priceList/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList, id: null }
+
+price_list_aliases:
+    pattern: /admin/priceListAliases/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListsAliases }
 
 download_price_list:
     pattern: /admin/downloadPriceList/{id}

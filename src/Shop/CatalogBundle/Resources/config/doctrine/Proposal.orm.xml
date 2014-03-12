@@ -14,8 +14,8 @@
         <field name="defaultContractorId" type="integer" column="defaultContractorId" nullable="true"/>
 
         <field name="title" type="string" column="title" length="255"/>
-        <field name="shortDescription" type="string" column="short_description" length="255"/>
-        <field name="description" type="text" column="description"/>
+        <field name="shortDescription" type="string" column="short_description" length="255" nullable="true"/>
+        <field name="description" type="text" column="description" nullable="true"/>
 
         <field name="showOnHomePage" type="boolean" nullable="true"/>
 

@@ -144,7 +144,7 @@ class Category extends AbstractEntity
      */
     public function getSingularName()
     {
-        return $this->singularName;
+        return $this->singularName ?: $this->getName();
     }
 
     /**
@@ -199,7 +199,7 @@ class Category extends AbstractEntity
      */
     public function getMultipleName()
     {
-        return $this->multipleName;
+        return $this->multipleName ?: $this->getName();
     }
     /**
      * @var \Doctrine\Common\Collections\Collection

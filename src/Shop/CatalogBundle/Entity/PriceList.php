@@ -2,6 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shop\MainBundle\Entity\AbstractEntity;
 
@@ -45,6 +46,11 @@ class PriceList extends AbstractEntity
      * @var integer
      */
     private $status;
+
+    /**
+     * @var integer
+     */
+    private $identifiersRowIndex;
 
     /**
      * @var array
@@ -259,5 +265,188 @@ class PriceList extends AbstractEntity
     public function getContractor()
     {
         return $this->contractor;
+    }
+
+    /**
+     * @param int $identifiersRowNumber
+     */
+    public function setIdentifiersRowIndex($identifiersRowNumber)
+    {
+        $this->identifiersRowIndex = $identifiersRowNumber;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdentifiersRowIndex()
+    {
+        return $this->identifiersRowIndex ?: 1;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $aliases;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->aliases = new ArrayCollection();
+    }
+
+    /**
+     * Add aliases
+     *
+     * @param \Shop\CatalogBundle\Entity\PriceListAlias $alias
+     * @return PriceList
+     */
+    public function addAlias(PriceListAlias $alias)
+    {
+        $this->aliases[] = $alias;
+        $alias->setPriceList($this);
+        return $this;
+    }
+
+    /**
+     * Remove aliases
+     *
+     * @param \Shop\CatalogBundle\Entity\PriceListAlias $aliases
+     */
+    public function removeAlias(PriceListAlias $aliases)
+    {
+        $this->aliases->removeElement($aliases);
+    }
+
+    /**
+     * Get aliases
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAliases()
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * @return $this
+     */
+    public function resetAliases(){
+        $this->aliases = new ArrayCollection();
+        return $this;
+    }
+
+    /**
+     * @var integer
+     */
+    private $categoryId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Category
+     */
+    private $category;
+
+
+    /**
+     * Set categoryId
+     *
+     * @param integer $categoryId
+     * @return PriceList
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
+    }
+
+    /**
+     * Get categoryId
+     *
+     * @return integer 
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \Shop\CatalogBundle\Entity\Category $category
+     * @return PriceList
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+        $this->categoryId = $category ? $category->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Shop\CatalogBundle\Entity\Category 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    /**
+     * @var integer
+     */
+    private $manufacturerId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Manufacturer
+     */
+    private $manufacturer;
+
+
+    /**
+     * Set manufacturerId
+     *
+     * @param integer $manufacturerId
+     * @return PriceList
+     */
+    public function setManufacturerId($manufacturerId)
+    {
+        $this->manufacturerId = $manufacturerId;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturerId
+     *
+     * @return integer 
+     */
+    public function getManufacturerId()
+    {
+        return $this->manufacturerId;
+    }
+
+    /**
+     * Set manufacturer
+     *
+     * @param \Shop\CatalogBundle\Entity\Manufacturer $manufacturer
+     * @return PriceList
+     */
+    public function setManufacturer(Manufacturer $manufacturer = null)
+    {
+        $this->manufacturer = $manufacturer;
+        $this->manufacturerId = $manufacturer ? $manufacturer->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get manufacturer
+     *
+     * @return \Shop\CatalogBundle\Entity\Manufacturer 
+     */
+    public function getManufacturer()
+    {
+        return $this->manufacturer;
     }
 }

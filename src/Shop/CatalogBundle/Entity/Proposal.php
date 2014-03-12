@@ -482,7 +482,7 @@ class Proposal extends AbstractEntity
     public function setManufacturer(Manufacturer $manufacturer = null)
     {
         $this->manufacturer = $manufacturer;
-        $this->setManufacturerId($manufacturer->getId());
+        $this->manufacturerId = $manufacturer ? $manufacturer->getId() : null;
         return $this;
     }
 

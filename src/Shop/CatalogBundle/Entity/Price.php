@@ -28,10 +28,12 @@ class Price extends AbstractEntity {
 
     /**
      * @param string $value
+     * @return $this
      */
     public function setValue($value)
     {
         $this->value = preg_replace("/([^0-9\\.])/i", "", $value);
+        return $this;
     }
 
     /**
@@ -53,12 +55,16 @@ class Price extends AbstractEntity {
         if($this->getCurrencyNumericCode() != ContractorCurrency::BLR_CURRENCY_NUMERIC_CODE){
 
             $priceCurrencyNumericCode = $this->getCurrencyNumericCode();
-            $currency = $this->getContractor()->getCurrencies()->filter(function(ContractorCurrency $currency) use ($priceCurrencyNumericCode) {
-                return $currency->getNumericCode() == $priceCurrencyNumericCode;
-            })->current();
+            if($this->getContractor()){
 
-            if($currency instanceof ContractorCurrency){
-                $exchangedValue = $this->getValue() * $currency->getValue();
+                $currency = $this->getContractor()->getCurrencies()->filter(function(ContractorCurrency $currency) use ($priceCurrencyNumericCode) {
+                    return $currency->getNumericCode() == $priceCurrencyNumericCode;
+                })->current();
+
+                if($currency instanceof ContractorCurrency){
+                    $exchangedValue = $this->getValue() * $currency->getValue();
+                }
+
             }
 
         }
@@ -260,7 +266,7 @@ class Price extends AbstractEntity {
      */
     public function getContractor()
     {
-        return $this->contractor;
+        return $this->contractor ?: ($this->getProposal() ? $this->getProposal()->getDefaultContractor() : null);
     }
     /**
      * @var integer

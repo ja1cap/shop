@@ -47,12 +47,22 @@
                         {{ priceList.textStatus }}
                     </td>
                     <td>
-                        <div class="medium btn default icon-left entypo icon-arrows-ccw">
+                        <div class="medium btn default icon-left entypo icon-pencil" style="width: 100%">
+                            <a href="{{ path('price_list', {'id' : priceList.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn warning icon-left entypo icon-cog" style="width: 100%">
+                            <a href="{{ path('price_list_aliases', {'id' : priceList.id}) }}">
+                                Настроить
+                            </a>
+                        </div>
+                        <div class="medium btn default icon-left entypo icon-arrows-ccw" style="width: 100%">
                             <a href="{{ path('parse_price_list', {'id' : priceList.id}) }}">
                                 Обработать
                             </a>
                         </div>
-                        <div class="medium btn danger icon-left entypo icon-trash">
+                        <div class="medium btn danger icon-left entypo icon-trash" style="width: 100%">
                             <a href="{{ path('delete_price_list', {'id' : priceList.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
                                 Удалить
                             </a>

@@ -45,6 +45,9 @@
                     </td>
                     <td>
                         {{ priceList.textStatus }}
+                        {% if priceList.updateDate %}
+                            {{ priceList.updateDate|date("d.m.Y в H:I:S") }}
+                        {% endif %}
                     </td>
                     <td>
                         <div class="medium btn default icon-left entypo icon-pencil" style="width: 100%">

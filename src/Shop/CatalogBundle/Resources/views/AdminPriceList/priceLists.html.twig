@@ -19,10 +19,10 @@
                 <th>
                     ID
                 </th>
-                <th style="width: 50%">
+                <th style="width: 40%">
                     Название
                 </th>
-                <th style="width: 10%">
+                <th style="width: 25%">
                     Статус
                 </th>
                 <th>
@@ -46,7 +46,9 @@
                     <td>
                         {{ priceList.textStatus }}
                         {% if priceList.updateDate %}
-                            {{ priceList.updateDate|date("d.m.Y в H:I:S") }}
+                            <div>
+                                {{ priceList.updateDate|date("d.m.Y в H:i:s") }}
+                            </div>
                         {% endif %}
                     </td>
                     <td>

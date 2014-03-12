@@ -57,7 +57,7 @@
                                 Настроить
                             </a>
                         </div>
-                        {% if priceList.manufactureId and priceList.categoryId %}
+                        {% if priceList.manufacturerId and priceList.categoryId %}
                             <div class="medium btn default icon-left entypo icon-arrows-ccw" style="width: 100%">
                                 <a href="{{ path('parse_price_list', {'id' : priceList.id}) }}">
                                     Обработать

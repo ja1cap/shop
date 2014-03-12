@@ -14,6 +14,8 @@ class PriceListAlias extends AbstractEntity
 
     const ALIAS_SKU = 'sku';
     const ALIAS_NAME = 'name';
+    const ALIAS_DESCRIPTION = 'description';
+    const ALIAS_SHORT_DESCRIPTION = 'short_description';
     const ALIAS_PRICE = 'price';
     const ALIAS_CURRENCY = 'currency';
     const ALIAS_MANUFACTURER = 'manufacturer';
@@ -36,6 +38,8 @@ class PriceListAlias extends AbstractEntity
     public static $aliasesTitles = array(
         self::ALIAS_SKU => 'Артикул',
         self::ALIAS_NAME => 'Наименование',
+//        self::ALIAS_SHORT_DESCRIPTION => 'Краткое описание',
+//        self::ALIAS_DESCRIPTION => 'Полное описание',
         self::ALIAS_PRICE => 'Цена',
         self::ALIAS_CURRENCY => 'Валюта',
         self::ALIAS_CATEGORY => 'Категория',
@@ -53,6 +57,14 @@ class PriceListAlias extends AbstractEntity
             'название',
             'наименование',
             'наименование изделия',
+        ),
+        self::ALIAS_DESCRIPTION => array(
+            'краткое описание',
+            'короткое описание',
+        ),
+        self::ALIAS_DESCRIPTION => array(
+            'описание',
+            'полное описание',
         ),
         self::ALIAS_PRICE => array(
             'цена',

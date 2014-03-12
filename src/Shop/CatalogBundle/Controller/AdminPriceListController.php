@@ -325,6 +325,8 @@ class AdminPriceListController extends Controller
             $rowData = array(
                 PriceListAlias::ALIAS_SKU => null,
                 PriceListAlias::ALIAS_NAME => null,
+                PriceListAlias::ALIAS_SHORT_DESCRIPTION => null,
+                PriceListAlias::ALIAS_DESCRIPTION => null,
                 PriceListAlias::ALIAS_PRICE => null,
                 PriceListAlias::ALIAS_CURRENCY => null,
                 PriceListAlias::ALIAS_CATEGORY => null,

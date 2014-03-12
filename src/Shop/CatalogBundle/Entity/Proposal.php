@@ -102,7 +102,13 @@ class Proposal extends AbstractEntity
      */
     public function getShortDescription()
     {
+
+        if(mb_strlen($this->shortDescription, 'UTF-8') > 100){
+            return mb_substr($this->shortDescription, 'UTF-8', 0, 97) . '...';
+        }
+
         return $this->shortDescription;
+
     }
 
     /**

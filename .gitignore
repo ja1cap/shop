@@ -11,3 +11,6 @@
 /composer.phar
 /composer.lock
 /web/uploads/*
+/web/gumby/.sass-cache/
+/.idea/
+!web/uploads.tar.gz

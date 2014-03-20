@@ -49,6 +49,9 @@ class AdminOrderController extends Controller
             throw $this->createNotFoundException('Заказ не найден');
         }
 
+        $order->setStatus(CustomerOrder::STATUS_ACCEPTED);
+        $this->getDoctrine()->getManager()->flush();
+
         return $this->render('ShopCatalogBundle:AdminOrder:order.html.twig', array(
             'order' => $order
         ));

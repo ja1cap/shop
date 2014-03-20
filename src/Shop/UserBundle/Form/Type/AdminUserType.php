@@ -2,14 +2,13 @@
 
 namespace Shop\UserBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class AdminUserType
  * @package Shop\UserBundle\Form\Type
  */
-class AdminUserType extends AbstractType {
+class AdminUserType extends UserType {
 
     /**
      * @param FormBuilderInterface $builder
@@ -18,9 +17,7 @@ class AdminUserType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $builder->add('user', new UserType(), array(
-            'label' => 'Данные пользователя',
-        ));
+        parent::buildForm($builder, $options);
 
         $builder->add('plainPassword', 'repeated', array(
             'required' => false,
@@ -41,12 +38,23 @@ class AdminUserType extends AbstractType {
             'type' => 'password',
         ));
 
-        $builder->add('roles', 'entity', array(
+        $builder->add('enabled', 'choice', array(
+            'label' => 'Активирован',
+            'choices' => array(
+                'Нет',
+                'Да',
+            ),
+        ));
+
+        $builder->add('roles', 'choice', array(
             'required' => false,
             'multiple' => true,
-            'class' => 'ShopMainBundle:Role',
-            'property' => 'name',
-            'label' => 'Должности'
+            'label' => 'Должности',
+            'choices' => array(
+//                'ROLE_USER' => 'Пользователь',
+                'ROLE_MANAGER' => 'Менеджер',
+                'ROLE_ADMIN' => 'Администратор',
+            ),
         ));
 
         $builder->add('save', 'submit', array(

@@ -1950,10 +1950,13 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .admin-container .header-container .header .user-container a { color: white; line-height: 70px; text-decoration: underline; }
 .admin-container .dashboard .tiles li { padding-bottom: 2%; }
 .admin-container .dashboard .tiles li > a { text-align: center; color: white; font-size: 20px; line-height: 160px; background: #3085d6; display: block; }
-.admin-container form label { font-size: 16px; margin-bottom: 5px; }
+.admin-container .login-form-container form input[type='submit'] { width: 100%; }
+.admin-container form label { display: inline; font-size: 16px; margin-bottom: 5px; }
 .admin-container form textarea { width: 100%; height: 50px; border: 1px solid #CCCCCC; padding: 5px; margin-bottom: 10px; }
+.admin-container form select { display: block; margin-bottom: 10px; }
 .admin-container form input { width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #CCCCCC; }
-.admin-container form button[type="submit"] { cursor: pointer; display: block; border: none; padding: 10px; margin: 10px 0; width: 200px; color: white; font-size: 20px; background: #3085d6; outline: none; }
+.admin-container form input[type="checkbox"] { width: auto; }
+.admin-container form button[type="submit"], .admin-container form input[type="submit"] { cursor: pointer; display: block; border: none; padding: 10px; margin: 10px 0; width: 200px; color: white; font-size: 20px; background: #3085d6; outline: none; }
 .admin-container .tabs.vertical .tab-content { padding-top: 0px; }
 .admin-container .tabs.vertical .tab-nav > li { padding: 0; margin: 0; }
 .admin-container .tabs.vertical .tab-nav > li.active { position: static; }

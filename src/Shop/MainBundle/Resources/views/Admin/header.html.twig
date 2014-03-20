@@ -15,7 +15,7 @@
             {% if user_name %}
                 <div class="user-container">
                     Привет, {{ user_name }} |
-                    <a href="{{ path('logout') }}">
+                    <a href="{{ path('fos_user_security_logout') }}">
                         Выйти
                     </a>
                 </div>

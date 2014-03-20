@@ -2097,9 +2097,22 @@ body {
 
   }
 
+  .login-form-container {
+
+    form {
+
+      input[type='submit']{
+        width: 100%;
+      }
+
+    }
+
+  }
+
   form {
 
     label {
+      display: inline;
       font-size: 16px;
       margin-bottom: 5px;
     }
@@ -2112,25 +2125,40 @@ body {
       margin-bottom: 10px;
     }
 
+    select {
+      display: block;
+      margin-bottom: 10px;
+    }
+
     input {
+
       width: 100%;
       padding: 5px;
       margin-bottom: 10px;
       border: 1px solid #CCCCCC;
+
+      &[type="checkbox"] {
+        width: auto;
+      }
+
     }
 
-    button[type="submit"] {
+    button, input {
 
-      cursor: pointer;
-      display: block;
-      border: none;
-      padding: 10px;
-      margin: 10px 0;
-      width: 200px;
-      color: white;
-      font-size: 20px;
-      background: #3085d6;
-      outline: none;
+      &[type="submit"] {
+
+        cursor: pointer;
+        display: block;
+        border: none;
+        padding: 10px;
+        margin: 10px 0;
+        width: 200px;
+        color: white;
+        font-size: 20px;
+        background: #3085d6;
+        outline: none;
+
+      }
 
     }
 

@@ -4,7 +4,6 @@ namespace Shop\UserBundle\Controller;
 
 use Shop\UserBundle\Entity\User;
 use Shop\UserBundle\Form\Type\AdminUserType;
-use Shop\UserBundle\Model\UserModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -41,35 +40,26 @@ class AdminUserController extends Controller
      */
     public function userAction($id, Request $request)
     {
-
+        /**
+         * @var $userManager \FOS\UserBundle\Doctrine\UserManager
+         */
+        $userManager = $this->get('fos_user.user_manager');
         $em = $this->getDoctrine()->getManager();
 
         $user = $id ? $em->getRepository('ShopUserBundle:User')->findOneBy(array('id' => $id)) : null;
 
         if(!$user instanceof User){
-            $user = new User();
+            $user = $userManager->createUser();
+            $user->setEnabled(true);
         }
 
-        /**
-         * @var $factory \Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
-         */
-        $factory = $this->get('security.encoder_factory');
-        $model = new UserModel($factory);
-        $model->setUser($user);
-
-        $form = $this->createForm(new AdminUserType(), $model);
+        $form = $this->createForm(new AdminUserType(), $user);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
 
-            $model = $form->getData();
-
-            if(!$model->getUser()->getId()){
-                $em->persist($model->getUser());
-            }
-
-            $em->flush();
+            $userManager->updateUser($user);
 
             return $this->redirect($this->generateUrl('admin_users'));
 

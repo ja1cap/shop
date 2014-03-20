@@ -127,19 +127,4 @@
     <route id="settings" pattern="/admin/settings">
         <default key="_controller">ShopMainBundle:Admin:settings</default>
     </route>
-    <route id="account_register" pattern="/register">
-        <default key="_controller">ShopMainBundle:Auth:register</default>
-    </route>
-    <route id="account_create" pattern="/register/create">
-        <default key="_controller">ShopMainBundle:Auth:create</default>
-    </route>
-    <route id="login" pattern="/login">
-        <default key="_controller">ShopMainBundle:Auth:login</default>
-    </route>
-    <route id="login_check" pattern="/loginCheck">
-        <default key="_controller">ShopMainBundle:Auth:loginCheck</default>
-    </route>
-    <route id="logout" pattern="/logout">
-        <default key="_controller">ShopMainBundle:Auth:logout</default>
-    </route>
 </routes>

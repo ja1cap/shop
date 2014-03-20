@@ -6,10 +6,9 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <field name="username" type="string" column="username" length="255" unique="true"/>
-        <field name="password" type="string" column="password" length="60"/>
-        <field name="email" type="string" column="email" length="255" unique="true"/>
-        <field name="isActive" type="boolean" column="isActive"/>
-        <many-to-many target-entity="Role" field="roles"/>
+        <!--<field name="username" type="string" column="username" length="255" unique="true"/>-->
+        <!--<field name="password" type="string" column="password" length="60"/>-->
+        <!--<field name="email" type="string" column="email" length="255" unique="true"/>-->
+        <!--<many-to-many target-entity="Role" field="roles"/>-->
     </entity>
 </doctrine-mapping>

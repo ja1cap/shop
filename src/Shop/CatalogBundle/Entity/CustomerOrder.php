@@ -71,11 +71,6 @@ class CustomerOrder extends AbstractEntity
     /**
      * @var integer
      */
-    private $actionId;
-
-    /**
-     * @var integer
-     */
     private $id;
 
 
@@ -307,29 +302,6 @@ class CustomerOrder extends AbstractEntity
     public function getDenyComment()
     {
         return $this->denyComment;
-    }
-
-    /**
-     * Set actionId
-     *
-     * @param integer $actionId
-     * @return CustomerOrder
-     */
-    public function setActionId($actionId)
-    {
-        $this->actionId = $actionId;
-
-        return $this;
-    }
-
-    /**
-     * Get actionId
-     *
-     * @return integer 
-     */
-    public function getActionId()
-    {
-        return $this->actionId;
     }
 
     /**

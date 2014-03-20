@@ -1,0 +1,11 @@
+{% extends 'ShopMainBundle:Admin:layout.html.twig' %}
+
+{% block title %}Система управления сайтом{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="login-form-container centered four columns">
+            {% block fos_user_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

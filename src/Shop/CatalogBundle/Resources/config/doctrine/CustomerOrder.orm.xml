@@ -21,8 +21,6 @@
         <field name="denyDate" type="datetime" column="denyDate" nullable="true"/>
         <field name="denyComment" type="text" column="denyComment" nullable="true"/>
 
-        <field name="actionId" type="integer" column="actionId" nullable="true"/>
-
         <one-to-many target-entity="CustomerOrderProposal" mapped-by="order" field="proposals">
             <cascade>
                 <cascade-persist/>

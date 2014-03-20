@@ -2,268 +2,106 @@
 
 namespace Shop\UserBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * Class User
  * @package Shop\UserBundle\Entity
  */
 class User
-    extends AbstractEntity
-    implements UserInterface, \Serializable
+    extends BaseUser
+    implements \ArrayAccess
 {
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var string
-     */
-    private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
-     * @var string
-     */
-    private $email;
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $roles;
-
-    /**
-     * @var boolean
-     */
-    private $isActive;
-
-    function __construct()
-    {
-        $this->isActive = true;
-        $this->roles = new ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string 
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Set password
-     *
      * @param string $password
-     * @return User
+     * @return $this
      */
-    public function setPassword($password)
+    public function setPlainPassword($password)
     {
-        $this->password = $password;
-
+        if($password){
+            return parent::setPlainPassword($password);
+        }
         return $this;
     }
 
     /**
-     * Get password
-     *
-     * @return string 
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
      */
-    public function getPassword()
+    public function offsetExists($offset)
     {
-        return $this->password;
+        $method = 'get' . Inflector::classify($offset);
+        return method_exists($this, $method);
     }
 
     /**
-     * @return string
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
      */
-    public function getSalt()
+    public function offsetGet($offset)
     {
+        $method = 'get' . Inflector::classify($offset);
+        if(method_exists($this, $method)){
+            return $this->$method();
+        }
         return null;
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     * @return User
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean 
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-        ));
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
      * </p>
      * @return void
      */
-    public function unserialize($serialized)
+    public function offsetSet($offset, $value)
     {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-        ) = unserialize($serialized);
-    }
-
-    /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return Role[] The user roles
-     */
-    public function getRoles()
-    {
-        return $this->roles ? $this->roles->toArray() : array('ROLE_USER');
-    }
-
-    /**
-     * @param $roles
-     * @return $this
-     */
-    public function setRoles($roles){
-
-        if(is_array($roles)){
-
-            $this->roles = new ArrayCollection($roles);
-
-        } elseif($roles instanceof ArrayCollection){
-
-            $this->roles = $roles;
-
+        $method = 'set' . Inflector::classify($offset);
+        if(method_exists($this, $method)){
+            $this->$method($value);
         }
-
-        return $this;
-
     }
 
     /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
      */
-    public function eraseCredentials()
-    {}
-
-    /**
-     * Add roles
-     *
-     * @param \Shop\UserBundle\Entity\Role $role
-     * @return User
-     */
-    public function addRole(Role $role)
+    public function offsetUnset($offset)
     {
-        $this->roles[] = $role;
-
-        return $this;
+        $method = 'set' . Inflector::classify($offset);
+        if(method_exists($this, $method)){
+            $this->$method(null);
+        }
     }
 
-    /**
-     * Remove roles
-     *
-     * @param \Shop\UserBundle\Entity\Role $role
-     */
-    public function removeRole(Role $role)
-    {
-        $this->roles->removeElement($role);
-    }
 }

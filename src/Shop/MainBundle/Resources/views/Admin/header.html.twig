@@ -11,7 +11,7 @@
                     </span>
                 </a>
             </div>
-            {% set user_name = app.security.getToken().getUser().getUserName() %}
+            {% set user_name = app.user and app.user.userName ? app.user.userName : null %}
             {% if user_name %}
                 <div class="user-container">
                     Привет, {{ user_name }} |

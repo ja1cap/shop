@@ -1,0 +1,47 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Управление заказами{% endblock %}
+
+{% block right_bar %}
+
+    <div>
+
+        <div>
+            <div>
+                Покупатель - {{ order.customerName }}
+            </div>
+            <div>
+                Телефон - {{ order.customerPhone }}
+            </div>
+            <div>
+                Email - {{ order.customerEmail|default('-') }}
+            </div>
+            <div>
+                Комментарий - {{ order.customerComment|default('-') }}
+            </div>
+        </div>
+
+        <div>
+            <table>
+                <tbody>
+                    {% for customerProposal in order.proposals %}
+                        <tr>
+                            <td>
+                                {{ customerProposal.proposal.title }}
+                            </td>
+                            <td>
+                                {{ customerProposal.priceValue|number_format(0, '.', ' ') }}
+                                x
+                                {{ customerProposal.amount }}
+                                =
+                                {{ (customerProposal.priceValue * customerProposal.amount)|number_format(0, '.', ' ') }} руб
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}

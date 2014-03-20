@@ -1,3 +1,7 @@
+shop_user:
+    resource: "@ShopUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 shop_catalog:
     resource: "@ShopCatalogBundle/Resources/config/routing.yml"
     prefix:   /

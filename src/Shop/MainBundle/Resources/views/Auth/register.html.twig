@@ -1,0 +1,25 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block body %}
+
+    <div class="admin-container">
+
+        {{ include("ShopMainBundle:Admin:header.html.twig") }}
+
+        <div class="row">
+
+            <div class="centered four columns">
+
+                {{ form(form) }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+

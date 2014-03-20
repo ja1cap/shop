@@ -2,10 +2,16 @@
 
 namespace Shop\MainBundle\Controller;
 
+use Shop\MainBundle\Form\Type\RegistrationType;
+use Shop\UserBundle\Model\UserModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
+/**
+ * Class AuthController
+ * @package Shop\MainBundle\Controller
+ */
 class AuthController extends Controller
 {
     public function loginAction(Request $request)
@@ -34,11 +40,66 @@ class AuthController extends Controller
 
     }
 
-    public function loginCheckAction(){
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function registerAction(){
+
+        /**
+         * @var $factory \Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
+         */
+        $factory = $this->get('security.encoder_factory');
+        $model = new UserModel($factory);
+
+        $form = $this->createForm(new RegistrationType(), $model, array(
+            'action' => $this->generateUrl('account_create'),
+        ));
+
+        return $this->render(
+            'ShopMainBundle:Auth:register.html.twig',
+            array('form' => $form->createView())
+        );
+
     }
 
-    public function logoutAction()
-    {
+    /**
+     * @param Request $request
+     * @return string|\Symfony\Component\HttpFoundation\Response
+     */
+    public function createAction(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+
+        /**
+         * @var $factory \Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
+         */
+        $factory = $this->get('security.encoder_factory');
+        $model = new UserModel($factory);
+
+        $form = $this->createForm(new RegistrationType(), $model);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $model = $form->getData();
+
+            $em->persist($model->getUser());
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('login'));
+
+        }
+
+        return $this->render(
+            'ShopMainBundle:Auth:register.html.twig',
+            array('form' => $form->createView())
+        );
+
     }
+
+    public function loginCheckAction(){}
+
+    public function logoutAction(){}
 
 }

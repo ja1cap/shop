@@ -1,16 +1,16 @@
 <?php
 
-namespace Shop\CatalogBundle;
+namespace Shop\UserBundle;
 
 use Shop\MainBundle\Entity\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ShopCatalogBundle
- * @package Shop\CatalogBundle
+ * Class ShopUserBundle
+ * @package Shop\UserBundle
  */
-class ShopCatalogBundle extends Bundle
+class ShopUserBundle extends Bundle
 {
 
     /**

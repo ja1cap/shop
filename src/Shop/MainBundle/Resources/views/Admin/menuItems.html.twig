@@ -1,71 +1,64 @@
-<li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
-    <a href="{{ path('categories') }}" class="">
-        Каталог
-    </a>
-</li>
+{#{% for role in app.user.roles %}#}
+    {#{{ role }}#}
+{#{% endfor %}#}
+{% if is_granted('ROLE_MANAGER') %}
+    <li class="{{ app.request.get('_route') == 'orders' ? 'active' : '' }}">
+        <a href="{{ path('orders') }}" class="">
+            Заказы
+        </a>
+    </li>
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
+        <a href="{{ path('categories') }}" class="">
+            Каталог
+        </a>
+    </li>
+    <li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
+        <a href="{{ path('shipping_methods') }}" class="">
+            Способы доставки
+        </a>
+    </li>
 
-<li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
-    <a href="{{ path('shipping_methods') }}" class="">
-        Способы доставки
-    </a>
-</li>
+    <li class="{{ app.request.get('_route') == 'actions' ? 'active' : '' }}">
+        <a href="{{ path('actions') }}" class="">
+            Акции
+        </a>
+    </li>
 
-<li class="{{ app.request.get('_route') == 'actions' ? 'active' : '' }}">
-    <a href="{{ path('actions') }}" class="">
-        Акции
-    </a>
-</li>
+    <li class="{{ app.request.get('_route') == 'benefits' ? 'active' : '' }}">
+        <a href="{{ path('benefits') }}" class="">
+            Преимущества
+        </a>
+    </li>
 
-{#<li class="{{ app.request.get('_route') == 'why_us' ? 'active' : '' }}">#}
-    {#<a href="{{ path('why_us') }}" class="">#}
-        {#Почему мы#}
-    {#</a>#}
-{#</li>#}
+    <li class="{{ app.request.get('_route') == 'reviews' ? 'active' : '' }}">
+        <a href="{{ path('reviews') }}" class="">
+            Отзывы клиентов
+        </a>
+    </li>
 
-<li class="{{ app.request.get('_route') == 'benefits' ? 'active' : '' }}">
-    <a href="{{ path('benefits') }}" class="">
-        Преимущества
-    </a>
-</li>
+    <li class="{{ app.request.get('_route') == 'contacts' ? 'active' : '' }}">
+        <a href="{{ path('contacts') }}" class="">
+            Контакты
+        </a>
+    </li>
 
-<li class="{{ app.request.get('_route') == 'reviews' ? 'active' : '' }}">
-    <a href="{{ path('reviews') }}" class="">
-        Отзывы клиентов
-    </a>
-</li>
+    <li class="{{ app.request.get('_route') == 'mail_templates' ? 'active' : '' }}">
+        <a href="{{ path('mail_templates') }}" class="">
+            Почта
+        </a>
+    </li>
 
-{#<li class="{{ app.request.get('_route') == 'images' ? 'active' : '' }}">#}
-    {#<a href="{{ path('images') }}" class="">#}
-        {#Фотографии#}
-    {#</a>#}
-{#</li>#}
+    <li class="{{ app.request.get('_route') == 'settings' ? 'active' : '' }}">
+        <a href="{{ path('settings') }}" class="">
+            Настройки
+        </a>
+    </li>
 
-{#<li class="{{ app.request.get('_route') == 'how_we' ? 'active' : '' }}">#}
-    {#<a href="{{ path('how_we') }}" class="">#}
-        {#Как мы работаем#}
-    {#</a>#}
-{#</li>#}
-
-{#<li class="{{ app.request.get('_route') == 'problems' ? 'active' : '' }}">#}
-    {#<a href="{{ path('problems') }}" class="">#}
-        {#Проблемы#}
-    {#</a>#}
-{#</li>#}
-
-<li class="{{ app.request.get('_route') == 'contacts' ? 'active' : '' }}">
-    <a href="{{ path('contacts') }}" class="">
-        Контакты
-    </a>
-</li>
-
-<li class="{{ app.request.get('_route') == 'mail_templates' ? 'active' : '' }}">
-    <a href="{{ path('mail_templates') }}" class="">
-        Почта
-    </a>
-</li>
-
-<li class="{{ app.request.get('_route') == 'settings' ? 'active' : '' }}">
-    <a href="{{ path('settings') }}" class="">
-        Настройки
-    </a>
-</li>
+    <li class="{{ app.request.get('_route') == 'admin_users' ? 'active' : '' }}">
+        <a href="{{ path('admin_users') }}" class="">
+            Пользователи
+        </a>
+    </li>
+{% endif %}

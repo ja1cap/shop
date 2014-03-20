@@ -2,8 +2,8 @@
 
 namespace Shop\MainBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -35,6 +35,11 @@ class User
     private $email;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $roles;
+
+    /**
      * @var boolean
      */
     private $isActive;
@@ -42,6 +47,7 @@ class User
     function __construct()
     {
         $this->isActive = true;
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -205,7 +211,27 @@ class User
      */
     public function getRoles()
     {
-        return array('ROLE_ADMIN');
+        return $this->roles ? $this->roles->toArray() : array('ROLE_USER');
+    }
+
+    /**
+     * @param $roles
+     * @return $this
+     */
+    public function setRoles($roles){
+
+        if(is_array($roles)){
+
+            $this->roles = new ArrayCollection($roles);
+
+        } elseif($roles instanceof ArrayCollection){
+
+            $this->roles = $roles;
+
+        }
+
+        return $this;
+
     }
 
     /**
@@ -217,4 +243,26 @@ class User
     public function eraseCredentials()
     {}
 
+    /**
+     * Add roles
+     *
+     * @param \Shop\MainBundle\Entity\Role $role
+     * @return User
+     */
+    public function addRole(Role $role)
+    {
+        $this->roles[] = $role;
+
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \Shop\MainBundle\Entity\Role $role
+     */
+    public function removeRole(Role $role)
+    {
+        $this->roles->removeElement($role);
+    }
 }

@@ -20,7 +20,10 @@
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
         "andre_487/php_rutils": "dev-master",
-        "phpexcel/phpexcel" : "*"
+        "phpexcel/phpexcel" : "*",
+        "ircmaxell/password-compat": "~1.0.3",
+        "leaseweb/secure-controller-bundle": "*",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "scripts": {
         "post-install-cmd": [

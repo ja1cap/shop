@@ -129,11 +129,11 @@ shop_cart_order:
     defaults: { _controller: ShopCatalogBundle:ShopCart:order }
 
 orders:
-    pattern: /admin/orders
+    pattern: /manager/orders
     defaults: { _controller: ShopCatalogBundle:AdminOrder:orders }
 
 order:
-    pattern: /admin/order/{id}
+    pattern: /manager/order/{id}
     defaults: { _controller: ShopCatalogBundle:AdminOrder:order }
 
 contractors:

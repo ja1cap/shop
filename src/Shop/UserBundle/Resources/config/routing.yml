@@ -1,0 +1,15 @@
+shop_user_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ShopUserBundle:Default:index }
+
+admin_users:
+    pattern: /admin/users
+    defaults: { _controller: ShopUserBundle:AdminUser:users }
+
+admin_user:
+    pattern: /admin/user/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:user, id: null }
+
+admin_delete_user:
+    pattern: /admin/deleteUser/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:deleteUser }

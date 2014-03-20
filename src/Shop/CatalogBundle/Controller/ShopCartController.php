@@ -48,7 +48,6 @@ class ShopCartController extends Controller
 
         return $this->render('ShopCatalogBundle:ShopCart:default.html.twig', array(
             'title' => 'Оформление заказа',
-            'settings' => $this->getSettings(),
             'actions' => $actions,
             'shippingMethods' => $shippingMethods,
             'shopCartSummary' => $shopCartSummary,
@@ -141,7 +140,6 @@ class ShopCartController extends Controller
 
             $response = $this->render('ShopCatalogBundle:ShopCart:order.html.twig', array(
                 'title' => 'Заказ оформлен',
-                'settings' => $this->getSettings(),
             ));
 
             $response->headers->clearCookie('shopCart');
@@ -223,18 +221,6 @@ class ShopCartController extends Controller
 
         }
 
-    }
-
-    /**
-     * @return Settings
-     */
-    protected function getSettings()
-    {
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if (!$settings) {
-            $settings = new Settings();
-        }
-        return $settings;
     }
 
     /**

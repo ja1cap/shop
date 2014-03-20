@@ -1,0 +1,54 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block right_bar %}
+
+    <div class="medium primary btn">
+        <a href="{{ path('admin_user') }}">
+            Добавить пользователя
+        </a>
+    </div>
+
+    {% if users %}
+        <table style="margin: 10px 0">
+            <thead>
+            <tr>
+                <th>
+                    Логин
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        {{ user.username }}
+                    </td>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                    <td>
+                        <div class="medium btn default icon-left entypo icon-pencil">
+                            <a href="{{ path('admin_user', {'id' : user.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger icon-left entypo icon-trash">
+                            <a href="{{ path('admin_delete_user', {'id' : user.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

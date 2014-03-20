@@ -2,7 +2,7 @@
 
 namespace Shop\UserBundle\Controller;
 
-use Shop\MainBundle\Entity\User;
+use Shop\UserBundle\Entity\User;
 use Shop\UserBundle\Form\Type\AdminUserType;
 use Shop\UserBundle\Model\UserModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,7 +21,7 @@ class AdminUserController extends Controller
     public function usersAction()
     {
 
-        $users = $this->getDoctrine()->getRepository('ShopMainBundle:User')->findBy(
+        $users = $this->getDoctrine()->getRepository('ShopUserBundle:User')->findBy(
             array(),
             array(
                 'username' => 'ASC'
@@ -44,7 +44,7 @@ class AdminUserController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $user = $id ? $em->getRepository('ShopMainBundle:User')->findOneBy(array('id' => $id)) : null;
+        $user = $id ? $em->getRepository('ShopUserBundle:User')->findOneBy(array('id' => $id)) : null;
 
         if(!$user instanceof User){
             $user = new User();
@@ -92,7 +92,7 @@ class AdminUserController extends Controller
     public function deleteUserAction($id)
     {
 
-        $entity = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:User')->findOneBy(array(
+        $entity = $this->getDoctrine()->getManager()->getRepository('ShopUserBundle:User')->findOneBy(array(
             'id' => $id
         ));
 

@@ -1,7 +1,7 @@
 security:
     encoders:
 #        Symfony\Component\Security\Core\User\User: plaintext
-        Shop\MainBundle\Entity\User: plaintext
+        Shop\UserBundle\Entity\User: plaintext
 
     role_hierarchy:
         ROLE_MANAGER:     ROLE_USER
@@ -15,7 +15,7 @@ security:
 #                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
 #                    admin: { password: 1qaz@WSX, roles: [ 'ROLE_ADMIN' ] }
         main:
-            entity: { class: ShopMainBundle:User, property: username }
+            entity: { class: ShopUserBundle:User, property: username }
 
     firewalls:
         admin:

@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class UserType
- * @package Shop\MainBundle\Form\Type
+ * @package Shop\UserBundle\Form\Type
  */
 class UserType extends AbstractType {
 
@@ -41,7 +41,7 @@ class UserType extends AbstractType {
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Shop\MainBundle\Entity\User'
+            'data_class' => 'Shop\UserBundle\Entity\User'
         ));
     }
 

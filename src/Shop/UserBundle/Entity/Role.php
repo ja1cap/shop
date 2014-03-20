@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop\MainBundle\Entity;
+namespace Shop\UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * Class Role
- * @package Shop\MainBundle\Entity
+ * @package Shop\UserBundle\Entity
  */
 class Role implements RoleInterface
 {
@@ -99,7 +99,7 @@ class Role implements RoleInterface
     /**
      * Add users
      *
-     * @param \Shop\MainBundle\Entity\User $user
+     * @param \Shop\UserBundle\Entity\User $user
      * @return Role
      */
     public function addUser(User $user)
@@ -112,7 +112,7 @@ class Role implements RoleInterface
     /**
      * Remove users
      *
-     * @param \Shop\MainBundle\Entity\User $users
+     * @param \Shop\UserBundle\Entity\User $users
      */
     public function removeUser(User $users)
     {

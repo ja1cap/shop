@@ -1,14 +1,15 @@
 <?php
 
-namespace Shop\MainBundle\Entity;
+namespace Shop\UserBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\MainBundle\Entity\AbstractEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User
- * @package Shop\MainBundle\Entity
+ * @package Shop\UserBundle\Entity
  */
 class User
     extends AbstractEntity
@@ -246,7 +247,7 @@ class User
     /**
      * Add roles
      *
-     * @param \Shop\MainBundle\Entity\Role $role
+     * @param \Shop\UserBundle\Entity\Role $role
      * @return User
      */
     public function addRole(Role $role)
@@ -259,7 +260,7 @@ class User
     /**
      * Remove roles
      *
-     * @param \Shop\MainBundle\Entity\Role $role
+     * @param \Shop\UserBundle\Entity\Role $role
      */
     public function removeRole(Role $role)
     {

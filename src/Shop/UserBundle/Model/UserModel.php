@@ -1,6 +1,6 @@
 <?php
 namespace Shop\UserBundle\Model;
-use Shop\MainBundle\Entity\User;
+use Shop\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
@@ -15,7 +15,7 @@ class UserModel {
     protected $encoderFactory;
 
     /**
-     * @var \Shop\MainBundle\Entity\User
+     * @var \Shop\UserBundle\Entity\User
      */
     protected $user;
 
@@ -33,7 +33,7 @@ class UserModel {
     }
 
     /**
-     * @param \Shop\MainBundle\Entity\User $user
+     * @param \Shop\UserBundle\Entity\User $user
      */
     public function setUser(User $user)
     {
@@ -41,7 +41,7 @@ class UserModel {
     }
 
     /**
-     * @return \Shop\MainBundle\Entity\User
+     * @return \Shop\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -102,7 +102,7 @@ class UserModel {
     }
 
     /**
-     * @return array|\Shop\MainBundle\Entity\Role[]
+     * @return array|\Shop\UserBundle\Entity\Role[]
      */
     public function getRoles(){
         return $this->getUser() ? $this->getUser()->getRoles() : array();

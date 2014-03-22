@@ -4,6 +4,11 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="Shop\CatalogBundle\Entity\CustomerOrderRepository"
             name="Shop\CatalogBundle\Entity\CustomerOrder">
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preFlush" method="serializeProposals"/>
+        </lifecycle-callbacks>
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -20,6 +25,9 @@
         <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
         <field name="denyDate" type="datetime" column="denyDate" nullable="true"/>
         <field name="denyComment" type="text" column="denyComment" nullable="true"/>
+
+        <field name="currentSerializedProposals" column="currentSerializedProposals" type="array" />
+        <field name="previousSerializedProposalsIds" column="previousSerializedProposals" type="array" />
 
         <one-to-many target-entity="CustomerOrderProposal" mapped-by="order" field="proposals">
             <cascade>

@@ -49,8 +49,21 @@ class AdminOrderController extends Controller
             throw $this->createNotFoundException('Заказ не найден');
         }
 
-        $order->setStatus(CustomerOrder::STATUS_ACCEPTED);
-        $this->getDoctrine()->getManager()->flush();
+        /**
+         * @var $auditReader \SimpleThings\EntityAudit\AuditReader
+         */
+        $auditReader = $this->get("simplethings_entityaudit.reader");
+        $revisions = $auditReader->findRevisions('Shop\CatalogBundle\Entity\CustomerOrder', $order->getId());
+
+        /**
+         * @var $revision \SimpleThings\EntityAudit\Revision
+         */
+        foreach($revisions as $revision){
+            $customerOrderAudit = $auditReader->find('Shop\CatalogBundle\Entity\CustomerOrder', $order->getId(), $revision->getRev());
+            if($customerOrderAudit instanceof CustomerOrder){
+                var_dump($customerOrderAudit->getProposals()->toArray());
+            }
+        }
 
         return $this->render('ShopCatalogBundle:AdminOrder:order.html.twig', array(
             'order' => $order

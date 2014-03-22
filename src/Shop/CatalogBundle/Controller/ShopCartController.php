@@ -136,7 +136,7 @@ class ShopCartController extends Controller
 
             }
 
-            $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);
+//            $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);
 
             $response = $this->render('ShopCatalogBundle:ShopCart:order.html.twig', array(
                 'title' => 'Заказ оформлен',

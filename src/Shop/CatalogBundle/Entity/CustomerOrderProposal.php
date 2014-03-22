@@ -10,21 +10,12 @@ use Shop\MainBundle\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class CustomerOrderProposal extends AbstractEntity
+    implements \Serializable
 {
     /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var integer
-     */
-    private $proposalId;
-
-    /**
-     * @var integer
-     */
-    private $priceId;
 
     /**
      * @var integer
@@ -36,7 +27,6 @@ class CustomerOrderProposal extends AbstractEntity
      */
     private $priceValue;
 
-
     /**
      * Get id
      *
@@ -45,52 +35,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set proposalId
-     *
-     * @param integer $proposalId
-     * @return CustomerOrderProposal
-     */
-    public function setProposalId($proposalId)
-    {
-        $this->proposalId = $proposalId;
-
-        return $this;
-    }
-
-    /**
-     * Get proposalId
-     *
-     * @return integer 
-     */
-    public function getProposalId()
-    {
-        return $this->proposalId;
-    }
-
-    /**
-     * Set priceId
-     *
-     * @param integer $priceId
-     * @return CustomerOrderProposal
-     */
-    public function setPriceId($priceId)
-    {
-        $this->priceId = $priceId;
-
-        return $this;
-    }
-
-    /**
-     * Get priceId
-     *
-     * @return integer 
-     */
-    public function getPriceId()
-    {
-        return $this->priceId;
     }
 
     /**
@@ -138,10 +82,6 @@ class CustomerOrderProposal extends AbstractEntity
     {
         return $this->priceValue;
     }
-    /**
-     * @var integer
-     */
-    private $orderId;
 
     /**
      * @var \Shop\CatalogBundle\Entity\CustomerOrder
@@ -158,30 +98,6 @@ class CustomerOrderProposal extends AbstractEntity
      */
     private $price;
 
-
-    /**
-     * Set orderId
-     *
-     * @param integer $orderId
-     * @return CustomerOrderProposal
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
-
-    /**
-     * Get orderId
-     *
-     * @return integer 
-     */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
-
     /**
      * Set order
      *
@@ -191,7 +107,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function setOrder(CustomerOrder $order = null)
     {
         $this->order = $order;
-        $this->orderId = $order->getId();
         return $this;
     }
 
@@ -214,7 +129,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function setProposal(Proposal $proposal = null)
     {
         $this->proposal = $proposal;
-        $this->proposalId = $proposal->getId();
         return $this;
     }
 
@@ -237,7 +151,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function setPrice(Price $price = null)
     {
         $this->price = $price;
-        $this->proposalId = $price->getId();
         $this->priceValue = $price->getExchangedValue();
         return $this;
     }
@@ -251,4 +164,36 @@ class CustomerOrderProposal extends AbstractEntity
     {
         return $this->price;
     }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            'orderId' => $this->getOrder()->getId(),
+            'proposalId' => $this->getProposal()->getId(),
+            'priceId' => $this->getPrice()->getId(),
+            'priceValue' => $this->getPriceValue(),
+            'amount' => $this->getAmount(),
+        ));
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        // TODO: Implement unserialize() method.
+    }
+
 }

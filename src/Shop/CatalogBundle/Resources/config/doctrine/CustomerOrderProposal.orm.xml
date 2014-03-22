@@ -8,9 +8,6 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="orderId" type="integer" column="orderId"/>
-        <field name="proposalId" type="integer" column="proposalId"/>
-        <field name="priceId" type="integer" column="priceId"/>
         <field name="amount" type="integer" column="amount"/>
         <field name="priceValue" type="string" column="priceValue" length="255"/>
 

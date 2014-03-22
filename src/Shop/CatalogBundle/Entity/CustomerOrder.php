@@ -373,7 +373,6 @@ class CustomerOrder extends AbstractEntity
     public function setAction(Action $action = null)
     {
         $this->action = $action;
-        $this->actionId = $action->getId();
         return $this;
     }
 
@@ -386,4 +385,75 @@ class CustomerOrder extends AbstractEntity
     {
         return $this->action;
     }
+    /**
+     * @var array
+     */
+    private $currentSerializedProposals;
+
+    /**
+     * @var array
+     */
+    private $previousSerializedProposalsIds;
+
+
+    /**
+     * Set currentSerializedProposals
+     *
+     * @param array $currentSerializedProposals
+     * @return CustomerOrder
+     */
+    public function setCurrentSerializedProposals($currentSerializedProposals)
+    {
+        $this->previousSerializedProposalsIds = $this->currentSerializedProposals;
+        $this->currentSerializedProposals = $currentSerializedProposals;
+        return $this;
+    }
+
+    /**
+     * Get currentSerializedProposals
+     *
+     * @return array 
+     */
+    public function getCurrentSerializedProposals()
+    {
+        return $this->currentSerializedProposals;
+    }
+
+    /**
+     * Set previousSerializedProposalsIds
+     *
+     * @param array $previousSerializedProposalsIds
+     * @return CustomerOrder
+     */
+    public function setPreviousSerializedProposalsIds($previousSerializedProposalsIds)
+    {
+        $this->previousSerializedProposalsIds = $previousSerializedProposalsIds;
+
+        return $this;
+    }
+
+    /**
+     * Get previousSerializedProposalsIds
+     *
+     * @return array 
+     */
+    public function getPreviousSerializedProposalsIds()
+    {
+        return $this->previousSerializedProposalsIds;
+    }
+
+    /**
+     * @ORM\PreFlush
+     */
+    public function serializeProposals()
+    {
+        $this->setCurrentSerializedProposals(
+            $this->getProposals()->map(
+                function(CustomerOrderProposal $proposal){
+                    return $proposal->serialize();
+                }
+            )->toArray()
+        );
+    }
+
 }

@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Shop\MainBundle\Entity\AbstractEntity;
 
 /**
- * PriceList
+ * Class PriceList
+ * @package Shop\CatalogBundle\Entity
  */
 class PriceList extends AbstractEntity
 {

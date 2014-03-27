@@ -1,0 +1,12 @@
+parameters:
+#    shop_order_management.example.class: Shop\OrderManagementBundle\Example
+
+services:
+    order_proposal_security_context:
+        class: Shop\OrderManagementBundle\Security\OrderProposalSecurityContext
+        arguments: [@security.context]
+    shop.twig.acme_extension:
+        class: Shop\OrderManagementBundle\Twig\OrderProposalSecurityExtension
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }

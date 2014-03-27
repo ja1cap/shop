@@ -3,107 +3,107 @@ shop_catalog_homepage:
     defaults: { _controller: ShopCatalogBundle:Default:index }
 
 parameters:
-    pattern: /admin/parameters
+    pattern: /adminCatalog/parameters
     defaults: { _controller: ShopCatalogBundle:AdminParameter:parameters }
 
 parameter:
-    pattern: /admin/parameter/{id}
+    pattern: /adminCatalog/parameter/{id}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:parameter, id: null }
 
 delete_parameter:
-    pattern: /admi/deleteParameter/{id}
+    pattern: /adminCatalog/deleteParameter/{id}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:deleteParameter }
 
 parameter_option:
-    pattern: /admin/parameterOption/{parameterId}/{id}
+    pattern: /adminCatalog/parameterOption/{parameterId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:parameterOption, id: null }
 
 delete_parameter_option:
-    pattern: /admin/deleteParameterOption/{id}
+    pattern: /adminCatalog/deleteParameterOption/{id}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:deleteParameterOption }
 
 update_parameter_options:
-    pattern: /admin/updateParameterOptions/{parameterId}
+    pattern: /adminCatalog/updateParameterOptions/{parameterId}
     defaults: { _controller: ShopCatalogBundle:AdminParameter:updateParameterOptions}
 
 categories:
-    pattern: /admin/categories
+    pattern: /adminCatalog/categories
     defaults: { _controller: ShopCatalogBundle:AdminCategory:categories }
 
 category:
-    pattern: /admin/category/{id}
+    pattern: /adminCatalog/category/{id}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:category, id: null }
 
 delete_category:
-    pattern: /admin/deleteCategory/{id}
+    pattern: /adminCatalog/deleteCategory/{id}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategory }
 
 category_parameters:
-    pattern: /admin/categoryParameters/{categoryId}
+    pattern: /adminCatalog/categoryParameters/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameters }
 
 category_parameter:
-    pattern: /admin/categoryParameter/{categoryId}/{id}
+    pattern: /adminCatalog/categoryParameter/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameter, id: null }
 
 delete_category_parameter:
-    pattern: /admin/deleteCategoryParameter/{id}
+    pattern: /adminCatalog/deleteCategoryParameter/{id}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategoryParameter }
 
 update_category_parameters:
-    pattern: /admin/updateCategoryParameters/{categoryId}
+    pattern: /adminCatalog/updateCategoryParameters/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:updateCategoryParameters }
 
 proposals:
-    pattern: /admin/proposals/{categoryId}
+    pattern: /adminCatalog/proposals/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }
 
 proposal:
-    pattern: /admin/proposal/{categoryId}/{id}
+    pattern: /adminCatalog/proposal/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, id: null }
 
 delete_proposal:
-    pattern: /admin/deleteProposal/{id}
+    pattern: /adminCatalog/deleteProposal/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposal }
 
 proposal_price:
-    pattern: /admin/proposalPrice/{proposalId}/{id}
+    pattern: /adminCatalog/proposalPrice/{proposalId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }
 
 proposal_prices:
-    pattern: /admin/proposalPrices/{id}
+    pattern: /adminCatalog/proposalPrices/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrices }
 
 delete_proposal_price:
-    pattern: /admin/deleteProposalPrice/{id}
+    pattern: /adminCatalog/deleteProposalPrice/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalPrice }
 
 proposal_image:
-    pattern: /admin/proposalImages/{proposalId}/image/{id}
+    pattern: /adminCatalog/proposalImages/{proposalId}/image/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImage, id: null }
 
 proposal_set_main_image:
-    pattern: /admin/proposalImages/{proposalId}/setMainImage/{id}
+    pattern: /adminCatalog/proposalImages/{proposalId}/setMainImage/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalSetMainImage }
 
 proposal_images:
-    pattern: /admin/proposalImages/{id}
+    pattern: /adminCatalog/proposalImages/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImages }
 
 delete_proposal_image:
-    pattern: /admin/proposalImages/{proposalId}/deleteImage/{id}
+    pattern: /adminCatalog/proposalImages/{proposalId}/deleteImage/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalImage }
 
 manufacturers:
-    pattern: /admin/manufacturers
+    pattern: /adminCatalog/manufacturers
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturers }
 
 manufacturer:
-    pattern: /admin/manufacturer/{id}
+    pattern: /adminCatalog/manufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturer, id: null }
 
 delete_manufacturer:
-    pattern: /admin/deleteManufacturer/{id}
+    pattern: /adminCatalog/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
 
 actions:
@@ -128,14 +128,6 @@ shop_cart_order:
     pattern: /shopCart/order
     defaults: { _controller: ShopCatalogBundle:ShopCart:order }
 
-orders:
-    pattern: /manager/orders
-    defaults: { _controller: ShopCatalogBundle:AdminOrder:orders }
-
-order:
-    pattern: /manager/order/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminOrder:order }
-
 contractors:
     pattern: /admin/contractors
     defaults: { _controller: ShopCatalogBundle:AdminContractor:contractors }
@@ -157,27 +149,27 @@ delete_contractor_currency:
     defaults: { _controller: ShopCatalogBundle:AdminContractor:deleteContractorCurrency }
 
 price_lists:
-    pattern: /admin/priceLists
+    pattern: /adminCatalog/priceLists
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }
 
 price_list:
-    pattern: /admin/priceList/{id}
+    pattern: /adminCatalog/priceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList, id: null }
 
 price_list_aliases:
-    pattern: /admin/priceListAliases/{id}
+    pattern: /adminCatalog/priceListAliases/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListsAliases }
 
 download_price_list:
-    pattern: /admin/downloadPriceList/{id}
+    pattern: /adminCatalog/downloadPriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:downloadPriceList }
 
 parse_price_list:
-    pattern: /admin/parsePriceList/{id}
+    pattern: /adminCatalog/parsePriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:parsePriceList }
 
 delete_price_list:
-    pattern: /admin/deletePriceList/{id}
+    pattern: /adminCatalog/deletePriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:deletePriceList }
 
 shipping_methods:

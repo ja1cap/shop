@@ -3,13 +3,49 @@ shop_user_homepage:
     defaults: { _controller: ShopUserBundle:Default:index }
 
 admin_users:
-    pattern: /admin/users
-    defaults: { _controller: ShopUserBundle:AdminUser:users }
+    pattern: /admin/users/{group_id}
+    defaults: { _controller: ShopUserBundle:AdminUser:users, group_id: null }
 
-admin_user:
-    pattern: /admin/user/{id}
-    defaults: { _controller: ShopUserBundle:AdminUser:user, id: null }
+admin_users_user:
+    pattern: /admin/user/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:user, id: null, group_id: null }
 
-admin_delete_user:
-    pattern: /admin/deleteUser/{id}
-    defaults: { _controller: ShopUserBundle:AdminUser:deleteUser }
+admin_users_delete_user:
+    pattern: /admin/deleteUser/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:deleteUser, group_id: null }
+
+admin_admins:
+    pattern: /admin/administrators/{group_id}
+    defaults: { _controller: ShopUserBundle:AdminUser:users, group_id: null }
+
+admin_admins_user:
+    pattern: /admin/administrator/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:user, id: null, group_id: null }
+
+admin_admins_delete_user:
+    pattern: /admin/deleteAdministrator/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:deleteUser, group_id: null }
+
+admin_managers:
+    pattern: /admin/managers/{group_id}
+    defaults: { _controller: ShopUserBundle:AdminManager:managers, group_id: null }
+
+admin_manager_contractors:
+    pattern: /admin/manager/{id}/contractors
+    defaults: { _controller: ShopUserBundle:AdminManager:managerContractors }
+
+admin_manager_contractor:
+    pattern: /admin/manager/{manager_id}/contractor/{id}
+    defaults: { _controller: ShopUserBundle:AdminManager:managerContractor, id: null }
+
+admin_manager_delete_contractor:
+    pattern: /admin/manager/{manager_id}/deleteContractor/{id}
+    defaults: { _controller: ShopUserBundle:AdminManager:managerDeleteContractor }
+
+admin_managers_user:
+    pattern: /admin/manager/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:user, id: null, group_id: null }
+
+admin_managers_delete_user:
+    pattern: /admin/deleteManager/{group_id}/{id}
+    defaults: { _controller: ShopUserBundle:AdminUser:deleteUser, group_id: null }

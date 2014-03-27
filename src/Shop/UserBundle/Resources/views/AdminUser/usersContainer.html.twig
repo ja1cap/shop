@@ -1,0 +1,54 @@
+{% block users_container %}
+    <div id="{{ 'group' ~ currentGroup.id }}">
+
+        <div class="medium primary btn">
+            <a href="{{ path('admin_' ~ currentGroup.route_prefix|default('users') ~ '_user', { 'group_id': currentGroup.id }) }}">
+                Добавить
+            </a>
+        </div>
+
+        {% if users %}
+            <table style="margin: 10px 0">
+                <thead>
+                <tr>
+                    <th>
+                        Логин
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.username }}
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+                        <td>
+                            {% block user_buttons %}
+                                <div class="medium btn default icon-left entypo icon-pencil">
+                                    <a href="{{ path('admin_' ~ currentGroup.route_prefix|default('users') ~ '_user', {'id' : user.id, 'group_id': currentGroup.id }) }}">
+                                        Изменить
+                                    </a>
+                                </div>
+                                <div class="medium btn danger icon-left entypo icon-trash">
+                                    <a href="{{ path('admin_' ~ currentGroup.route_prefix|default('users') ~ '_delete_user', {'id' : user.id, 'group_id': currentGroup.id }) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        Удалить
+                                    </a>
+                                </div>
+                            {% endblock %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+    </div>
+{% endblock %}

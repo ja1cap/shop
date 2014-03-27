@@ -46,16 +46,15 @@ class AdminUserType extends UserType {
             ),
         ));
 
-        $builder->add('roles', 'choice', array(
-            'required' => false,
-            'multiple' => true,
-            'label' => 'Должности',
-            'choices' => array(
-//                'ROLE_USER' => 'Пользователь',
-                'ROLE_MANAGER' => 'Менеджер',
-                'ROLE_ADMIN' => 'Администратор',
-            ),
-        ));
+//        $builder->add('roles', 'choice', array(
+//            'required' => false,
+//            'multiple' => true,
+//            'label' => 'Должности',
+//            'choices' => array(
+//                'ROLE_MANAGER' => 'Менеджер',
+//                'ROLE_ADMIN' => 'Администратор',
+//            ),
+//        ));
 
         $builder->add('save', 'submit', array(
             'label' => 'Сохранить',

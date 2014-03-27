@@ -4,6 +4,8 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shop\MainBundle\Entity\AbstractEntity;
+use Shop\UserBundle\Entity\Courier;
+use Shop\UserBundle\Entity\AbstractUser;
 
 /**
  * Class CustomerOrderProposal
@@ -174,7 +176,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function serialize()
     {
         return serialize(array(
-            'orderId' => $this->getOrder()->getId(),
             'proposalId' => $this->getProposal()->getId(),
             'priceId' => $this->getPrice()->getId(),
             'priceValue' => $this->getPriceValue(),
@@ -196,4 +197,95 @@ class CustomerOrderProposal extends AbstractEntity
         // TODO: Implement unserialize() method.
     }
 
+    /**
+     * @var integer
+     */
+    private $status;
+
+    /**
+     * @var \Shop\UserBundle\Entity\AbstractUser
+     */
+    private $manager;
+
+    /**
+     * @var \Shop\UserBundle\Entity\Courier
+     */
+    private $courier;
+
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return CustomerOrderProposal
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set manager
+     *
+     * @param \Shop\UserBundle\Entity\AbstractUser $manager
+     * @return CustomerOrderProposal
+     */
+    public function setManager(AbstractUser $manager = null)
+    {
+        $this->manager = $manager;
+
+        return $this;
+    }
+
+    /**
+     * Get manager
+     *
+     * @return \Shop\UserBundle\Entity\AbstractUser
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getManagerId(){
+        return $this->getManager() ? $this->getManager()->getId() : null;
+    }
+
+    /**
+     * Set courier
+     *
+     * @param \Shop\UserBundle\Entity\Courier $courier
+     * @return CustomerOrderProposal
+     */
+    public function setCourier(Courier $courier = null)
+    {
+        $this->courier = $courier;
+
+        return $this;
+    }
+
+    /**
+     * Get courier
+     *
+     * @return \Shop\UserBundle\Entity\Courier 
+     */
+    public function getCourier()
+    {
+        return $this->courier;
+    }
 }

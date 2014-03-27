@@ -5,10 +5,10 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_MANAGER:     ROLE_USER
-        ROLE_ADMIN:       ROLE_MANAGER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-
+        ROLE_MANAGER:       ROLE_USER
+        ROLE_CATALOG_ADMIN: ROLE_USER
+        ROLE_ADMIN:         [ROLE_MANAGER, ROLE_CATALOG_ADMIN]
+        ROLE_SUPER_ADMIN:   [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     providers:
 #        in_memory:
 #            memory:
@@ -49,5 +49,6 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/manager, roles: ROLE_MANAGER }
-        - { path: ^/admin$, roles: ROLE_MANAGER }
+        - { path: ^/admin$, roles: [ROLE_CATALOG_ADMIN, ROLE_MANAGER, ROLE_ADMIN] }
+        - { path: ^/adminCatalog/, roles: ROLE_CATALOG_ADMIN }
         - { path: ^/admin/, roles: ROLE_ADMIN }

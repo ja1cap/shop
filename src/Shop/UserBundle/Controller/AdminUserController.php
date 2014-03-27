@@ -2,7 +2,8 @@
 
 namespace Shop\UserBundle\Controller;
 
-use Shop\UserBundle\Entity\User;
+use Shop\UserBundle\Entity\AbstractUser;
+use Shop\UserBundle\Entity\UserGroup;
 use Shop\UserBundle\Form\Type\AdminUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,42 +16,109 @@ class AdminUserController extends Controller
 {
 
     /**
+     * @param $group_id
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function usersAction()
+    public function usersAction($group_id, Request $request)
     {
 
-        $users = $this->getDoctrine()->getRepository('ShopUserBundle:User')->findBy(
+        $groupRepository = $this->getDoctrine()->getRepository('ShopUserBundle:UserGroup');
+
+        $groups = $groupRepository->findBy(
             array(),
             array(
-                'username' => 'ASC'
+                'name' => 'ASC'
             )
         );
 
-        return $this->render('ShopUserBundle:AdminUser:users.html.twig', array(
-            'users' => $users
+        $currentGroup = $group_id ? $groupRepository->findOneBy(array('id' => $group_id)) : null;
+
+        if($currentGroup instanceof UserGroup){
+
+            $groupRoute = 'admin_' . $currentGroup->getRoutePrefix();
+
+            if($request->get('_route') != $groupRoute){
+                $this->redirect($this->generateUrl($groupRoute, array('group_id' => $currentGroup->getId())));
+            }
+
+            $users = $currentGroup->getUsers()->toArray();
+
+        } else {
+
+            $users = $this->getDoctrine()->getRepository('ShopUserBundle:User')->findBy(
+                array(),
+                array(
+                    'username' => 'ASC'
+                )
+            );
+
+        }
+
+        $templateName = 'ShopUserBundle:AdminUser:users.html.twig';
+        $usersContainerTemplateName = 'ShopUserBundle:AdminUser:usersContainer.html.twig';
+
+        if($request->get('ajax_tab')){
+            $templateName = $usersContainerTemplateName;
+        }
+
+        return $this->render($templateName, array(
+            'users' => $users,
+            'groups' => $groups,
+            'currentGroup' => $currentGroup,
+            'usersContainerTemplateName' => $usersContainerTemplateName,
         ));
 
     }
 
     /**
+     * @param $group_id
      * @param $id
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function userAction($id, Request $request)
+    public function userAction($group_id, $id, Request $request)
     {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $groupRoute = 'admin_users';
+        $groupUserClassName = '\Shop\UserBundle\Entity\User';
+
+        $groupRepository = $this->getDoctrine()->getRepository('ShopUserBundle:UserGroup');
+        $currentGroup = $group_id ? $groupRepository->findOneBy(array('id' => $group_id)) : null;
+
+        if($currentGroup instanceof UserGroup){
+
+            $groupRoute = 'admin_' . $currentGroup->getRoutePrefix();
+            $groupUserRoute =  $groupRoute . '_user';
+            $groupUserClassName = $currentGroup->getUserClassName();
+
+            if($request->get('_route') != $groupUserRoute){
+                $this->redirect($this->generateUrl($groupUserRoute, array('group_id' => $currentGroup->getId())));
+            }
+
+        }
+
+        $usersRepository = $em->getRepository($groupUserClassName);
+
         /**
          * @var $userManager \FOS\UserBundle\Doctrine\UserManager
          */
         $userManager = $this->get('fos_user.user_manager');
-        $em = $this->getDoctrine()->getManager();
 
-        $user = $id ? $em->getRepository('ShopUserBundle:User')->findOneBy(array('id' => $id)) : null;
+        $user = $id ? $usersRepository->findOneBy(array('id' => $id)) : null;
 
-        if(!$user instanceof User){
-            $user = $userManager->createUser();
+        if(!$id && !$user instanceof AbstractUser){
+
+            /**
+             * @var $user AbstractUser
+             */
+            $user = new $groupUserClassName;
             $user->setEnabled(true);
+
+            $user->addGroup($currentGroup);
+
         }
 
         $form = $this->createForm(new AdminUserType(), $user);
@@ -60,8 +128,7 @@ class AdminUserController extends Controller
         if ($form->isValid()) {
 
             $userManager->updateUser($user);
-
-            return $this->redirect($this->generateUrl('admin_users'));
+            return $this->redirect($this->generateUrl($groupRoute, array('group_id' => $group_id)));
 
         }
 
@@ -69,20 +136,41 @@ class AdminUserController extends Controller
             'ShopUserBundle:AdminUser:user.html.twig',
             array(
                 'title' => $user->getId() ? 'Изменение пользователя' : 'Добавление пользователя',
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'user' => $user,
+                'currentGroup' => $currentGroup,
             )
         );
 
     }
 
     /**
+     * @param $group_id
      * @param $id
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteUserAction($id)
+    public function deleteUserAction($group_id, $id, Request $request)
     {
 
-        $entity = $this->getDoctrine()->getManager()->getRepository('ShopUserBundle:User')->findOneBy(array(
+        $groupRoute = 'admin_users';
+        $groupUserClassName = '\Shop\UserBundle\Entity\User';
+
+        $groupRepository = $this->getDoctrine()->getRepository('ShopUserBundle:UserGroup');
+        $currentGroup = $group_id ? $groupRepository->findOneBy(array('id' => $group_id)) : null;
+
+        if($currentGroup instanceof UserGroup){
+
+            $groupRoute = 'admin_' . $currentGroup->getRoutePrefix();
+            $groupUserClassName = $currentGroup->getUserClassName();
+
+            if($request->get('_route') != $groupRoute){
+                $this->redirect($this->generateUrl($groupRoute, array('group_id' => $currentGroup->getId())));
+            }
+
+        }
+
+        $entity = $this->getDoctrine()->getManager()->getRepository($groupUserClassName)->findOneBy(array(
             'id' => $id
         ));
 
@@ -94,7 +182,7 @@ class AdminUserController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('admin_users'));
+        return $this->redirect($this->generateUrl($groupRoute, array('group_id' => $group_id)));
 
     }
 

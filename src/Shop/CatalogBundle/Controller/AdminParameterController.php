@@ -162,7 +162,7 @@ class AdminParameterController extends Controller
             'id' => $id
         ));
 
-        if($entity){
+        if($entity instanceof ParameterOption){
 
             $em = $this->getDoctrine()->getManager();
             $em->remove($entity);
@@ -170,6 +170,8 @@ class AdminParameterController extends Controller
             //@TODO update position of options that has current position greater then position of deleted option
 
             $em->flush();
+
+            return $this->redirect($this->generateUrl('parameter', array('id' => $entity->getParameterId())));
 
         }
 

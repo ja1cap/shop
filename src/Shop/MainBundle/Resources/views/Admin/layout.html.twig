@@ -5,14 +5,14 @@
         {{ include("ShopMainBundle:Admin:header.html.twig") }}
         {% block content %}
             <div class="row vertical tabs">
-                {% block left_bar %}
-                    {{ include("ShopMainBundle:Admin:menu.html.twig") }}
-                {% endblock %}
-                <div class="nine columns tab-content active">
+                {#{% block left_bar %}#}
+                    {#{{ include("ShopMainBundle:Admin:menu.html.twig") }}#}
+                {#{% endblock %}#}
+                {#<div class="nine columns tab-content active">#}
                     {% block right_bar %}
                         {{ form(form) }}
                     {% endblock %}
-                </div>
+                {#</div>#}
             </div>
         {% endblock %}
     </div>

@@ -2017,11 +2017,13 @@ body {
 
 .admin-container {
 
-  padding-top: 90px;
   background: white;
+  padding-bottom: 20px;
 
   .header-container {
 
+    margin-bottom: 20px;
+    position: relative;
     color: white;
     background: #4a4d50;
     @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px);
@@ -2170,7 +2172,8 @@ body {
       padding-top: 0px;
     }
 
-    .tab-nav > li {
+    .tab-nav.navigation-menu > li {
+
       padding: 0;
       margin: 0;
 

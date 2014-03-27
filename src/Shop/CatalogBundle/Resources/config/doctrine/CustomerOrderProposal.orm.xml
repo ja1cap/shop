@@ -8,12 +8,28 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <!--@TODO different employers can set only statuses that are available for them-->
+        <!--@TODO create multiple statuses for order, shipping, contractor payment, customer payment etc.-->
+        <field name="status" type="integer"/>
+
         <field name="amount" type="integer" column="amount"/>
         <field name="priceValue" type="string" column="priceValue" length="255"/>
 
         <many-to-one target-entity="CustomerOrder" field="order">
             <join-columns>
                 <join-column name="orderId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one target-entity="Shop\UserBundle\Entity\AbstractUser" field="manager">
+            <join-columns>
+                <join-column name="managerId" referenced-column-name="id" nullable="true"/>
+            </join-columns>
+        </many-to-one>
+
+        <many-to-one target-entity="Shop\UserBundle\Entity\Courier" field="courier">
+            <join-columns>
+                <join-column name="courierId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
 

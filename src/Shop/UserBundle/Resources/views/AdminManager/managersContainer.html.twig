@@ -1,0 +1,9 @@
+{% extends "ShopUserBundle:AdminUser:usersContainer.html.twig" %}
+{% block user_buttons %}
+    <div class="medium btn secondary icon-left entypo icon-archive">
+        <a href="{{ path('admin_manager_contractors', { 'id' : user.id }) }}">
+            Контрагенты и категории
+        </a>
+    </div>
+    {{ parent() }}
+{% endblock %}

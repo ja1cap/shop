@@ -1,0 +1,64 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ manager.username|capitalize }} - контрагенты и категории{% endblock %}
+
+{% block right_bar %}
+
+    {{ include('ShopUserBundle:AdminManager:breadcrumb/managerContractorsBreadcrumb.html.twig') }}
+
+    <div class="medium primary btn">
+        <a href="{{ path('admin_manager_contractor', { 'manager_id' : manager.id }) }}">
+            Добавить контрагента
+        </a>
+    </div>
+
+    {% if not manager.contractors.isEmpty %}
+        <table style="margin: 10px 0;">
+            <thead>
+            <tr>
+                <th>
+                    Контрагент
+                </th>
+                <th>
+                    Категории
+                </th>
+                <th>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for managerContractor in manager.contractors %}
+                <tr>
+                    <td>
+                        {% if managerContractor.allContractors %}
+                            Все
+                        {% else %}
+                            {{ managerContractor.contractor.name }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if managerContractor.allCategories %}
+                            Все
+                        {% else %}
+                            {{ managerContractor.categoriesNames|join(', ') }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="medium btn default icon-left entypo icon-pencil">
+                            <a href="{{ path('admin_manager_contractor', { 'manager_id' : manager.id, 'id' : managerContractor.id}) }}">
+                                Изменить
+                            </a>
+                        </div>
+                        <div class="medium btn danger icon-left entypo icon-trash">
+                            <a href="{{ path('admin_manager_delete_contractor', { 'manager_id' : manager.id, 'id' : managerContractor.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

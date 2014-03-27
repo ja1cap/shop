@@ -1,0 +1,90 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Управление заказами{% endblock %}
+
+{% block right_bar %}
+
+    {#<div class="medium primary btn">#}
+        {#<a href="{{ path('manufacturer') }}">#}
+            {#Добавить производителя#}
+        {#</a>#}
+    {#</div>#}
+
+    {% if orders %}
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Покупатель
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        {{ order.id }}
+                    </td>
+                    <td>
+                        {{ order.customerName }}
+                        <br/>
+                        {{ order.customerPhone }}
+                        {% if order.customerEmail %}
+                            <br/>
+                            {{ order.customerEmail }}
+                        {% endif %}
+                        {% if order.customerComment %}
+                            <br/>
+                            {{ order.customerComment }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <ul>
+                            {#@TODO 13 - 21, 17-18#}
+                            {% for customerProposal in order.proposals %}
+                                <li>
+                                    <div>
+                                        {{ customerProposal.proposal.title }}
+                                    </div>
+                                    <div>
+                                        {{ customerProposal.priceValue|number_format(0, '.', ' ') }}
+                                        x
+                                        {{ customerProposal.amount }}
+                                        =
+                                        {{ (customerProposal.priceValue * customerProposal.amount)|number_format(0, '.', ' ') }} руб
+                                    </div>
+                                    {% if order_proposal_security_is_granted('set manager', customerProposal) %}
+                                        <div>
+                                            <a href="">
+                                                {{ 'Set me as order proposal manager'|trans }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    {% if order_proposal_security_is_granted('view', customerProposal) %}
+                                        <div>
+                                            <a href="">
+                                                {{ 'View order proposal'|trans }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="medium btn default icon-left entypo icon-info">
+                            <a href="{{ path('order', {'id' : order.id}) }}">
+                                Подробнее
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}

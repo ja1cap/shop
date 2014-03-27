@@ -1,0 +1,16 @@
+<div class="breadcrumb">
+    <ul>
+        {% block breadcrumb_items %}
+            <li class="medium btn default">
+                <a href="{{ path('admin_' ~ (currentGroup.routePrefix|default('users')), {'group_id':currentGroup.id}) }}">
+                    {{ currentGroup.name|default('Пользователи') }}
+                </a>
+            </li>
+            <li class="medium btn default">
+                <a href="{{ path('admin_' ~ (currentGroup.routePrefix|default('users')) ~ '_user', {'group_id':currentGroup.id, 'id':user.id}) }}">
+                    {{ user.username|capitalize|default('Добавление') }}
+                </a>
+            </li>
+        {% endblock %}
+    </ul>
+</div>

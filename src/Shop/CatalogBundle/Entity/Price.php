@@ -373,4 +373,60 @@ class Price extends AbstractEntity {
     {
         return $this->status;
     }
+    /**
+     * @var integer
+     */
+    private $warehouseAmount;
+
+    /**
+     * @var \DateTime
+     */
+    private $warehouseAmountUpdateDate;
+
+
+    /**
+     * Set warehouseAmount
+     *
+     * @param integer $warehouseAmount
+     * @return Price
+     */
+    public function setWarehouseAmount($warehouseAmount)
+    {
+        $this->warehouseAmount = $warehouseAmount;
+
+        return $this;
+    }
+
+    /**
+     * Get warehouseAmount
+     *
+     * @return integer 
+     */
+    public function getWarehouseAmount()
+    {
+        return $this->warehouseAmount;
+    }
+
+    /**
+     * Set warehouseAmountUpdateDate
+     *
+     * @param \DateTime $warehouseAmountUpdateDate
+     * @return Price
+     */
+    public function setWarehouseAmountUpdateDate($warehouseAmountUpdateDate)
+    {
+        $this->warehouseAmountUpdateDate = $warehouseAmountUpdateDate;
+
+        return $this;
+    }
+
+    /**
+     * Get warehouseAmountUpdateDate
+     *
+     * @return \DateTime 
+     */
+    public function getWarehouseAmountUpdateDate()
+    {
+        return $this->warehouseAmountUpdateDate;
+    }
 }

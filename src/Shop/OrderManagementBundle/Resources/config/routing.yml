@@ -1,0 +1,10 @@
+shop_order_management_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ShopOrderManagementBundle:Default:index }
+orders:
+    pattern: /manager/orders
+    defaults: { _controller: ShopOrderManagementBundle:AdminOrder:orders }
+
+order:
+    pattern: /manager/order/{id}
+    defaults: { _controller: ShopOrderManagementBundle:AdminOrder:order }

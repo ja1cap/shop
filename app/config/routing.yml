@@ -1,3 +1,7 @@
+shop_order_management:
+    resource: "@ShopOrderManagementBundle/Resources/config/routing.yml"
+    prefix:   /
+
 shop_user:
     resource: "@ShopUserBundle/Resources/config/routing.yml"
     prefix:   /

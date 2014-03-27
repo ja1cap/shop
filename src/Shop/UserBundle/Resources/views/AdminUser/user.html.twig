@@ -3,5 +3,6 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block right_bar %}
+    {{ include('ShopUserBundle:AdminUser:breadcrumb/userBreadcrumb.html.twig') }}
     {{ form(form) }}
 {% endblock %}

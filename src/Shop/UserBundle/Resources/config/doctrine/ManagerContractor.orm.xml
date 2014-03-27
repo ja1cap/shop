@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\UserBundle\Entity\ManagerContractor">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="managerId" type="integer" column="managerId"/>
+        <field name="contractorId" type="integer" column="contractorId" nullable="true"/>
+        <field name="allContractors" type="boolean" column="allContractors"/>
+        <field name="allCategories" type="boolean" column="allCategories"/>
+        <many-to-one target-entity="Manager" field="manager">
+            <join-columns>
+                <join-column name="managerId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one target-entity="Shop\CatalogBundle\Entity\Contractor" field="contractor">
+            <join-columns>
+                <join-column name="contractorId" referenced-column-name="id" nullable="true"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-many target-entity="Shop\CatalogBundle\Entity\Category" field="categories">
+            <order-by>
+                <order-by-field name="name" direction="ASC"/>
+            </order-by>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

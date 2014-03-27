@@ -1,0 +1,8 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ manager.username|capitalize }} - контрагенты и категории{% endblock %}
+
+{% block right_bar %}
+    {{ include('ShopUserBundle:AdminManager:breadcrumb/managerContractorBreadcrumb.html.twig') }}
+    {{ form(form) }}
+{% endblock %}

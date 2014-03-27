@@ -704,7 +704,7 @@ class AdminPriceListController extends Controller
         }
 
         $path = $priceList->getPriceListFilePath();
-        $content = file_get_contents($path);
+        $content = @file_get_contents($path);
 
         $response = new Response();
 

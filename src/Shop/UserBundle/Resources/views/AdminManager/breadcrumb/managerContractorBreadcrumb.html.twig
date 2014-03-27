@@ -1,0 +1,9 @@
+{% extends 'ShopUserBundle:AdminManager:breadcrumb/managerContractorsBreadcrumb.html.twig' %}
+{% block breadcrumb_items %}
+    {{ parent() }}
+    <li class="medium btn default">
+        <a href="{{ path('admin_manager_contractor', {'manager_id' : manager.id, 'id' : managerContractor.id}) }}">
+            {{ managerContractor.id ? 'Изменение' : 'Добавление' }}
+        </a>
+    </li>
+{% endblock %}

@@ -20,14 +20,15 @@
         <field name="customerEmail" type="string" column="customerEmail" length="255" nullable="true"/>
         <field name="customerComment" type="text" column="customerComment" nullable="true"/>
 
+        <!--@TODO duplicate dates and comments in customer order entity-->
         <field name="createDate" type="datetime" column="createDate"/>
         <field name="acceptDate" type="datetime" column="acceptDate" nullable="true"/>
         <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
         <field name="denyDate" type="datetime" column="denyDate" nullable="true"/>
         <field name="denyComment" type="text" column="denyComment" nullable="true"/>
 
-        <field name="currentSerializedProposals" column="currentSerializedProposals" type="array" />
-        <field name="previousSerializedProposalsIds" column="previousSerializedProposals" type="array" />
+        <field name="currentSerializedProposals" column="currentSerializedProposals" type="array" nullable="true" />
+        <field name="previousSerializedProposalsIds" column="previousSerializedProposals" type="array" nullable="true" />
 
         <one-to-many target-entity="CustomerOrderProposal" mapped-by="order" field="proposals">
             <cascade>

@@ -8,12 +8,14 @@
         </a>
     </li>
 {% endif %}
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
     <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
         <a href="{{ path('categories') }}" class="">
             Каталог
         </a>
     </li>
+{% endif %}
+{% if is_granted(['ROLE_ADMIN']) %}
     <li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
         <a href="{{ path('shipping_methods') }}" class="">
             Способы доставки

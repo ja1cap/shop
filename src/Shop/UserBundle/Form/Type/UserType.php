@@ -36,16 +36,6 @@ class UserType extends AbstractType {
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Shop\UserBundle\Entity\User'
-        ));
-    }
-
-    /**
      * Returns the name of this type.
      *
      * @return string The name of this type

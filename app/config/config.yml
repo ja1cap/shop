@@ -85,7 +85,9 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Shop\UserBundle\Entity\User
+    user_class: Shop\UserBundle\Entity\AbstractUser
+    group:
+        group_class: Shop\UserBundle\Entity\UserGroup
 
 simple_things_entity_audit:
     audited_entities:

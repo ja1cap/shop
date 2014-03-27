@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Shop\UserBundle\ShopUserBundle(),
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
+            new Shop\OrderManagementBundle\ShopOrderManagementBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

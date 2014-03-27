@@ -15,6 +15,9 @@
         <field name="value" type="integer" column="value"/>
         <field name="currencyNumericCode" type="integer" column="currencyNumericCode"/>
 
+        <field name="warehouseAmount" type="integer"/>
+        <field name="warehouseAmountUpdateDate" type="datetime"/>
+
         <one-to-many target-entity="ParameterValue" mapped-by="price" field="parameterValues">
             <cascade>
                 <cascade-persist/>

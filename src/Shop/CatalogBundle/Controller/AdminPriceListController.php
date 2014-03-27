@@ -182,6 +182,22 @@ class AdminPriceListController extends Controller
 
             if($identifiersRow){
 
+                $parameters = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findBy(
+                    array(),
+                    array(
+                        'name' => 'ASC',
+                    )
+                );
+
+                $parametersNames = array();
+
+                /**
+                 * @var $parameter \Shop\CatalogBundle\Entity\Parameter
+                 */
+                foreach($parameters as $parameter){
+                    $parametersNames[$parameter->getId()] = $parameter->getName();
+                }
+
                 $identifiers = array();
 
                 /**
@@ -205,6 +221,32 @@ class AdminPriceListController extends Controller
 
                     }
 
+                    if(!$alias){
+
+                        $maxPercent = 0;
+                        $mostRelevantParameterId = null;
+                        $mostRelevantParameterName = null;
+
+                        foreach($parametersNames as $parameterId => $parameterName){
+
+                            $formattedParameterName = trim(mb_strtolower($parameterName, 'UTF-8'));
+                            similar_text($formattedParameterName, $title, $percent);
+
+                            if($percent > 75 && $percent > $maxPercent){
+
+                                $maxPercent = $percent;
+                                $mostRelevantParameterId = $parameterId;
+
+                            }
+
+                        }
+
+                        if($mostRelevantParameterId){
+                            $alias = PriceListAlias::ALIAS_PARAMETER_PREFIX . $mostRelevantParameterId;
+                        }
+
+                    }
+
                     $identifiers[$cell->getColumn()] = array(
                         'column' => $cell->getColumn(),
                         'alias' => $alias,
@@ -213,7 +255,6 @@ class AdminPriceListController extends Controller
                     );
 
                 }
-
 
             } else {
 
@@ -229,18 +270,11 @@ class AdminPriceListController extends Controller
                 $options[$alias] = $aliasTitle;
             }
 
-            $parameters = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findBy(
-                array(),
-                array(
-                    'name' => 'ASC',
-                )
-            );
-
             /**
              * @var $parameter \Shop\CatalogBundle\Entity\Parameter
              */
             foreach($parameters as $parameter){
-                $options[PriceListAlias::ALIAS_PARAMETER_PREFIX . $parameter->getId()] = 'Параметр - ' . $parameter->getName();
+                $options[PriceListAlias::ALIAS_PARAMETER_PREFIX . $parameter->getId()] = $parameter->getName() . ' (параметр)';
             }
 
             $categories = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(
@@ -657,9 +691,6 @@ class AdminPriceListController extends Controller
             }
 
         }
-
-//        var_dump($groupedRowsData);
-//        die;
 
         $priceList->setStatus(PriceList::STATUS_PARSED);
         $priceList->setUpdateDate(new \DateTime());

@@ -80,7 +80,7 @@ abstract class AbstractEntity implements \ArrayAccess {
                 if($file instanceof UploadedFile){
 
                     $filename = sha1(uniqid(mt_rand(), true));
-                    $this->offsetSet($file_name_field, $filename.'.'.$file->guessExtension());
+                    $this->offsetSet($file_name_field, $filename.'.'.$file->getClientOriginalExtension());
 
                 }
 

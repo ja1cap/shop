@@ -325,7 +325,7 @@ class PriceListParser {
 
                     $proposalParametersValues = $proposalsParametersValues[$proposalName];
 
-                    $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em->getManager(), $proposal);
+                    $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
                     $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
 
                 }
@@ -364,7 +364,7 @@ class PriceListParser {
 
                         $parameterValuesData = $priceData['parametersValues'];
                         if($parameterValuesData){
-                            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em->getManager(), $price);
+                            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em, $price);
                             $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
                         }
 
@@ -389,7 +389,7 @@ class PriceListParser {
 
                     $parameterValuesData = $priceData['parametersValues'];
                     if($parameterValuesData){
-                        $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em->getManager(), $price);
+                        $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em, $price);
                         $priceParameterValuesMapper->mapParameterValues($parameterValuesData, false);
                     }
 

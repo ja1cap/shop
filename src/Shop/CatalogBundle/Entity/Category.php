@@ -61,6 +61,24 @@ class Category extends AbstractEntity
     private $multipleName;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $parameterGroups;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $parameters;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->parameters = new ArrayCollection();
+        $this->parameterGroups = new ArrayCollection();
+    }
+    /**
      * @var array
      */
     public static $statuses = array(
@@ -200,18 +218,6 @@ class Category extends AbstractEntity
     public function getMultipleName()
     {
         return $this->multipleName ?: $this->getName();
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $parameters;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->parameters = new ArrayCollection();
     }
 
     /**
@@ -358,5 +364,38 @@ class Category extends AbstractEntity
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Add parameterGroups
+     *
+     * @param \Shop\CatalogBundle\Entity\CategoryParameterGroup $parameterGroup
+     * @return Category
+     */
+    public function addParameterGroup(CategoryParameterGroup $parameterGroup)
+    {
+        $this->parameterGroups[] = $parameterGroup;
+        $parameterGroup->setCategory($this);
+        return $this;
+    }
+
+    /**
+     * Remove parameterGroups
+     *
+     * @param \Shop\CatalogBundle\Entity\CategoryParameterGroup $parameterGroups
+     */
+    public function removeParameterGroup(CategoryParameterGroup $parameterGroups)
+    {
+        $this->parameterGroups->removeElement($parameterGroups);
+    }
+
+    /**
+     * Get parameterGroups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParameterGroups()
+    {
+        return $this->parameterGroups;
     }
 }

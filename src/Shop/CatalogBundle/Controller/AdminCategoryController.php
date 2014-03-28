@@ -4,6 +4,7 @@ namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryParameter;
+use Shop\CatalogBundle\Entity\CategoryParameterGroup;
 use Shop\CatalogBundle\Form\Type\CategoryParameterType;
 use Shop\CatalogBundle\Form\Type\CategoryType;
 use Shop\CatalogBundle\Entity\CategoryParameterRepository;
@@ -264,6 +265,66 @@ class AdminCategoryController extends Controller
         }
 
         return new JsonResponse('OK');
+
+    }
+
+    /**
+     * @param $categoryId
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function categoryParameterGroupAction($categoryId, $id, Request $request){
+
+        //МКОНДОР-K-101-80x190;
+
+        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+            'id' => $categoryId,
+        ));
+
+        if(!$category instanceof Category){
+            return $this->redirect($this->generateUrl('categories'));
+        }
+
+        $categoryParameterGroupRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryParameterGroup');
+        $categoryParameterGroup = $categoryParameterGroupRepository->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$categoryParameterGroup instanceof CategoryParameterGroup){
+            $categoryParameterGroup = new CategoryParameterGroup();
+        }
+
+        $isNew = !$categoryParameterGroup->getId();
+
+        $form = $this->createForm(new CategoryParameterType($category), $categoryParameterGroup);
+
+        $form->handleRequest($request);
+
+        if($request->getMethod() == 'POST' && $form->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+
+            if($isNew){
+                $category->addParameterGroup($categoryParameterGroup);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('category_parameters', array(
+                'categoryId' => $category->getId(),
+            )));
+
+        } else {
+
+            return $this->render('ShopCatalogBundle:AdminCategory:categoryParameterGroup.html.twig', array(
+                'title' => $isNew ? 'Добавление группы параметров' : 'Изменение группы параметров',
+                'form' => $form->createView(),
+                'category' => $category,
+                'category_parameter_group' => $categoryParameterGroup,
+            ));
+
+        }
 
     }
 

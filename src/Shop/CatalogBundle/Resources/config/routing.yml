@@ -54,6 +54,14 @@ update_category_parameters:
     pattern: /adminCatalog/updateCategoryParameters/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminCategory:updateCategoryParameters }
 
+category_parameter_group:
+    pattern: /adminCatalog/categoryParameterGroup/{categoryId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameterGroup, id: null }
+
+delete_category_parameter_group:
+    pattern: /adminCatalog/deleteCategoryParameterGroup/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup }
+
 proposals:
     pattern: /adminCatalog/proposals/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }

@@ -221,4 +221,60 @@ class CategoryParameter
     {
         return $this->name ?: ($this->getParameter() ? $this->getParameter()->getName() : null);
     }
+    /**
+     * @var integer
+     */
+    private $groupId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\CategoryParameterGroup
+     */
+    private $group;
+
+
+    /**
+     * Set groupId
+     *
+     * @param integer $groupId
+     * @return CategoryParameter
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    /**
+     * Get groupId
+     *
+     * @return integer 
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
+     * Set group
+     *
+     * @param \Shop\CatalogBundle\Entity\CategoryParameterGroup $group
+     * @return CategoryParameter
+     */
+    public function setGroup(CategoryParameterGroup $group = null)
+    {
+        $this->group = $group;
+        $this->groupId = $group ? $group->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Shop\CatalogBundle\Entity\CategoryParameterGroup 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
 }

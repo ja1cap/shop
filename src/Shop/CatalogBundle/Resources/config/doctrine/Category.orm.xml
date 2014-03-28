@@ -20,6 +20,14 @@
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
         </one-to-many>
+        <one-to-many target-entity="CategoryParameterGroup" mapped-by="category" field="parameterGroups">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <order-by>
+                <order-by-field name="position" direction="ASC"/>
+            </order-by>
+        </one-to-many>
         <one-to-many target-entity="Proposal" mapped-by="category" field="proposals">
             <order-by>
                 <order-by-field name="title" direction="ASC"/>

@@ -341,6 +341,42 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
+    public function findProposals($categoriesIds, $manufacturesIds, $contractorsIds){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('p')
+            ->from('ShopCatalogBundle:Proposal', 'p')
+            ->leftJoin('ShopCatalogBundle:Price', 'pp', Expr\Join::LEFT_JOIN, $qb->expr()->eq('pp.proposalId', 'p.id'))
+        ;
+
+        if($categoriesIds){
+            $qb->andWhere($qb->expr()->in('p.categoryId', $categoriesIds));
+        }
+
+        if($manufacturesIds){
+            $qb->andWhere($qb->expr()->in('p.manufacturerId', $manufacturesIds));
+        }
+
+        if($contractorsIds){
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->in('p.defaultContractorId', $contractorsIds),
+                        $qb->expr()->isNull('pp.contractorId')
+                    ),
+                    $qb->expr()->in('pp.contractorId', $contractorsIds)
+                )
+            );
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+
+    }
+
     /**
      * @param $categoryId
      * @param $manufacturerId
@@ -350,7 +386,7 @@ class ProposalRepository extends AbstractRepository {
      * @param null $perPage
      * @return array
      */
-    public function findProposals($categoryId, $manufacturerId, $filteredParametersValues, $filterPricesRanges, $page = null, $perPage = null){
+    public function findProposalsByParameters($categoryId, $manufacturerId, $filteredParametersValues, $filterPricesRanges, $page = null, $perPage = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 

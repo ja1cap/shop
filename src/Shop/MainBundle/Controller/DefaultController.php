@@ -417,7 +417,7 @@ class DefaultController extends Controller
             })->toArray()
         );
 
-        $proposals = $proposalRepository->findProposals(
+        $proposals = $proposalRepository->findProposalsByParameters(
             $category->getId(),
             $manufacturerId,
             $filterParametersValuesFilteredByOptionsIds,
@@ -794,7 +794,7 @@ class DefaultController extends Controller
 
             $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
 
-            $additionalCategoryProposals = $proposalRepository->findProposals($additionalCategory->getId(), null, $filterParametersValuesFilteredByOptionsIds, null, 1, 1);
+            $additionalCategoryProposals = $proposalRepository->findProposalsByParameters($additionalCategory->getId(), null, $filterParametersValuesFilteredByOptionsIds, null, 1, 1);
             if ($additionalCategoryProposals) {
 
                 $additionalCategoriesData[$additionalCategory->getId()] = array(

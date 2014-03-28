@@ -3,20 +3,18 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\ContractorCurrency;
+use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\Manufacturer;
-use Shop\CatalogBundle\Entity\Parameter;
-use Shop\CatalogBundle\Entity\ParameterOption;
+use Shop\CatalogBundle\Entity\ParameterValue;
+use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\PriceList;
 use Shop\CatalogBundle\Entity\PriceListAlias;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Form\Type\PriceListType;
-use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
-use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
+use Shop\CatalogBundle\Parser\PriceListParser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Shop\CatalogBundle\Entity\PriceListRepository;
-use Shop\CatalogBundle\Entity\Price;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -82,6 +80,171 @@ class AdminPriceListController extends Controller
             ));
 
         }
+
+    }
+
+    public function createPriceListAction(){
+
+        $em = $this->getDoctrine()->getManager();
+
+        $categoryRepository = $em->getRepository('ShopCatalogBundle:Category');
+//        $manufactureRepository = $em->getRepository('ShopCatalogBundle:Manufacturer');
+//        $contractorRepository = $em->getRepository('ShopCatalogBundle:Contractor');
+
+        /**
+         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
+         */
+        $proposalRepository = $em->getRepository('ShopCatalogBundle:Proposal');
+
+        $categoriesIds = array(2);
+        $manufacturesIds = array(2);
+        $contractorsIds = array();
+
+        $proposals = $proposalRepository->findProposals($categoriesIds, $manufacturesIds, $contractorsIds);
+
+        $categoriesParametersColumns = array();
+        $categories = $categoryRepository->findBy(array(
+            'id' => $categoriesIds,
+        ));
+
+        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+
+        $baseColumns = array(
+            array(
+                'entity' => 'price',
+                'property' => 'sku',
+                'name' => 'Артикул',
+            ),
+            array(
+                'entity' => 'proposal',
+                'property' => 'title',
+                'name' => 'Название',
+            ),
+            array(
+                'entity' => 'price',
+                'property' => 'value',
+                'name' => 'Цена',
+            ),
+            array(
+                'entity' => 'price',
+                'property' => 'currencyAlphabeticCode',
+                'name' => 'Валюта',
+            ),
+        );
+
+        foreach($baseColumns as $i => $baseColumn){
+            $activeSheet->setCellValueByColumnAndRow($i, 1, $baseColumn['name']);
+        }
+
+        foreach($categories as $category){
+
+            $categoryParameterColumn = count($baseColumns);
+
+            if($category instanceof Category){
+
+                if(!isset($categoriesParametersColumns[$category->getId()])){
+                    $categoriesParametersColumns[$category->getId()] = array();
+                }
+
+                foreach($category->getParameters() as $categoryParameter){
+
+                    if($categoryParameter instanceof CategoryParameter){
+
+                        $cell = $activeSheet->setCellValueByColumnAndRow($categoryParameterColumn, 1, $categoryParameter->getParameter()->getName(), true);
+                        $parameterColumnName = $cell->getColumn();
+                        var_dump($parameterColumnName);
+
+                        $categoriesParametersColumns[$category->getId()][$categoryParameter->getParameterId()] = $categoryParameterColumn;
+                        $categoryParameterColumn++;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        $pRow = 1;
+
+        foreach($proposals as $proposal){
+
+            if(!$proposal instanceof Proposal){
+                continue;
+            }
+
+            $prices = $proposal->getPrices();
+
+            foreach($prices as $price){
+
+                if(!$price instanceof Price){
+                    continue;
+                }
+
+                $pRow++;
+
+                foreach($baseColumns as $i => $baseColumn){
+
+                    $value = null;
+
+                    switch($baseColumn['entity']){
+                        case 'proposal':
+                            $value = $proposal[$baseColumn['property']];
+                            break;
+                        case 'price':
+                            $value = $price[$baseColumn['property']];
+                            break;
+                    }
+
+                    $activeSheet->setCellValueByColumnAndRow($i, $pRow, $value);
+
+                }
+
+                foreach($price->getParameterValues() as $parameterValue){
+
+                    if($parameterValue instanceof ParameterValue){
+
+                        if(isset($categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()])){
+
+                            $parameterColumn = $categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()];
+                            $activeSheet->setCellValueByColumnAndRow($parameterColumn, $pRow, $parameterValue->getOption()->getName());
+
+                        }
+
+                    }
+
+                }
+
+                foreach($proposal->getParameterValues() as $parameterValue){
+
+                    if($parameterValue instanceof ParameterValue){
+
+                        if(isset($categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()])){
+
+                            $parameterColumn = $categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()];
+                            $activeSheet->setCellValueByColumnAndRow($parameterColumn, $pRow, $parameterValue->getOption()->getName());
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $path = '/var/www/vsematrasy.by/web/uploads/Прайс Kondor.xlsx';
+        $objWriter->save($path);
+        chmod($path, 0777);
+
+        $objWriter = new \PHPExcel_Writer_HTML($objPHPExcel);
+        return $this->render('ShopCatalogBundle:AdminPriceList:viewPriceList.html.twig', array(
+            'priceListSheetData' => $objWriter->generateSheetData(),
+        ));
 
     }
 
@@ -313,6 +476,11 @@ class AdminPriceListController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function parsePriceListAction($id)
     {
 
@@ -326,371 +494,8 @@ class AdminPriceListController extends Controller
             throw $this->createNotFoundException('Прайс-лист не найден');
         }
 
-        if(!$priceList->getManufacturer() instanceof Manufacturer){
-            throw new \Exception('Price list manufacturer not defined');
-        }
-
-        $filePath = $priceList->getPriceListFilePath();
-        $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
-
-        $activeSheet = $objPHPExcel->getActiveSheet();
-        $rowIterator = $activeSheet->getRowIterator();
-
-        $priceListColumnsAliases = array();
-        foreach($priceList->getAliases() as $priceListAlias){
-            if($priceListAlias instanceof PriceListAlias){
-                $priceListColumnsAliases[$priceListAlias->getColumnName()] = $priceListAlias->getAliasName();
-            }
-        }
-
-        $parameters = array();
-        $proposalsParametersValues = array();
-
-        $parameterOptionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:ParameterOption');
-        $parametersOptionsIndexedByName = array();
-
-        $groupedRowsData = array();
-
-        /**
-         * @var $row \PHPExcel_Worksheet_Row
-         */
-        foreach($rowIterator as $row){
-
-            $rowData = array(
-                PriceListAlias::ALIAS_SKU => null,
-                PriceListAlias::ALIAS_NAME => null,
-                PriceListAlias::ALIAS_SHORT_DESCRIPTION => null,
-                PriceListAlias::ALIAS_DESCRIPTION => null,
-                PriceListAlias::ALIAS_PRICE => null,
-                PriceListAlias::ALIAS_CURRENCY => null,
-                PriceListAlias::ALIAS_CATEGORY => null,
-                PriceListAlias::ALIAS_MANUFACTURER => null,
-                'parametersValues' => array(),
-            );
-
-            if($row->getRowIndex() > $priceList->getIdentifiersRowIndex()){
-
-                $proposalParametersValues = array();
-
-                $cellIterator = $row->getCellIterator();
-
-                /**
-                 * @var $cell \PHPExcel_Cell
-                 */
-                foreach($cellIterator as $cell){
-
-                    $alias = null;
-                    if(isset($priceListColumnsAliases[$cell->getColumn()])){
-                        $alias = $priceListColumnsAliases[$cell->getColumn()];
-                    }
-
-                    if($alias){
-
-                        $cellValue = trim($cell->getValue());
-
-                        switch($alias){
-                            case PriceListAlias::ALIAS_CURRENCY:
-
-                                if(is_numeric($cellValue) && in_array($cellValue, ContractorCurrency::$currenciesNumericCodes)){
-
-                                    $rowData[$alias] = $cellValue;
-
-                                } elseif(is_string($cellValue) && isset(ContractorCurrency::$currenciesAlphabeticCodesNumericCodes[$cellValue])) {
-
-                                    $rowData[$alias] = ContractorCurrency::$currenciesAlphabeticCodesNumericCodes[$cellValue];
-
-                                }
-
-                                break;
-
-                            default:
-
-                                if(in_array($alias, array_keys(PriceListAlias::getAliasesCommonTitles()))){
-
-                                    $rowData[$alias] = $cellValue;
-
-                                } elseif(strpos($alias, PriceListAlias::ALIAS_PARAMETER_PREFIX) === 0){
-
-                                    $parameterId = (int)str_replace(PriceListAlias::ALIAS_PARAMETER_PREFIX, '', $alias);
-                                    if($parameterId){
-
-                                        if(isset($parameters[$parameterId])){
-
-                                            $parameter = $parameters[$parameterId];
-
-                                        } else {
-
-                                            $parameter = $this->getDoctrine()->getRepository('ShopCatalogBundle:Parameter')->findOneBy(array(
-                                                'id' => $parameterId,
-                                            ));
-
-
-                                            if($parameter instanceof Parameter){
-                                                $parameters[$parameterId] = $parameter;
-                                            }
-
-                                        }
-
-                                        if($parameter){
-
-                                            $parameterOption = null;
-
-                                            if($cellValue){
-
-                                                if(isset($parametersOptionsIndexedByName[$parameterId][$cellValue])){
-
-                                                    $parameterOption = $parametersOptionsIndexedByName[$parameterId][$cellValue];
-
-                                                } else {
-
-                                                    $parameterOption = $parameterOptionRepository->findOneBy(array(
-                                                        'parameterId' => $parameter->getId(),
-                                                        'name' => array(
-                                                            $cellValue,
-                                                            str_replace('х', 'x', $cellValue), //@TODO remove
-                                                        ),
-                                                    ));
-
-                                                    if(!$parameterOption instanceof ParameterOption){
-
-                                                        $parameterOption = new ParameterOption();
-                                                        $parameterOption->setName($cellValue);
-                                                        $parameter->addOption($parameterOption);
-
-                                                        $em->persist($parameterOption);
-
-                                                    }
-
-                                                    if(!isset($parametersOptionsIndexedByName[$parameterId])){
-                                                        $parametersOptionsIndexedByName[$parameterId] = array();
-                                                    }
-
-                                                    $parametersOptionsIndexedByName[$parameterId][$cellValue] = $parameterOption;
-
-                                                }
-
-                                            }
-
-                                            if($parameter->getIsPriceParameter()){
-
-                                                $rowData['parametersValues'][$parameterId] = $parameterOption;
-
-                                            } else {
-
-                                                $proposalParametersValues[$parameterId] = $parameterOption;
-
-                                            }
-
-                                        }
-
-
-                                    }
-
-                                }
-
-                        }
-
-                    }
-
-                }
-
-                $isValid = !array_diff(PriceListAlias::getRequiredAliases(), array_keys(array_filter($rowData)));
-                if($isValid){
-
-                    if(!$rowData[PriceListAlias::ALIAS_CATEGORY]){
-                        $rowData[PriceListAlias::ALIAS_CATEGORY] = $priceList->getCategory()->getName();
-                    }
-
-                    $categoryName = $rowData[PriceListAlias::ALIAS_CATEGORY];
-                    $proposalName = $rowData[PriceListAlias::ALIAS_NAME];
-
-                    if($proposalParametersValues){
-                        $proposalsParametersValues[$proposalName] = $proposalParametersValues;
-                    }
-
-                    $sku = $rowData[PriceListAlias::ALIAS_SKU];
-
-                    if(!isset($groupedRowsData[$categoryName])){
-                        $groupedRowsData[$categoryName] = array();
-                    }
-
-                    if(!isset($groupedRowsData[$categoryName][$proposalName])){
-                        $groupedRowsData[$categoryName][$proposalName] = array();
-                    }
-
-                    $groupedRowsData[$categoryName][$proposalName][$sku] = $rowData;
-
-                }
-
-            }
-
-        }
-
-        $formattedCategoriesNames = $this->formatNames(array_keys($groupedRowsData));
-
-        /**
-         * @var $categoryRepository \Shop\CatalogBundle\Entity\CategoryRepository
-         */
-        $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
-        $existingCategories = $categoryRepository->findCategoriesByName($formattedCategoriesNames);
-
-        foreach($groupedRowsData as $categoryName => $proposals){
-
-            $category = null;
-            $formattedCategoryName = str_replace(' ', '', trim(mb_strtolower($categoryName, 'UTF-8')));
-
-            foreach($existingCategories as $existingCategory){
-
-                if($existingCategory instanceof Category){
-
-                    $formattedExistingCategoryName = str_replace(' ', '', trim(mb_strtolower($existingCategory->getName(), 'UTF-8')));
-                    if($formattedExistingCategoryName == $formattedCategoryName){
-
-                        $category = $existingCategory;
-                        break;
-
-                    }
-
-                }
-
-            }
-
-            if(!$category instanceof Category){
-
-                $category = new Category();
-                $category
-                    ->setName($categoryName)
-                    ->setStatus(Category::STATUS_OFF)
-                ;
-
-                $em->persist($category);
-
-            }
-
-            $proposalsNames = array_keys($proposals);
-            $formattedProposalsNames = $this->formatNames($proposalsNames);
-
-            /**
-             * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
-             */
-            $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
-            $existingCategoryProposals = $proposalRepository->findProposalsByName($formattedProposalsNames);
-
-            foreach($proposals as $proposalName => $pricesData){
-
-                $proposal = null;
-                $formattedProposalName = str_replace(' ', '', trim(mb_strtolower($proposalName, 'UTF-8')));
-
-                foreach($existingCategoryProposals as $existingProposal){
-
-                    if($existingProposal instanceof Proposal){
-
-                        $formattedExistingProposalName = str_replace(' ', '', trim(mb_strtolower($existingProposal->getTitle(), 'UTF-8')));
-                        if($formattedExistingProposalName == $formattedProposalName){
-
-                            $proposal = $existingProposal;
-                            break;
-
-                        }
-
-                    }
-
-                }
-
-                if(!$proposal instanceof Proposal){
-
-                    $proposal = new Proposal();
-                    $proposal
-                        ->setTitle($proposalName)
-                        ->setStatus(Proposal::STATUS_ON)
-                        ->setManufacturer($priceList->getManufacturer())
-                        ->setDefaultContractor($priceList->getContractor())
-                    ;
-
-                    $category->addProposal($proposal);
-                    $em->persist($proposal);
-
-                }
-
-                if(isset($proposalsParametersValues[$proposalName]) && is_array($proposalsParametersValues[$proposalName])){
-
-                    $proposalParametersValues = $proposalsParametersValues[$proposalName];
-
-                    $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->getDoctrine()->getManager(), $proposal);
-                    $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
-
-                }
-
-                if($proposal->getId()){
-
-                    $pricesSku = array_keys($pricesData);
-
-                    $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
-                    $prices = $priceRepository->findBy(array(
-                        'proposalId' => $proposal->getId(),
-                        'sku' => array_unique($pricesSku),
-                    ));
-
-                } else {
-
-                    $prices = array();
-
-                }
-
-                /**
-                 * @var $price Price
-                 */
-                foreach($prices as $price){
-
-                    if(isset($pricesData[$price->getSku()])){
-
-                        $priceData = $pricesData[$price->getSku()];
-
-                        $price
-                            //->setStatus(Price::STATUS_ON)
-                            ->setValue($priceData[PriceListAlias::ALIAS_PRICE])
-                            ->setCurrencyNumericCode($priceData[PriceListAlias::ALIAS_CURRENCY])
-                            ->setContractor($priceList->getContractor())
-                        ;
-
-                        $parameterValuesData = $priceData['parametersValues'];
-                        if($parameterValuesData){
-                            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->getDoctrine()->getManager(), $price);
-                            $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
-                        }
-
-                        unset($pricesData[$price->getSku()]);
-
-                    }
-
-                }
-
-                foreach($pricesData as $priceData){
-
-                    $price = new Price();
-                    $price
-                        ->setStatus(Price::STATUS_ON)
-                        ->setSku($priceData[PriceListAlias::ALIAS_SKU])
-                        ->setValue($priceData[PriceListAlias::ALIAS_PRICE])
-                        ->setCurrencyNumericCode($priceData[PriceListAlias::ALIAS_CURRENCY])
-                        ->setContractor($priceList->getContractor())
-                    ;
-
-                    $proposal->addPrice($price);
-
-                    $parameterValuesData = $priceData['parametersValues'];
-                    if($parameterValuesData){
-                        $priceParameterValuesMapper = new PriceParameterValuesMapper($this->getDoctrine()->getManager(), $price);
-                        $priceParameterValuesMapper->mapParameterValues($parameterValuesData, false);
-                    }
-
-                    $em->persist($price);
-
-                }
-
-            }
-
-        }
+        $parser = new PriceListParser($em);
+        $priceList = $parser->parse($priceList);
 
         $priceList->setStatus(PriceList::STATUS_PARSED);
         $priceList->setUpdateDate(new \DateTime());
@@ -699,23 +504,6 @@ class AdminPriceListController extends Controller
 
         return $this->redirect($this->generateUrl('price_lists'));
 
-    }
-
-    /**
-     * @param $names
-     * @return array
-     */
-    protected function formatNames($names){
-        return array_unique(
-            array_filter(
-                array_map(
-                    function($name){
-                        return str_replace(' ', '', trim(mb_strtolower($name, 'UTF-8')));
-                    },
-                    $names
-                )
-            )
-        );
     }
 
     /**

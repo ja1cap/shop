@@ -64,6 +64,16 @@ class ContractorCurrency extends AbstractEntity
     /**
      * @var array
      */
+    public static $currenciesNumericCodesAlphabeticCodes = array(
+        self::BLR_CURRENCY_NUMERIC_CODE => self::BLR_CURRENCY_ALPHABETIC_CODE,
+        self::RUB_CURRENCY_NUMERIC_CODE => self::RUB_CURRENCY_ALPHABETIC_CODE,
+        self::USD_CURRENCY_NUMERIC_CODE => self::USD_CURRENCY_ALPHABETIC_CODE,
+        self::EURO_CURRENCY_NUMERIC_CODE => self::EURO_CURRENCY_ALPHABETIC_CODE,
+    );
+
+    /**
+     * @var array
+     */
     public static $currencyNames = array(
         self::BLR_CURRENCY_NUMERIC_CODE => self::BLR_CURRENCY_NAME,
         self::RUB_CURRENCY_NUMERIC_CODE => self::RUB_CURRENCY_NAME,

@@ -298,6 +298,19 @@ class Price extends AbstractEntity {
     }
 
     /**
+     * Get currencyAlphabeticCode
+     *
+     * @return integer
+     */
+    public function getCurrencyAlphabeticCode()
+    {
+        if(!isset(ContractorCurrency::$currenciesNumericCodesAlphabeticCodes[$this->getCurrencyNumericCode()])){
+            return false;
+        }
+        return ContractorCurrency::$currenciesNumericCodesAlphabeticCodes[$this->getCurrencyNumericCode()];
+    }
+
+    /**
      * @return bool
      */
     public function getCurrencyName(){

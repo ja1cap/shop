@@ -24,7 +24,7 @@ class ProposalParameterValuesMapper {
     protected $em;
 
     /**
-     * @param ObjectManager $em
+     * @param ObjectManager|object $em
      * @param Proposal $proposal
      */
     function __construct(ObjectManager $em, Proposal $proposal)

@@ -156,6 +156,10 @@ price_list:
     pattern: /adminCatalog/priceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList, id: null }
 
+create_price_list:
+    pattern: /adminCatalog/createPriceList
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:createPriceList }
+
 price_list_aliases:
     pattern: /adminCatalog/priceListAliases/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListsAliases }

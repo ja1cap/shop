@@ -341,22 +341,21 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
-    public function findProposals($categoriesIds, $manufacturesIds, $contractorsIds){
+    public function findProposals($categoryId, $contractorsIds = null, $manufacturersIds = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
-            ->select('p')
+            ->select(array(
+                'p',
+                'coalesce(p.defaultContractorId, pp.contractorId) AS HIDDEN _contractorId'
+            ))
             ->from('ShopCatalogBundle:Proposal', 'p')
             ->leftJoin('ShopCatalogBundle:Price', 'pp', Expr\Join::LEFT_JOIN, $qb->expr()->eq('pp.proposalId', 'p.id'))
         ;
 
-        if($categoriesIds){
-            $qb->andWhere($qb->expr()->in('p.categoryId', $categoriesIds));
-        }
-
-        if($manufacturesIds){
-            $qb->andWhere($qb->expr()->in('p.manufacturerId', $manufacturesIds));
+        if($categoryId){
+            $qb->andWhere($qb->expr()->eq('p.categoryId', $categoryId));
         }
 
         if($contractorsIds){
@@ -370,6 +369,15 @@ class ProposalRepository extends AbstractRepository {
                 )
             );
         }
+
+        if($manufacturersIds){
+            $qb->andWhere($qb->expr()->in('p.manufacturerId', $manufacturersIds));
+        }
+
+        $qb
+            ->addOrderBy('p.manufacturerId')
+            ->addOrderBy('_contractorId')
+        ;
 
         $query = $qb->getQuery();
 

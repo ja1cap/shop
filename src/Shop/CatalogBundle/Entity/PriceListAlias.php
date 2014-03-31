@@ -20,6 +20,7 @@ class PriceListAlias extends AbstractEntity
     const ALIAS_CURRENCY = 'currency';
     const ALIAS_MANUFACTURER = 'manufacturer';
     const ALIAS_CATEGORY = 'category';
+    const ALIAS_CONTRACTOR = 'contractor';
     const ALIAS_PARAMETER_PREFIX = 'parameter_';
 
     /**
@@ -44,6 +45,41 @@ class PriceListAlias extends AbstractEntity
         self::ALIAS_CURRENCY => 'Валюта',
         self::ALIAS_CATEGORY => 'Категория',
         self::ALIAS_MANUFACTURER => 'Производитель',
+        self::ALIAS_CONTRACTOR => 'Контрагент',
+    );
+
+    /**
+     * @var array
+     */
+    public static $aliasesEntities = array(
+        PriceListAlias::ALIAS_SKU => array(
+            'entity' => 'price',
+            'property' => 'sku',
+        ),
+        PriceListAlias::ALIAS_CATEGORY => array(
+            'entity' => 'proposal',
+            'property' => 'categoryName',
+        ),
+        PriceListAlias::ALIAS_NAME => array(
+            'entity' => 'proposal',
+            'property' => 'title',
+        ),
+        PriceListAlias::ALIAS_MANUFACTURER => array(
+            'entity' => 'proposal',
+            'property' => 'manufacturerName',
+        ),
+        PriceListAlias::ALIAS_CONTRACTOR => array(
+            'entity' => 'price',
+            'property' => 'contractorName',
+        ),
+        PriceListAlias::ALIAS_PRICE => array(
+            'entity' => 'price',
+            'property' => 'value',
+        ),
+        PriceListAlias::ALIAS_CURRENCY => array(
+            'entity' => 'price',
+            'property' => 'currencyAlphabeticCode',
+        ),
     );
 
     /**
@@ -78,6 +114,10 @@ class PriceListAlias extends AbstractEntity
         ),
         self::ALIAS_MANUFACTURER => array(
             'производитель',
+        ),
+        self::ALIAS_CONTRACTOR => array(
+            'контрагент',
+            'поставщик',
         ),
     );
 
@@ -263,6 +303,25 @@ class PriceListAlias extends AbstractEntity
             $titles[$alias] = self::getAliasesTitle($alias);
         }
         return array_filter($titles);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAliasesEntities()
+    {
+        return self::$aliasesEntities;
+    }
+
+    /**
+     * @param $alias
+     * @return null|array
+     */
+    public static function getAliasEntity($alias){
+        if(isset(self::$aliasesEntities[$alias])){
+            return self::$aliasesEntities[$alias];
+        }
+        return null;
     }
 
 }

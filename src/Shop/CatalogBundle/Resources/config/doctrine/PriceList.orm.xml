@@ -11,7 +11,7 @@
         <field name="createDate" type="datetime" column="createDate"/>
         <field name="updateDate" type="datetime" column="updateDate"/>
         <field name="status" type="integer" column="status"/>
-        <field name="contractorId" type="integer" column="contractorId"/>
+        <field name="contractorId" type="integer" column="contractorId" nullable="true"/>
         <field name="categoryId" type="integer" nullable="true"/>
         <field name="manufacturerId" type="integer" nullable="true"/>
         <field name="identifiersRowIndex" type="integer" nullable="true"/>
@@ -26,17 +26,17 @@
         </one-to-many>
         <many-to-one target-entity="Contractor" field="contractor">
             <join-columns>
-                <join-column name="contractorId" referenced-column-name="id"/>
+                <join-column name="contractorId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
         <many-to-one target-entity="Category" field="category">
             <join-columns>
-                <join-column name="categoryId" referenced-column-name="id"/>
+                <join-column name="categoryId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
         <many-to-one target-entity="Manufacturer" field="manufacturer">
             <join-columns>
-                <join-column name="manufacturerId" referenced-column-name="id"/>
+                <join-column name="manufacturerId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
     </entity>

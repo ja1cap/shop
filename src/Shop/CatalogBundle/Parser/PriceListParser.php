@@ -3,7 +3,6 @@ namespace Shop\CatalogBundle\Parser;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\ContractorCurrency;
-use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\Parameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Price;
@@ -35,15 +34,13 @@ class PriceListParser {
 
     public function parse(PriceList $priceList){
 
-        if(!$priceList->getManufacturer() instanceof Manufacturer){
-            throw new \Exception('Price list manufacturer not defined');
-        }
-
         $filePath = $priceList->getPriceListFilePath();
         $objPHPExcel = \PHPExcel_IOFactory::load($filePath);
 
         $activeSheet = $objPHPExcel->getActiveSheet();
         $rowIterator = $activeSheet->getRowIterator();
+
+        $aliasesEntities = PriceListAlias::getAliasesEntities();
 
         $priceListColumnsAliases = array();
         foreach($priceList->getAliases() as $priceListAlias){
@@ -53,7 +50,8 @@ class PriceListParser {
         }
 
         $parameters = array();
-        $proposalsParametersValues = array();
+
+        $proposalsData = array();
 
         $parameterOptionRepository = $this->em->getRepository('ShopCatalogBundle:ParameterOption');
         $parametersOptionsIndexedByName = array();
@@ -74,6 +72,7 @@ class PriceListParser {
                 PriceListAlias::ALIAS_CURRENCY => null,
                 PriceListAlias::ALIAS_CATEGORY => null,
                 PriceListAlias::ALIAS_MANUFACTURER => null,
+                PriceListAlias::ALIAS_CONTRACTOR => null,
                 'parametersValues' => array(),
             );
 
@@ -207,27 +206,77 @@ class PriceListParser {
                 if($isValid){
 
                     if(!$rowData[PriceListAlias::ALIAS_CATEGORY]){
-                        $rowData[PriceListAlias::ALIAS_CATEGORY] = $priceList->getCategory()->getName();
+                        $rowData[PriceListAlias::ALIAS_CATEGORY] = $priceList->getCategory() ? $priceList->getCategory()->getName() : null;
                     }
 
-                    $categoryName = $rowData[PriceListAlias::ALIAS_CATEGORY];
+                    if(!$rowData[PriceListAlias::ALIAS_CONTRACTOR]){
+                        $rowData[PriceListAlias::ALIAS_CONTRACTOR] = $priceList->getContractor() ? $priceList->getContractor()->getName() : null;
+                    }
+
+                    if(!$rowData[PriceListAlias::ALIAS_MANUFACTURER]){
+                        $rowData[PriceListAlias::ALIAS_MANUFACTURER] = $priceList->getManufacturer() ? $priceList->getManufacturer()->getName() : null;
+                    }
+
                     $proposalName = $rowData[PriceListAlias::ALIAS_NAME];
 
-                    if($proposalParametersValues){
-                        $proposalsParametersValues[$proposalName] = $proposalParametersValues;
+                    if(!isset($proposalsData[$proposalName])){
+
+                        $proposalData = array();
+
+                        foreach($aliasesEntities as $alias => $aliasEntity){
+                            if(isset($rowData[$alias])){
+
+                                switch($aliasEntity['entity']){
+                                    case 'proposal':
+
+                                        $proposalData[$alias] = $rowData[$alias];
+                                        break;
+
+                                    case 'price':
+
+                                        switch($aliasEntity['property']){
+
+                                            case 'contractorName';
+                                                $proposalData[$alias] = $rowData[$alias];
+                                                break;
+
+                                        }
+
+                                        break;
+                                }
+
+                            }
+                        }
+
+                        $proposalData['parametersValues'] = $proposalParametersValues;
+
+                        $proposalsData[$proposalName] = $proposalData;
+
+                    } else {
+
+                        $proposalData = $proposalsData[$proposalName];
+
                     }
 
-                    $sku = $rowData[PriceListAlias::ALIAS_SKU];
+                    $categoryName = $proposalData[PriceListAlias::ALIAS_CATEGORY];
+                    $contractorName = $proposalData[PriceListAlias::ALIAS_CONTRACTOR];
+                    $manufacturerName = $proposalData[PriceListAlias::ALIAS_MANUFACTURER];
 
-                    if(!isset($groupedRowsData[$categoryName])){
-                        $groupedRowsData[$categoryName] = array();
+                    if($categoryName && $contractorName && $manufacturerName){
+
+                        $sku = $rowData[PriceListAlias::ALIAS_SKU];
+
+                        if(!isset($groupedRowsData[$categoryName])){
+                            $groupedRowsData[$categoryName] = array();
+                        }
+
+                        if(!isset($groupedRowsData[$categoryName][$proposalName])){
+                            $groupedRowsData[$categoryName][$proposalName] = array();
+                        }
+
+                        $groupedRowsData[$categoryName][$proposalName][$sku] = $rowData;
+
                     }
-
-                    if(!isset($groupedRowsData[$categoryName][$proposalName])){
-                        $groupedRowsData[$categoryName][$proposalName] = array();
-                    }
-
-                    $groupedRowsData[$categoryName][$proposalName][$sku] = $rowData;
 
                 }
 
@@ -246,13 +295,13 @@ class PriceListParser {
         foreach($groupedRowsData as $categoryName => $proposals){
 
             $category = null;
-            $formattedCategoryName = str_replace(' ', '', trim(mb_strtolower($categoryName, 'UTF-8')));
+            $formattedCategoryName = $this->formatName($categoryName);
 
             foreach($existingCategories as $existingCategory){
 
                 if($existingCategory instanceof Category){
 
-                    $formattedExistingCategoryName = str_replace(' ', '', trim(mb_strtolower($existingCategory->getName(), 'UTF-8')));
+                    $formattedExistingCategoryName = $this->formatName($existingCategory->getName());
                     if($formattedExistingCategoryName == $formattedCategoryName){
 
                         $category = $existingCategory;
@@ -269,7 +318,7 @@ class PriceListParser {
                 $category = new Category();
                 $category
                     ->setName($categoryName)
-                    ->setStatus(Category::STATUS_OFF)
+                    ->setStatus(Category::STATUS_ON)
                 ;
 
                 $this->em->persist($category);
@@ -287,14 +336,20 @@ class PriceListParser {
 
             foreach($proposals as $proposalName => $pricesData){
 
+                if(!isset($proposalsData[$proposalName])){
+                    continue;
+                }
+
+                $proposalData = $proposalsData[$proposalName];
+
                 $proposal = null;
-                $formattedProposalName = str_replace(' ', '', trim(mb_strtolower($proposalName, 'UTF-8')));
+                $formattedProposalName = $this->formatName($proposalName);
 
                 foreach($existingCategoryProposals as $existingProposal){
 
                     if($existingProposal instanceof Proposal){
 
-                        $formattedExistingProposalName = str_replace(' ', '', trim(mb_strtolower($existingProposal->getTitle(), 'UTF-8')));
+                        $formattedExistingProposalName = $this->formatName($existingProposal->getTitle());
                         if($formattedExistingProposalName == $formattedProposalName){
 
                             $proposal = $existingProposal;
@@ -321,9 +376,9 @@ class PriceListParser {
 
                 }
 
-                if(isset($proposalsParametersValues[$proposalName]) && is_array($proposalsParametersValues[$proposalName])){
+                if(isset($proposalData['parametersValues']) && is_array($proposalData['parametersValues'])){
 
-                    $proposalParametersValues = $proposalsParametersValues[$proposalName];
+                    $proposalParametersValues = $proposalData['parametersValues'];
 
                     $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
                     $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
@@ -413,13 +468,19 @@ class PriceListParser {
         return array_unique(
             array_filter(
                 array_map(
-                    function($name){
-                        return str_replace(' ', '', trim(mb_strtolower($name, 'UTF-8')));
-                    },
+                    array($this, 'formatName'),
                     $names
                 )
             )
         );
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    protected function formatName($name){
+        return str_replace(' ', '', trim(mb_strtolower($name, 'UTF-8')));
     }
 
 } 

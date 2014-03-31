@@ -163,7 +163,7 @@ abstract class AbstractEntity implements \ArrayAccess {
     /**
      * @return string
      */
-    protected function getUploadDirPath()
+    public function getUploadDirPath()
     {
         // the absolute directory path where uploaded
         // documents should be saved

@@ -3,5 +3,17 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block right_bar %}
-    {{ priceListSheetData|raw }}
+
+    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+
+    <div class="large btn primary" style="margin-bottom: 20px">
+        <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">
+            Скачать прайс-лист
+        </a>
+    </div>
+
+    <div style="overflow: auto; height: 500px;">
+        {{ priceListSheetData|raw }}
+    </div>
+
 {% endblock %}

@@ -2,15 +2,14 @@
 
 namespace Shop\CatalogBundle\Controller;
 
+use Shop\CatalogBundle\Builder\PriceListBuilder;
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\Manufacturer;
-use Shop\CatalogBundle\Entity\ParameterValue;
-use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\PriceList;
 use Shop\CatalogBundle\Entity\PriceListAlias;
-use Shop\CatalogBundle\Entity\Proposal;
+use Shop\CatalogBundle\Form\Type\CreatePriceListType;
 use Shop\CatalogBundle\Form\Type\PriceListType;
+use Shop\CatalogBundle\Mapper\PriceListMapper;
 use Shop\CatalogBundle\Parser\PriceListParser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,168 +82,48 @@ class AdminPriceListController extends Controller
 
     }
 
-    public function createPriceListAction(){
+    public function createPriceListAction(Request $request){
 
-        $em = $this->getDoctrine()->getManager();
+        $builder = new PriceListBuilder($this->getDoctrine()->getManager());
+        $mapper = new PriceListMapper();
 
-        $categoryRepository = $em->getRepository('ShopCatalogBundle:Category');
-//        $manufactureRepository = $em->getRepository('ShopCatalogBundle:Manufacturer');
-//        $contractorRepository = $em->getRepository('ShopCatalogBundle:Contractor');
+        $form = $this->createForm(new CreatePriceListType(), $mapper);
+        $form->handleRequest($request);
 
-        /**
-         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
-         */
-        $proposalRepository = $em->getRepository('ShopCatalogBundle:Proposal');
+        if($request->getMethod() == 'POST' && $form->isValid()){
 
-        $categoriesIds = array(2);
-        $manufacturesIds = array(2);
-        $contractorsIds = array();
+            $builder->build($mapper->getCategoryId(), $mapper->getContractorsIds(), $mapper->getManufacturersIds());
 
-        $proposals = $proposalRepository->findProposals($categoriesIds, $manufacturesIds, $contractorsIds);
+            $priceList = $builder->getPriceList();
+            $objPHPExcel = $builder->getObjPHPExcel();
 
-        $categoriesParametersColumns = array();
-        $categories = $categoryRepository->findBy(array(
-            'id' => $categoriesIds,
-        ));
+            $priceList->setName($mapper->getName());
 
-        $objPHPExcel = new \PHPExcel();
-        $objPHPExcel->setActiveSheetIndex(0);
-        $activeSheet = $objPHPExcel->getActiveSheet();
+            $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+            $fileName = $priceList->getFileName();
+            $path = $priceList->getUploadDirPath() . DIRECTORY_SEPARATOR . $fileName;
+            $objWriter->save($path);
+            chmod($path, 0777);
 
-        $baseColumns = array(
-            array(
-                'entity' => 'price',
-                'property' => 'sku',
-                'name' => 'Артикул',
-            ),
-            array(
-                'entity' => 'proposal',
-                'property' => 'title',
-                'name' => 'Название',
-            ),
-            array(
-                'entity' => 'price',
-                'property' => 'value',
-                'name' => 'Цена',
-            ),
-            array(
-                'entity' => 'price',
-                'property' => 'currencyAlphabeticCode',
-                'name' => 'Валюта',
-            ),
-        );
+            $em = $this->getDoctrine()->getManager();
 
-        foreach($baseColumns as $i => $baseColumn){
-            $activeSheet->setCellValueByColumnAndRow($i, 1, $baseColumn['name']);
-        }
+            $em->persist($priceList);
+            $em->flush();
 
-        foreach($categories as $category){
+            $objWriter = new \PHPExcel_Writer_HTML($objPHPExcel);
+            return $this->render('ShopCatalogBundle:AdminPriceList:viewPriceList.html.twig', array(
+                'priceList' => $priceList,
+                'priceListSheetData' => $objWriter->generateSheetData(),
+            ));
 
-            $categoryParameterColumn = count($baseColumns);
+        } else {
 
-            if($category instanceof Category){
-
-                if(!isset($categoriesParametersColumns[$category->getId()])){
-                    $categoriesParametersColumns[$category->getId()] = array();
-                }
-
-                foreach($category->getParameters() as $categoryParameter){
-
-                    if($categoryParameter instanceof CategoryParameter){
-
-                        $cell = $activeSheet->setCellValueByColumnAndRow($categoryParameterColumn, 1, $categoryParameter->getParameter()->getName(), true);
-                        $parameterColumnName = $cell->getColumn();
-                        var_dump($parameterColumnName);
-
-                        $categoriesParametersColumns[$category->getId()][$categoryParameter->getParameterId()] = $categoryParameterColumn;
-                        $categoryParameterColumn++;
-
-                    }
-
-                }
-
-            }
+            return $this->render('ShopCatalogBundle:AdminPriceList:priceList.html.twig', array(
+                'title' => 'Создание прайс-листа',
+                'form' => $form->createView(),
+            ));
 
         }
-
-        $pRow = 1;
-
-        foreach($proposals as $proposal){
-
-            if(!$proposal instanceof Proposal){
-                continue;
-            }
-
-            $prices = $proposal->getPrices();
-
-            foreach($prices as $price){
-
-                if(!$price instanceof Price){
-                    continue;
-                }
-
-                $pRow++;
-
-                foreach($baseColumns as $i => $baseColumn){
-
-                    $value = null;
-
-                    switch($baseColumn['entity']){
-                        case 'proposal':
-                            $value = $proposal[$baseColumn['property']];
-                            break;
-                        case 'price':
-                            $value = $price[$baseColumn['property']];
-                            break;
-                    }
-
-                    $activeSheet->setCellValueByColumnAndRow($i, $pRow, $value);
-
-                }
-
-                foreach($price->getParameterValues() as $parameterValue){
-
-                    if($parameterValue instanceof ParameterValue){
-
-                        if(isset($categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()])){
-
-                            $parameterColumn = $categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()];
-                            $activeSheet->setCellValueByColumnAndRow($parameterColumn, $pRow, $parameterValue->getOption()->getName());
-
-                        }
-
-                    }
-
-                }
-
-                foreach($proposal->getParameterValues() as $parameterValue){
-
-                    if($parameterValue instanceof ParameterValue){
-
-                        if(isset($categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()])){
-
-                            $parameterColumn = $categoriesParametersColumns[$proposal->getCategoryId()][$parameterValue->getParameterId()];
-                            $activeSheet->setCellValueByColumnAndRow($parameterColumn, $pRow, $parameterValue->getOption()->getName());
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $path = '/var/www/vsematrasy.by/web/uploads/Прайс Kondor.xlsx';
-        $objWriter->save($path);
-        chmod($path, 0777);
-
-        $objWriter = new \PHPExcel_Writer_HTML($objPHPExcel);
-        return $this->render('ShopCatalogBundle:AdminPriceList:viewPriceList.html.twig', array(
-            'priceListSheetData' => $objWriter->generateSheetData(),
-        ));
 
     }
 

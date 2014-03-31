@@ -445,6 +445,14 @@ class Proposal extends AbstractEntity
     {
         return $this->category;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getCategoryName(){
+        return $this->getCategory() ? $this->getCategory()->getName() : null;
+    }
+
     /**
      * @var integer
      */
@@ -501,6 +509,14 @@ class Proposal extends AbstractEntity
     {
         return $this->manufacturer;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getManufacturerName(){
+        return $this->getManufacturer() ? $this->getManufacturer()->getName() : null;
+    }
+
     /**
      * @var integer
      */

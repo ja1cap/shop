@@ -15,6 +15,7 @@ class PriceList extends AbstractEntity
 
     const STATUS_UPLOADED = 1;
     const STATUS_PARSED = 2;
+    const STATUS_CREATED = 3;
     const STATUS_INVALID_FILE = -1;
     const STATUS_PARSE_ERROR = -2;
 
@@ -59,6 +60,7 @@ class PriceList extends AbstractEntity
     public static $statuses = array(
         self::STATUS_UPLOADED => 'Загружен',
         self::STATUS_PARSED => 'Обработан',
+        self::STATUS_CREATED => 'Создан',
         self::STATUS_INVALID_FILE => 'Файл не подходит',
         self::STATUS_PARSE_ERROR => 'Ошибка обработки',
     );
@@ -450,4 +452,5 @@ class PriceList extends AbstractEntity
     {
         return $this->manufacturer;
     }
+
 }

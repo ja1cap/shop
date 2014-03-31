@@ -268,6 +268,14 @@ class Price extends AbstractEntity {
     {
         return $this->contractor ?: ($this->getProposal() ? $this->getProposal()->getDefaultContractor() : null);
     }
+
+    /**
+     * @return null|string
+     */
+    public function getContractorName(){
+        return $this->getContractor() ? $this->getContractor()->getName() : null;
+    }
+
     /**
      * @var integer
      */

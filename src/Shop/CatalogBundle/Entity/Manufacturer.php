@@ -179,4 +179,13 @@ class Manufacturer extends AbstractEntity
     {
         return $this->imageFileName;
     }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
 }

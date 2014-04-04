@@ -361,6 +361,12 @@ class PriceListParser {
 
                 }
 
+                foreach($proposalData as $alias => $value){
+                    //@TODO set proposal and price properties by alias
+//                    var_dump($alias);
+//                    var_dump($value);
+                }
+
                 if(!$proposal instanceof Proposal){
 
                     $proposal = new Proposal();

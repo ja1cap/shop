@@ -578,6 +578,11 @@ class ProposalRepository extends AbstractRepository {
             $qb->expr()->isNotNull('pp.id')
         ));
 
+        $qb->andWhere($qb->expr()->in('cp.filterGroup', array(
+            CategoryParameter::FILTER_GROUP_MAIN,
+            CategoryParameter::FILTER_GROUP_EXTRA,
+        )));
+
         $qb
             ->addOrderBy('cp.position')
             ->addOrderBy('po.position')
@@ -757,6 +762,10 @@ class ProposalRepository extends AbstractRepository {
                 $categoryParameters = $this->getEntityManager()->getRepository('ShopCatalogBundle:CategoryParameter')->findBy(array(
                     'categoryId' => $categoryId,
                     'parameterId' => $parameterIds,
+                    'filterGroup' => array(
+                        CategoryParameter::FILTER_GROUP_MAIN,
+                        CategoryParameter::FILTER_GROUP_EXTRA,
+                    ),
                 ));
 
                 /**

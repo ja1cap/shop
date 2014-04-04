@@ -150,6 +150,7 @@ class Category extends AbstractEntity
      */
     public function setSingularName($singularName)
     {
+        $singularName = strtolower($singularName);
         $this->singularName = $singularName;
         $this->setSingularGenitiveName(WordInflector::inflect($singularName, WordInflector::CASE_GENITIVE));
         return $this;
@@ -205,8 +206,8 @@ class Category extends AbstractEntity
      */
     public function setMultipleName($multipleName)
     {
+        $multipleName = strtolower($multipleName);
         $this->multipleName = $multipleName;
-
         return $this;
     }
 
@@ -252,6 +253,7 @@ class Category extends AbstractEntity
     {
         return $this->parameters;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -364,6 +366,13 @@ class Category extends AbstractEntity
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTextStatus(){
+        return self::$statuses[$this->getStatus()];
     }
 
     /**

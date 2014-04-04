@@ -7,6 +7,36 @@ body {
 
   background: #f1f1f1;
 
+  .tiles {
+
+    &.tiles-blocks {
+
+      li {
+
+        padding: 10px;
+        border: 1px solid #CCCCCC;
+        margin-bottom: 20px;
+
+        .tile-title {
+
+          font-size: 16px;
+          margin-bottom: 10px;
+
+        }
+
+        .tile-buttons {
+          .btn {
+            width: 49%;
+            margin-bottom: 5px;
+          }
+        }
+
+      }
+
+    }
+
+  }
+
   .chosen-select {
     width: 100%;
   }
@@ -844,19 +874,43 @@ body {
 
     &.proposals-block {
 
+      $catalog_menu_width : 900px;
+      $catalog_menu_item_width : $catalog_menu_width / 4;
+
       .catalog-menu {
+
         margin-bottom: 10px;
-        width: 800px;
-        min-width: 800px;
+        width: $catalog_menu_width;
+        min-width: $catalog_menu_width;
         position: relative;
         z-index: 5;
 
         .tiles {
-          margin-left: 0;
-          &.four_up > li {
+          margin: 0 auto;
+
+          li {
             margin-left: 0;
-            width: 25%;
+            width: $catalog_menu_item_width;
           }
+
+          &.three_up {
+
+            width: ($catalog_menu_width * .75);
+
+          }
+
+          &.two_up {
+
+            width: ($catalog_menu_width * .5);
+
+          }
+
+          &.one_up {
+
+            width: ($catalog_menu_width * .25);
+
+          }
+
         }
 
         .btn {
@@ -2389,9 +2443,8 @@ $proposal-image-side : 284px;
     width: 131px;
     height: 131px;
     margin: 5px auto 30px;
-    border: 3px solid white;
+    border: 3px solid #e0dfdf;
     @include border-radius(80px);
-    @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px, 0);
 
     .nailthumb-container {
       display: block;
@@ -2572,19 +2625,6 @@ $proposal-image-side : 284px;
       .shop-cart-buttons {
         margin-top: 5px;
         margin-left: 0;
-      }
-
-    }
-
-    .shop-cart-proposal-image {
-
-      width: 106px;
-      height: 106px;
-      margin: 10px auto;
-
-      .nailthumb-container {
-        width: 100px;
-        height: 100px;
       }
 
     }

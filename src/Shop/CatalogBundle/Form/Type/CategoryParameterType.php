@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\CategoryParameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -46,12 +47,9 @@ class CategoryParameterType extends AbstractType {
             ));
 
         $builder
-            ->add('isMain', 'choice', array(
-                'choices' => array(
-                    'нет',
-                    'да',
-                ),
-                'label' => 'Основной параметр',
+            ->add('filterGroup', 'choice', array(
+                'choices' => CategoryParameter::$filterGroups,
+                'label' => 'Группа фильтров',
             ))
             ->add('name', 'text', array(
                 'required' => false,

@@ -22,7 +22,7 @@
         </div>
         <div class="medium default btn icon-left entypo icon-menu">
             <a href="{{ path('parameters') }}">
-                Параметры
+                Базовые параметры
             </a>
         </div>
     </div>
@@ -34,31 +34,33 @@
     </div>
 
     {% if categories %}
-        <table style="margin: 10px 0;">
-            <tbody>
-            {% for category in categories %}
-                <tr>
-                    <td>
-                        <span class="{% if category.status == constant('STATUS_OFF', category) %}danger label{% endif %}">
+        <div style="margin: 10px 0;">
+            <ul class="tiles three_up tiles-blocks">
+                {% for category in categories %}
+                    <li>
+                        <div class="tile-title">
                             {{ category.name }}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="medium btn default icon-left entypo icon-pencil">
-                            <a href="{{ path('category', {'id' : category.id}) }}">
-                                Изменить
-                            </a>
+                            <span class="{{  category.status == constant('STATUS_OFF', category) ? 'danger' : 'success' }} label">
+                                {{ category.textStatus }}
+                            </span>
                         </div>
-                        <div class="medium btn danger icon-left entypo icon-trash">
-                            <a href="{{ path('delete_category', {'id' : category.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить
-                            </a>
+                        <div class="tile-buttons">
+                            {{ include('ShopCatalogBundle:AdminCategory:categoryNavigationButtons.html.twig') }}
+                            <div class="medium btn default icon-left entypo icon-pencil">
+                                <a href="{{ path('category', {'id' : category.id}) }}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="medium btn danger icon-left entypo icon-trash">
+                                <a href="{{ path('delete_category', {'id' : category.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
                         </div>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 
 {% endblock %}

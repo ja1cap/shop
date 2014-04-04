@@ -3,12 +3,19 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shop\MainBundle\Entity\AbstractEntity;
 
 /**
- * CategoryParameter
+ * Class CategoryParameter
+ * @package Shop\CatalogBundle\Entity
  */
-class CategoryParameter
+class CategoryParameter extends AbstractEntity
 {
+
+    const FILTER_GROUP_NONE = 0;
+    const FILTER_GROUP_MAIN = 1;
+    const FILTER_GROUP_EXTRA = 2;
+
     /**
      * @var integer
      */
@@ -30,10 +37,28 @@ class CategoryParameter
     private $position;
 
     /**
-     * @var boolean
+     * @var integer
      */
-    private $isMain;
+    private $filterGroup;
 
+    /**
+     * @var array
+     */
+    public static $filterGroups = array(
+        self::FILTER_GROUP_MAIN => 'Основная',
+        self::FILTER_GROUP_EXTRA => 'Дополнительная',
+        self::FILTER_GROUP_NONE => 'Нет',
+    );
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Category
+     */
+    private $category;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Parameter
+     */
+    private $parameter;
 
     /**
      * Get id
@@ -113,39 +138,6 @@ class CategoryParameter
     {
         return $this->position;
     }
-
-    /**
-     * Set isMain
-     *
-     * @param boolean $isMain
-     * @return CategoryParameter
-     */
-    public function setIsMain($isMain)
-    {
-        $this->isMain = $isMain;
-
-        return $this;
-    }
-
-    /**
-     * Get isMain
-     *
-     * @return boolean 
-     */
-    public function getIsMain()
-    {
-        return $this->isMain;
-    }
-    /**
-     * @var \Shop\CatalogBundle\Entity\Category
-     */
-    private $category;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Parameter
-     */
-    private $parameter;
-
 
     /**
      * Set category
@@ -276,5 +268,28 @@ class CategoryParameter
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * Set filterType
+     *
+     * @param integer $filterType
+     * @return CategoryParameter
+     */
+    public function setFilterGroup($filterType)
+    {
+        $this->filterGroup = $filterType;
+
+        return $this;
+    }
+
+    /**
+     * Get filterType
+     *
+     * @return integer 
+     */
+    public function getFilterGroup()
+    {
+        return $this->filterGroup;
     }
 }

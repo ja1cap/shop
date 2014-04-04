@@ -404,7 +404,7 @@ class DefaultController extends Controller
         $extraParametersData = array_filter(
             $category->getParameters()->map(function(CategoryParameter $categoryParameter) use (&$parametersData) {
 
-                if(!$categoryParameter->getIsMain() && isset($parametersData[$categoryParameter->getParameterId()])){
+                if($categoryParameter->getFilterGroup() == $categoryParameter::FILTER_GROUP_EXTRA && isset($parametersData[$categoryParameter->getParameterId()])){
 
                     $parameterData = $parametersData[$categoryParameter->getParameterId()];
                     unset($parametersData[$categoryParameter->getParameterId()]);

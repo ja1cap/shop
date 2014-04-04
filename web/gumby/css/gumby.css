@@ -1683,6 +1683,9 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 .ie9 .radio.checked i, .ie9 .checkbox.checked i { top: 0; }
 
 body { background: #f1f1f1; overflow-y: scroll; }
+body .tiles.tiles-blocks li { padding: 10px; border: 1px solid #CCCCCC; margin-bottom: 20px; }
+body .tiles.tiles-blocks li .tile-title { font-size: 16px; margin-bottom: 10px; }
+body .tiles.tiles-blocks li .tile-buttons .btn { width: 49%; margin-bottom: 5px; }
 body .chosen-select { width: 100%; }
 body .ui-tooltip { max-width: 100%; }
 body .checkboxes label { padding-left: 20px; position: relative; font-size: 12px; line-height: 14px; }
@@ -1796,9 +1799,12 @@ body .block-container.how-we-block .block-body .how-we-list .columns .image-cont
 body .block-container.how-we-block .block-body .how-we-list .columns .image-container .image-wrapper img { max-height: 133px; max-width: 133px; }
 body .block-container.how-we-block .block-body .how-we-list .columns .title { text-align: center; font-size: 20px; padding: 0 10px; }
 body .block-container.how-we-block .block-body .how-we-list .columns .description { text-align: center; padding: 20px 10px 0; }
-body .block-container.proposals-block .catalog-menu { margin-bottom: 10px; width: 800px; min-width: 800px; position: relative; z-index: 5; }
-body .block-container.proposals-block .catalog-menu .tiles { margin-left: 0; }
-body .block-container.proposals-block .catalog-menu .tiles.four_up > li { margin-left: 0; width: 25%; }
+body .block-container.proposals-block .catalog-menu { margin-bottom: 10px; width: 900px; min-width: 900px; position: relative; z-index: 5; }
+body .block-container.proposals-block .catalog-menu .tiles { margin: 0 auto; }
+body .block-container.proposals-block .catalog-menu .tiles li { margin-left: 0; width: 225px; }
+body .block-container.proposals-block .catalog-menu .tiles.three_up { width: 675px; }
+body .block-container.proposals-block .catalog-menu .tiles.two_up { width: 450px; }
+body .block-container.proposals-block .catalog-menu .tiles.one_up { width: 225px; }
 body .block-container.proposals-block .catalog-menu .btn { width: 100%; text-align: center; background: white; }
 body .block-container.proposals-block .catalog-menu .btn a { color: #34495e; }
 body .block-container.proposals-block .catalog-menu .btn:hover { background: #34495e; }
@@ -1995,7 +2001,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .shop-cart .shop-cart-category { padding: 5px 18px; background: #f1f1f1; }
 .shop-cart .shop-cart-category:first-child { -webkit-border-radius: 7px 7px 0 0; -moz-border-radius: 7px 7px 0 0; -ms-border-radius: 7px 7px 0 0; -o-border-radius: 7px 7px 0 0; border-radius: 7px 7px 0 0; }
 .shop-cart .shop-cart-category a { color: black; }
-.shop-cart .shop-cart-proposal-image { display: block; position: relative; overflow: hidden; width: 131px; height: 131px; margin: 5px auto 30px; border: 3px solid white; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
+.shop-cart .shop-cart-proposal-image { display: block; position: relative; overflow: hidden; width: 131px; height: 131px; margin: 5px auto 30px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
 .shop-cart .shop-cart-proposal-image .nailthumb-container { display: block; width: 125px; height: 125px; }
 .shop-cart .shop-cart-category-proposals { padding: 10px 18px; }
 .shop-cart .shop-cart-category-proposals .shop-cart-category-proposal .shop-cart-proposal-name { font-size: 16px; }
@@ -2020,8 +2026,6 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .price { font-size: 16px; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .price-summary { margin-left: 0; font-size: 20px; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .shop-cart-buttons { margin-top: 5px; margin-left: 0; }
-.shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-image { width: 106px; height: 106px; margin: 10px auto; }
-.shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-image .nailthumb-container { width: 100px; height: 100px; }
 .shop-cart-container .shop-cart-summary { text-align: right; font-size: 20px; margin-bottom: 20px; }
 .shop-cart-container .shop-cart-summary .summary-value { margin-left: 5px; font-size: 30px; color: #f14854; }
 .shop-cart-container #order-form .large-title { margin-bottom: 20px; }

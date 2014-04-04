@@ -5,19 +5,9 @@
 {% block right_bar %}
     {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig') }}
     {% if category.id %}
-        <div>
-            <div class="medium default btn icon-left entypo icon-archive">
-                <a href="{{ path('proposals', {'categoryId' : category.id}) }}">
-                    Товары
-                </a>
-            </div>
-            <div class="medium default btn icon-left entypo icon-menu">
-                <a href="{{ path('category_parameters', {'categoryId' : category.id}) }}">
-                    Параметры категории
-                </a>
-            </div>
+        <div style="margin-bottom: 10px">
+            {{ include('ShopCatalogBundle:AdminCategory:categoryNavigationButtons.html.twig') }}
         </div>
-        <br/>
     {% endif %}
     {{ form(form) }}
 {% endblock %}

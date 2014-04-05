@@ -4,13 +4,13 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\QueryBuilder;
-use Shop\MainBundle\Entity\AbstractRepository;
+use Weasty\DoctrineBundle\Entity\AbstractRepository;
 
 /**
  * Class ProposalRepository
  * @package Shop\CatalogBundle\Entity
  */
-class ProposalRepository extends AbstractRepository {
+class ProposalRepository extends \Weasty\DoctrineBundle\Entity\AbstractRepository {
 
     /**
      * @param $formattedNames

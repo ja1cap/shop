@@ -5,7 +5,7 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 use Shop\MainBundle\Utils\WordInflector;
 
 /**

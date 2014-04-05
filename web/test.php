@@ -1,3 +1,21 @@
 <?php
 
-echo @file_get_contents('https://dl.dropboxusercontent.com/sh/35shplf4e9w2zs9/nDvN0HI_aK/ARIZONA_Jpeg.jpg?token_hash=AAFdQVDIbBaHs910Tbnjb-GyfswasAgnvAC5S-UpW9dS4A');
+$geonameId = 625144;
+$geonameUsername = "ja1cap";
+$geonameLocalityUrl = "http://api.geonames.org/getJSON?geonameId=$geonameId&username=$geonameUsername&style=full";
+$geonameLocalityJSON = @file_get_contents($geonameLocalityUrl);
+$geonameLocalityData = json_decode($geonameLocalityJSON, true);
+
+$localeNames = array();
+
+foreach($geonameLocalityData['alternateNames'] as $alternateName){
+
+    if($alternateName['lang'] && $alternateName['lang'] != 'link'){
+        $localeNames[$alternateName['lang']] = $alternateName['name'];
+    }
+
+}
+
+var_dump($localeNames);
+
+die;

@@ -3,12 +3,12 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * ContractorCurrency
  */
-class ContractorCurrency extends AbstractEntity
+class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
 {
 
     const BLR_CURRENCY_NAME = 'Белорусский рубль';

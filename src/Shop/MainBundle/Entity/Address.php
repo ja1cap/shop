@@ -3,6 +3,7 @@
 namespace Shop\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Address

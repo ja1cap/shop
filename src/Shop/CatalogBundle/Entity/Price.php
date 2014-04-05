@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class Price

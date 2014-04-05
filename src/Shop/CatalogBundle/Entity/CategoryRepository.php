@@ -2,7 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
-use Shop\MainBundle\Entity\AbstractRepository;
+use Weasty\DoctrineBundle\Entity\AbstractRepository;
 
 /**
  * CategoryRepository

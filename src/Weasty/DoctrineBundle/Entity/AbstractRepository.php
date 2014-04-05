@@ -1,5 +1,5 @@
 <?php
-namespace Shop\MainBundle\Entity;
+namespace Weasty\DoctrineBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 use Doctrine\ORM\Query;
@@ -8,9 +8,9 @@ use Doctrine\ORM\Query\Expr;
 
 /**
  * Class AbstractRepository
- * @package Shop\MainBundle\Entity
+ * @package Weasty\DoctrineBundle\Entity
  */
-class AbstractRepository extends EntityRepository {
+abstract class AbstractRepository extends EntityRepository {
 
     /**
      * @param QueryBuilder $qb

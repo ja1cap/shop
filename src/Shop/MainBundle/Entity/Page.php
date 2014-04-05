@@ -1,5 +1,6 @@
 <?php
 namespace Shop\MainBundle\Entity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class Page

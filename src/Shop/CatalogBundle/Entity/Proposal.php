@@ -4,13 +4,13 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class Proposal
  * @package Shop\CatalogBundle\Entity
  */
-class Proposal extends AbstractEntity
+class Proposal extends \Weasty\DoctrineBundle\Entity\AbstractEntity
 {
 
     const STATUS_ON = 1;

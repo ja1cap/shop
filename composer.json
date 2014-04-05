@@ -6,20 +6,6 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "repositories": [
-        {
-            "type":"package",
-            "package": {
-                "name": "simplethings/entity-audit",
-                "version":"dev-master",
-                "source": {
-                    "url": "https://github.com/simplethings/EntityAudit.git",
-                    "type": "git",
-                    "reference":"master"
-                }
-            }
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.4",
@@ -37,7 +23,9 @@
         "phpexcel/phpexcel" : "*",
         "ircmaxell/password-compat": "~1.0.3",
         "leaseweb/secure-controller-bundle": "*",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "jjs/common": "dev-master",
+        "jjs/geonames-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

@@ -4,12 +4,12 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Parameter
  */
-class Parameter extends AbstractEntity
+class Parameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
 {
 
     const TYPE_SELECT = 1;

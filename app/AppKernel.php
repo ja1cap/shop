@@ -17,13 +17,16 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Shop\MainBundle\ShopMainBundle(),
-            new Shop\CatalogBundle\ShopCatalogBundle(),
             new Lsw\SecureControllerBundle\LswSecureControllerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new Shop\UserBundle\ShopUserBundle(),
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new Shop\OrderManagementBundle\ShopOrderManagementBundle(),
+            new JJs\Bundle\GeonamesBundle\JJsGeonamesBundle(),
+            new Weasty\GeonamesBundle\WeastyGeonamesBundle(),
+            new Weasty\DoctrineBundle\WeastyDoctrineBundle(),
+            new Shop\UserBundle\ShopUserBundle(),
+            new Shop\MainBundle\ShopMainBundle(),
+            new Shop\CatalogBundle\ShopCatalogBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

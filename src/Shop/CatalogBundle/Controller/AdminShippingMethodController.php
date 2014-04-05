@@ -3,7 +3,7 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\ShippingMethod;
-use Shop\CatalogBundle\Form\Type\ShippingMethodType;
+use Shop\CatalogBundle\Mapper\ShippingMethodMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,16 +39,17 @@ class AdminShippingMethodController extends Controller
     {
 
         $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:ShippingMethod');
-        $entity = $repository->findOneBy(array(
+        $shippingMethod = $repository->findOneBy(array(
             'id' => $id
         ));
 
-        if(!$entity instanceof ShippingMethod){
-            $entity = new ShippingMethod;
+        if(!$shippingMethod instanceof ShippingMethod){
+            $shippingMethod = new ShippingMethod;
         }
 
-        $isNew = !$entity->getId();
-        $form = $this->createForm(new ShippingMethodType(), $entity);
+        $isNew = !$shippingMethod->getId();
+        $mapper = new ShippingMethodMapper($this->container, $shippingMethod);
+        $form = $this->createForm('shipping_method', $mapper);
 
         $form->handleRequest($request);
 
@@ -57,7 +58,7 @@ class AdminShippingMethodController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if($isNew){
-                $em->persist($entity);
+                $em->persist($shippingMethod);
             }
 
             $em->flush();
@@ -69,7 +70,7 @@ class AdminShippingMethodController extends Controller
             return $this->render('ShopCatalogBundle:AdminShippingMethod:shippingMethod.html.twig', array(
                 'title' => $isNew ? 'Добавление способа доставки' : 'Изменение способа доставки',
                 'form' => $form->createView(),
-                'shippingMethod' => $entity,
+                'shippingMethod' => $shippingMethod,
             ));
 
         }

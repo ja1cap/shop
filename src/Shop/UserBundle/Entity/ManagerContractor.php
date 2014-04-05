@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\Contractor;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class ManagerContractor

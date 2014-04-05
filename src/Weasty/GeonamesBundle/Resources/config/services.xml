@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="weasty.geonames.username">zhenia.tereshko</parameter>
+        <parameter key="weasty.geonames.geoname.loader.class">Weasty\GeonamesBundle\Data\GeonameLoader</parameter>
+        <parameter key="weasty.geonames.country.loader.class">Weasty\GeonamesBundle\Data\CountryLoader</parameter>
+        <parameter key="weasty.geonames.country.entity.class">Weasty\GeonamesBundle\Entity\Country</parameter>
+        <parameter key="weasty.geonames.country.entity_repository.class">Weasty\GeonamesBundle\Entity\CountryRepository</parameter>
+        <parameter key="weasty.geonames.city.entity.class">Weasty\GeonamesBundle\Entity\City</parameter>
+        <parameter key="weasty.geonames.city.entity_repository.class">Weasty\GeonamesBundle\Entity\CityRepository</parameter>
+    </parameters>
+    <services>
+
+        <!--
+            Geoname Loader
+
+            Loads geoname from a geonames.org
+        -->
+        <service id="weasty.geonames.geoname.loader" class="%weasty.geonames.geoname.loader.class%">
+            <argument>%weasty.geonames.username%</argument>
+        </service>
+
+        <!-- Country Repository -->
+        <service id="weasty.geonames.country.entity_repository" class="%weasty.geonames.country.entity_repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%weasty.geonames.country.entity.class%</argument>
+            <call method="setGeonameLoader">
+                <argument id="weasty.geonames.geoname.loader" type="service" />
+            </call>
+        </service>
+
+        <!--
+            Country Repository
+
+            Aliased to the appropriate country repository based on the chozen
+            data storage implementation.
+        -->
+        <service id="weasty.geonames.country.repository" alias="weasty.geonames.country.entity_repository" />
+
+        <!--
+            City Entity Repository
+
+            Implementation of a Doctrine ORM repository which can store states
+            in a relational database.
+        -->
+        <service id="weasty.geonames.city.entity_repository" class="%weasty.geonames.city.entity_repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%weasty.geonames.city.entity.class%</argument>
+            <call method="setGeonameLoader">
+                <argument id="weasty.geonames.geoname.loader" type="service" />
+            </call>
+            <call method="setCountryRepository">
+                <argument id="weasty.geonames.country.entity_repository" type="service" />
+            </call>
+            <call method="setTimezoneRepository">
+                <argument id="geonames.timezone.entity_repository" type="service" />
+            </call>
+        </service>
+
+        <!--
+            City Repository
+
+            Aliased to the appropriate city repository based on the chozen
+            data storage implementation.
+        -->
+        <service id="weasty.geonames.city.repository" alias="weasty.geonames.city.entity_repository" />
+
+    </services>
+</container>

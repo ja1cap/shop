@@ -3,7 +3,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class PriceListAlias

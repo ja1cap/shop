@@ -1,12 +1,12 @@
 <?php
-namespace Shop\MainBundle\Entity;
+namespace Weasty\DoctrineBundle\Entity;
 
 use Doctrine\Common\Inflector\Inflector;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class AbstractEntity
- * @package Shop\MainBundle\Entity
+ * @package Weasty\DoctrineBundle\Mapper
  */
 abstract class AbstractEntity implements \ArrayAccess {
 

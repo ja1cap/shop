@@ -2,11 +2,13 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * ShippingMethod
+ * Class ShippingMethod
+ * @package Shop\CatalogBundle\Entity
  */
 class ShippingMethod extends AbstractEntity
 {
@@ -119,5 +121,53 @@ class ShippingMethod extends AbstractEntity
     public function getStatus()
     {
         return $this->status;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $countries;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->countries = new ArrayCollection();
+    }
+
+    /**
+     * Add countries
+     *
+     * @param \Shop\CatalogBundle\Entity\ShippingMethodCountry $country
+     * @return ShippingMethod
+     */
+    public function addCountry(ShippingMethodCountry $country)
+    {
+        $this->countries[] = $country;
+        $country->setShippingMethod($this);
+        return $this;
+    }
+
+    /**
+     * Remove countries
+     *
+     * @param \Shop\CatalogBundle\Entity\ShippingMethodCountry $countries
+     */
+    public function removeCountry(ShippingMethodCountry $countries)
+    {
+        $this->countries->removeElement($countries);
+    }
+
+    /**
+     * Get countries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCountries()
+    {
+        if(!$this->countries){
+            $this->countries = new ArrayCollection();
+        }
+        return $this->countries;
     }
 }

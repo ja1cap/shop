@@ -3,7 +3,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Query\Expr;
-use Shop\MainBundle\Entity\AbstractRepository;
+use Weasty\DoctrineBundle\Entity\AbstractRepository;
 use Shop\UserBundle\Entity\AbstractUser;
 use Shop\UserBundle\Entity\Manager;
 use Shop\UserBundle\Entity\ManagerContractor;

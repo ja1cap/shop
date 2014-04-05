@@ -3,13 +3,13 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class CategoryParameter
  * @package Shop\CatalogBundle\Entity
  */
-class CategoryParameter extends AbstractEntity
+class CategoryParameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
 {
 
     const FILTER_GROUP_NONE = 0;

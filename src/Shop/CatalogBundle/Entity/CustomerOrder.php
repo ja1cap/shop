@@ -4,13 +4,13 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\MainBundle\Entity\AbstractEntity;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class CustomerOrder
  * @package Shop\CatalogBundle\Entity
  */
-class CustomerOrder extends AbstractEntity
+class CustomerOrder extends \Weasty\DoctrineBundle\Entity\AbstractEntity
 {
 
     const STATUS_NEW = 1;

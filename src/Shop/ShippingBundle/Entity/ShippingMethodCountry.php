@@ -1,13 +1,13 @@
 <?php
 
-namespace Shop\CatalogBundle\Entity;
+namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class ShippingMethodCountry
- * @package Shop\CatalogBundle\Entity
+ * @package Shop\ShippingBundle\Entity
  */
 class ShippingMethodCountry extends AbstractEntity
 {
@@ -89,7 +89,7 @@ class ShippingMethodCountry extends AbstractEntity
     private $shippingMethodId;
 
     /**
-     * @var \Shop\CatalogBundle\Entity\ShippingMethod
+     * @var \Shop\ShippingBundle\Entity\ShippingMethod
      */
     private $shippingMethod;
 
@@ -120,7 +120,7 @@ class ShippingMethodCountry extends AbstractEntity
     /**
      * Set shippingMethod
      *
-     * @param \Shop\CatalogBundle\Entity\ShippingMethod $shippingMethod
+     * @param \Shop\ShippingBundle\Entity\ShippingMethod $shippingMethod
      * @return ShippingMethodCountry
      */
     public function setShippingMethod(ShippingMethod $shippingMethod = null)
@@ -133,7 +133,7 @@ class ShippingMethodCountry extends AbstractEntity
     /**
      * Get shippingMethod
      *
-     * @return \Shop\CatalogBundle\Entity\ShippingMethod 
+     * @return \Shop\ShippingBundle\Entity\ShippingMethod
      */
     public function getShippingMethod()
     {

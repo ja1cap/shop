@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop\CatalogBundle\Entity;
+namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class ShippingMethod
- * @package Shop\CatalogBundle\Entity
+ * @package Shop\ShippingBundle\Entity
  */
 class ShippingMethod extends AbstractEntity
 {
@@ -138,7 +138,7 @@ class ShippingMethod extends AbstractEntity
     /**
      * Add countries
      *
-     * @param \Shop\CatalogBundle\Entity\ShippingMethodCountry $country
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCountry $country
      * @return ShippingMethod
      */
     public function addCountry(ShippingMethodCountry $country)
@@ -151,7 +151,7 @@ class ShippingMethod extends AbstractEntity
     /**
      * Remove countries
      *
-     * @param \Shop\CatalogBundle\Entity\ShippingMethodCountry $countries
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCountry $countries
      */
     public function removeCountry(ShippingMethodCountry $countries)
     {

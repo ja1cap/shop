@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="shop_shipping_homepage" pattern="/hello/{name}">
+        <default key="_controller">ShopShippingBundle:Default:index</default>
+    </route>
+
+    <route id="shipping_methods" pattern="/admin/shippingMethods">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethods</default>
+    </route>
+
+    <route id="shipping_method" pattern="/admin/shippingMethod/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethod</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_method" pattern="/admin/deleteShippingMethod/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethod</default>
+    </route>
+
+</routes>

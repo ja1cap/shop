@@ -1,15 +1,15 @@
 <?php
 
-namespace Shop\CatalogBundle\Controller;
+namespace Shop\ShippingBundle\Controller;
 
-use Shop\CatalogBundle\Entity\ShippingMethod;
+use Shop\ShippingBundle\Entity\ShippingMethod;
 use Shop\CatalogBundle\Mapper\ShippingMethodMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AdminShippingMethodController
- * @package Shop\CatalogBundle\Controller
+ * @package Shop\ShippingBundle\Controller
  */
 class AdminShippingMethodController extends Controller
 {
@@ -20,11 +20,11 @@ class AdminShippingMethodController extends Controller
     public function shippingMethodsAction()
     {
 
-        $shippingMethods = $this->getDoctrine()->getRepository('ShopCatalogBundle:ShippingMethod')->findBy(array(), array(
+        $shippingMethods = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod')->findBy(array(), array(
             'name' => 'ASC',
         ));
 
-        return $this->render('ShopCatalogBundle:AdminShippingMethod:shippingMethods.html.twig', array(
+        return $this->render('ShopShippingBundle:AdminShippingMethod:shippingMethods.html.twig', array(
             'shippingMethods' => $shippingMethods,
         ));
 
@@ -38,7 +38,7 @@ class AdminShippingMethodController extends Controller
     public function shippingMethodAction($id, Request $request)
     {
 
-        $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:ShippingMethod');
+        $repository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod');
         $shippingMethod = $repository->findOneBy(array(
             'id' => $id
         ));
@@ -67,7 +67,7 @@ class AdminShippingMethodController extends Controller
 
         } else {
 
-            return $this->render('ShopCatalogBundle:AdminShippingMethod:shippingMethod.html.twig', array(
+            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingMethod.html.twig', array(
                 'title' => $isNew ? 'Добавление способа доставки' : 'Изменение способа доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingMethod,
@@ -80,7 +80,7 @@ class AdminShippingMethodController extends Controller
     public function deleteShippingMethodAction($id)
     {
 
-        $entity = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:ShippingMethod')->findOneBy(array(
+        $entity = $this->getDoctrine()->getManager()->getRepository('ShopShippingBundle:ShippingMethod')->findOneBy(array(
             'id' => $id
         ));
 

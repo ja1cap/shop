@@ -183,15 +183,3 @@ parse_price_list:
 delete_price_list:
     pattern: /adminCatalog/deletePriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:deletePriceList }
-
-shipping_methods:
-    pattern: /admin/shippingMethods
-    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:shippingMethods }
-
-shipping_method:
-    pattern: /admin/shippingMethod/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:shippingMethod, id: null }
-
-delete_shipping_method:
-    pattern: /admin/deleteShippingMethod/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminShippingMethod:deleteShippingMethod }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop\CatalogBundle\Tests\Controller;
+namespace Shop\ShippingBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

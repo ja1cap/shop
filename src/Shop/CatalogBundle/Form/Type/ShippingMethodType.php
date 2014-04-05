@@ -1,7 +1,7 @@
 <?php
 namespace Shop\CatalogBundle\Form\Type;
 
-use Shop\CatalogBundle\Entity\ShippingMethod;
+use Shop\ShippingBundle\Entity\ShippingMethod;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Weasty\GeonamesBundle\Entity\CountryRepository;

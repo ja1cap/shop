@@ -2,8 +2,8 @@
 namespace Shop\CatalogBundle\Mapper;
 
 use Doctrine\Common\Util\Inflector;
-use Shop\CatalogBundle\Entity\ShippingMethod;
-use Shop\CatalogBundle\Entity\ShippingMethodCountry;
+use Shop\ShippingBundle\Entity\ShippingMethod;
+use Shop\ShippingBundle\Entity\ShippingMethodCountry;
 
 /**
  * Class ShippingMethodMapper
@@ -12,7 +12,7 @@ use Shop\CatalogBundle\Entity\ShippingMethodCountry;
 class ShippingMethodMapper {
 
     /**
-     * @var ShippingMethod
+     * @var \Shop\ShippingBundle\Entity\ShippingMethod
      */
     protected $shippingMethod;
 
@@ -72,7 +72,7 @@ class ShippingMethodMapper {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Entity\ShippingMethod
+     * @return \Shop\ShippingBundle\Entity\ShippingMethod
      */
     public function getShippingMethod()
     {
@@ -81,7 +81,7 @@ class ShippingMethodMapper {
 
     /**
      * @param $countryCode
-     * @return ShippingMethodCountry
+     * @return \Shop\ShippingBundle\Entity\ShippingMethodCountry
      * @throws \Exception
      */
     protected function getShippingMethodCountry($countryCode = null){

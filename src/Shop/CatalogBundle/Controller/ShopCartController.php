@@ -42,7 +42,7 @@ class ShopCartController extends Controller
 
         }
 
-        $shippingMethods = $this->getDoctrine()->getRepository('ShopCatalogBundle:ShippingMethod')->findBy(array(), array(
+        $shippingMethods = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod')->findBy(array(), array(
             'name' => 'ASC',
         ));
 

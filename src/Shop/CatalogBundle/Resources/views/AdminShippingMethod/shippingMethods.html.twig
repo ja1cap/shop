@@ -16,12 +16,36 @@
             {% for shippingMethod in shippingMethods %}
                 <tr>
                     <td>
+                        {{ shippingMethod.id }}
+                    </td>
+                    <td>
                         <span class="{% if shippingMethod.status == constant('STATUS_OFF', shippingMethod) %}danger label{% endif %}">
                             {{ shippingMethod.name }}
                         </span>
-                    </td>
-                    <td>
-                        {{ shippingMethod.description|nl2br }}
+                        {% if shippingMethod.description %}
+                            <div style="font-size: 12px">
+                                {{ shippingMethod.description|nl2br }}
+                            </div>
+                        {% endif %}
+                        {% if not shippingMethod.countries.isEmpty %}
+                            <div style="font-size: 12px">
+                                {% for shippingMethodCountry in shippingMethod.countries %}
+                                    {% set country = weasty_geonames_country(shippingMethodCountry.countryCode) %}
+                                    {% if country %}
+                                        {{ country.getLocaleName(app.request.locale) }}
+                                        -
+                                        {% set cities = shippingMethodCountry.cityGeonameIds ? weasty_geonames_cities(shippingMethodCountry.cityGeonameIds) : null %}
+                                        {% if cities %}
+                                            {% for city in cities %}
+                                                {{ city.getLocaleName(app.request.locale) }}{{ not loop.last ? ', ' : '' }}
+                                            {% endfor %}
+                                        {% else %}
+                                            все города
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </td>
                     <td>
                         <div class="medium btn default icon-left entypo icon-pencil">

@@ -104,6 +104,7 @@ class ShippingMethodType extends AbstractType {
 //                'label' => 'Страны',
 //                'mapped' => false
 //            ))
+            ->add('countryCode', 'hidden')
             ->add('cityGeonameIds', 'choice', array(
                 'choices' => $citiesChoices,
                 'multiple' => true,

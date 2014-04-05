@@ -46,6 +46,15 @@ class ShippingMethodMapper {
     }
 
     /**
+     * @param $countryCode
+     * @return $this
+     */
+    public function setCountryCode($countryCode){
+        $this->getShippingMethodCountry($countryCode);
+        return $this;
+    }
+
+    /**
      * @param $cityGeonameIds
      * @return $this
      * @throws \Exception
@@ -71,12 +80,13 @@ class ShippingMethodMapper {
     }
 
     /**
+     * @param $countryCode
      * @return ShippingMethodCountry
      * @throws \Exception
      */
-    protected function getShippingMethodCountry(){
+    protected function getShippingMethodCountry($countryCode = null){
 
-        $countryCode = $this->getCountryCode();
+        $countryCode = $countryCode ?: $this->getCountryCode();
 
         $shippingMethodCountry = $this->getShippingMethod()->getCountries()->filter(function(ShippingMethodCountry $country) use ($countryCode) {
             return $country->getCountryCode() == $countryCode;

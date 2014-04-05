@@ -9,7 +9,7 @@
         </id>
         <field name="shippingMethodId" type="integer" column="shippingMethodId"/>
         <field name="countryCode" type="string" column="countryCode" length="2"/>
-        <field name="cityGeonameIds" type="simple_array" column="cityGeonameIds"/>
+        <field name="cityGeonameIds" type="simple_array" column="cityGeonameIds" nullable="true"/>
         <many-to-one target-entity="ShippingMethod" field="shippingMethod">
             <join-columns>
                 <join-column name="shippingMethodId" referenced-column-name="id"/>

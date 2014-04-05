@@ -70,5 +70,15 @@
         -->
         <service id="weasty.geonames.city.repository" alias="weasty.geonames.city.entity_repository" />
 
+        <service id="weasty.geonames.twig.cities_extension" class="Weasty\GeonamesBundle\Twig\CitiesExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="weasty.geonames.city.repository"/>
+        </service>
+
+        <service id="weasty.geonames.twig.countries_extension" class="Weasty\GeonamesBundle\Twig\CountriesExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="weasty.geonames.country.repository"/>
+        </service>
+
     </services>
 </container>

@@ -2,106 +2,18 @@
 
 namespace Weasty\GeonamesBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use JJs\Bundle\GeonamesBundle\Entity\Timezone;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Geographical Locality
  *
  * Identifies a geographical location ranging from large areas to buildings.
  *
- * @ORM\MappedSuperclass()
- * @author Josiah <Josiah@jjs.id.au>
- */
-abstract class Locality
+ * */
+abstract class Locality extends AbstractEntity
 {
-    /**
-     * Locality Identifier
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     * @ORM\Id
-     * @var integer
-     */
-    protected $id;
-
-    /**
-     * GeoNames.org ID
-     *
-     * Uniquely identifies this locality for syncronization from data on
-     * GeoNames.org.
-     * 
-     * @ORM\Column(name="geoname_id", type="integer", nullable=true)
-     * @var integer
-     */
-    protected $geonameIdentifier;
-
-    /**
-     * Country
-     *
-     * @ORM\ManyToOne(targetEntity="Country")
-     * @ORM\JoinColumn(nullable=false)
-     * @var Country
-     */
-    protected $country;
-
-    /**
-     * Name (UTF-8 encoded)
-     *
-     * @ORM\Column(name="name_utf8", type="string")
-     * @var string
-     */
-    protected $nameUtf8;
-
-    /**
-     * Name (ASCII encoded)
-     *
-     * @ORM\Column(name="name_ascii", type="string")
-     * @var string
-     */
-    protected $nameAscii;
-
-    /**
-     * Latitude coordinate
-     *
-     * @ORM\Column(name="latitude", type="float", scale=6, precision=9)
-     * @var float
-     */
-    protected $latitude;
-
-    /**
-     * Longitude coordinate
-     *
-     * @ORM\Column(name="longitude", type="float", scale=6, precision=9)
-     * @var float
-     */
-    protected $longitude;
-
-    /**
-     * Timezone
-     *
-     * @ORM\ManyToOne(targetEntity="JJs\Bundle\GeonamesBundle\Entity\Timezone")
-     * @var \JJs\Bundle\GeonamesBundle\Entity\Timezone
-     */
-    protected $timezone;
-
-    /**
-     * Creation date
-     *
-     * @ORM\Column(name="creation_date", type="datetime")
-     * @var DateTime
-     */
-    protected $creationDate;
-
-    /**
-     * Modification date
-     *
-     * @ORM\Column(name="modification_date", type="datetime", nullable=true)
-     * @var DateTime
-     */
-    protected $modificationDate;
-
     /**
      * Creates a new locality
      */
@@ -115,20 +27,14 @@ abstract class Locality
      * 
      * @return integer
      */
-    public function getID()
-    {
-        return $this->id;
-    }
+    abstract public function getID();
 
     /**
      * Returns the GeoNames.org identifier of this locality
      *
      * @return integer
      */
-    public function getGeonameIdentifier()
-    {
-        return $this->geonameIdentifier;
-    }
+    abstract public function getGeonameIdentifier();
 
     /**
      * Sets the GeoNames.org identifier of this locality
@@ -137,22 +43,14 @@ abstract class Locality
      *
      * @return Locality
      */
-    public function setGeonameIdentifier($geonameIdentifier)
-    {
-        $this->geonameIdentifier = $geonameIdentifier;
-
-        return $this;
-    }
+    abstract public function setGeonameIdentifier($geonameIdentifier);
 
     /**
      * Returns the country
      * 
      * @return Country
      */
-    public function getCountry()
-    {
-        return $this->country;
-    }
+    abstract public function getCountry();
 
     /**
      * Sets the country
@@ -161,32 +59,20 @@ abstract class Locality
      * 
      * @return Locality
      */
-    public function setCountry(Country $country)
-    {
-        $this->country = $country;
-
-        return $this;
-    }
+    abstract public function setCountry(Country $country);
 
     /**
      * Returns the name of the locality
-     * 
      * @return string
      */
-    public function getName()
-    {
-        return $this->getNameUtf8() ?: $this->getNameAscii();
-    }
+    abstract public function getName();
 
     /**
      * Returns the UTF8 encoded name of the locality
      * 
      * @return string
      */
-    public function getNameUtf8()
-    {
-        return $this->nameUtf8;
-    }
+    abstract public function getNameUtf8();
 
     /**
      * Sets the UTF8 encoded name of the locality
@@ -195,22 +81,14 @@ abstract class Locality
      *
      * @return Locality
      */
-    public function setNameUtf8($name)
-    {
-        $this->nameUtf8 = $name;
-
-        return $this;
-    }
+    abstract public function setNameUtf8($name);
 
     /**
      * Returns the ASCII encoded name of the locality
      * 
      * @return string
      */
-    public function getNameAscii()
-    {
-        return $this->nameAscii;
-    }
+    abstract public function getNameAscii();
 
     /**
      * Sets the ASCII encoded name of the locality
@@ -219,22 +97,14 @@ abstract class Locality
      *
      * @return Locality
      */
-    public function setNameAscii($name)
-    {
-        $this->nameAscii = $name;
-
-        return $this;
-    }
+    abstract public function setNameAscii($name);
 
     /**
      * Returns the approximate latitude of the locality
      * 
      * @return float
      */
-    public function getLatitude()
-    {
-        return $this->latitude;
-    }
+    abstract public function getLatitude();
 
     /**
      * Sets the latitude of the locality
@@ -243,22 +113,14 @@ abstract class Locality
      *
      * @return float
      */
-    public function setLatitude($latitude)
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
+    abstract public function setLatitude($latitude);
 
     /**
      * Returns the longitude of the locality
      * 
      * @return float
      */
-    public function getLongitude()
-    {
-        return $this->longitude;
-    }
+    abstract public function getLongitude();
 
     /**
      * Sets the longitude of the locality
@@ -267,22 +129,14 @@ abstract class Locality
      *
      * @return Locality
      */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
+    abstract public function setLongitude($longitude);
 
     /**
      * Returns the timezone
      * 
      * @return Timezone
      */
-    public function getTimezone()
-    {
-        return $this->timezone;
-    }
+    abstract public function getTimezone();
 
     /**
      * Sets the timezone
@@ -291,32 +145,21 @@ abstract class Locality
      *
      * @return Locality
      */
-    public function setTimezone(Timezone $timezone = null)
-    {
-        $this->timezone = $timezone;
-
-        return $this;
-    }
+    abstract public function setTimezone(Timezone $timezone = null);
 
     /**
      * Returns the creation date of this locality
      * 
      * @return DateTime
      */
-    public function getCreationDate()
-    {
-        return $this->creationDate;
-    }
+    abstract public function getCreationDate();
 
     /**
      * Returns the modification date of this locality
      * 
      * @return DateTime
      */
-    public function getModificationDate()
-    {
-        return $this->modificationDate;
-    }
+    abstract public function getModificationDate();
 
     /**
      * Sets the modification date of this locality
@@ -325,10 +168,16 @@ abstract class Locality
      * 
      * @return Locality
      */
-    public function setModificationDate(DateTime $modificationDate)
-    {
-        $this->modificationDate = $modificationDate;
+    abstract public function setModificationDate(DateTime $modificationDate);
 
-        return $this;
-    }
+    /**
+     * @param string $countryId
+     */
+    abstract public function setCountryId($countryId);
+
+    /**
+     * @return string
+     */
+    abstract public function getCountryId();
+
 }

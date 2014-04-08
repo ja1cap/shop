@@ -3,7 +3,7 @@
 namespace Shop\ShippingBundle\Controller;
 
 use Shop\ShippingBundle\Entity\ShippingMethod;
-use Shop\CatalogBundle\Mapper\ShippingMethodMapper;
+use Shop\ShippingBundle\Mapper\ShippingMethodMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,6 +42,25 @@ class AdminShippingMethodController extends Controller
         $shippingMethod = $repository->findOneBy(array(
             'id' => $id
         ));
+
+//        $cities = $this->getDoctrine()->getRepository('WeastyGeonamesBundle:City')->findBy(array(
+//            'stateId' => array(
+//                01,
+//                02,
+//                03,
+//                04,
+//                05,
+//                06,
+//            ),
+//        ));
+//        foreach($cities as $city){
+//            if($city instanceof City){
+//                var_dump($city->getStateId());
+//                var_dump($city->getLocaleNames());
+//                var_dump($city->getState()->getName());
+//            }
+//        }
+//        die;
 
         if(!$shippingMethod instanceof ShippingMethod){
             $shippingMethod = new ShippingMethod;

@@ -22,22 +22,17 @@ class CityRepository extends LocalityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select(array(
-                'c.*'
+                'c'
             ))
             ->from('WeastyGeonamesBundle:City', 'c')
             ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('c.country_id', $country->getID()),
+                $qb->expr()->eq('c.countryId', $country->getID()),
                 $qb->expr()->gte('c.population', 5000)
             ))
             ->addOrderBy('c.population', 'DESC')
         ;
 
-        $this->convertDqlToSql($qb);
-        $sql = (string)$qb;
-
-        $rsm = $this->createResultSetMappingFromMetadata('WeastyGeonamesBundle:City', 'c');
-
-        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query = $qb->getQuery();
 
         return $query->getResult();
 
@@ -69,7 +64,8 @@ class CityRepository extends LocalityRepository
      * Imports a locality as a city
      * 
      * @param LocalityInterface $locality Locality
-     * 
+     *
+     * @throws \Exception
      * @return City
      */
     public function importLocality(LocalityInterface $locality)
@@ -91,6 +87,27 @@ class CityRepository extends LocalityRepository
             ;
 
             if($locality->getPopulation() >= 5000){
+
+                $city->setStateAdminCode($locality->getAdmin1Code());
+
+                if($city->getStateAdminCode()){
+
+                    $state = $this->getStateRepository()->findOneBy(array(
+                        'countryId' => $city->getCountry()->getID(),
+                        'adminCode' => $city->getStateAdminCode(),
+                    ));
+
+                    if($state instanceof State){
+
+                        $city->setState($state);
+
+                    } else {
+
+                        //throw new \Exception(sprintf('State not found %s, %s (%s - %s)', $city->getName(), $city->getGeonameIdentifier(), $city->getCountry()->getCode(), $city->getStateAdminCode()), 404);
+
+                    }
+
+                }
 
                 $geonameId = $locality->getGeonameIdentifier();
                 $geonameData = $this->getGeonameLoader()->load($geonameId);
@@ -117,7 +134,8 @@ class CityRepository extends LocalityRepository
 
                     $city->setLocaleNames($localeNames);
 
-                } else {
+                }
+                else {
 
                     //@TODO create translate service
                     $locale = 'ru';

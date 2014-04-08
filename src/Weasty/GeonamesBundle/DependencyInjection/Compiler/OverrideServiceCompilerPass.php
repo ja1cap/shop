@@ -24,7 +24,17 @@ class OverrideServiceCompilerPass implements CompilerPassInterface {
         $definition->addMethodCall(
             'addLocalityRepository',
             array(
-                new Reference('weasty.geonames.city.entity_repository'),
+                new Reference('weasty.geonames.state.repository'),
+                array(
+                    FeatureCodes::ADM1,
+                ),
+            )
+        );
+
+        $definition->addMethodCall(
+            'addLocalityRepository',
+            array(
+                new Reference('weasty.geonames.city.repository'),
                 array(
                     FeatureCodes::PPL,
                     FeatureCodes::PPLA,

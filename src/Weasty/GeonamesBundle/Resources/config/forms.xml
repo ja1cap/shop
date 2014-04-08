@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="weasty.geonames.form.type.state.class">Weasty\GeonamesBundle\Form\Type\StateType</parameter>
+        <parameter key="weasty.geonames.form.type.city.class">Weasty\GeonamesBundle\Form\Type\CityType</parameter>
+    </parameters>
+
+    <services>
+        <service id="weasty.geonames.form.type.state" class="%weasty.geonames.form.type.state.class%">
+            <tag name="form.type" alias="weasty_geonames_state" />
+            <argument type="service" id="doctrine"/>
+            <argument>%weasty.geonames.state.entity.class%</argument>
+            <call method="setCountryCode">
+                <argument>%country_code%</argument>
+            </call>
+            <call method="setLocale">
+                <argument>%locale%</argument>
+            </call>
+        </service>
+        <service id="weasty.geonames.form.type.city" class="%weasty.geonames.form.type.city.class%">
+            <tag name="form.type" alias="weasty_geonames_city" />
+            <argument type="service" id="doctrine"/>
+            <argument>%weasty.geonames.city.entity.class%</argument>
+            <call method="setCountryCode">
+                <argument>%country_code%</argument>
+            </call>
+            <call method="setLocale">
+                <argument>%locale%</argument>
+            </call>
+        </service>
+    </services>
+
+</container>

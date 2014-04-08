@@ -253,4 +253,29 @@ abstract class AbstractEntity implements \ArrayAccess {
         }
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    function __get($name)
+    {
+
+        if(strpos($name, '(') !== false){
+
+            list($property, $argumentsList) = explode('(', $name);
+
+            $method = 'get' . Inflector::classify($property);
+            $arguments = explode(',', str_replace(')', '', $argumentsList));
+
+            if(method_exists($this, $method)){
+                return call_user_func_array(array($this, $method), $arguments);
+            } else {
+                return null;
+            }
+
+        } else {
+            return $this->offsetGet($name);
+        }
+    }
+
 }

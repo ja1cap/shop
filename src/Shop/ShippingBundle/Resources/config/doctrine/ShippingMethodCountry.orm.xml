@@ -9,6 +9,7 @@
         </id>
         <field name="shippingMethodId" type="integer" column="shippingMethodId"/>
         <field name="countryCode" type="string" column="countryCode" length="2"/>
+        <field name="stateGeonameIds" type="simple_array" column="stateGeonameIds" nullable="true"/>
         <field name="cityGeonameIds" type="simple_array" column="cityGeonameIds" nullable="true"/>
         <many-to-one target-entity="ShippingMethod" field="shippingMethod">
             <join-columns>

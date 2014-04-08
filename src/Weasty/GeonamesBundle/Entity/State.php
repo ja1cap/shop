@@ -4,14 +4,26 @@ namespace Weasty\GeonamesBundle\Entity;
 
 use DateTime;
 use JJs\Bundle\GeonamesBundle\Entity\Timezone;
+use Doctrine\ORM\Mapping as ORM;
 use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
 
 /**
- * Class City
+ * Class State
  * @package Weasty\GeonamesBundle\Entity
  */
-class City extends Locality implements TranslatableGeoname
+class State extends Locality implements TranslatableGeoname
 {
+
+    /**
+     * Locale names
+     * @var array
+     */
+    protected $localeNames;
+
+    /**
+     * @var string
+     */
+    protected $adminCode;
 
     /**
      * Locality Identifier
@@ -92,167 +104,6 @@ class City extends Locality implements TranslatableGeoname
      * @var DateTime
      */
     protected $modificationDate;
-
-    /**
-     * Locale names
-     * @var array
-     */
-    protected $localeNames;
-
-    /**
-     * City population
-     * @var integer
-     */
-    protected $population;
-
-    /**
-     * City state id
-     * @var integer
-     */
-    protected $stateId;
-
-    /**
-     * City state admin code
-     * @var integer
-     */
-    protected $stateAdminCode;
-
-    /**
-     * State
-     *
-     * @var State
-     */
-    protected $state;
-
-    /**
-     * @param int $population
-     * @return $this
-     */
-    public function setPopulation($population)
-    {
-        $this->population = $population;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPopulation()
-    {
-        return $this->population;
-    }
-
-    /**
-     * @param array $localeNames
-     * @return $this
-     */
-    public function setLocaleNames($localeNames)
-    {
-        $this->localeNames = $localeNames;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getLocaleNames()
-    {
-        return $this->localeNames ?: array(
-            'en' => $this->getName(),
-        );
-    }
-
-    /**
-     * @param $locale
-     * @param $name
-     * @return $this
-     */
-    public function addLocaleName($locale, $name){
-        $this->localeNames[$locale] = $name;
-        return $this;
-    }
-
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getLocaleName($locale){
-        if(isset($this->localeNames[$locale])){
-            return $this->localeNames[$locale];
-        }
-        return $this->getName();
-    }
-
-    /**
-     * @param $locale
-     * @return $this
-     */
-    public function removeLocaleName($locale){
-        if(isset($this->localeNames[$locale])){
-            unset($this->localeNames[$locale]);
-        }
-        return $this;
-    }
-
-    /**
-     * @param State $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-        $this->stateId = $state ? $state->getID() : null;
-        $this->stateAdminCode = $state ? $state->getAdminCode() : null;
-    }
-
-    /**
-     * @return State
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param null $locale
-     * @return null|string
-     */
-    public function getStateName($locale = null){
-
-        return $this->getState() ? $this->getState()->getLocaleName($locale) : null;
-
-    }
-
-    /**
-     * @param int $stateAdminCode
-     */
-    public function setStateAdminCode($stateAdminCode)
-    {
-        $this->stateAdminCode = $stateAdminCode;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStateAdminCode()
-    {
-        return $this->stateAdminCode;
-    }
-
-    /**
-     * @param int $stateId
-     */
-    public function setStateId($stateId)
-    {
-        $this->stateId = $stateId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStateId()
-    {
-        return $this->stateId;
-    }
 
     /**
      * Creates a new locality
@@ -497,6 +348,72 @@ class City extends Locality implements TranslatableGeoname
     public function getCountryId()
     {
         return $this->countryId;
+    }
+
+    /**
+     * @param string $adminCode
+     */
+    public function setAdminCode($adminCode)
+    {
+        $this->adminCode = $adminCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminCode()
+    {
+        return $this->adminCode;
+    }
+
+    /**
+     * @param array $localeNames
+     * @return $this
+     */
+    public function setLocaleNames($localeNames)
+    {
+        $this->localeNames = $localeNames;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocaleNames()
+    {
+        return $this->localeNames;
+    }
+
+    /**
+     * @param $locale
+     * @param $name
+     * @return $this
+     */
+    public function addLocaleName($locale, $name){
+        $this->localeNames[$locale] = $name;
+        return $this;
+    }
+
+    /**
+     * @param $locale
+     * @return string
+     */
+    public function getLocaleName($locale){
+        if($locale && isset($this->localeNames[$locale])){
+            return $this->localeNames[$locale];
+        }
+        return $this->getName();
+    }
+
+    /**
+     * @param $locale
+     * @return $this
+     */
+    public function removeLocaleName($locale){
+        if(isset($this->localeNames[$locale])){
+            unset($this->localeNames[$locale]);
+        }
+        return $this;
     }
 
 }

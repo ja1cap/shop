@@ -13,6 +13,13 @@ use JJs\Bundle\GeonamesBundle\Entity\TimezoneRepository;
 abstract class LocalityRepository extends GeonameRepository implements LocalityRepositoryInterface {
 
     /**
+     * State Repository
+     *
+     * @var StateRepository
+     */
+    protected $stateRepository;
+
+    /**
      * Country Repository
      *
      * @var CountryRepository
@@ -64,6 +71,22 @@ abstract class LocalityRepository extends GeonameRepository implements LocalityR
     public function setTimezoneRepository(TimezoneRepository $timezoneRepository)
     {
         $this->timezoneRepository = $timezoneRepository;
+    }
+
+    /**
+     * @param \Weasty\GeonamesBundle\Entity\StateRepository $stateRepository
+     */
+    public function setStateRepository(StateRepository $stateRepository)
+    {
+        $this->stateRepository = $stateRepository;
+    }
+
+    /**
+     * @return \Weasty\GeonamesBundle\Entity\StateRepository
+     */
+    public function getStateRepository()
+    {
+        return $this->stateRepository;
     }
 
     /**

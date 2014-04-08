@@ -2,16 +2,13 @@
 
 namespace Weasty\GeonamesBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use JJs\Bundle\GeonamesBundle\Model\CountryInterface;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
 
 /**
- * Country
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Weasty\GeonamesBundle\Entity\CountryRepository")
+ * Class Country
+ * @package Weasty\GeonamesBundle\Entity
  */
 class Country extends AbstractEntity implements CountryInterface, TranslatableGeoname
 {
@@ -19,9 +16,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * Unique identifier which represents the country in the local database.
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @var integer
      */
     protected $id;
@@ -29,7 +23,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * ISO code (2 character)
      *
-     * @ORM\Column(length=2, unique=true)
      * @var string
      */
     protected $code;
@@ -37,7 +30,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * Name
      *
-     * @ORM\Column(length=50, unique=true)
      * @var string
      */
     protected $name;
@@ -45,7 +37,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * Top level domain
      *
-     * @ORM\Column(length=2, nullable=true)
      * @var string
      */
     protected $domain;
@@ -53,7 +44,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * Postal code format
      *
-     * @ORM\Column(name="postal_code_format", length=60, nullable=true)
      * @var string
      */
     protected $postalCodeFormat;
@@ -61,7 +51,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * Postal code regular expression
      *
-     * @ORM\Column(name="postal_code_regex", length=180, nullable=true)
      * @var string
      */
     protected $postalCodeRegex;
@@ -72,7 +61,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
      * Where there is more than one possible phone prefix the different prefixes
      * will be separated by commas.
      *
-     * @ORM\Column(name="phone_prefix", length=20, nullable=true)
      * @var string
      */
     protected $phonePrefix;
@@ -80,7 +68,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     /**
      * @var array
      *
-     * @ORM\Column(name="locale_names", type="json_array", nullable=true)
      */
     protected $localeNames;
 
@@ -90,7 +77,6 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
      * Uniquely identifies this locality for syncronization from data on
      * GeoNames.org.
      *
-     * @ORM\Column(name="geoname_id", type="integer", nullable=true)
      * @var integer
      */
     protected $geonameIdentifier;

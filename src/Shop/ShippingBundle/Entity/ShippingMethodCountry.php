@@ -26,6 +26,10 @@ class ShippingMethodCountry extends AbstractEntity
      */
     private $cityGeonameIds;
 
+    /**
+     * @var array
+     */
+    private $stateGeonameIds;
 
     /**
      * Get id
@@ -140,4 +144,26 @@ class ShippingMethodCountry extends AbstractEntity
         return $this->shippingMethod;
     }
 
+    /**
+     * Set stateGeonameIds
+     *
+     * @param array $stateGeonameIds
+     * @return ShippingMethodCountry
+     */
+    public function setStateGeonameIds($stateGeonameIds)
+    {
+        $this->stateGeonameIds = $stateGeonameIds;
+
+        return $this;
+    }
+
+    /**
+     * Get stateGeonameIds
+     *
+     * @return array 
+     */
+    public function getStateGeonameIds()
+    {
+        return $this->stateGeonameIds;
+    }
 }

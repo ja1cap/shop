@@ -32,15 +32,26 @@
                                 {% for shippingMethodCountry in shippingMethod.countries %}
                                     {% set country = weasty_geonames_country(shippingMethodCountry.countryCode) %}
                                     {% if country %}
-                                        {{ country.getLocaleName(app.request.locale) }}
-                                        -
+                                        <span style="font-weight: bold;">
+                                            {{ country.getLocaleName(app.request.locale) }}
+                                        </span>
+                                        {% set states = shippingMethodCountry.stateGeonameIds ? weasty_geonames_states(shippingMethodCountry.stateGeonameIds) : null %}
+                                        {% if states %}
+                                            <div>
+                                                Регионы:
+                                                {% for state in states %}
+                                                    {{ state.getLocaleName(app.request.locale) }}{{ not loop.last ? ', ' : '' }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
                                         {% set cities = shippingMethodCountry.cityGeonameIds ? weasty_geonames_cities(shippingMethodCountry.cityGeonameIds) : null %}
                                         {% if cities %}
-                                            {% for city in cities %}
-                                                {{ city.getLocaleName(app.request.locale) }}{{ not loop.last ? ', ' : '' }}
-                                            {% endfor %}
-                                        {% else %}
-                                            все города
+                                            <div>
+                                                Города:
+                                                {% for city in cities %}
+                                                    {{ city.getLocaleName(app.request.locale) }}{{ not loop.last ? ', ' : '' }}
+                                                {% endfor %}
+                                            </div>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}

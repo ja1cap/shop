@@ -1,13 +1,16 @@
 <?php
-namespace Shop\CatalogBundle\Mapper;
+namespace Shop\ShippingBundle\Mapper;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
 use Shop\ShippingBundle\Entity\ShippingMethod;
 use Shop\ShippingBundle\Entity\ShippingMethodCountry;
+use Weasty\GeonamesBundle\Entity\City;
+use Weasty\GeonamesBundle\Entity\State;
 
 /**
  * Class ShippingMethodMapper
- * @package Shop\CatalogBundle\Mapper
+ * @package Shop\ShippingBundle\Mapper
  */
 class ShippingMethodMapper {
 
@@ -27,6 +30,16 @@ class ShippingMethodMapper {
     protected $countryRepository;
 
     /**
+     * @var \Weasty\GeonamesBundle\Entity\StateRepository
+     */
+    protected $stateRepository;
+
+    /**
+     * @var \Weasty\GeonamesBundle\Entity\CityRepository
+     */
+    protected $cityRepository;
+
+    /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param $shippingMethod
      */
@@ -34,6 +47,8 @@ class ShippingMethodMapper {
     {
         $this->countryCode = $container->getParameter('country_code');
         $this->countryRepository = $container->get('weasty.geonames.country.repository');
+        $this->stateRepository = $container->get('weasty.geonames.state.repository');
+        $this->cityRepository = $container->get('weasty.geonames.city.repository');
         $this->shippingMethod = $shippingMethod;
     }
 
@@ -55,20 +70,77 @@ class ShippingMethodMapper {
     }
 
     /**
-     * @param $cityGeonameIds
+     * @param ArrayCollection $cities
      * @return $this
      * @throws \Exception
      */
-    public function setCityGeonameIds($cityGeonameIds){
-        $this->getShippingMethodCountry()->setCityGeonameIds($cityGeonameIds);
+    public function setCities($cities){
+
+        $geonameIdentifiers = $cities->map(function(City $city){
+            return $city->getGeonameIdentifier();
+        })->toArray();
+
+        $this->getShippingMethodCountry()->setCityGeonameIds($geonameIdentifiers);
+
         return $this;
+
     }
 
     /**
-     * @return array
+     * @return ArrayCollection|null
      */
-    public function getCityGeonameIds(){
-        return $this->getShippingMethodCountry()->getCityGeonameIds();
+    public function getCities(){
+
+        $cities = null;
+        $geonameIdentifiers = $this->getShippingMethodCountry()->getCityGeonameIds();
+
+        if($geonameIdentifiers){
+
+            $cities = new ArrayCollection($this->getCityRepository()->findBy(array(
+                'geonameIdentifier' => $geonameIdentifiers
+            )));
+
+        }
+
+        return $cities;
+
+    }
+
+    /**
+     * @param ArrayCollection $states
+     * @return $this
+     * @throws \Exception
+     */
+    public function setStates($states){
+
+        $geonameIdentifiers = $states->map(function(State $state){
+            return $state->getGeonameIdentifier();
+        })->toArray();
+
+        $this->getShippingMethodCountry()->setStateGeonameIds($geonameIdentifiers);
+
+        return $this;
+
+    }
+
+    /**
+     * @return ArrayCollection|null
+     */
+    public function getStates(){
+
+        $states = null;
+        $geonameIdentifiers = $this->getShippingMethodCountry()->getStateGeonameIds();
+
+        if($geonameIdentifiers){
+
+            $states = new ArrayCollection($this->getStateRepository()->findBy(array(
+                'geonameIdentifier' => $geonameIdentifiers
+            )));
+
+        }
+
+        return $states;
+
     }
 
     /**
@@ -124,6 +196,22 @@ class ShippingMethodMapper {
     }
 
     /**
+     * @return \Weasty\GeonamesBundle\Entity\CityRepository
+     */
+    public function getCityRepository()
+    {
+        return $this->cityRepository;
+    }
+
+    /**
+     * @return \Weasty\GeonamesBundle\Entity\StateRepository
+     */
+    public function getStateRepository()
+    {
+        return $this->stateRepository;
+    }
+
+    /**
      * @param $name
      * @return mixed
      */
@@ -149,4 +237,4 @@ class ShippingMethodMapper {
         $this->getShippingMethod()->offsetSet($name, $value);
     }
 
-} 
+}

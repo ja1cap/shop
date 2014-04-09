@@ -32,6 +32,9 @@ twig:
     cache:            false
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+      resources:
+          - 'ShopShippingBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

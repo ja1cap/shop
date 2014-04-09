@@ -3,12 +3,15 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\ResourceBundle\Data\PriceInterface;
 
 /**
  * Class Price
  * @package Shop\CatalogBundle\Entity
  */
-class Price extends AbstractEntity {
+class Price extends AbstractEntity
+    implements PriceInterface
+{
 
     const STATUS_ON = 1;
     const STATUS_OFF = 2;
@@ -120,7 +123,6 @@ class Price extends AbstractEntity {
      * @var integer
      */
     private $proposalId;
-
 
     /**
      * Set proposalId

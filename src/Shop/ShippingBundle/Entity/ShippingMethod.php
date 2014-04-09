@@ -170,4 +170,42 @@ class ShippingMethod extends AbstractEntity
         }
         return $this->countries;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $prices;
+
+
+    /**
+     * Add prices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodPrice $price
+     * @return ShippingMethod
+     */
+    public function addPrice(ShippingMethodPrice $price)
+    {
+        $this->prices[] = $price;
+        $price->setShippingMethod($this);
+        return $this;
+    }
+
+    /**
+     * Remove prices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodPrice $prices
+     */
+    public function removePrice(ShippingMethodPrice $prices)
+    {
+        $this->prices->removeElement($prices);
+    }
+
+    /**
+     * Get prices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
 }

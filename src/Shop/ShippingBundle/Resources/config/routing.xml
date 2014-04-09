@@ -21,4 +21,13 @@
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethod</default>
     </route>
 
+    <route id="shipping_method_price" pattern="/admin/shippingMethodPrice/{shippingMethodId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_method_price" pattern="/admin/deleteShippingMethodPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodPrice</default>
+    </route>
+
 </routes>

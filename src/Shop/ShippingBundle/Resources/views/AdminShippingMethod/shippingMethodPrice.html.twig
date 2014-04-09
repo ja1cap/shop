@@ -1,0 +1,34 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block right_bar %}
+    {{ form(form) }}
+    <script>
+        $(function(){
+
+            var $shipping_price_orderPriceType = $('#shipping_price_orderPriceType');
+            var $orderPricesContainers = $('#shipping_price_minOrderPrice, #shipping_price_maxOrderPrice').closest('div');
+
+            var checkOrderPriceType = function(){
+
+                var shipping_price_orderPriceType = $shipping_price_orderPriceType.find('input:checked').val();
+
+                switch (shipping_price_orderPriceType){
+                    case '{{ constant('Shop\\ShippingBundle\\Entity\\SHippingPrice::ORDER_PRICE_TYPE_ANY') }}':
+                        $orderPricesContainers.hide();
+                        break;
+                    case '{{ constant('Shop\\ShippingBundle\\Entity\\SHippingPrice::ORDER_PRICE_TYPE_RANGE') }}':
+                        $orderPricesContainers.show();
+                        break;
+                }
+
+            };
+
+            checkOrderPriceType();
+
+            $shipping_price_orderPriceType.find('input').change(checkOrderPriceType);
+
+        });
+    </script>
+{% endblock %}

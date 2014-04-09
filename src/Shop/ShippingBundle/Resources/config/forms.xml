@@ -6,12 +6,16 @@
 
     <parameters>
         <parameter key="shop.catalog.form.type.shipping_method.class">Shop\ShippingBundle\Form\Type\ShippingMethodType</parameter>
+        <parameter key="shop.catalog.form.type.shipping_price.class">Shop\ShippingBundle\Form\Type\ShippingPriceType</parameter>
     </parameters>
 
     <services>
         <service id="shop.catalog.form.type.shipping_method" class="%shop.catalog.form.type.shipping_method.class%">
             <tag name="form.type" alias="shipping_method" />
             <argument>%locale%</argument>
+        </service>
+        <service id="shop.catalog.form.type.shipping_price" class="%shop.catalog.form.type.shipping_price.class%">
+            <tag name="form.type" alias="shipping_price" />
         </service>
     </services>
 

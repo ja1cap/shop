@@ -1,0 +1,36 @@
+{#{% block shipping_price_widget %}#}
+    {#<div style="">#}
+        {#{% set prices = (value ?: [null]) %}#}
+        {#{% for price in prices %}#}
+
+            {#{% set priceElementNamePrefix = full_name ~ '[' ~ loop.index0 ~']' %}#}
+
+            {#{% set orderPriceType = price.orderPriceType|default(constant('Shop\\ShippingBundle\\Entity\\SHippingPrice::ORDER_PRICE_TYPE_ANY')) %}#}
+            {#{% set orderPriceTypeElementName = priceElementNamePrefix ~ '[orderPriceType]' %}#}
+            {#{% set orderPriceTypeElementId = form.orderPriceType.vars.id ~ loop.index0 %}#}
+
+            {#<label>#}
+                {#{{ form.orderPriceType.vars.label }}#}
+            {#</label>#}
+            {#<div class="">#}
+                {#{% for choice in form.orderPriceType.vars.choices %}#}
+                    {#<label class="" for="{{ orderPriceTypeElementId ~ choice.value }}">#}
+                        {#<input name="{{ orderPriceTypeElementName }}" id="{{ orderPriceTypeElementId ~ choice.value }}" value="{{ choice.value }}" type="radio" {{ choice.value == orderPriceType ? 'checked="checked"' : '' }}>#}
+                        {#{{ choice.label }}#}
+                    {#</label>#}
+                {#{% endfor %}#}
+            {#</div>#}
+
+            {#{% set priceValueElementName = priceElementNamePrefix ~ '[value]' %}#}
+            {#{% set priceValueElementId = form.value.vars.id ~ loop.index0 %}#}
+
+            {#<div>#}
+                {#<label for="{{ priceValueElementId }}">#}
+                    {#{{ form.value.vars.label }}#}
+                {#</label>#}
+                {#<input type="text" name="{{ priceValueElementName }}" id="{{ priceValueElementId }}">#}
+            {#</div>#}
+
+        {#{% endfor %}#}
+    {#</div>#}
+{#{% endblock %}#}

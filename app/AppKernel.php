@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Shop\MainBundle\ShopMainBundle(),
             new Shop\CatalogBundle\ShopCatalogBundle(),
             new Shop\ShippingBundle\ShopShippingBundle(),
+            new Weasty\ResourceBundle\WeastyResourceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

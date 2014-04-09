@@ -2186,7 +2186,7 @@ body {
       margin-bottom: 10px;
     }
 
-    input {
+    input[type="text"], input[type="password"], input[type="email"] {
 
       width: 100%;
       padding: 5px;

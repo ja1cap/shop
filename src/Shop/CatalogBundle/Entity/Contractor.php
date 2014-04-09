@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * Contractor
+ * Class Contractor
+ * @package Shop\CatalogBundle\Entity
  */
 class Contractor extends AbstractEntity
 {
@@ -125,26 +126,6 @@ class Contractor extends AbstractEntity
     public function getDefaultCurrencyNumericCode()
     {
         return $this->defaultCurrencyNumericCode;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getDefaultCurrencyName(){
-        if(!isset(ContractorCurrency::$currencyNames[$this->getDefaultCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currencyNames[$this->getDefaultCurrencyNumericCode()];
-    }
-
-    /**
-     * @return bool
-     */
-    public function getDefaultCurrencyShortName(){
-        if(!isset(ContractorCurrency::$currencyShortNames[$this->getDefaultCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currencyShortNames[$this->getDefaultCurrencyNumericCode()];
     }
 
     /**

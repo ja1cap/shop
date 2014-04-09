@@ -8,7 +8,7 @@
             </li>
             <li class="medium btn default">
                 <a href="{{ path('category', {'id' : category.id}) }}">
-                    {{ category.name|default(title)|capitalize }}
+                    {{ category.name|default((title is defined ? title : null))|capitalize }}
                 </a>
             </li>
         {% endblock %}

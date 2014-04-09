@@ -1,9 +1,9 @@
 <?php
-namespace Weasty\ResourceBundle\Data;
+namespace Weasty\MoneyBundle\Data;
 
 /**
  * Interface PriceInterface
- * @package Weasty\ResourceBundle\Data
+ * @package Weasty\MoneyBundle\Data
  */
 interface PriceInterface {
 
@@ -13,8 +13,8 @@ interface PriceInterface {
     public function getValue();
 
     /**
-     * @return integer|string
+     * @return integer|string|CurrencyInterface
      */
-    public function getCurrencyNumericCode();
+    public function getCurrency();
 
 } 

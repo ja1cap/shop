@@ -32,10 +32,10 @@
                         {{ currency.numericCode }}
                     </td>
                     <td>
-                        {{ currency.name }}
+                        {{ currency.numericCode|weasty_currency_name }}
                     </td>
                     <td>
-                        1 {{ currency.shortName }} = {{ currency.value|number_format(0, '.', ' ') }} {{ contractor.defaultCurrencyShortName }}
+                        1 {{ currency.numericCode|weasty_currency_symbol }} = {{ currency.value|weasty_money(contractor.defaultCurrencyNumericCode) }}
                     </td>
                     <td>
                         <div class="medium btn default" style="width: 100%">

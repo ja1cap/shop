@@ -84,15 +84,15 @@
                                         {% else %}
                                             Сумма заказа
                                             {% if price.minOrderPrice %}
-                                                от {{ (price.minOrderPrice|number_format(0, '.', ' ') ~ ' ' ~ price.currencyShortName) }}
+                                                от {{ price.minOrderPrice|weasty_price(price.currency) }}
                                             {% endif %}
                                             {% if price.maxOrderPrice %}
-                                                до {{ (price.maxOrderPrice|number_format(0, '.', ' ') ~ ' ' ~ price.currencyShortName) }}
+                                                до {{ price.maxOrderPrice|weasty_price(price.currency) }}
                                             {% endif %}
                                         {% endif %}
                                         -
                                         {% if price.value %}
-                                            доставка {{ (price.value|number_format(0, '.', ' ') ~ ' ' ~ price.currencyShortName) }}
+                                            доставка {{ price|weasty_price }}
                                         {% else %}
                                             бесплатная доставка
                                         {% endif %}

@@ -4,6 +4,7 @@ imports:
 
 parameters:
   country_code: BY
+  currency_code: BYR
 
 framework:
     #esi:             ~
@@ -99,3 +100,6 @@ simple_things_entity_audit:
     audited_entities:
         - Shop\CatalogBundle\Entity\CustomerOrder
         - Shop\CatalogBundle\Entity\CustomerOrderProposal
+
+sylius_money:
+    driver: doctrine/orm

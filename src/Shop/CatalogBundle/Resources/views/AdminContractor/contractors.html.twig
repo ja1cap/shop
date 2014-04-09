@@ -39,7 +39,7 @@
                         {{ contractor.name }}
                     </td>
                     <td>
-                        {{ contractor.defaultCurrencyName }} ({{ contractor.defaultCurrencyNumericCode }})
+                        {{ contractor.defaultCurrencyNumericCode|weasty_currency_name }} ({{ contractor.defaultCurrencyNumericCode }})
                     </td>
                     <td>
                         <div class="medium btn default icon-left entypo icon-pencil">

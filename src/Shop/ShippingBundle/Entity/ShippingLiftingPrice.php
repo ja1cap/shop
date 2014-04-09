@@ -4,7 +4,7 @@ namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\ResourceBundle\Data\PriceInterface;
+use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
  * Class ShippingLiftingPrice
@@ -170,6 +170,14 @@ abstract class ShippingLiftingPrice extends AbstractEntity
     public function getCurrencyNumericCode()
     {
         return $this->currencyNumericCode;
+    }
+
+    /**
+     * @return integer|string
+     */
+    public function getCurrency()
+    {
+        return $this->getCurrencyNumericCode();
     }
 
     /**

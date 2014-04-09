@@ -6,9 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * ContractorCurrency
+ * Class ContractorCurrency
+ * @package Shop\CatalogBundle\Entity
  */
-class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
+class ContractorCurrency extends AbstractEntity
 {
 
     const BLR_CURRENCY_NAME = 'Белорусский рубль';
@@ -32,6 +33,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     const EURO_CURRENCY_NUMERIC_CODE = 978;
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currenciesNumericCodes = array(
@@ -42,6 +44,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     );
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currenciesAlphabeticCodes = array(
@@ -52,6 +55,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     );
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currenciesAlphabeticCodesNumericCodes = array(
@@ -62,6 +66,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     );
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currenciesNumericCodesAlphabeticCodes = array(
@@ -72,6 +77,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     );
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currencyNames = array(
@@ -82,6 +88,7 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     );
 
     /**
+     * @deprecated
      * @var array
      */
     public static $currencyShortNames = array(
@@ -166,26 +173,6 @@ class ContractorCurrency extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     public function getNumericCode()
     {
         return $this->numericCode;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getName(){
-        if(!isset(self::$currencyNames[$this->getNumericCode()])){
-            return false;
-        }
-        return self::$currencyNames[$this->getNumericCode()];
-    }
-
-    /**
-     * @return bool
-     */
-    public function getShortName(){
-        if(!isset(self::$currencyShortNames[$this->getNumericCode()])){
-            return false;
-        }
-        return self::$currencyShortNames[$this->getNumericCode()];
     }
 
     /**

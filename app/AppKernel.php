@@ -15,6 +15,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            new \Sylius\Bundle\MoneyBundle\SyliusMoneyBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Lsw\SecureControllerBundle\LswSecureControllerBundle(),
@@ -29,6 +31,7 @@ class AppKernel extends Kernel
             new Shop\CatalogBundle\ShopCatalogBundle(),
             new Shop\ShippingBundle\ShopShippingBundle(),
             new Weasty\ResourceBundle\WeastyResourceBundle(),
+            new Weasty\MoneyBundle\WeastyMoneyBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

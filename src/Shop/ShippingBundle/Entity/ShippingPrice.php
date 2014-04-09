@@ -3,9 +3,8 @@
 namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\ResourceBundle\Data\PriceInterface;
+use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
  * Class ShippingPrice
@@ -164,12 +163,10 @@ abstract class ShippingPrice extends AbstractEntity
     }
 
     /**
-     * @return bool
+     * @return integer|string
      */
-    public function getCurrencyShortName(){
-        if(!isset(ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()];
+    public function getCurrency()
+    {
+        return $this->getCurrencyNumericCode();
     }
 }

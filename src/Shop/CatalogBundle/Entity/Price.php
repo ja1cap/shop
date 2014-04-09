@@ -3,7 +3,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\ResourceBundle\Data\PriceInterface;
+use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
  * Class Price
@@ -23,6 +23,11 @@ class Price extends AbstractEntity
         self::STATUS_ON => 'Вкл',
         self::STATUS_OFF => 'Выкл',
     );
+
+    /**
+     * @var string
+     */
+    private $sku;
 
     /**
      * @var string
@@ -48,14 +53,15 @@ class Price extends AbstractEntity
     }
 
     /**
+     * @deprecated
      * @return string
      */
     public function getExchangedValue(){
 
-        $exchangedValue = $this->getValue();
+        $value = $this->getValue();
 
         //@TODO refactor
-        if($this->getCurrencyNumericCode() != ContractorCurrency::BLR_CURRENCY_NUMERIC_CODE){
+        if($this->getCurrencyNumericCode() != 974){
 
             $priceCurrencyNumericCode = $this->getCurrencyNumericCode();
             if($this->getContractor()){
@@ -65,14 +71,14 @@ class Price extends AbstractEntity
                 })->current();
 
                 if($currency instanceof ContractorCurrency){
-                    $exchangedValue = $this->getValue() * $currency->getValue();
+                    $value = $this->getValue() * $currency->getValue();
                 }
 
             }
 
         }
 
-        return $exchangedValue;
+        return $value;
     }
 
     /**
@@ -308,43 +314,12 @@ class Price extends AbstractEntity
     }
 
     /**
-     * Get currencyAlphabeticCode
-     *
-     * @return integer
+     * @return integer|string
      */
-    public function getCurrencyAlphabeticCode()
+    public function getCurrency()
     {
-        if(!isset(ContractorCurrency::$currenciesNumericCodesAlphabeticCodes[$this->getCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currenciesNumericCodesAlphabeticCodes[$this->getCurrencyNumericCode()];
+        return $this->getCurrencyNumericCode();
     }
-
-    /**
-     * @return bool
-     */
-    public function getCurrencyName(){
-        if(!isset(ContractorCurrency::$currencyNames[$this->getCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currencyNames[$this->getCurrencyNumericCode()];
-    }
-
-    /**
-     * @return bool
-     */
-    public function getCurrencyShortName(){
-        if(!isset(ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()])){
-            return false;
-        }
-        return ContractorCurrency::$currencyShortNames[$this->getCurrencyNumericCode()];
-    }
-
-    /**
-     * @var string
-     */
-    private $sku;
-
 
     /**
      * Set sku

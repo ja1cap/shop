@@ -42,7 +42,7 @@
                     </td>
                     <td>
                         <span class="{% if price.status == constant('STATUS_OFF', price) %}danger label{% endif %}">
-                            {{ (price.value|number_format(0, '.', ' ') ~ ' ' ~ price.currencyShortName) }}
+                            {{ price|shop_price }}
                         </span>
                         {% set contractor = price.contractor|default(proposal.defaultContractor) %}
                         {% if contractor %}

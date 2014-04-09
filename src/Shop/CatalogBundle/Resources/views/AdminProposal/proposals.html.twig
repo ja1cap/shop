@@ -32,7 +32,7 @@
                         </span>
                         {% if proposal.price %}
                             <span style="font-weight: normal; display: block">
-                                от {{ proposal.price|number_format(0, '.', ' ') }} руб
+                                от {{ proposal.price|shop_price }}
                             </span>
                         {% else %}
                             <span class="warning label">

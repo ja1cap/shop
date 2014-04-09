@@ -1,3 +1,7 @@
+weasty_money:
+    resource: "@WeastyMoneyBundle/Resources/config/routing.xml"
+    prefix:   /
+
 weasty_resource:
     resource: "@WeastyResourceBundle/Resources/config/routing.xml"
     prefix:   /

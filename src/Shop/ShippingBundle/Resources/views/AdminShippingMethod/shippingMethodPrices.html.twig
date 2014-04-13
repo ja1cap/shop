@@ -1,0 +1,49 @@
+<div style="margin: 10px 0">
+    <div class="btn secondary small">
+        <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id}) }}">
+            Добавить стоимость
+        </a>
+    </div>
+    <div style="margin: 10px 0 5px;">
+        {% for price in shippingMethod.prices %}
+            <div class="" style="margin: 0 0 5px; font-size: 12px">
+                {{ loop.index }}.
+                {% if price.orderPriceType == constant('ORDER_PRICE_TYPE_ANY', price) %}
+                    Любая сумма заказа
+                {% else %}
+                    Сумма заказа
+                    {% if price.minOrderPriceValue %}
+                        от {{ price.minOrderPriceValue|weasty_price(price.minOrderPriceCurrencyNumericCode) }}
+                    {% endif %}
+                    {% if price.maxOrderPriceValue %}
+                        до {{ price.maxOrderPriceValue|weasty_price(price.maxOrderPriceCurrencyNumericCode) }}
+                    {% endif %}
+                {% endif %}
+                -
+                {% if price.value %}
+                    доставка {{ price|weasty_price }}
+                {% else %}
+                    бесплатная доставка
+                {% endif %}
+                {% if price.liftingType %}
+                    , подъем на этаж: {{ price.liftingTextType }}
+                {% endif %}
+                {% if price.assemblyType %}
+                    , сборка: {{ price.assemblyTextType }}
+                {% endif %}
+                <div style="display: inline-block; margin: 0 10px">
+                    <div class="btn default small">
+                        <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}">
+                            Изменить стоимость
+                        </a>
+                    </div>
+                    <div class="btn danger small">
+                        <a href="{{ path('delete_shipping_method_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                            Удалить стоимость
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

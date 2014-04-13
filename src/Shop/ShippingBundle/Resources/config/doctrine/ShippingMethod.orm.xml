@@ -10,8 +10,6 @@
         <field name="status" type="integer"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="description" type="text" column="description" nullable="true"/>
-        <!--<field name="shippingPrices" type="json_array" column="shippingPrices" nullable="true"/>-->
-        <!--<field name="assemblyPrices" type="json_array" column="shippingPrices" nullable="true"/>-->
         <one-to-many target-entity="ShippingMethodCountry" mapped-by="shippingMethod" field="countries">
             <cascade>
                 <cascade-persist/>
@@ -27,7 +25,16 @@
                 <cascade-remove/>
             </cascade>
             <order-by>
-                <order-by-field name="value" direction="ASC"/>
+                <order-by-field name="minOrderPriceValue" direction="ASC"/>
+            </order-by>
+        </one-to-many>
+        <one-to-many target-entity="ShippingMethodLiftingPrice" mapped-by="shippingMethod" field="liftingPrices">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <order-by>
+                <order-by-field name="minFloor" direction="ASC"/>
             </order-by>
         </one-to-many>
     </entity>

@@ -2,7 +2,7 @@
 
 {% block title %}Параметра категории{% endblock %}
 
-{% block right_bar %}
+{% block main_container %}
     {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryParametersBreadcrumb.html.twig') }}
     {% if category.id and category.parameters.count < total_parameters_amount %}
         <div class="medium primary btn">

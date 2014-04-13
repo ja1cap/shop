@@ -16,6 +16,11 @@
     </li>
 {% endif %}
 {% if is_granted(['ROLE_ADMIN']) %}
+    <li class="{{ app.request.get('_route') == 'weasty_money_currency_rates' ? 'active' : '' }}">
+        <a href="{{ path('weasty_money_currency_rates') }}" class="">
+            Курсы валют
+        </a>
+    </li>
     <li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
         <a href="{{ path('shipping_methods') }}" class="">
             Способы доставки

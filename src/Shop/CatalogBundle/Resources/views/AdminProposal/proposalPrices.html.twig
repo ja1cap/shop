@@ -2,7 +2,7 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block right_bar %}
+{% block main_container %}
     {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalPricesBreadcrumb.html.twig') }}
     <div class="medium secondary btn">
         <a href="{{ path('proposal_price', {'proposalId' : proposal.id}) }}">

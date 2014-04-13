@@ -1,7 +1,6 @@
 <?php
 namespace Shop\ShippingBundle\Form\Type;
 
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Shop\ShippingBundle\Entity\ShippingPrice;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,24 +27,43 @@ class ShippingPriceType extends AbstractType {
                     ShippingPrice::ORDER_PRICE_TYPE_RANGE => 'диапазон',
                 ),
             ))
-            ->add('minOrderPrice', 'text', array(
-                'required' => false,
-                'label' => 'Мин.сумма заказа',
-            ))
-            ->add('maxOrderPrice', 'text', array(
-                'required' => false,
-                'label' => 'Макс.сумма заказа',
-            ))
-            ->add('value', 'text', array(
-                'required' => false,
-                'label' => 'Стоимость доставки',
-                'attr' => array(
-                    'placeholder' => 'Поумолчанию бесплатно'
+            ->add('minOrderPrice', 'weasty_money_price', array(
+                'value_options' => array(
+                    'required' => false,
+                    'label' => 'Мин.сумма заказа',
+                    'attr' => array(
+                        'placeholder' => ''
+                    ),
                 ),
+                'currency_form_type' => 'weasty_money_currency_numeric',
             ))
-            ->add('currencyNumericCode', 'choice', array(
-                'label' => 'Валюта',
-                'choices' => ContractorCurrency::$currencyNames,
+            ->add('maxOrderPrice', 'weasty_money_price', array(
+                'value_options' => array(
+                    'required' => false,
+                    'label' => 'Макс.сумма заказа',
+                    'attr' => array(
+                        'placeholder' => ''
+                    ),
+                ),
+                'currency_form_type' => 'weasty_money_currency_numeric',
+            ))
+            ->add('price', 'weasty_money_price', array(
+                'value_options' => array(
+                    'required' => false,
+                    'label' => 'Стоимость доставки',
+                    'attr' => array(
+                        'placeholder' => 'Поумолчанию бесплатно'
+                    ),
+                ),
+                'currency_form_type' => 'weasty_money_currency_numeric',
+            ))
+            ->add('liftingType', 'choice', array(
+                'label' => 'Подъем на этаж',
+                'choices' => ShippingPrice::$liftingTypes,
+            ))
+            ->add('assemblyType', 'choice', array(
+                'label' => 'Сборка',
+                'choices' => ShippingPrice::$assemblyTypes,
             ))
         ;
 

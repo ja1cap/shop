@@ -2,7 +2,7 @@
 
 {% block title %}{{ manager.username|capitalize }} - контрагенты и категории{% endblock %}
 
-{% block right_bar %}
+{% block main_container %}
     {{ include('ShopUserBundle:AdminManager:breadcrumb/managerContractorBreadcrumb.html.twig') }}
     {{ form(form) }}
 {% endblock %}

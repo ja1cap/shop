@@ -1,0 +1,47 @@
+{% extends "WeastyMoneyBundle::layout.html.twig" %}
+
+{% block title %}Управление курсами валют{% endblock %}
+
+{% block main_container %}
+
+    <div class="medium primary btn">
+        <a href="{{ path('weasty_money_currency_rate') }}">
+            Добавить курс
+        </a>
+    </div>
+
+    {% if currencyRates %}
+        <div style="margin: 10px 0;">
+            <table>
+                <tbody>
+                    {% for currencyRate in currencyRates %}
+                        <tr>
+                            <td>
+                                {{ currencyRate.sourceAlphabeticCode|weasty_currency_name }}
+                            </td>
+                            <td>
+                                {{ currencyRate.sourceAlphabeticCode }}/{{ currencyRate.destinationAlphabeticCode }}
+                            </td>
+                            <td>
+                                {{ currencyRate.rate }} {{ currencyRate.destinationAlphabeticCode|weasty_currency_symbol }}
+                            </td>
+                            <td>
+                                <div class="medium btn default icon-left entypo icon-pencil">
+                                    <a href="{{ path('weasty_money_currency_rate', {'id' : currencyRate.id}) }}">
+                                        Изменить
+                                    </a>
+                                </div>
+                                <div class="medium btn danger icon-left entypo icon-trash">
+                                    <a href="{{ path('weasty_money_delete_currency_rate', {'id' : currencyRate.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        Удалить
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -4,22 +4,16 @@ namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
  * Class ShippingLiftingPrice
  * @package Shop\ShippingBundle\Entity
  */
 abstract class ShippingLiftingPrice extends AbstractEntity
-    implements PriceInterface
 {
 
     const FLOOR_AMOUNT_TYPE_ANY = 1;
     const FLOOR_AMOUNT_TYPE_RANGE = 2;
-
-    const LIFTING_TYPE_COMMON = 1;
-    const LIFTING_TYPE_LIFT = 2;
-    const LIFTING_TYPE_SERVICE_LIFT = 3;
 
     /**
      * @var integer
@@ -36,25 +30,9 @@ abstract class ShippingLiftingPrice extends AbstractEntity
      */
     private $maxFloor;
 
-    /**
-     * @var integer
-     */
-    private $value;
-
-    /**
-     * @var integer
-     */
-    private $currencyNumericCode;
-
-    /**
-     * @var integer
-     */
-    private $liftingType;
-
     function __construct()
     {
         $this->floorAmountType = self::FLOOR_AMOUNT_TYPE_ANY;
-        $this->liftingType = self::LIFTING_TYPE_COMMON;
     }
 
     /**
@@ -127,79 +105,171 @@ abstract class ShippingLiftingPrice extends AbstractEntity
     }
 
     /**
-     * Set value
+     * @var integer
+     */
+    private $noLiftPriceValue;
+
+    /**
+     * @var integer
+     */
+    private $noLiftPriceCurrencyNumericCode;
+
+    /**
+     * @var integer
+     */
+    private $liftPriceValue;
+
+    /**
+     * @var integer
+     */
+    private $liftPriceCurrencyNumericCode;
+
+    /**
+     * @var integer
+     */
+    private $serviceLiftPriceValue;
+
+    /**
+     * @var integer
+     */
+    private $serviceLiftPriceCurrencyNumericCode;
+
+
+    /**
+     * Set noLiftPriceValue
      *
-     * @param integer $value
+     * @param integer $noLiftPriceValue
      * @return ShippingLiftingPrice
      */
-    public function setValue($value)
+    public function setNoLiftPriceValue($noLiftPriceValue)
     {
-        $this->value = $value;
+        $this->noLiftPriceValue = $noLiftPriceValue;
 
         return $this;
     }
 
     /**
-     * Get value
+     * Get noLiftPriceValue
      *
      * @return integer 
      */
-    public function getValue()
+    public function getNoLiftPriceValue()
     {
-        return $this->value;
+        return $this->noLiftPriceValue;
     }
 
     /**
-     * Set currencyNumericCode
+     * Set noLiftPriceCurrencyNumericCode
      *
-     * @param integer $currencyNumericCode
+     * @param integer $noLiftPriceCurrencyNumericCode
      * @return ShippingLiftingPrice
      */
-    public function setCurrencyNumericCode($currencyNumericCode)
+    public function setNoLiftPriceCurrencyNumericCode($noLiftPriceCurrencyNumericCode)
     {
-        $this->currencyNumericCode = $currencyNumericCode;
+        $this->noLiftPriceCurrencyNumericCode = $noLiftPriceCurrencyNumericCode;
 
         return $this;
     }
 
     /**
-     * Get currencyNumericCode
+     * Get noLiftPriceCurrencyNumericCode
      *
      * @return integer 
      */
-    public function getCurrencyNumericCode()
+    public function getNoLiftPriceCurrencyNumericCode()
     {
-        return $this->currencyNumericCode;
+        return $this->noLiftPriceCurrencyNumericCode;
     }
 
     /**
-     * @return integer|string
-     */
-    public function getCurrency()
-    {
-        return $this->getCurrencyNumericCode();
-    }
-
-    /**
-     * Set liftingType
+     * Set liftPriceValue
      *
-     * @param integer $liftingType
+     * @param integer $liftPriceValue
      * @return ShippingLiftingPrice
      */
-    public function setLiftingType($liftingType)
+    public function setLiftPriceValue($liftPriceValue)
     {
-        $this->liftingType = $liftingType;
+        $this->liftPriceValue = $liftPriceValue;
 
         return $this;
     }
 
     /**
-     * Get liftingType
+     * Get liftPriceValue
      *
      * @return integer 
      */
-    public function getLiftingType()
+    public function getLiftPriceValue()
     {
-        return $this->liftingType;
+        return $this->liftPriceValue;
+    }
+
+    /**
+     * Set liftPriceCurrencyNumericCode
+     *
+     * @param integer $liftPriceCurrencyNumericCode
+     * @return ShippingLiftingPrice
+     */
+    public function setLiftPriceCurrencyNumericCode($liftPriceCurrencyNumericCode)
+    {
+        $this->liftPriceCurrencyNumericCode = $liftPriceCurrencyNumericCode;
+
+        return $this;
+    }
+
+    /**
+     * Get liftPriceCurrencyNumericCode
+     *
+     * @return integer 
+     */
+    public function getLiftPriceCurrencyNumericCode()
+    {
+        return $this->liftPriceCurrencyNumericCode;
+    }
+
+    /**
+     * Set serviceLiftPriceValue
+     *
+     * @param integer $serviceLiftPriceValue
+     * @return ShippingLiftingPrice
+     */
+    public function setServiceLiftPriceValue($serviceLiftPriceValue)
+    {
+        $this->serviceLiftPriceValue = $serviceLiftPriceValue;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceLiftPriceValue
+     *
+     * @return integer 
+     */
+    public function getServiceLiftPriceValue()
+    {
+        return $this->serviceLiftPriceValue;
+    }
+
+    /**
+     * Set serviceLiftPriceCurrencyNumericCode
+     *
+     * @param integer $serviceLiftPriceCurrencyNumericCode
+     * @return ShippingLiftingPrice
+     */
+    public function setServiceLiftPriceCurrencyNumericCode($serviceLiftPriceCurrencyNumericCode)
+    {
+        $this->serviceLiftPriceCurrencyNumericCode = $serviceLiftPriceCurrencyNumericCode;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceLiftPriceCurrencyNumericCode
+     *
+     * @return integer 
+     */
+    public function getServiceLiftPriceCurrencyNumericCode()
+    {
+        return $this->serviceLiftPriceCurrencyNumericCode;
     }
 }

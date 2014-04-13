@@ -3,11 +3,20 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <mapped-superclass name="Shop\ShippingBundle\Entity\ShippingLiftingPrice">
+
         <field name="floorAmountType" type="integer" column="floorAmountType"/>
-        <field name="minFloor" type="integer" column="minFloor"/>
-        <field name="maxFloor" type="integer" column="maxFloor"/>
-        <field name="value" type="integer" column="value"/>
-        <field name="currencyNumericCode" type="integer" column="currencyNumericCode"/>
-        <field name="liftingType" type="integer" column="liftingType"/>
+
+        <field name="minFloor" type="integer" nullable="true"/>
+        <field name="maxFloor" type="integer" nullable="true"/>
+
+        <field name="noLiftPriceValue" type="integer" nullable="true"/>
+        <field name="noLiftPriceCurrencyNumericCode" type="integer" nullable="true"/>
+
+        <field name="liftPriceValue" type="integer" nullable="true"/>
+        <field name="liftPriceCurrencyNumericCode" type="integer" nullable="true"/>
+
+        <field name="serviceLiftPriceValue" type="integer" nullable="true"/>
+        <field name="serviceLiftPriceCurrencyNumericCode" type="integer" nullable="true"/>
+
     </mapped-superclass>
 </doctrine-mapping>

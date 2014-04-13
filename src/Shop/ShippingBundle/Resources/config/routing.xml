@@ -30,4 +30,13 @@
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodPrice</default>
     </route>
 
+    <route id="shipping_method_lifting_price" pattern="/admin/shippingMethodLiftingPrice/{shippingMethodId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodLiftingPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_method_lifting_price" pattern="/admin/deleteShippingMethodLiftingPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodLiftingPrice</default>
+    </route>
+
 </routes>

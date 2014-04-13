@@ -3,10 +3,20 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <mapped-superclass name="Shop\ShippingBundle\Entity\ShippingPrice">
+
         <field name="orderPriceType" type="integer" column="orderPriceType"/>
-        <field name="minOrderPrice" type="integer" column="minOrderPrice" nullable="true"/>
-        <field name="maxOrderPrice" type="integer" column="maxOrderPrice" nullable="true"/>
+
+        <field name="minOrderPriceValue" type="integer" nullable="true"/>
+        <field name="minOrderPriceCurrencyNumericCode" type="integer" nullable="true"/>
+
+        <field name="maxOrderPriceValue" type="integer" nullable="true"/>
+        <field name="maxOrderPriceCurrencyNumericCode" type="integer" nullable="true"/>
+
+        <field name="liftingType" type="integer" nullable="true"/>
+        <field name="assemblyType" type="integer" nullable="true"/>
+
         <field name="value" type="integer" column="value" nullable="true"/>
         <field name="currencyNumericCode" type="integer" column="currencyNumericCode"/>
+
     </mapped-superclass>
 </doctrine-mapping>

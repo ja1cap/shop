@@ -36,6 +36,7 @@ twig:
     form:
       resources:
           - 'ShopShippingBundle:Form:fields.html.twig'
+          - 'WeastyMoneyBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

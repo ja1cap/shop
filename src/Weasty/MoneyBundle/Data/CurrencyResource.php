@@ -1,5 +1,6 @@
 <?php
 namespace Weasty\MoneyBundle\Data;
+
 use Symfony\Component\Intl\Intl;
 
 /**
@@ -33,9 +34,65 @@ class CurrencyResource {
      */
     function __construct($currencies, $defaultCurrency, $locale)
     {
-        $this->currencies = $currencies;
+
         $this->defaultCurrency = $defaultCurrency;
         $this->locale = $locale;
+
+        $this->currencies = array();
+
+        if(is_array($currencies)){
+            foreach($currencies as $alphabeticCode => $data){
+                $this->currencies[$alphabeticCode] = $this->buildCurrency($alphabeticCode, $data);
+            }
+        }
+
+    }
+
+    /**
+     * @param $currencyAlphabeticCode
+     * @param array $data
+     * @return Currency
+     */
+    protected function buildCurrency($currencyAlphabeticCode, array $data = array()){
+
+        $currency = new Currency($data);
+        $currency->setAlphabeticCode($currencyAlphabeticCode);
+
+        if(!$currency->getName()){
+            $name = Intl::getCurrencyBundle()->getCurrencyName($currencyAlphabeticCode, $this->getLocale());
+            $currency->setName($name);
+        }
+
+        return $currency;
+
+    }
+
+    /**
+     * @param $currencyAlphabeticCode
+     * @return null|Currency|array
+     */
+    public function getCurrency($currencyAlphabeticCode){
+        if(isset($this->currencies[$currencyAlphabeticCode])){
+            return $this->currencies[$currencyAlphabeticCode];
+        }
+        return null;
+    }
+
+    /**
+     * @param $currencyAlphabeticCode
+     * @param $parameterName
+     * @return mixed
+     */
+    public function getCurrencyParameter($currencyAlphabeticCode, $parameterName){
+
+        $currency = $this->getCurrency($currencyAlphabeticCode);
+
+        if($currency && isset($currency[$parameterName])){
+            return $currency[$parameterName];
+        }
+
+        return null;
+
     }
 
     /**
@@ -58,10 +115,7 @@ class CurrencyResource {
      * @return null|string
      */
     public function getCurrencyName($currencyAlphabeticCode){
-        if(isset($this->currencies[$currencyAlphabeticCode]) && isset($this->currencies[$currencyAlphabeticCode]['name'])){
-            return $this->currencies[$currencyAlphabeticCode]['name'];
-        }
-        return Intl::getCurrencyBundle()->getCurrencyName($currencyAlphabeticCode, $this->getLocale());
+        return $this->getCurrencyParameter($currencyAlphabeticCode, 'name') ?: Intl::getCurrencyBundle()->getCurrencyName($currencyAlphabeticCode, $this->getLocale());
     }
 
     /**
@@ -69,10 +123,7 @@ class CurrencyResource {
      * @return null|string
      */
     public function getCurrencySymbol($currencyAlphabeticCode){
-        if(isset($this->currencies[$currencyAlphabeticCode]) && isset($this->currencies[$currencyAlphabeticCode]['symbol'])){
-            return $this->currencies[$currencyAlphabeticCode]['symbol'];
-        }
-        return Intl::getCurrencyBundle()->getCurrencySymbol($currencyAlphabeticCode, $this->getLocale());
+        return $this->getCurrencyParameter($currencyAlphabeticCode, 'symbol') ?: Intl::getCurrencyBundle()->getCurrencySymbol($currencyAlphabeticCode, $this->getLocale());
     }
 
     /**
@@ -80,10 +131,7 @@ class CurrencyResource {
      * @return null|integer
      */
     public function getCurrencyNumericCode($currencyAlphabeticCode){
-        if(isset($this->currencies[$currencyAlphabeticCode]) && isset($this->currencies[$currencyAlphabeticCode]['numericCode'])){
-            return $this->currencies[$currencyAlphabeticCode]['numericCode'];
-        }
-        return null;
+        return $this->getCurrencyParameter($currencyAlphabeticCode, 'numericCode');
     }
 
     /**
@@ -92,7 +140,7 @@ class CurrencyResource {
      */
     public function getCurrencyAlphabeticCode($currencyNumericCode){
 
-        foreach($this->currencies as $currencyAlphabeticCode => $currency){
+        foreach($this->getCurrencies() as $currencyAlphabeticCode => $currency){
             if(isset($currency['numericCode']) && $currency['numericCode'] == $currencyNumericCode){
                 return $currencyAlphabeticCode;
                 break;

@@ -2,7 +2,7 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block right_bar %}
+{% block main_container %}
     {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig') }}
     {% if category.id %}
         <div style="margin-bottom: 10px">

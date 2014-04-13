@@ -133,6 +133,8 @@ class ShippingMethod extends AbstractEntity
     public function __construct()
     {
         $this->countries = new ArrayCollection();
+        $this->prices = new ArrayCollection();
+        $this->liftingPrices = new ArrayCollection();
     }
 
     /**
@@ -207,5 +209,43 @@ class ShippingMethod extends AbstractEntity
     public function getPrices()
     {
         return $this->prices;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $liftingPrices;
+
+
+    /**
+     * Add liftingPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodLiftingPrice $liftingPrices
+     * @return ShippingMethod
+     */
+    public function addLiftingPrice(ShippingMethodLiftingPrice $liftingPrices)
+    {
+        $this->liftingPrices[] = $liftingPrices;
+        $liftingPrices->setShippingMethod($this);
+        return $this;
+    }
+
+    /**
+     * Remove liftingPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodLiftingPrice $liftingPrices
+     */
+    public function removeLiftingPrice(ShippingMethodLiftingPrice $liftingPrices)
+    {
+        $this->liftingPrices->removeElement($liftingPrices);
+    }
+
+    /**
+     * Get liftingPrices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLiftingPrices()
+    {
+        return $this->liftingPrices;
     }
 }

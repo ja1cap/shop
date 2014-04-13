@@ -2,13 +2,13 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block right_bar %}
+{% block main_container %}
     {{ form(form) }}
     <script>
         $(function(){
 
             var $shipping_price_orderPriceType = $('#shipping_price_orderPriceType');
-            var $orderPricesContainers = $('#shipping_price_minOrderPrice, #shipping_price_maxOrderPrice').closest('div');
+            var $orderPricesContainers = $('#shipping_price_minOrderPrice_value, #shipping_price_maxOrderPrice_value').closest('.form-element-weasty-price');
 
             var checkOrderPriceType = function(){
 

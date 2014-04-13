@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../../lib/gems/1.9.1/gems/compass-0.12.2" />
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/app/cache/dev" />
       <excludeFolder url="file://$MODULE_DIR$/app/cache/prod" />
       <excludeFolder url="file://$MODULE_DIR$/web/uploads" />

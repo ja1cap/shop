@@ -1,9 +1,10 @@
 <?php
-namespace Shop\MainBundle\Utils;
+namespace Weasty\ResourceBundle\Utils;
 
 /**
+ * @TODO create service
  * Class WordInflector
- * @package Shop\MainBundle\Utils
+ * @package Weasty\ResourceBundle\Utils
  */
 class WordInflector {
 
@@ -15,6 +16,7 @@ class WordInflector {
     const CASE_PRAEPOSITIONALIS = 6;
 
     /**
+     * @TODO refactor
      * @param $word
      * @param null|int $case
      * @return array|string|bool

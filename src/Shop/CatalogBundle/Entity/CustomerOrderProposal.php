@@ -14,6 +14,7 @@ use Shop\UserBundle\Entity\AbstractUser;
 class CustomerOrderProposal extends AbstractEntity
     implements \Serializable
 {
+
     /**
      * @var integer
      */
@@ -153,7 +154,6 @@ class CustomerOrderProposal extends AbstractEntity
     public function setPrice(Price $price = null)
     {
         $this->price = $price;
-        $this->priceValue = $price->getExchangedValue();
         return $this;
     }
 
@@ -193,9 +193,7 @@ class CustomerOrderProposal extends AbstractEntity
      * @return void
      */
     public function unserialize($serialized)
-    {
-        // TODO: Implement unserialize() method.
-    }
+    {}
 
     /**
      * @var integer

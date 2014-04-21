@@ -1,7 +1,6 @@
 <?php
 namespace Shop\CatalogBundle\Form\Type;
 
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -25,8 +24,7 @@ class ContractorType extends AbstractType {
             ));
 
         $builder
-            ->add('defaultCurrencyNumericCode', 'choice', array(
-                'choices' => ContractorCurrency::$currencyNames,
+            ->add('defaultCurrencyNumericCode', 'weasty_money_currency_numeric', array(
                 'required' => true,
                 'label' => 'Валюта поумолчанию',
             ));

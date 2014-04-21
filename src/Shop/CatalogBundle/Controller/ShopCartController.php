@@ -26,7 +26,7 @@ class ShopCartController extends Controller
     public function defaultAction(Request $request)
     {
 
-        $shopCartSummary = $this->getShopCart($request)->getSummary();
+        $shopCartSummary = $this->getShopCartSummary($request);
 
         $actions = array();
         $shopCartSummaryPrice = $shopCartSummary['summaryPrice'];
@@ -74,7 +74,9 @@ class ShopCartController extends Controller
             }
 
             $orderInformation = null;
-            $shopCartSummary = $this->getShopCart($request)->getSummary();
+
+            $shopCartSummary = $this->getShopCartSummary($request);
+
             if($shopCartSummary['categories']){
 
                 $customerOrder = new CustomerOrder();
@@ -111,6 +113,7 @@ class ShopCartController extends Controller
                                     $orderProposal
                                         ->setProposal($proposal)
                                         ->setPrice($price)
+                                        ->setPriceValue($this->get('shop_catalog.price.currency.converter')->convert($price))
                                         ->setAmount($amount);
 
                                     $customerOrder->addProposal($orderProposal);
@@ -224,17 +227,32 @@ class ShopCartController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return ShopCart
      */
-    protected function getShopCart(Request $request)
+    protected function getShopCart()
     {
-        $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
+
         $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
         $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
         $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
-        $shopCart = new ShopCart($categoryRepository, $proposalsRepository, $priceRepository, $shopCartStorageData);
+        $currencyConverter = $this->get('shop_catalog.price.currency.converter');
+
+        $shopCart = new ShopCart($currencyConverter, $categoryRepository, $proposalsRepository, $priceRepository);
+
         return $shopCart;
+
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function getShopCartSummary(Request $request)
+    {
+        $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
+        $shopCartSummary = $this->getShopCart()->getSummary($shopCartStorageData);
+        return $shopCartSummary;
     }
 
 }

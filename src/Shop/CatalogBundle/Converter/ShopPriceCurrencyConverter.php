@@ -14,11 +14,11 @@ class ShopPriceCurrencyConverter extends CurrencyConverter {
 
     /**
      * @param string|integer|float|\Weasty\MoneyBundle\Data\PriceInterface $price
-     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface $sourceCurrency
-     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface $destinationCurrency
+     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface|null $sourceCurrency
+     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface|null $destinationCurrency
      * @return string|integer|float|null
      */
-    public function convert($price, $sourceCurrency, $destinationCurrency)
+    public function convert($price, $sourceCurrency = null, $destinationCurrency = null)
     {
 
         if(!$price instanceof Price){
@@ -31,6 +31,8 @@ class ShopPriceCurrencyConverter extends CurrencyConverter {
                 $price->getCurrency(),
                 CurrencyResource::CODE_TYPE_ISO_4217_ALPHABETIC
             );
+
+        $destinationCurrency = $destinationCurrency ?: $this->getCurrencyResource()->getDefaultCurrency();
 
         $destinationCurrencyAlphabeticCode = $this
             ->getCurrencyCodeConverter()

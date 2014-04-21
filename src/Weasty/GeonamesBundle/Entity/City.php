@@ -4,13 +4,13 @@ namespace Weasty\GeonamesBundle\Entity;
 
 use DateTime;
 use JJs\Bundle\GeonamesBundle\Entity\Timezone;
-use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
+use Weasty\GeonamesBundle\Data\TranslatableGeonameInterface;
 
 /**
  * Class City
  * @package Weasty\GeonamesBundle\Entity
  */
-class City extends Locality implements TranslatableGeoname
+class City extends Locality implements TranslatableGeonameInterface
 {
 
     /**

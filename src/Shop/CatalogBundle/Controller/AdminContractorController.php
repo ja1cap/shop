@@ -69,18 +69,10 @@ class AdminContractorController extends Controller
 
         } else {
 
-            $canAddCurrency = false;
-            if(!$isNew){
-                $canAddCurrency = ($contractor->getCurrencies()->filter(function(ContractorCurrency $currency) use ($contractor) {
-                    return $currency->getNumericCode() != $contractor->getDefaultCurrencyNumericCode();
-                })->count() < count(ContractorCurrency::$currencyNames));
-            }
-
             return $this->render('ShopCatalogBundle:AdminContractor:contractor.html.twig', array(
                 'title' => $isNew ? 'Добавление контрагента' : 'Изменение контрагента',
                 'form' => $form->createView(),
                 'contractor' => $contractor,
-                'canAddCurrency' => $canAddCurrency,
             ));
 
         }
@@ -114,7 +106,7 @@ class AdminContractorController extends Controller
         }
 
         $isNew = !$contractorCurrency->getId();
-        $form = $this->createForm(new ContractorCurrencyType($contractor, $contractorCurrency), $contractorCurrency);
+        $form = $this->createForm(new ContractorCurrencyType(), $contractorCurrency);
 
         $form->handleRequest($request);
 

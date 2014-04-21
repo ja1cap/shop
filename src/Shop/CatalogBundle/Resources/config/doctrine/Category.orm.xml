@@ -9,9 +9,9 @@
         <field name="status" type="integer"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="slug" type="string" column="slug" length="255"/>
-        <field name="singularName" type="string" column="singularName" length="255"/>
-        <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255"/>
-        <field name="multipleName" type="string" column="multipleName" length="255"/>
+        <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
+        <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255" nullable="true"/>
+        <field name="multipleName" type="string" column="multipleName" length="255" nullable="true"/>
         <one-to-many target-entity="CategoryParameter" mapped-by="category" field="parameters">
             <cascade>
                 <cascade-all/>

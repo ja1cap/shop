@@ -106,18 +106,26 @@ class PriceListMapper {
      * @return array
      */
     public function getManufacturersIds(){
-        return array_map(function(Manufacturer $manufacturer){
-            return $manufacturer->getId();
-        }, $this->getManufacturers());
+        $ids = array();
+        foreach($this->getManufacturers() as $manufacturer){
+            if($manufacturer instanceof Manufacturer){
+                $ids[] = $manufacturer->getId();
+            }
+        }
+        return $ids;
     }
 
     /**
      * @return array
      */
     public function getContractorsIds(){
-        return array_map(function(Contractor $contractor){
-            return $contractor->getId();
-        }, $this->getContractors());
+        $ids = array();
+        foreach($this->getContractors() as $contractor){
+            if($contractor instanceof Contractor){
+                $ids[] = $contractor->getId();
+            }
+        }
+        return $ids;
     }
 
 }

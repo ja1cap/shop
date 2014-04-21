@@ -46,7 +46,7 @@ class LoadStatesCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
-        $importer = $container->get('weasty.geonames.state.importer');
+        $importer = $container->get('weasty_geonames.state.importer');
 
         $countries = $input->getArgument('country');
 

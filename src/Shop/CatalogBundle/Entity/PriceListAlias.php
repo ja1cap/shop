@@ -13,6 +13,7 @@ class PriceListAlias extends AbstractEntity
 {
 
     const ALIAS_SKU = 'sku';
+    const ALIAS_MANUFACTURER_SKU = 'manufacturer_sku';
     const ALIAS_NAME = 'name';
     const ALIAS_DESCRIPTION = 'description';
     const ALIAS_SHORT_DESCRIPTION = 'short_description';
@@ -38,6 +39,7 @@ class PriceListAlias extends AbstractEntity
      */
     public static $aliasesTitles = array(
         self::ALIAS_SKU => 'Артикул',
+        self::ALIAS_MANUFACTURER_SKU => 'Артикул производитель',
         self::ALIAS_NAME => 'Наименование',
 //        self::ALIAS_SHORT_DESCRIPTION => 'Краткое описание',
 //        self::ALIAS_DESCRIPTION => 'Полное описание',
@@ -55,6 +57,10 @@ class PriceListAlias extends AbstractEntity
         PriceListAlias::ALIAS_SKU => array(
             'entity' => 'price',
             'property' => 'sku',
+        ),
+        PriceListAlias::ALIAS_MANUFACTURER_SKU => array(
+            'entity' => 'price',
+            'property' => 'manufacturer_sku',
         ),
         PriceListAlias::ALIAS_CATEGORY => array(
             'entity' => 'proposal',
@@ -78,7 +84,7 @@ class PriceListAlias extends AbstractEntity
         ),
         PriceListAlias::ALIAS_CURRENCY => array(
             'entity' => 'price',
-            'property' => 'currencyAlphabeticCode',
+            'property' => 'currency',
         ),
     );
 
@@ -89,12 +95,15 @@ class PriceListAlias extends AbstractEntity
         self::ALIAS_SKU => array(
             'артикул',
         ),
+        self::ALIAS_MANUFACTURER_SKU => array(
+            'артикул производителя',
+        ),
         self::ALIAS_NAME => array(
             'название',
             'наименование',
             'наименование изделия',
         ),
-        self::ALIAS_DESCRIPTION => array(
+        self::ALIAS_SHORT_DESCRIPTION => array(
             'краткое описание',
             'короткое описание',
         ),
@@ -140,7 +149,6 @@ class PriceListAlias extends AbstractEntity
      * @var string
      */
     private $aliasName;
-
 
     /**
      * Get id

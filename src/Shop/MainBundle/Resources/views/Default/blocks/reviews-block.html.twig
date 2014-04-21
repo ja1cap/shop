@@ -1,4 +1,4 @@
-{% if reviews or images %}
+{% if (reviews is defined and reviews) or (images is defined and images) %}
     <div class="reviews-block block-container" id="reviews-block">
 
         <div class="block-diagonal-bg"></div>

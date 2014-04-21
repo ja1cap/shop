@@ -153,7 +153,7 @@ class AdminShippingMethodController extends Controller
 
         } else {
 
-            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingMethodPrice.html.twig', array(
+            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingPrice.html.twig', array(
                 'title' => 'Стоимость доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingMethod,
@@ -236,7 +236,7 @@ class AdminShippingMethodController extends Controller
 
         } else {
 
-            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingMethodLiftingPrice.html.twig', array(
+            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingLiftingPrice.html.twig', array(
                 'title' => 'Стоимость доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingMethod,

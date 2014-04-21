@@ -39,4 +39,31 @@
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodLiftingPrice</default>
     </route>
 
+    <route id="shipping_category" pattern="/admin/shippingCategory/{shippingMethodId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategory</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_category" pattern="/admin/deleteShippingCategory/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:deleteShippingCategory</default>
+    </route>
+
+    <route id="shipping_category_price" pattern="/admin/shippingCategoryPrice/{shippingCategoryId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_category_price" pattern="/admin/deleteShippingCategoryPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:deleteShippingCategoryPrice</default>
+    </route>
+
+    <route id="shipping_category_lifting_price" pattern="/admin/shippingCategoryLiftingPrice/{shippingCategoryId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryLiftingPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_category_lifting_price" pattern="/admin/deleteShippingCategoryLiftingPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:deleteShippingCategoryLiftingPrice</default>
+    </route>
+
 </routes>

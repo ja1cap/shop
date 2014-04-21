@@ -44,11 +44,11 @@
                             {{ hit_proposal.price_legend|default('По супер цене') }}
 
                             <span class="hit-price">
-                                {{ hit_proposal.discount_price|default(350000)|number_format(0, '.', ' ') }} руб
+                                {{ hit_proposal.discount_price|weasty_price }}
                             </span>
 
                             <span class="regular-price">
-                                {{ hit_proposal.regular_price|default(385000)|number_format(0, '.', ' ') }} руб
+                                {{ hit_proposal.regular_price|weasty_price }}
                             </span>
 
                         </a>

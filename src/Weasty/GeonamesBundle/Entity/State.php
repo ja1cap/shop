@@ -5,13 +5,13 @@ namespace Weasty\GeonamesBundle\Entity;
 use DateTime;
 use JJs\Bundle\GeonamesBundle\Entity\Timezone;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
+use Weasty\GeonamesBundle\Data\TranslatableGeonameInterface;
 
 /**
  * Class State
  * @package Weasty\GeonamesBundle\Entity
  */
-class State extends Locality implements TranslatableGeoname
+class State extends Locality implements TranslatableGeonameInterface
 {
 
     /**

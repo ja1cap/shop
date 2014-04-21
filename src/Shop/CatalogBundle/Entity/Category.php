@@ -6,13 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Shop\MainBundle\Utils\WordInflector;
+use Weasty\CatalogBundle\Data\CategoryInterface;
+use Weasty\ResourceBundle\Utils\WordInflector;
 
 /**
  * Class Category
  * @package Shop\CatalogBundle\Entity
  */
 class Category extends AbstractEntity
+    implements CategoryInterface
 {
 
     const STATUS_ON = 1;

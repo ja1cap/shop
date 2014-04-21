@@ -2,7 +2,6 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Shop\CatalogBundle\Entity\Price;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,42 +36,37 @@ class PriceType extends AbstractType {
     {
 
         $builder
-            ->add('value', 'text', array(
-                'required' => true,
-                'label' => 'Цена',
-            ));
-
-        $builder
-            ->add('currencyNumericCode', 'choice', array(
-                'required' => true,
-                'choices' => ContractorCurrency::$currencyNames,
-                'label' => 'Валюта',
-            ));
-
-        $builder
+            ->add('price', 'weasty_money_price', array(
+                'value_options' => array(
+                    'required' => true,
+                    'label' => 'Цена',
+                ),
+                'currency_form_type' => 'weasty_money_currency_numeric',
+            ))
             ->add('status', 'choice', array(
                 'required' => true,
                 'choices' => Price::$statuses,
                 'label' => 'Статус',
-            ));
-
-        $builder
+            ))
             ->add('sku', 'text', array(
                 'required' => false,
-                'label' => 'Артикул',
-            ));
-
-
-        $builder->add('contractor', 'entity', array(
-            'required' => false,
-            'empty_value' => 'Выберите контрагента',
-            'class' => 'ShopCatalogBundle:Contractor',
-            'query_builder' => function(EntityRepository $er) {
-                return $er->createQueryBuilder('c')
-                    ->orderBy('c.name', 'ASC');
-            },
-            'label' => 'Контрагент',
-        ));
+                'label' => 'Внутренний артикул',
+            ))
+            ->add('manufacturerSku', 'text', array(
+                'required' => false,
+                'label' => 'Артикул производителя',
+            ))
+            ->add('contractor', 'entity', array(
+                'required' => false,
+                'empty_value' => 'Выберите контрагента',
+                'class' => 'ShopCatalogBundle:Contractor',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+                'label' => 'Контрагент',
+            ))
+        ;
 
         /**
          * @var $categoryParameter CategoryParameter

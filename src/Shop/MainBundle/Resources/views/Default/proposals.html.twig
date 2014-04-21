@@ -8,13 +8,13 @@
             {% block proposals_left_bar %}
                 {% include('ShopMainBundle:Default:shopCart.html.twig') %}
                 {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
-                {% if extraParametersData or priceIntervalsData.intervals %}
+                {% if extraParametersData or (priceIntervalsData is defined and priceIntervalsData.intervals) %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">
                             Дополнительные фильтры
                         </div>
                         <form id="extraFiltersForm" class="extraFiltersForm">
-                            {% if priceIntervalsData.intervals %}
+                            {% if (priceIntervalsData is defined and priceIntervalsData.intervals) %}
                                 <div class="proposal-select">
                                     <label for="prices">
                                         Цена
@@ -25,12 +25,12 @@
                                             <label for="priceStep{{ intervalData.priceStep }}">
                                                 <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
                                                 {% if intervalData.priceStep > 0 %}
-                                                    {{ intervalData.priceStep|number_format(0, '.', ' ') }}
+                                                    {{ intervalData.priceStep|weasty_price }}
                                                     -
                                                 {% else %}
                                                     до
                                                 {% endif %}
-                                                {{ (intervalData.priceStep + priceIntervalsData.interval)|number_format(0, '.', ' ') }} руб
+                                                {{ (intervalData.priceStep + priceIntervalsData.interval)|weasty_price }}
                                                 <small class="amount">
                                                     ({{ intervalData.proposalsAmount|default(0) }})
                                                 </small>
@@ -119,10 +119,12 @@
                                                     <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
                                                         <option value="-1">Не важно</option>
                                                         {% for option in parameterData.options %}
-                                                            {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
-                                                            <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                                {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }})
-                                                            </option>
+                                                            {% if parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined %}
+                                                                {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
+                                                                <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and filteredParameterValues[parameterData.parameter.id] == option.id) ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
+                                                                    {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }})
+                                                                </option>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -170,7 +172,7 @@
                                     {% if proposalData.maxPrice > proposalData.price %}
                                         от
                                     {% endif %}
-                                    {{ proposalData.price|number_format(0, '.', ' ') }} руб
+                                    {{ proposalData.price|shop_price }}
                                 </span>
 
                             </a>
@@ -181,7 +183,9 @@
 
                 </ul>
             {% endblock %}
-            {{ page.content|nl2br }}
+            {% if (page is defined and page) %}
+                {{ page.content|nl2br }}
+            {% endif %}
         </div>
     </div>
     <script>

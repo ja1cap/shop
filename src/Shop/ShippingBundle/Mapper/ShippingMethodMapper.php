@@ -46,9 +46,9 @@ class ShippingMethodMapper {
     function __construct($container, ShippingMethod $shippingMethod)
     {
         $this->countryCode = $container->getParameter('country_code');
-        $this->countryRepository = $container->get('weasty.geonames.country.repository');
-        $this->stateRepository = $container->get('weasty.geonames.state.repository');
-        $this->cityRepository = $container->get('weasty.geonames.city.repository');
+        $this->countryRepository = $container->get('weasty_geonames.country.repository');
+        $this->stateRepository = $container->get('weasty_geonames.state.repository');
+        $this->cityRepository = $container->get('weasty_geonames.city.repository');
         $this->shippingMethod = $shippingMethod;
     }
 

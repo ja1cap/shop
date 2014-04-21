@@ -10,6 +10,7 @@ use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Entity\ProposalImage;
 use Shop\CatalogBundle\Form\Type\PriceType;
 use Shop\CatalogBundle\Form\Type\ProposalType;
+use Shop\CatalogBundle\Mapper\PriceMapper;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
 use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
 use Shop\MainBundle\Form\Type\ImageType;
@@ -226,7 +227,9 @@ class AdminProposalController extends Controller
         }
 
         $isNew = !$price->getId();
-        $form = $this->createForm(new PriceType($category), $price);
+        $mapper = new PriceMapper($price);
+
+        $form = $this->createForm(new PriceType($category), $mapper);
 
         $form->handleRequest($request);
 

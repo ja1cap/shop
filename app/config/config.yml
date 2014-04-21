@@ -102,5 +102,9 @@ simple_things_entity_audit:
         - Shop\CatalogBundle\Entity\CustomerOrder
         - Shop\CatalogBundle\Entity\CustomerOrderProposal
 
-sylius_money:
-    driver: doctrine/orm
+weasty_catalog:
+  category:
+    entity:
+      class: %shop_catalog.category.entity.class%
+    repository:
+      class: %shop_catalog.category.repository.class%

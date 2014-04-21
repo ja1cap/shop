@@ -5,28 +5,28 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="weasty.money.form.type.currency.class">Weasty\MoneyBundle\Form\Type\CurrencyType</parameter>
-        <parameter key="weasty.money.form.type.currency_numeric.class">Weasty\MoneyBundle\Form\Type\CurrencyNumericType</parameter>
-        <parameter key="weasty.money.form.type.currency_rate.class">Weasty\MoneyBundle\Form\Type\CurrencyRateType</parameter>
-        <parameter key="weasty.money.form.type.price.class">Weasty\MoneyBundle\Form\Type\PriceType</parameter>
+        <parameter key="weasty_money.form.type.currency.class">Weasty\MoneyBundle\Form\Type\CurrencyType</parameter>
+        <parameter key="weasty_money.form.type.currency_numeric.class">Weasty\MoneyBundle\Form\Type\CurrencyNumericType</parameter>
+        <parameter key="weasty_money.form.type.currency_rate.class">Weasty\MoneyBundle\Form\Type\CurrencyRateType</parameter>
+        <parameter key="weasty_money.form.type.price.class">Weasty\MoneyBundle\Form\Type\PriceType</parameter>
     </parameters>
 
     <services>
-        <service id="weasty.money.form.type.currency" class="%weasty.money.form.type.currency.class%">
+        <service id="weasty_money.form.type.currency" class="%weasty_money.form.type.currency.class%">
             <tag name="form.type" alias="weasty_money_currency" />
-            <argument type="service" id="weasty.money.currency.resource"/>
-            <argument type="service" id="weasty.money.currency.code.converter"/>
+            <argument type="service" id="weasty_money.currency.resource"/>
+            <argument type="service" id="weasty_money.currency.code.converter"/>
         </service>
-        <service id="weasty.money.form.type.currency_numeric" class="%weasty.money.form.type.currency_numeric.class%">
+        <service id="weasty_money.form.type.currency_numeric" class="%weasty_money.form.type.currency_numeric.class%">
             <tag name="form.type" alias="weasty_money_currency_numeric" />
-            <argument type="service" id="weasty.money.currency.resource"/>
-            <argument type="service" id="weasty.money.currency.code.converter"/>
+            <argument type="service" id="weasty_money.currency.resource"/>
+            <argument type="service" id="weasty_money.currency.code.converter"/>
         </service>
-        <service id="weasty.money.form.type.currency_rate" class="%weasty.money.form.type.currency_rate.class%">
+        <service id="weasty_money.form.type.currency_rate" class="%weasty_money.form.type.currency_rate.class%">
             <tag name="form.type" alias="weasty_money_currency_rate" />
-            <argument type="service" id="weasty.money.currency.resource"/>
+            <argument type="service" id="weasty_money.currency.resource"/>
         </service>
-        <service id="weasty.money.form.type.price" class="%weasty.money.form.type.price.class%">
+        <service id="weasty_money.form.type.price" class="%weasty_money.form.type.price.class%">
             <tag name="form.type" alias="weasty_money_price" />
         </service>
     </services>

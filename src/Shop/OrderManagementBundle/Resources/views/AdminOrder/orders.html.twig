@@ -52,11 +52,11 @@
                                         {{ customerProposal.proposal.title }}
                                     </div>
                                     <div>
-                                        {{ customerProposal.priceValue|number_format(0, '.', ' ') }}
+                                        {{ customerProposal.priceValue|weasty_price }}
                                         x
                                         {{ customerProposal.amount }}
                                         =
-                                        {{ (customerProposal.priceValue * customerProposal.amount)|number_format(0, '.', ' ') }} руб
+                                        {{ (customerProposal.priceValue * customerProposal.amount)|weasty_price }}
                                     </div>
                                     {% if order_proposal_security_is_granted('set manager', customerProposal) %}
                                         <div>

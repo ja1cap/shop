@@ -53,13 +53,6 @@ class ShippingMethodType extends AbstractType {
                 'required' => false,
                 'label' => 'Описание',
             ))
-//            ->add('countries', 'country', array(
-//                'choices' => $countriesChoices,
-//                'multiple' => true,
-//                'required' => true,
-//                'label' => 'Страны',
-//                'mapped' => false
-//            ))
             ->add('countryCode', 'hidden')
             ->add('states', 'weasty_geonames_state', array(
                 'multiple' => true,

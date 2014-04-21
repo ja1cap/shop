@@ -110,14 +110,14 @@ class CurrencyRateController extends Controller
      * @return \Weasty\MoneyBundle\Entity\CurrencyRateRepository
      */
     protected function getCurrencyRateRepository(){
-        return $this->get('weasty.money.currency.rate.repository');
+        return $this->get('weasty_money.currency.rate.repository');
     }
 
     /**
      * @return \Weasty\MoneyBundle\Converter\CurrencyCodeConverterInterface
      */
     protected function getCurrencyCodeConverter(){
-        return $this->get('weasty.money.currency.code.converter');
+        return $this->get('weasty_money.currency.code.converter');
     }
 
 }

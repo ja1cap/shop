@@ -2,7 +2,6 @@
 namespace Shop\CatalogBundle\Parser;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Shop\CatalogBundle\Entity\Parameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Price;
@@ -12,6 +11,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
 use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
+use Weasty\MoneyBundle\Data\CurrencyResource;
 
 /**
  * Class PriceListParser
@@ -25,11 +25,14 @@ class PriceListParser {
     protected $em;
 
     /**
-     * @param ObjectManager|object $em
+     * @var \Weasty\MoneyBundle\Converter\CurrencyCodeConverter
      */
-    function __construct(ObjectManager $em)
+    protected $currencyCodeConverter;
+
+    function __construct($em, $currencyCodeConverter)
     {
         $this->em = $em;
+        $this->currencyCodeConverter = $currencyCodeConverter;
     }
 
     public function parse(PriceList $priceList){
@@ -65,6 +68,7 @@ class PriceListParser {
 
             $rowData = array(
                 PriceListAlias::ALIAS_SKU => null,
+                PriceListAlias::ALIAS_MANUFACTURER_SKU => null,
                 PriceListAlias::ALIAS_NAME => null,
                 PriceListAlias::ALIAS_SHORT_DESCRIPTION => null,
                 PriceListAlias::ALIAS_DESCRIPTION => null,
@@ -99,16 +103,7 @@ class PriceListParser {
                         switch($alias){
                             case PriceListAlias::ALIAS_CURRENCY:
 
-                                if(is_numeric($cellValue) && in_array($cellValue, ContractorCurrency::$currenciesNumericCodes)){
-
-                                    $rowData[$alias] = $cellValue;
-
-                                } elseif(is_string($cellValue) && isset(ContractorCurrency::$currenciesAlphabeticCodesNumericCodes[$cellValue])) {
-
-                                    $rowData[$alias] = ContractorCurrency::$currenciesAlphabeticCodesNumericCodes[$cellValue];
-
-                                }
-
+                                $rowData[$alias] = $this->getCurrencyCodeConverter()->convert($cellValue, CurrencyResource::CODE_TYPE_ISO_4217_NUMERIC);
                                 break;
 
                             default:
@@ -202,6 +197,7 @@ class PriceListParser {
 
                 }
 
+                //@TODO refactor to use manufacturer sku
                 $isValid = !array_diff(PriceListAlias::getRequiredAliases(), array_keys(array_filter($rowData)));
                 if($isValid){
 
@@ -487,6 +483,22 @@ class PriceListParser {
      */
     protected function formatName($name){
         return str_replace(' ', '', trim(mb_strtolower($name, 'UTF-8')));
+    }
+
+    /**
+     * @return \Weasty\MoneyBundle\Converter\CurrencyCodeConverter
+     */
+    public function getCurrencyCodeConverter()
+    {
+        return $this->currencyCodeConverter;
+    }
+
+    /**
+     * @return ObjectManager|object
+     */
+    public function getEm()
+    {
+        return $this->em;
     }
 
 } 

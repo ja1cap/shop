@@ -1,5 +1,5 @@
 <h3>
-    Сумма заказа: {{ shopCartSummary.summaryPrice|number_format(0, '.', ' ') }} руб
+    Сумма заказа: {{ shopCartSummary.summaryPrice|weasty_price }}
 </h3>
 <table>
     <thead>
@@ -22,7 +22,7 @@
                 <td>
                     {% for priceData in proposalData.prices %}
                         <div>
-                            {{ priceData.price.exchangedValue|number_format(0, '.', ' ') }} руб x {{ priceData.amount }} = {{ (priceData.price.exchangedValue * priceData.amount)|number_format(0, '.', ' ') }} руб
+                            {{ priceData.summary|weasty_price }} x {{ priceData.amount }} = {{ priceData.summary|weasty_price }}
                             <div>
                                 {{ priceData.price.description }}
                             </div>

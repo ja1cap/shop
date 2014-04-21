@@ -32,6 +32,11 @@ class Price extends AbstractEntity
     /**
      * @var string
      */
+    private $manufacturerSku;
+
+    /**
+     * @var string
+     */
     protected $value;
 
     /**
@@ -50,35 +55,6 @@ class Price extends AbstractEntity
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * @deprecated
-     * @return string
-     */
-    public function getExchangedValue(){
-
-        $value = $this->getValue();
-
-        //@TODO refactor
-        if($this->getCurrencyNumericCode() != 974){
-
-            $priceCurrencyNumericCode = $this->getCurrencyNumericCode();
-            if($this->getContractor()){
-
-                $currency = $this->getContractor()->getCurrencies()->filter(function(ContractorCurrency $currency) use ($priceCurrencyNumericCode) {
-                    return $currency->getNumericCode() == $priceCurrencyNumericCode;
-                })->current();
-
-                if($currency instanceof ContractorCurrency){
-                    $value = $this->getValue() * $currency->getValue();
-                }
-
-            }
-
-        }
-
-        return $value;
     }
 
     /**
@@ -426,5 +402,28 @@ class Price extends AbstractEntity
     public function getWarehouseAmountUpdateDate()
     {
         return $this->warehouseAmountUpdateDate;
+    }
+
+    /**
+     * Set manufacturerSku
+     *
+     * @param string $manufacturerSku
+     * @return Price
+     */
+    public function setManufacturerSku($manufacturerSku)
+    {
+        $this->manufacturerSku = $manufacturerSku;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturerSku
+     *
+     * @return string 
+     */
+    public function getManufacturerSku()
+    {
+        return $this->manufacturerSku;
     }
 }

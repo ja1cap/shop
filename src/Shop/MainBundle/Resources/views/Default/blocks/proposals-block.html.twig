@@ -40,7 +40,7 @@
                 <div class="proposals-list owl-carousel owl-theme">
                     {% for proposal in proposals %}
 
-                        <div class="proposal {{ proposal.discount_percent ? 'discount-proposal' : '' }}">
+                        <div class="proposal {#discount-proposal#}">
 
                             <a href="{{ path('shop_proposal', { 'categorySlug' : proposal.category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
 
@@ -50,7 +50,7 @@
                                     </span>
                                 </span>
 
-                                {% if proposal.discount_percent %}
+                                {% if proposal.discount_percent is defined and proposal.discount_percent %}
                                     {% if proposal.discount_end_date %}
                                         <span class="countdown proposal-countdown" data-date="{{ proposal.discount_end_date|date }}"></span>
                                     {% endif %}
@@ -66,7 +66,7 @@
                                     {{ proposal.short_description|nl2br }}
                                 </span>
                                 <span class="price">
-                                    {{ proposal.price|number_format(0, '.', ' ') }} руб
+                                    {{ proposal.price|shop_price }}
                                 </span>
 
                             </a>

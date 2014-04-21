@@ -248,4 +248,42 @@ class ShippingMethod extends AbstractEntity
     {
         return $this->liftingPrices;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $categories;
+
+
+    /**
+     * Add categories
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCategory $category
+     * @return ShippingMethod
+     */
+    public function addCategory(ShippingMethodCategory $category)
+    {
+        $this->categories[] = $category;
+        $category->setShippingMethod($this);
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCategory $categories
+     */
+    public function removeCategory(ShippingMethodCategory $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
 }

@@ -4,13 +4,13 @@ namespace Weasty\GeonamesBundle\Entity;
 
 use JJs\Bundle\GeonamesBundle\Model\CountryInterface;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
+use Weasty\GeonamesBundle\Data\TranslatableGeonameInterface;
 
 /**
  * Class Country
  * @package Weasty\GeonamesBundle\Entity
  */
-class Country extends AbstractEntity implements CountryInterface, TranslatableGeoname
+class Country extends AbstractEntity implements CountryInterface, TranslatableGeonameInterface
 {
 
     /**

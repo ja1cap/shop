@@ -1,7 +1,7 @@
 <?php
 namespace Weasty\GeonamesBundle\Entity;
 use Weasty\DoctrineBundle\Entity\AbstractRepository;
-use Weasty\GeonamesBundle\Resources\TranslatableGeoname;
+use Weasty\GeonamesBundle\Data\TranslatableGeonameInterface;
 
 /**
  * Class GeonameRepository
@@ -42,7 +42,7 @@ abstract class GeonameRepository extends AbstractRepository {
         $geonamesIndexedByTranslatedName = array();
 
         foreach($geonames as $locality){
-            if($locality instanceof TranslatableGeoname){
+            if($locality instanceof TranslatableGeonameInterface){
                 $geonamesIndexedByTranslatedName[$locality->getLocaleName($locale)] = $locality;
             }
         }

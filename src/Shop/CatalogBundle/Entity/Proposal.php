@@ -10,7 +10,7 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
  * Class Proposal
  * @package Shop\CatalogBundle\Entity
  */
-class Proposal extends \Weasty\DoctrineBundle\Entity\AbstractEntity
+class Proposal extends AbstractEntity
 {
 
     const STATUS_ON = 1;
@@ -194,11 +194,8 @@ class Proposal extends \Weasty\DoctrineBundle\Entity\AbstractEntity
             return $price->getStatus() == Price::STATUS_ON;
         })->current();
 
-        if($price instanceof Price){
-            return $price->getExchangedValue();
-        }
+        return $price;
 
-        return null;
     }
 
     /**

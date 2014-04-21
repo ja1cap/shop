@@ -2,10 +2,10 @@
 namespace Weasty\GeonamesBundle\Twig;
 
 /**
- * Class CountriesExtension
+ * Class CountryExtension
  * @package Weasty\GeonamesBundle\Twig
  */
-class CountriesExtension extends \Twig_Extension {
+class CountryExtension extends \Twig_Extension {
 
     /**
      * @var \Weasty\GeonamesBundle\Entity\CountryRepository

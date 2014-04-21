@@ -1,11 +1,8 @@
 <?php
 namespace Shop\CatalogBundle\Form\Type;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Shop\CatalogBundle\Entity\Contractor;
 
 /**
  * Class ContractorCurrencyType
@@ -14,48 +11,14 @@ use Shop\CatalogBundle\Entity\Contractor;
 class ContractorCurrencyType extends AbstractType {
 
     /**
-     * @var Contractor
-     */
-    private $contractor;
-
-    /**
-     * @var ContractorCurrency
-     */
-    private $currency;
-
-    /**
-     * @param Contractor $contractor
-     * @param ContractorCurrency $currency
-     */
-    function __construct(Contractor $contractor, ContractorCurrency $currency)
-    {
-        $this->contractor = $contractor;
-        $this->currency = $currency;
-    }
-
-    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-        $currencies = new ArrayCollection(ContractorCurrency::$currencyNames);
-        $currencyCurrencyNumericCode = $this->currency->getNumericCode();
-
-        if($currencyCurrencyNumericCode != $this->contractor->getDefaultCurrencyNumericCode()){
-            $currencies->remove($this->contractor->getDefaultCurrencyNumericCode());
-        }
-
-        $this->contractor->getCurrencies()->map(function(ContractorCurrency $currency) use($currencies, $currencyCurrencyNumericCode) {
-            if($currencyCurrencyNumericCode != $currency->getNumericCode()){
-                $currencies->remove($currency->getNumericCode());
-            }
-        });
-
         $builder
-            ->add('numericCode', 'choice', array(
-                'choices' => $currencies->toArray(),
+            ->add('numericCode', 'weasty_money_currency_numeric', array(
                 'required' => true,
                 'label' => 'Валюта',
             ));

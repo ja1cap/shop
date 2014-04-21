@@ -54,10 +54,10 @@
                                         <div class="success alert">
                                             <b>Сумма заказа:</b>
                                             {% if item.minOrderSummary %}
-                                                от {{ item.minOrderSummary|number_format(0, '.', ' ') }} руб
+                                                от {{ item.minOrderSummary|weasty_price }}
                                             {% endif %}
                                             {% if item.maxOrderSummary %}
-                                                до {{ item.maxOrderSummary|number_format(0, '.', ' ') }} руб
+                                                до {{ item.maxOrderSummary|weasty_price }}
                                             {% endif %}
                                         </div>
                                     {% endif %}

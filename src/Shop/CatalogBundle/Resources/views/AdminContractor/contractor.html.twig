@@ -7,7 +7,7 @@
     {{ include('ShopCatalogBundle:AdminContractor:breadcrumb/contractorBreadcrumb.html.twig') }}
     {{ form(form) }}
 
-    {% if contractor.id and canAddCurrency %}
+    {% if contractor.id %}
         <hr/>
         <div class="medium primary btn">
             <a href="{{ path('contractor_currency', {'contractorId' : contractor.id}) }}">

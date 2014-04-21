@@ -69,8 +69,9 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        {% include 'ShopShippingBundle:AdminShippingMethod:shippingMethodPrices.html.twig' %}
-                        {% include 'ShopShippingBundle:AdminShippingMethod:shippingMethodLiftingPrices.html.twig' %}
+                        {% include 'ShopShippingBundle:AdminShippingMethod:shippingPrices.html.twig' with {'shippingPrices' : shippingMethod.prices } %}
+                        {% include 'ShopShippingBundle:AdminShippingMethod:shippingLiftingPrices.html.twig' with {'shippingLiftingPrices' : shippingMethod.liftingPrices } %}
+                        {% include 'ShopShippingBundle:AdminShippingMethodCategory:shippingCategories.html.twig' %}
                     </td>
                 </tr>
             {% endfor %}

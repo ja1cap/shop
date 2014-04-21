@@ -23,26 +23,41 @@ class CurrencyConverter implements CurrencyConverterInterface {
     protected $currencyCodeConverter;
 
     /**
+     * @var \Weasty\MoneyBundle\Data\CurrencyResource
+     */
+    protected $currencyResource;
+
+    /**
+     * @param $currencyResource
      * @param $currencyRateRepository
      * @param $currencyCodeConverter
      */
-    function __construct(ObjectRepository $currencyRateRepository, CurrencyCodeConverterInterface $currencyCodeConverter)
+    function __construct(CurrencyResource $currencyResource, ObjectRepository $currencyRateRepository, CurrencyCodeConverterInterface $currencyCodeConverter)
     {
+        $this->currencyResource = $currencyResource;
         $this->currencyRateRepository = $currencyRateRepository;
         $this->currencyCodeConverter = $currencyCodeConverter;
     }
 
     /**
      * @param string|integer|float|\Weasty\MoneyBundle\Data\PriceInterface $value
-     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface $sourceCurrency
-     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface $destinationCurrency
+     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface|null $sourceCurrency
+     * @param string|integer|\Weasty\MoneyBundle\Data\CurrencyInterface|null $destinationCurrency
      * @return string|integer|float|null
      */
-    public function convert($value, $sourceCurrency, $destinationCurrency)
+    public function convert($value, $sourceCurrency = null, $destinationCurrency = null)
     {
 
         if($value instanceof PriceInterface){
-            $value = $value->getValue();
+
+            $price = $value;
+            $value = $price->getValue();
+            $sourceCurrency = $sourceCurrency ?: $price->getCurrency();
+
+        } else {
+
+            $sourceCurrency = $sourceCurrency ?: $this->getCurrencyResource()->getDefaultCurrency();
+
         }
 
         $sourceCurrencyAlphabeticCode = $this
@@ -51,6 +66,8 @@ class CurrencyConverter implements CurrencyConverterInterface {
                 $sourceCurrency,
                 CurrencyResource::CODE_TYPE_ISO_4217_ALPHABETIC
             );
+
+        $destinationCurrency = $destinationCurrency ?: $this->getCurrencyResource()->getDefaultCurrency();
 
         $destinationCurrencyAlphabeticCode = $this
             ->getCurrencyCodeConverter()
@@ -88,6 +105,14 @@ class CurrencyConverter implements CurrencyConverterInterface {
 
         return $value;
 
+    }
+
+    /**
+     * @return CurrencyResource
+     */
+    public function getCurrencyResource()
+    {
+        return $this->currencyResource;
     }
 
     /**

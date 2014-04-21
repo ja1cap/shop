@@ -26,9 +26,7 @@
         "leaseweb/secure-controller-bundle": "*",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "jjs/common": "dev-master",
-        "jjs/geonames-bundle": "dev-master",
-        "sylius/resource-bundle": "dev-master",
-        "sylius/money-bundle": "dev-master"
+        "jjs/geonames-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

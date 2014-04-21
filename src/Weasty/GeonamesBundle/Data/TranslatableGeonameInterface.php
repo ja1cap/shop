@@ -1,11 +1,11 @@
 <?php
-namespace Weasty\GeonamesBundle\Resources;
+namespace Weasty\GeonamesBundle\Data;
 
 /**
  * Interface TranslatableLocality
  * @package Weasty\GeonamesBundle\Resources
  */
-interface TranslatableGeoname {
+interface TranslatableGeonameInterface {
 
     /**
      * Set localeNames

@@ -19,7 +19,7 @@
 
                     {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
 
-                    {% if priceIntervalsData.intervals %}
+                    {% if (priceIntervalsData is defined and priceIntervalsData.intervals) %}
                         <div class="filters-form-container extraFiltersForm-container">
                             <form id="extraFiltersForm" class="extraFiltersForm">
                                 {% if priceIntervalsData.intervals %}
@@ -33,12 +33,12 @@
                                                 <label for="priceStep{{ intervalData.priceStep }}">
                                                     <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
                                                     {% if intervalData.priceStep > 0 %}
-                                                        {{ intervalData.priceStep|number_format(0, '.', ' ') }}
+                                                        {{ intervalData.priceStep|weasty_price }}
                                                         -
                                                     {% else %}
                                                         до
                                                     {% endif %}
-                                                    {{ (intervalData.priceStep + priceIntervalsData.interval)|number_format(0, '.', ' ') }} руб
+                                                    {{ (intervalData.priceStep + priceIntervalsData.interval)|weasty_price }}
                                                     <small class="amount">
                                                         ({{ intervalData.pricesAmount|default(0) }})
                                                     </small>
@@ -106,18 +106,18 @@
                                                             {% if priceData.maxPrice > priceData.price %}
                                                                 от
                                                             {% endif %}
-                                                            {{ priceData.price|number_format(0, '.', ' ') }} руб
+                                                            {{ priceData.price|shop_price }}
                                                         </div>
                                                     {% endif %}
                                                 </div>
 
                                                 {% if price.id not in shopCartSummary.priceIds %}
                                                     <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                        Добавить {{ category.singularName|lower }} в корзину
+                                                        Добавить в корзину
                                                     </a>
                                                     {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
                                                         <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                            Заменить {{ category.singularName|lower }} в корзине
+                                                            Заменить в корзине
                                                         </a>
                                                     {% endif %}
                                                 {% else %}

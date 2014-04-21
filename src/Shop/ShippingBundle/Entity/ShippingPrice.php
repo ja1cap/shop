@@ -31,7 +31,7 @@ abstract class ShippingPrice extends AbstractEntity
     public static $liftingTypes = array(
         self::LIFTING_TYPE_BASIC => 'Базовый тариф',
         self::LIFTING_TYPE_INCLUDED => 'Включено в стоимость доставки',
-        self::LIFTING_TYPE_IGNORE => 'Не учитываеть',
+        self::LIFTING_TYPE_IGNORE => 'Не учитывать',
     );
 
     /**
@@ -40,7 +40,7 @@ abstract class ShippingPrice extends AbstractEntity
     public static $assemblyTypes = array(
         self::ASSEMBLY_TYPE_BASIC => 'Базовый тариф',
         self::ASSEMBLY_TYPE_INCLUDED => 'Включено в стоимость доставки',
-        self::ASSEMBLY_TYPE_IGNORE => 'Не учитываеть',
+        self::ASSEMBLY_TYPE_IGNORE => 'Не учитывать',
     );
 
     /**

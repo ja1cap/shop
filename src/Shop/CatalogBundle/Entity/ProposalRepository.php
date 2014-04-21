@@ -10,7 +10,7 @@ use Weasty\DoctrineBundle\Entity\AbstractRepository;
  * Class ProposalRepository
  * @package Shop\CatalogBundle\Entity
  */
-class ProposalRepository extends \Weasty\DoctrineBundle\Entity\AbstractRepository {
+class ProposalRepository extends AbstractRepository {
 
     /**
      * @param $formattedNames

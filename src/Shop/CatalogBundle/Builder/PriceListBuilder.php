@@ -141,14 +141,23 @@ class PriceListBuilder {
                 foreach($aliasesEntities as $aliasEntity){
 
                     $value = null;
+                    $property = $aliasEntity['property'];
 
                     switch($aliasEntity['entity']){
                         case 'proposal':
-                            $value = $proposal[$aliasEntity['property']];
+
+                            $value = $proposal[$property];
                             break;
+
                         case 'price':
-                            $value = $price[$aliasEntity['property']];
+
+                            switch($aliasEntity[$property]){
+                                default:
+                                    $value = $price[$aliasEntity[$property]];
+                            }
+
                             break;
+
                     }
 
                     $activeSheet->setCellValueByColumnAndRow($i, $identifiersRowIndex, $value);

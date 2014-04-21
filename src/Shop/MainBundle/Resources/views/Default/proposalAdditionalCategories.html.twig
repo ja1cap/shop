@@ -13,20 +13,22 @@
                 <div class="manufactures-list">
                     <div class="item">
                         <a href="{{ path('shop_category', {'slug' : additionalCategoryData.category.slug }) }}">
-                                                    <span class="manufacturer-image-container">
-                                                        <span class="nailthumb-container">
-                                                            <img src="{{ additionalCategoryData.proposalData.proposal.thumbImageUrl }}" alt="{{ additionalCategoryData.category.name }}">
-                                                        </span>
-                                                    </span>
+                            <span class="manufacturer-image-container">
+                                <span class="nailthumb-container">
+                                    <img src="{{ additionalCategoryData.proposalData.proposal.thumbImageUrl }}" alt="{{ additionalCategoryData.category.name }}">
+                                </span>
+                            </span>
                         </a>
                     </div>
-                    {% for manufacturer in additionalCategoryData.manufacturers %}
-                        <div class="item" style="padding: 0 15px">
-                            <div class="manufacturer-image-container" style="width: 200px; height: 200px">
-                                <img src="{{ manufacturer.thumb_image_url }}" alt="{{ manufacturer.name }}">
+                    {% if additionalCategoryData.manufacturers is defined %}
+                        {% for manufacturer in additionalCategoryData.manufacturers %}
+                            <div class="item" style="padding: 0 15px">
+                                <div class="manufacturer-image-container" style="width: 200px; height: 200px">
+                                    <img src="{{ manufacturer.thumb_image_url }}" alt="{{ manufacturer.name }}">
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
                 <div style="font-size: 18px; margin-bottom: 5px">
@@ -36,7 +38,7 @@
                 </div>
 
                 <div style="font-size: 16px">
-                    от {{ additionalCategoryData.proposalData.price|number_format(0, '.', ' ') }} руб
+                    от {{ additionalCategoryData.proposalData.price|shop_price }}
                 </div>
 
             </li>

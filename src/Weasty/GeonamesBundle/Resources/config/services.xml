@@ -133,6 +133,9 @@
         <service id="weasty_geonames.twig.city_extension" class="Weasty\GeonamesBundle\Twig\CityExtension">
             <tag name="twig.extension" />
             <argument type="service" id="weasty_geonames.city.repository"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
         </service>
 
         <service id="weasty_geonames.twig.country_extension" class="Weasty\GeonamesBundle\Twig\CountryExtension">

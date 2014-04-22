@@ -416,4 +416,18 @@ class State extends Locality implements TranslatableGeonameInterface
         return $this;
     }
 
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     * @return State
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
 }

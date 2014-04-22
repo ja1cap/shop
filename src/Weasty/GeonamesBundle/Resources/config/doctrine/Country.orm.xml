@@ -13,6 +13,7 @@
         </id>
         <field name="code" type="string" column="code" length="2" nullable="false"/>
         <field name="name" type="string" column="name" length="50" nullable="false"/>
+        <field name="capital" type="string" column="capital" nullable="true"/>
         <field name="domain" type="string" column="domain" length="2" nullable="true"/>
         <field name="postalCodeFormat" type="string" column="postal_code_format" length="60" nullable="true"/>
         <field name="postalCodeRegex" type="string" column="postal_code_regex" length="180" nullable="true"/>

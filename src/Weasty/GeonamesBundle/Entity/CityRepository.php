@@ -1,6 +1,8 @@
 <?php
 namespace Weasty\GeonamesBundle\Entity;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
 use JJs\Bundle\GeonamesBundle\Import\Locality as ImportLocality;
 use JJs\Bundle\GeonamesBundle\Model\LocalityInterface;
 
@@ -10,6 +12,58 @@ use JJs\Bundle\GeonamesBundle\Model\LocalityInterface;
  */
 class CityRepository extends LocalityRepository
 {
+
+    /**
+     * @param $countryCode
+     * @return null|City
+     */
+    public function getCountryCapitalCity($countryCode){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('c')
+            ->from('WeastyGeonamesBundle:Country', 'co')
+            ->join('WeastyGeonamesBundle:City', 'c', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('c.nameUtf8', 'co.capital'),
+                $qb->expr()->eq('co.id', 'c.countryId')
+            ))
+            ->andWhere($qb->expr()->eq('co.code', $qb->expr()->literal($countryCode)))
+        ;
+
+        return current($qb->getQuery()->getResult());
+
+    }
+
+    /**
+     * @param $latitude
+     * @param $longitude
+     * @return null|City
+     */
+    public function locateCity($latitude, $longitude){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select(array(
+                'c.id',
+                '(6371 * acos(cos(radians(' . $latitude . ')) * cos(radians(c.latitude)) * cos(radians(c.longitude) - radians(' . $longitude . ')) + sin(radians(' . $latitude . ')) * sin(radians(c.latitude)))) AS distance'
+            ))
+            ->from('WeastyGeonamesBundle:City', 'c')
+            ->andHaving($qb->expr()->lte('distance', 25))
+            ->orderBy('distance', 'ASC')
+        ;
+
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb;
+        $sql .= ' LIMIT 1';
+
+        $id = $this->getEntityManager()->getConnection()->fetchColumn($sql);
+        $city = $id ? $this->find($id) : null;
+
+        return $city;
+
+
+    }
 
     /**
      * @param $country

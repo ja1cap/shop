@@ -499,4 +499,18 @@ class City extends Locality implements TranslatableGeonameInterface
         return $this->countryId;
     }
 
+
+    /**
+     * Set creationDate
+     *
+     * @param \DateTime $creationDate
+     * @return City
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
 }

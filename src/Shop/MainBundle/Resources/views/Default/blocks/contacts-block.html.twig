@@ -33,15 +33,11 @@
         <script type="text/javascript">
             $(function(){
 
-
-
-                ymaps.ready(init);
-
                 var myMap,
-                        myPlacemark,
-                        json_addresses = $.parseJSON($('#json_addresses').html());
+                    myPlaceMark,
+                    json_addresses = $.parseJSON($('#json_addresses').html());
 
-                function init(){
+                function initMap(){
 
                     myMap = new ymaps.Map ("map", {
                         center: [53.9, 27.56],
@@ -49,13 +45,13 @@
                     });
 
                     myMap.controls
-                            .add('zoomControl', { left: 5, top: 150 });
+                        .add('zoomControl', { left: 5, top: 150 });
 
                     var markers = new ymaps.GeoObjectCollection();
 
                     $.each(json_addresses, function(i, address){
 
-                        myPlacemark = new ymaps.Placemark(
+                        myPlaceMark = new ymaps.Placemark(
                                 [address['latitude'], address['longitude']],
                                 {
                                     iconContent: i + 1,
@@ -67,7 +63,7 @@
                                 }
                         );
 
-                        markers.add(myPlacemark);
+                        markers.add(myPlaceMark);
 
                     });
 
@@ -77,6 +73,10 @@
                     }
 
                 }
+
+                ymaps.ready(function(){
+                    initMap();
+                });
 
             });
         </script>

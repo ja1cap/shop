@@ -1,16 +1,25 @@
 <?php
 namespace Weasty\GeonamesBundle\Twig;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class CityExtension
  * @package Weasty\GeonamesBundle\Twig
  */
-class CityExtension extends \Twig_Extension {
+class CityExtension extends \Twig_Extension
+    implements ContainerAwareInterface
+{
 
     /**
      * @var \Weasty\GeonamesBundle\Entity\CityRepository
      */
     protected $cityRepository;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\Container
+     */
+    protected $container;
 
     /**
      * @param \Weasty\GeonamesBundle\Entity\CityRepository $cityRepository
@@ -25,9 +34,25 @@ class CityExtension extends \Twig_Extension {
      */
     public function getFunctions(){
         return array(
+            new \Twig_SimpleFunction('weasty_geonames_city_locator', array($this, 'cityLocator'), array(
+                'is_safe' => array('html')
+            )),
             new \Twig_SimpleFunction('weasty_geonames_city', array($this, 'getCity')),
             new \Twig_SimpleFunction('weasty_geonames_cities', array($this, 'getCities')),
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function cityLocator(){
+
+        /**
+         * @var $twig \Twig_Environment
+         */
+        $twig = $this->getContainer()->get('twig');
+        return $twig->render('WeastyGeonamesBundle:City:cityLocator.html.twig');
+
     }
 
     /**
@@ -68,4 +93,24 @@ class CityExtension extends \Twig_Extension {
         return $this->cityRepository;
     }
 
-} 
+    /**
+     * @return \Symfony\Component\DependencyInjection\Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     *
+     * @api
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+}

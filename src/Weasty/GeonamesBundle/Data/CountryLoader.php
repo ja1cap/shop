@@ -30,6 +30,7 @@ class CountryLoader extends BaseCountryLoader {
         $columnsProperties = array(
             self::COLUMN_ISO_CODE => 'code',
             self::COLUMN_NAME => 'name',
+            self::COLUMN_CAPITAL => 'capital',
             self::COLUMN_TOP_LEVEL_DOMAIN => 'domain',
             self::COLUMN_POSTAL_CODE_FORMAT => 'postalCodeFormat',
             self::COLUMN_POSTAL_CODE_REGEX => 'postalCodeRegex',

@@ -82,6 +82,11 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
     protected $geonameIdentifier;
 
     /**
+     * @var mixed
+     */
+    protected $capital;
+
+    /**
      * Returns the unique identifier of this country in the local database
      *
      * @return integer
@@ -311,4 +316,22 @@ class Country extends AbstractEntity implements CountryInterface, TranslatableGe
         }
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCapital()
+    {
+        return $this->capital;
+    }
+
+    /**
+     * @param mixed $capital
+     */
+    public function setCapital($capital)
+    {
+        $this->capital = $capital;
+    }
+
+
 }

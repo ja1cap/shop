@@ -13,6 +13,11 @@ use Traversable;
 class Country extends BaseCountry implements \ArrayAccess, \IteratorAggregate {
 
     /**
+     * @var mixed
+     */
+    public $capital;
+
+    /**
      * @var integer
      */
     public $geonameIdentifier;
@@ -177,6 +182,22 @@ class Country extends BaseCountry implements \ArrayAccess, \IteratorAggregate {
     public function getGeonameIdentifier()
     {
         return $this->geonameIdentifier;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCapital()
+    {
+        return $this->capital;
+    }
+
+    /**
+     * @param mixed $capital
+     */
+    public function setCapital($capital)
+    {
+        $this->capital = $capital;
     }
 
 } 

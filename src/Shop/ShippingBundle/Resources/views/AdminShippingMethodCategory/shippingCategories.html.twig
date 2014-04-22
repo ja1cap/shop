@@ -24,6 +24,7 @@
                 </div>
                 {% include 'ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryPrices.html.twig' with {'shippingPrices' : shippingCategory.prices } %}
                 {% include 'ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryLiftingPrices.html.twig' with {'shippingLiftingPrices' : shippingCategory.liftingPrices } %}
+                {% include 'ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryAssemblyPrices.html.twig' with {'shippingAssemblyPrices' : shippingCategory.assemblyPrices } %}
             </div>
         {% endfor %}
     </div>

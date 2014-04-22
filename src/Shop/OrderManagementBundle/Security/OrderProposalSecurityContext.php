@@ -101,7 +101,7 @@ class OrderProposalSecurityContext
                     if($managerContractor instanceof ManagerContractor){
 
                         $isGrantedContractor = (!$managerContractor->getContractorId() || $object->getPrice()->getContractorId() == $managerContractor->getContractorId());
-                        $isGrantedCategory = (!$managerContractor->getCategoriesIds() || in_array($object->getProposal()->getCategoryId(), $managerContractor->getCategoriesIds()));
+                        $isGrantedCategory = (!$managerContractor->getCategoryIds() || in_array($object->getProposal()->getCategoryId(), $managerContractor->getCategoryIds()));
 
                         if($isGrantedContractor && $isGrantedCategory){
 

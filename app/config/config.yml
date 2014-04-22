@@ -33,6 +33,8 @@ twig:
     cache:            false
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+      locale: %locale%
     form:
       resources:
           - 'ShopShippingBundle:Form:fields.html.twig'

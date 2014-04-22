@@ -12,96 +12,40 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
 abstract class ShippingLiftingPrice extends AbstractEntity
 {
 
-    const FLOOR_AMOUNT_TYPE_ANY = 1;
-    const FLOOR_AMOUNT_TYPE_RANGE = 2;
+    const PRICE_TYPE_ANY_FLOOR = 1;
+    const PRICE_TYPE_PER_FLOOR = 2;
 
     /**
      * @var integer
      */
-    protected $floorAmountType;
-
-    /**
-     * @var integer
-     */
-    private $minFloor;
-
-    /**
-     * @var integer
-     */
-    private $maxFloor;
+    protected $priceType;
 
     function __construct()
     {
-        $this->floorAmountType = self::FLOOR_AMOUNT_TYPE_ANY;
+        $this->priceType = self::PRICE_TYPE_ANY_FLOOR;
     }
 
     /**
-     * Set floorAmountType
+     * Set priceType
      *
-     * @param integer $floorAmountType
+     * @param integer $priceType
      * @return ShippingLiftingPrice
      */
-    public function setFloorAmountType($floorAmountType)
+    public function setPriceType($priceType)
     {
-        $this->floorAmountType = $floorAmountType;
+        $this->priceType = $priceType;
 
         return $this;
     }
 
     /**
-     * Get floorAmountType
+     * Get priceType
      *
-     * @return integer 
+     * @return integer
      */
-    public function getFloorAmountType()
+    public function getPriceType()
     {
-        return $this->floorAmountType;
-    }
-
-    /**
-     * Set minFloor
-     *
-     * @param integer $minFloor
-     * @return ShippingLiftingPrice
-     */
-    public function setMinFloor($minFloor)
-    {
-        $this->minFloor = $minFloor;
-
-        return $this;
-    }
-
-    /**
-     * Get minFloor
-     *
-     * @return integer 
-     */
-    public function getMinFloor()
-    {
-        return $this->minFloor;
-    }
-
-    /**
-     * Set maxFloor
-     *
-     * @param integer $maxFloor
-     * @return ShippingLiftingPrice
-     */
-    public function setMaxFloor($maxFloor)
-    {
-        $this->maxFloor = $maxFloor;
-
-        return $this;
-    }
-
-    /**
-     * Get maxFloor
-     *
-     * @return integer 
-     */
-    public function getMaxFloor()
-    {
-        return $this->maxFloor;
+        return $this->priceType;
     }
 
     /**

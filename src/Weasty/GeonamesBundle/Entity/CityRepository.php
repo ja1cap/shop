@@ -14,10 +14,15 @@ class CityRepository extends LocalityRepository
 {
 
     /**
+     * @var string
+     */
+    protected $defaultCountryCode;
+
+    /**
      * @param $countryCode
      * @return null|City
      */
-    public function getCountryCapitalCity($countryCode){
+    public function getCountryCapitalCity($countryCode = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
@@ -27,7 +32,7 @@ class CityRepository extends LocalityRepository
                 $qb->expr()->eq('c.nameUtf8', 'co.capital'),
                 $qb->expr()->eq('co.id', 'c.countryId')
             ))
-            ->andWhere($qb->expr()->eq('co.code', $qb->expr()->literal($countryCode)))
+            ->andWhere($qb->expr()->eq('co.code', $qb->expr()->literal($countryCode ?: $this->getDefaultCountryCode())))
         ;
 
         return current($qb->getQuery()->getResult());
@@ -69,9 +74,9 @@ class CityRepository extends LocalityRepository
      * @param $country
      * @return array
      */
-    public function getCountryCities($country){
+    public function getCountryCities($country = null){
 
-        $country = $this->getCountryRepository()->getCountry($country);
+        $country = $this->getCountryRepository()->getCountry($country ?: $this->getDefaultCountryCode());
 
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
@@ -235,6 +240,22 @@ class CityRepository extends LocalityRepository
         // Return the state instance from the locality
         return $city;
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultCountryCode()
+    {
+        return $this->defaultCountryCode;
+    }
+
+    /**
+     * @param string $defaultCountryCode
+     */
+    public function setDefaultCountryCode($defaultCountryCode)
+    {
+        $this->defaultCountryCode = $defaultCountryCode;
     }
 
 }

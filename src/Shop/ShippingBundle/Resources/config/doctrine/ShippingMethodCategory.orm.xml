@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Shop\ShippingBundle\Entity\ShippingMethodCategory">
+    <entity name="Shop\ShippingBundle\Entity\ShippingMethodCategory" repository-class="Shop\ShippingBundle\Entity\ShippingMethodCategoryRepository">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -25,9 +25,13 @@
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
-            <order-by>
-                <order-by-field name="minFloor" direction="ASC"/>
-            </order-by>
+        </one-to-many>
+
+        <one-to-many target-entity="ShippingMethodCategoryAssemblyPrice" mapped-by="shippingCategory" field="assemblyPrices">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
         </one-to-many>
 
         <many-to-one target-entity="ShippingMethod" field="shippingMethod">

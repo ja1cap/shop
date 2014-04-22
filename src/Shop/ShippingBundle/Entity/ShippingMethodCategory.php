@@ -46,6 +46,7 @@ class ShippingMethodCategory extends AbstractEntity
     {
         $this->prices = new ArrayCollection();
         $this->liftingPrices = new ArrayCollection();
+        $this->assemblyPrices = new ArrayCollection();
     }
 
     /**
@@ -106,20 +107,20 @@ class ShippingMethodCategory extends AbstractEntity
 
 
     /**
-     * Set categoriesIds
+     * Set categoryIds
      *
-     * @param array $categoriesIds
+     * @param array $categoryIds
      * @return ShippingMethodCategory
      */
-    public function setCategoryIds($categoriesIds)
+    public function setCategoryIds($categoryIds)
     {
-        $this->categoryIds = $categoriesIds;
+        $this->categoryIds = $categoryIds;
 
         return $this;
     }
 
     /**
-     * Get categoriesIds
+     * Get categoryIds
      *
      * @return array 
      */
@@ -192,5 +193,43 @@ class ShippingMethodCategory extends AbstractEntity
     public function getLiftingPrices()
     {
         return $this->liftingPrices;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $assemblyPrices;
+
+
+    /**
+     * Add assemblyPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCategoryAssemblyPrice $assemblyPrices
+     * @return ShippingMethodCategory
+     */
+    public function addAssemblyPrice(ShippingMethodCategoryAssemblyPrice $assemblyPrices)
+    {
+        $this->assemblyPrices[] = $assemblyPrices;
+        $assemblyPrices->setShippingCategory($this);
+        return $this;
+    }
+
+    /**
+     * Remove assemblyPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodCategoryAssemblyPrice $assemblyPrices
+     */
+    public function removeAssemblyPrice(ShippingMethodCategoryAssemblyPrice $assemblyPrices)
+    {
+        $this->assemblyPrices->removeElement($assemblyPrices);
+    }
+
+    /**
+     * Get assemblyPrices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAssemblyPrices()
+    {
+        return $this->assemblyPrices;
     }
 }

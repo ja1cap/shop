@@ -3,14 +3,14 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\CatalogBundle\Data\ProposalPriceInterface;
 
 /**
  * Class Price
  * @package Shop\CatalogBundle\Entity
  */
 class Price extends AbstractEntity
-    implements PriceInterface
+    implements ProposalPriceInterface
 {
 
     const STATUS_ON = 1;
@@ -38,6 +38,14 @@ class Price extends AbstractEntity
      * @var string
      */
     protected $value;
+
+    /**
+     * @return integer
+     */
+    public function getCategoryId()
+    {
+        return $this->getProposal()->getCategoryId();
+    }
 
     /**
      * @param string $value

@@ -579,16 +579,16 @@ class DefaultController extends Controller
                 $possibleSummaryPrice = $shopCartSummaryPrice;
             }
 
-            $shopCartCategoriesIds = $shopCartSummary['categoriesIds'];
-            $possibleCategoriesIds = array_unique(array_merge($shopCartCategoriesIds, array($category->getId())));
+            $shopCartCategoryIds = $shopCartSummary['categoryIds'];
+            $possibleCategoryIds = array_unique(array_merge($shopCartCategoryIds, array($category->getId())));
 
-            if($possibleSummaryPrice && $possibleCategoriesIds){
+            if($possibleSummaryPrice && $possibleCategoryIds){
 
                 /**
                  * @var $actionRepository \Shop\CatalogBundle\Entity\ActionRepository
                  */
                 $actionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action');
-                $actions = $actionRepository->findActions($possibleCategoriesIds, $possibleSummaryPrice);
+                $actions = $actionRepository->findActions($possibleCategoryIds, $possibleSummaryPrice);
 
             }
 

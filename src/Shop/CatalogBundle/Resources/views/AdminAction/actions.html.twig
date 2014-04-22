@@ -44,10 +44,10 @@
                                     <div style="margin: 5px 0 10px">
                                         {{ item.description|nl2br }}
                                     </div>
-                                    {% set categoriesNames = item.categoriesNames %}
-                                    {% if categoriesNames %}
+                                    {% set categoryNames = item.categoryNames %}
+                                    {% if categoryNames %}
                                         <div class="primary alert">
-                                            <b>Категории:</b> {{ categoriesNames|join(', ') }}
+                                            <b>Категории:</b> {{ categoryNames|join(', ') }}
                                         </div>
                                     {% endif %}
                                     {% if item.minOrderSummary or item.maxOrderSummary %}

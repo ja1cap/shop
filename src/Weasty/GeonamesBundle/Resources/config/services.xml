@@ -11,6 +11,7 @@
         <parameter key="weasty_geonames.country.entity_repository.class">Weasty\GeonamesBundle\Entity\CountryRepository</parameter>
         <parameter key="weasty_geonames.state.entity.class">Weasty\GeonamesBundle\Entity\State</parameter>
         <parameter key="weasty_geonames.state.entity_repository.class">Weasty\GeonamesBundle\Entity\StateRepository</parameter>
+        <parameter key="weasty_geonames.city.locator.class">Weasty\GeonamesBundle\Data\CityLocator</parameter>
         <parameter key="weasty_geonames.city.entity.class">Weasty\GeonamesBundle\Entity\City</parameter>
         <parameter key="weasty_geonames.city.entity_repository.class">Weasty\GeonamesBundle\Entity\CityRepository</parameter>
     </parameters>
@@ -108,6 +109,9 @@
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
             <argument>%weasty_geonames.city.entity.class%</argument>
+            <call method="setDefaultCountryCode">
+                <argument>%country_code%</argument>
+            </call>
             <call method="setGeonameLoader">
                 <argument id="weasty_geonames.geoname.loader" type="service" />
             </call>
@@ -129,6 +133,14 @@
             data storage implementation.
         -->
         <service id="weasty_geonames.city.repository" alias="weasty_geonames.city.entity_repository" />
+
+        <service id="weasty_geonames.city.locator" class="%weasty_geonames.city.locator.class%">
+            <argument>%locale%</argument>
+            <argument type="service" id="weasty_geonames.city.repository"/>
+            <call method="setRequest">
+                <argument type="service" id="request_stack"/>
+            </call>
+        </service>
 
         <service id="weasty_geonames.twig.city_extension" class="Weasty\GeonamesBundle\Twig\CityExtension">
             <tag name="twig.extension" />

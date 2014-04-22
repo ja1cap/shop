@@ -3,8 +3,10 @@
 namespace Shop\ShippingBundle\Controller;
 
 use Shop\ShippingBundle\Entity\ShippingMethod;
+use Shop\ShippingBundle\Entity\ShippingMethodAssemblyPrice;
 use Shop\ShippingBundle\Entity\ShippingMethodLiftingPrice;
 use Shop\ShippingBundle\Entity\ShippingMethodPrice;
+use Shop\ShippingBundle\Mapper\ShippingAssemblyPriceMapper;
 use Shop\ShippingBundle\Mapper\ShippingLiftingPriceMapper;
 use Shop\ShippingBundle\Mapper\ShippingMethodMapper;
 use Shop\ShippingBundle\Mapper\ShippingPriceMapper;
@@ -255,6 +257,89 @@ class AdminShippingMethodController extends Controller
     {
 
         $entity = $this->getDoctrine()->getManager()->getRepository('ShopShippingBundle:ShippingMethodLiftingPrice')->findOneBy(array(
+            'id' => $id
+        ));
+
+        if($entity){
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($entity);
+            $em->flush();
+
+        }
+
+        return $this->redirect($this->generateUrl('shipping_methods'));
+
+    }
+
+    /**
+     * @param $id
+     * @param $shippingMethodId
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function shippingMethodAssemblyPriceAction($id, $shippingMethodId, Request $request){
+
+        $shippingMethodRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod');
+        $shippingMethod = $shippingMethodRepository->findOneBy(array(
+            'id' => $shippingMethodId
+        ));
+
+        if(!$shippingMethod instanceof ShippingMethod){
+            throw $this->createNotFoundException('Shipping method not found');
+        }
+
+        $shippingMethodAssemblyPriceRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodAssemblyPrice');
+        $shippingMethodAssemblyPrice = $shippingMethodAssemblyPriceRepository->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$shippingMethodAssemblyPrice instanceof ShippingMethodAssemblyPrice){
+            $shippingMethodAssemblyPrice = new ShippingMethodAssemblyPrice();
+        }
+
+        $isNew = !$shippingMethodAssemblyPrice->getId();
+        $mapper = new ShippingAssemblyPriceMapper($shippingMethodAssemblyPrice);
+        $form = $this->createForm('shipping_assembly_price', $mapper);
+
+        $form->handleRequest($request);
+
+        if($request->getMethod() == 'POST' && $form->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+
+            if($isNew){
+                $shippingMethod->addAssemblyPrice($shippingMethodAssemblyPrice);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('shipping_methods'));
+
+        } else {
+
+            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingAssemblyPrice.html.twig', array(
+                'title' => 'Стоимость доставки',
+                'form' => $form->createView(),
+                'shippingMethod' => $shippingMethod,
+                'shippingMethodAssemblyPrice' => $shippingMethodAssemblyPrice,
+            ));
+
+        }
+
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteShippingMethodAssemblyPriceAction($id)
+    {
+
+        $entity = $this->getDoctrine()->getManager()->getRepository('ShopShippingBundle:ShippingMethodAssemblyPrice')->findOneBy(array(
             'id' => $id
         ));
 

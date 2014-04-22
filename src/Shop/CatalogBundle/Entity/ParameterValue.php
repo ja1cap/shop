@@ -173,7 +173,7 @@ class ParameterValue
     /**
      * Get price
      *
-     * @return \Shop\CatalogBundle\Entity\Price 
+     * @return \Shop\CatalogBundle\Entity\Price
      */
     public function getPrice()
     {

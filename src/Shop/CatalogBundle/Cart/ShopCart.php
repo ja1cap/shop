@@ -156,7 +156,7 @@ class ShopCart {
         return array(
             'proposalIds' => $proposalIds,
             'priceIds' => $priceIds,
-            'categoriesIds' => array_keys($categoryProposalsSummary),
+            'categoryIds' => array_keys($categoryProposalsSummary),
             'categories' => $categoryProposalsSummary,
             'summaryPrice' => $summaryPrice,
         );

@@ -1,8 +1,8 @@
 {% block users_container %}
-    <div id="{{ 'group' ~ currentGroup.id }}">
+    <div id="{{ 'group' ~ (currentGroup ? currentGroup.id : null) }}">
 
         <div class="medium primary btn">
-            <a href="{{ path('admin_' ~ currentGroup.route_prefix|default('users') ~ '_user', { 'group_id': currentGroup.id }) }}">
+            <a href="{{ path('admin_' ~ currentGroup.route_prefix|default('users') ~ '_user', { 'group_id': (currentGroup ? currentGroup.id : null) }) }}">
                 Добавить
             </a>
         </div>

@@ -1,0 +1,36 @@
+<div style="margin: 10px 0">
+    {% if shippingAssemblyPrices|length == 0 %}
+        {% block add_shipping_assembly_price_button %}
+            <div class="btn secondary small">
+                <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id}) }}">
+                    Добавить стоимость сборки
+                </a>
+            </div>
+        {% endblock %}
+    {% endif %}
+    <div style="margin: 10px 0 5px;">
+        {% for price in shippingAssemblyPrices %}
+            <div class="" style="margin: 0 0 5px; font-size: 12px">
+                {% if price.value %}
+                    Стоимость сборки - {{ price|weasty_price }}
+                {% else %}
+                    Бесплатная сборка
+                {% endif %}
+                {% block shipping_assembly_price_buttons %}
+                    <div style="display: inline-block; margin: 0 10px">
+                        <div class="btn default small">
+                            <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}">
+                                Изменить стоимость
+                            </a>
+                        </div>
+                        <div class="btn danger small">
+                            <a href="{{ path('delete_shipping_method_assembly_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                Удалить стоимость
+                            </a>
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

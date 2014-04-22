@@ -32,6 +32,11 @@ class ShippingMethod extends AbstractEntity
     private $description;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $assemblyPrices;
+
+    /**
      * @var array
      */
     public static $statuses = array(
@@ -135,6 +140,7 @@ class ShippingMethod extends AbstractEntity
         $this->countries = new ArrayCollection();
         $this->prices = new ArrayCollection();
         $this->liftingPrices = new ArrayCollection();
+        $this->assemblyPrices = new ArrayCollection();
     }
 
     /**
@@ -285,5 +291,38 @@ class ShippingMethod extends AbstractEntity
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add assemblyPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodAssemblyPrice $assemblyPrices
+     * @return ShippingMethod
+     */
+    public function addAssemblyPrice(ShippingMethodAssemblyPrice $assemblyPrices)
+    {
+        $this->assemblyPrices[] = $assemblyPrices;
+        $assemblyPrices->setShippingMethod($this);
+        return $this;
+    }
+
+    /**
+     * Remove assemblyPrices
+     *
+     * @param \Shop\ShippingBundle\Entity\ShippingMethodAssemblyPrice $assemblyPrices
+     */
+    public function removeAssemblyPrice(ShippingMethodAssemblyPrice $assemblyPrices)
+    {
+        $this->assemblyPrices->removeElement($assemblyPrices);
+    }
+
+    /**
+     * Get assemblyPrices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAssemblyPrices()
+    {
+        return $this->assemblyPrices;
     }
 }

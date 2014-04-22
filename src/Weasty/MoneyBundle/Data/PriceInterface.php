@@ -13,7 +13,7 @@ interface PriceInterface {
     public function getValue();
 
     /**
-     * @return integer|string|CurrencyInterface
+     * @return integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface
      */
     public function getCurrency();
 

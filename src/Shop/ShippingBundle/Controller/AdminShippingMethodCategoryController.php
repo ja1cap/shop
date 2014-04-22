@@ -4,8 +4,10 @@ namespace Shop\ShippingBundle\Controller;
 
 use Shop\ShippingBundle\Entity\ShippingMethod;
 use Shop\ShippingBundle\Entity\ShippingMethodCategory;
+use Shop\ShippingBundle\Entity\ShippingMethodCategoryAssemblyPrice;
 use Shop\ShippingBundle\Entity\ShippingMethodCategoryLiftingPrice;
 use Shop\ShippingBundle\Entity\ShippingMethodCategoryPrice;
+use Shop\ShippingBundle\Mapper\ShippingAssemblyPriceMapper;
 use Shop\ShippingBundle\Mapper\ShippingLiftingPriceMapper;
 use Shop\ShippingBundle\Mapper\ShippingPriceMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -238,7 +240,7 @@ class AdminShippingMethodCategoryController extends Controller
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingCategory->getShippingMethod(),
                 'shippingCategory' => $shippingCategory,
-                'ShippingCategoryLiftingPrice' => $shippingCategoryLiftingPrice,
+                'shippingCategoryLiftingPrice' => $shippingCategoryLiftingPrice,
             ));
 
         }
@@ -267,5 +269,90 @@ class AdminShippingMethodCategoryController extends Controller
         return $this->redirect($this->generateUrl('shipping_methods'));
 
     }
+
+    /**
+     * @param $id
+     * @param $shippingCategoryId
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function shippingCategoryAssemblyPriceAction($id, $shippingCategoryId, Request $request){
+
+        $shippingCategoryRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategory');
+        $shippingCategory = $shippingCategoryRepository->findOneBy(array(
+            'id' => $shippingCategoryId
+        ));
+
+        if(!$shippingCategory instanceof ShippingMethodCategory){
+            throw $this->createNotFoundException('Shipping category not found');
+        }
+
+        $shippingCategoryAssemblyPriceRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategoryAssemblyPrice');
+        $shippingCategoryAssemblyPrice = $shippingCategoryAssemblyPriceRepository->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$shippingCategoryAssemblyPrice instanceof ShippingMethodCategoryAssemblyPrice){
+            $shippingCategoryAssemblyPrice = new ShippingMethodCategoryAssemblyPrice();
+        }
+
+        $isNew = !$shippingCategoryAssemblyPrice->getId();
+        $mapper = new ShippingAssemblyPriceMapper($shippingCategoryAssemblyPrice);
+        $form = $this->createForm('shipping_assembly_price', $mapper);
+
+        $form->handleRequest($request);
+
+        if($request->getMethod() == 'POST' && $form->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+
+            if($isNew){
+                $shippingCategory->addAssemblyPrice($shippingCategoryAssemblyPrice);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('shipping_methods'));
+
+        } else {
+
+            return $this->render('ShopShippingBundle:AdminShippingMethod:shippingAssemblyPrice.html.twig', array(
+                'title' => 'Стоимость доставки',
+                'form' => $form->createView(),
+                'shippingMethod' => $shippingCategory->getShippingMethod(),
+                'shippingCategory' => $shippingCategory,
+                'shippingCategoryAssemblyPrice' => $shippingCategoryAssemblyPrice,
+            ));
+
+        }
+
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteShippingCategoryAssemblyPriceAction($id)
+    {
+
+        $entity = $this->getDoctrine()->getManager()->getRepository('ShopShippingBundle:ShippingMethodCategoryAssemblyPrice')->findOneBy(array(
+            'id' => $id
+        ));
+
+        if($entity){
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($entity);
+            $em->flush();
+
+        }
+
+        return $this->redirect($this->generateUrl('shipping_methods'));
+
+    }
+
 
 }

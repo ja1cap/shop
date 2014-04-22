@@ -15,4 +15,9 @@ interface CurrencyConverterInterface {
      */
     public function convert($value, $sourceCurrency = null, $destinationCurrency = null);
 
+    /**
+     * @return \Weasty\MoneyBundle\Data\CurrencyResource
+     */
+    public function getCurrencyResource();
+
 } 

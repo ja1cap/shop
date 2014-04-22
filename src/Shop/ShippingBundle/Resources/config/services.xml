@@ -4,4 +4,31 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="shop_shipping.shipping_method.entity.class">Shop\ShippingBundle\Entity\ShippingMethod</parameter>
+        <parameter key="shop_shipping.shipping_method.repository.class">Shop\ShippingBundle\Entity\ShippingMethodRepository</parameter>
+        <parameter key="shop_shipping.shipping_method_category.entity.class">Shop\ShippingBundle\Entity\ShippingMethodCategory</parameter>
+        <parameter key="shop_shipping.shipping_method_category.repository.class">Shop\ShippingBundle\Entity\ShippingMethodCategoryRepository</parameter>
+        <parameter key="shop_shipping.shipping_calculator.class">Shop\ShippingBundle\Calculator\ShippingCalculator</parameter>
+    </parameters>
+
+    <services>
+        <service id="shop_shipping.shipping_method.repository" class="%shop_shipping.shipping_method.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_shipping.shipping_method.entity.class%</argument>
+        </service>
+        <service id="shop_shipping.shipping_method_category.repository" class="%shop_shipping.shipping_method_category.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_shipping.shipping_method_category.entity.class%</argument>
+        </service>
+        <service id="shop_shipping.shipping_calculator" class="%shop_shipping.shipping_calculator.class%">
+            <argument type="service" id="shop_shipping.shipping_method.repository"/>
+            <argument type="service" id="shop_shipping.shipping_method_category.repository"/>
+            <argument type="service" id="weasty_money.currency.converter"/>
+            <argument type="service" id="shop_catalog.price.currency.converter"/>
+        </service>
+    </services>
+
 </container>

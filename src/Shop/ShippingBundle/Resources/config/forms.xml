@@ -8,6 +8,7 @@
         <parameter key="shop_shipping.form.type.shipping_method.class">Shop\ShippingBundle\Form\Type\ShippingMethodType</parameter>
         <parameter key="shop_shipping.form.type.shipping_price.class">Shop\ShippingBundle\Form\Type\ShippingPriceType</parameter>
         <parameter key="shop_shipping.form.type.shipping_lifting_price.class">Shop\ShippingBundle\Form\Type\ShippingLiftingPriceType</parameter>
+        <parameter key="shop_shipping.form.type.shipping_assembly_price.class">Shop\ShippingBundle\Form\Type\ShippingAssemblyPriceType</parameter>
         <parameter key="shop_shipping.form.type.shipping_category.class">Shop\ShippingBundle\Form\Type\ShippingMethodCategoryType</parameter>
     </parameters>
 
@@ -21,6 +22,9 @@
         </service>
         <service id="shop_shipping.form.type.shipping_lifting_price" class="%shop_shipping.form.type.shipping_lifting_price.class%">
             <tag name="form.type" alias="shipping_lifting_price" />
+        </service>
+        <service id="shop_shipping.form.type.shipping_assembly_price" class="%shop_shipping.form.type.shipping_assembly_price.class%">
+            <tag name="form.type" alias="shipping_assembly_price" />
         </service>
         <service id="shop_shipping.form.type.shipping_category" class="%shop_shipping.form.type.shipping_category.class%">
             <tag name="form.type" alias="shipping_category" />

@@ -10,11 +10,11 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
 class ActionRepository extends EntityRepository {
 
     /**
-     * @param array $categoriesIds
+     * @param array $categoryIds
      * @param float $orderSummary
      * @return array
      */
-    public function findActions($categoriesIds, $orderSummary){
+    public function findActions($categoryIds, $orderSummary){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -27,7 +27,7 @@ class ActionRepository extends EntityRepository {
 
         $expr = $qb->expr()->andX(
             $qb->expr()->eq('a.status', Action::STATUS_ON),
-            $qb->expr()->in('ac.category_id', $categoriesIds),
+            $qb->expr()->in('ac.category_id', $categoryIds),
             $qb->expr()->orX(
                 $qb->expr()->isNull('a.minOrderSummary'),
                 $qb->expr()->lte('a.minOrderSummary', $orderSummary)

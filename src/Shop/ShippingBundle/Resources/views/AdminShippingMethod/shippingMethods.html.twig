@@ -71,6 +71,7 @@
                         {% endif %}
                         {% include 'ShopShippingBundle:AdminShippingMethod:shippingPrices.html.twig' with {'shippingPrices' : shippingMethod.prices } %}
                         {% include 'ShopShippingBundle:AdminShippingMethod:shippingLiftingPrices.html.twig' with {'shippingLiftingPrices' : shippingMethod.liftingPrices } %}
+                        {% include 'ShopShippingBundle:AdminShippingMethod:shippingAssemblyPrices.html.twig' with {'shippingAssemblyPrices' : shippingMethod.assemblyPrices } %}
                         {% include 'ShopShippingBundle:AdminShippingMethodCategory:shippingCategories.html.twig' %}
                     </td>
                 </tr>

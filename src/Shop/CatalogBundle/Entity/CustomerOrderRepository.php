@@ -42,11 +42,11 @@ class CustomerOrderRepository extends AbstractRepository
                 if($mangerContractor instanceof ManagerContractor){
 
                     $contractorId = $mangerContractor->getContractorId();
-                    $categoriesIds = $mangerContractor->getCategoriesIds();
+                    $categoryIds = $mangerContractor->getCategoryIds();
 
                     $mangerContractorsExprList[] = $expr->andX(
                         ($contractorId ? $expr->eq('pp.contractorId', $contractorId) : null),
-                        ($categoriesIds ? $expr->in('p.categoryId', $categoriesIds) : null)
+                        ($categoryIds ? $expr->in('p.categoryId', $categoryIds) : null)
                     );
 
                 }

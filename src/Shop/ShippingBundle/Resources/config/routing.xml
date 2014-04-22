@@ -39,6 +39,15 @@
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodLiftingPrice</default>
     </route>
 
+    <route id="shipping_method_assembly_price" pattern="/admin/shippingMethodAssemblyPrice/{shippingMethodId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodAssemblyPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_method_assembly_price" pattern="/admin/deleteShippingMethodAssemblyPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodAssemblyPrice</default>
+    </route>
+
     <route id="shipping_category" pattern="/admin/shippingCategory/{shippingMethodId}/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategory</default>
         <default key="id">null</default>
@@ -64,6 +73,15 @@
 
     <route id="delete_shipping_category_lifting_price" pattern="/admin/deleteShippingCategoryLiftingPrice/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:deleteShippingCategoryLiftingPrice</default>
+    </route>
+
+    <route id="shipping_category_assembly_price" pattern="/admin/shippingCategoryAssemblyPrice/{shippingCategoryId}/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategoryAssemblyPrice</default>
+        <default key="id">null</default>
+    </route>
+
+    <route id="delete_shipping_category_assembly_price" pattern="/admin/deleteShippingCategoryAssemblyPrice/{id}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:deleteShippingCategoryAssemblyPrice</default>
     </route>
 
 </routes>

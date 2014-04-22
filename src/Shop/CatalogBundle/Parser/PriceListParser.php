@@ -280,13 +280,13 @@ class PriceListParser {
 
         }
 
-        $formattedCategoriesNames = $this->formatNames(array_keys($groupedRowsData));
+        $formattedCategoryNames = $this->formatNames(array_keys($groupedRowsData));
 
         /**
          * @var $categoryRepository \Shop\CatalogBundle\Entity\CategoryRepository
          */
         $categoryRepository = $this->em->getRepository('ShopCatalogBundle:Category');
-        $existingCategories = $categoryRepository->findCategoriesByName($formattedCategoriesNames);
+        $existingCategories = $categoryRepository->findCategoriesByName($formattedCategoryNames);
 
         foreach($groupedRowsData as $categoryName => $proposals){
 

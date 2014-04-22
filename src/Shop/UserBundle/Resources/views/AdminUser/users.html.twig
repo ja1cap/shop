@@ -10,9 +10,9 @@
             <ul class="groupsList">
                 {% for group in groups %}
                     {% set group_route = 'admin_' ~ group.route_prefix %}
-                    {% set is_current_group = currentGroup.id == group.id or (not currentGroup and group.slug == constant('SLUG_USERS', group)) %}
+                    {% set is_current_group = (currentGroup and currentGroup.id == group.id) or (not currentGroup and group.slug == constant('SLUG_USERS', group)) %}
                     <li class="{{ is_current_group ? 'active' : '' }}">
-                        <a href="{{ is_current_group ? '#group' ~ currentGroup.id : path(group_route, { 'group_id': group.id, 'ajax_tab' : true }) }}">
+                        <a href="{{ is_current_group ? '#group' ~ (currentGroup ? currentGroup.id : null) : path(group_route, { 'group_id': group.id, 'ajax_tab' : true }) }}">
                             {{ group.name }}
                         </a>
                     </li>

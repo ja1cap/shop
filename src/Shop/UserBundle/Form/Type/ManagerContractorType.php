@@ -72,7 +72,7 @@ class ManagerContractorType extends AbstractType {
         }
 
         $builder
-            ->add('categoriesIds', 'choice', array(
+            ->add('categoryIds', 'choice', array(
                 'label' => 'Категории',
                 'multiple' => true,
                 'attr' => array(

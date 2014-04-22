@@ -130,7 +130,7 @@ class ManagerContractor extends AbstractEntity
     /**
      * @return array
      */
-    public function getCategoriesIds(){
+    public function getCategoryIds(){
         return $this->getCategories()->map(function(Category $category){
             return $category->getId();
         })->toArray();
@@ -139,7 +139,7 @@ class ManagerContractor extends AbstractEntity
     /**
      * @return array
      */
-    public function getCategoriesNames(){
+    public function getCategoryNames(){
         return $this->getCategories()->map(function(Category $category){
             return $category->getName();
         })->toArray();

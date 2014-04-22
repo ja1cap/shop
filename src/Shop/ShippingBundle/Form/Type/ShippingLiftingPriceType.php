@@ -19,21 +19,13 @@ class ShippingLiftingPriceType extends AbstractType {
     {
 
         $builder
-            ->add('floorAmountType', 'choice', array(
+            ->add('priceType', 'choice', array(
                 'expanded' => true,
-                'label' => 'Этаж',
+                'label' => 'Тип цены',
                 'choices' => array(
-                    ShippingLiftingPrice::FLOOR_AMOUNT_TYPE_ANY => 'любой',
-                    ShippingLiftingPrice::FLOOR_AMOUNT_TYPE_RANGE => 'диапазон',
+                    ShippingLiftingPrice::PRICE_TYPE_ANY_FLOOR => 'подъем на любой этаж',
+                    ShippingLiftingPrice::PRICE_TYPE_PER_FLOOR => 'цена за этаж',
                 ),
-            ))
-            ->add('minFloor', 'text', array(
-                'required' => false,
-                'label' => 'Начальный этаж',
-            ))
-            ->add('maxFloor', 'text', array(
-                'required' => false,
-                'label' => 'Конечный этаж',
             ))
             ->add('noLiftPrice', 'weasty_money_price', array(
                 'value_options' => array(

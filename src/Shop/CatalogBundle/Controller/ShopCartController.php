@@ -10,6 +10,7 @@ use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,6 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ShopCartController extends Controller
 {
+
+    /**
+     * @var ShopCart
+     */
+    private $shopCart;
 
     /**
      * @param Request $request
@@ -30,15 +36,16 @@ class ShopCartController extends Controller
 
         $actions = array();
         $shopCartSummaryPrice = $shopCartSummary['summaryPrice'];
-        $shopCartCategoriesIds = $shopCartSummary['categoriesIds'];
+        $shopCartCategoriesData = $shopCartSummary['categories'];
+        $shopCartCategoryIds = $shopCartSummary['categoryIds'];
 
-        if($shopCartSummaryPrice && $shopCartCategoriesIds){
+        if($shopCartSummaryPrice && $shopCartCategoryIds){
 
             /**
              * @var $actionRepository \Shop\CatalogBundle\Entity\ActionRepository
              */
             $actionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action');
-            $actions = $actionRepository->findActions($shopCartCategoriesIds, $shopCartSummaryPrice);
+            $actions = $actionRepository->findActions($shopCartCategoryIds, $shopCartSummaryPrice);
 
         }
 
@@ -46,8 +53,15 @@ class ShopCartController extends Controller
             'name' => 'ASC',
         ));
 
+        $cities = $this->get('weasty_geonames.city.repository')->getCountryCities();
+        $customerCity = $this->get('weasty_geonames.city.locator')->getCity();
+
+        $this->get('shop_shipping.shipping_calculator')->calculate($shopCartCategoriesData, $shopCartSummaryPrice, $customerCity);
+
         return $this->render('ShopCatalogBundle:ShopCart:default.html.twig', array(
             'title' => 'Оформление заказа',
+            'customerCity' => $customerCity,
+            'cities' => $cities,
             'actions' => $actions,
             'shippingMethods' => $shippingMethods,
             'shopCartSummary' => $shopCartSummary,
@@ -232,14 +246,18 @@ class ShopCartController extends Controller
     protected function getShopCart()
     {
 
-        $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
-        $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
-        $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
-        $currencyConverter = $this->get('shop_catalog.price.currency.converter');
+        if(!$this->shopCart instanceof ShopCart){
 
-        $shopCart = new ShopCart($currencyConverter, $categoryRepository, $proposalsRepository, $priceRepository);
+            $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+            $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
+            $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
+            $currencyConverter = $this->get('shop_catalog.price.currency.converter');
 
-        return $shopCart;
+            $this->shopCart = new ShopCart($currencyConverter, $categoryRepository, $proposalsRepository, $priceRepository);
+
+        }
+
+        return $this->shopCart;
 
     }
 

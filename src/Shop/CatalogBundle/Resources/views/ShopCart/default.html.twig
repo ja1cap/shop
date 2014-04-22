@@ -92,6 +92,37 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <div>
+                        <div class="large-title">
+                            Доставка
+                        </div>
+
+                        <div class="field">
+                            <div class="picker" style="margin: 10px 0 0">
+                                <select name="customerCity" id="customerCity">
+                                    {% for city in cities %}
+                                        <option value="{{ city.id }}" {{ customerCity.id == city.id ? 'selected="selected"' : ''}}>
+                                            {{ city.localeName(locale) }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="shipping-methods">
+                            {% for shippingMethod in shippingMethods %}
+                                <div class="shipping-method" style="margin: 0 0 10px">
+                                    <h5>
+                                        {{ shippingMethod.name }}
+                                    </h5>
+                                    <div>
+                                        {{ shippingMethod.description|nl2br }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     <div class="shop-cart-summary">
                         Сумма заказа:
                         <span class="summary-value">
@@ -172,24 +203,6 @@
                                 </div>
                             </div>
                         {% endif %}
-
-                        <div>
-                            <div class="large-title">
-                                Доставка и оплата
-                            </div>
-                            <div class="shipping-methods">
-                                {% for shippingMethod in shippingMethods %}
-                                    <div class="shipping-method" style="margin: 10px 0">
-                                        <h5>
-                                            {{ shippingMethod.name }}
-                                        </h5>
-                                        <div>
-                                            {{ shippingMethod.description|nl2br }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
 
                     </div>
                 </div>

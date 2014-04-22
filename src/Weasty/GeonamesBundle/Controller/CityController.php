@@ -3,7 +3,6 @@
 namespace Weasty\GeonamesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Weasty\GeonamesBundle\Entity\City;
@@ -24,21 +23,9 @@ class CityController extends Controller
 
         $latitude = $request->get('latitude');
         $longitude = $request->get('longitude');
-        $city = null;
 
-        $cityRepository = $this->getCityRepository();
-
-        if($latitude && $longitude){
-
-            $city = $cityRepository->locateCity($latitude, $longitude);
-
-        }
-
-        if(!$city instanceof City){
-
-            $city = $cityRepository->getCountryCapitalCity($this->container->getParameter('country_code'));
-
-        }
+        $cityLocator = $this->get('weasty_geonames.city.locator');
+        $city = $cityLocator->locateCity($latitude, $longitude);
 
         $cityJsonData = null;
 

@@ -87,12 +87,12 @@ class ManagerContractorMapper {
     }
 
     /**
-     * @param $categoriesIds
+     * @param $categoryIds
      * @return $this
      */
-    public function setCategoriesIds($categoriesIds){
+    public function setCategoryIds($categoryIds){
 
-        if(in_array('*', $categoriesIds)){
+        if(in_array('*', $categoryIds)){
 
             $this->managerContractor
                 ->setAllCategories(true)
@@ -102,7 +102,7 @@ class ManagerContractorMapper {
         } else {
 
             $categories = $this->categoryRepository->findBy(array(
-                'id' => $categoriesIds
+                'id' => $categoryIds
             ));
 
             $this->managerContractor
@@ -119,7 +119,7 @@ class ManagerContractorMapper {
     /**
      * @return array|string
      */
-    public function getCategoriesIds(){
+    public function getCategoryIds(){
 
         if($this->managerContractor->getAllCategories()){
             return array('*');

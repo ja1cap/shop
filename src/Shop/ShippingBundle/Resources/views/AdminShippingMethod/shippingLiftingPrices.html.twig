@@ -10,16 +10,10 @@
         {% for price in shippingLiftingPrices %}
             <div class="" style="margin: 0 0 5px; font-size: 12px">
                 {{ loop.index }}.
-                {% if price.floorAmountType == constant('FLOOR_AMOUNT_TYPE_ANY', price) %}
+                {% if price.priceType == constant('PRICE_TYPE_ANY_FLOOR', price) %}
                     Любой этаж
                 {% else %}
-                    Этаж
-                    {% if price.minFloor %}
-                        от {{ price.minFloor }}
-                    {% endif %}
-                    {% if price.maxFloor %}
-                        до {{ price.maxFloor }}
-                    {% endif %}
+                    Цена за этаж
                 {% endif %}
                 -
                 {% if price.noLiftPriceValue %}
@@ -31,7 +25,7 @@
                 {% if price.liftPriceValue %}
                     подъем на пассажирском лифте {{ price.liftPriceValue|weasty_price(price.liftPriceCurrencyNumericCode) }}
                 {% else %}
-                    бесплатный на пассажирском лифте
+                    бесплатный подъем на пассажирском лифте
                 {% endif %}
                 ,
                 {% if price.serviceLiftPriceValue %}

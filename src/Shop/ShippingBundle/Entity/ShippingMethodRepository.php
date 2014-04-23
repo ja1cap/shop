@@ -30,19 +30,15 @@ class ShippingMethodRepository extends AbstractRepository
             ))
             ->from('ShopShippingBundle:ShippingMethod', 'sm')
             ->join('ShopShippingBundle:ShippingMethodCountry', 'smc', Expr\Join::WITH, $qb->expr()->eq('smc.shippingMethodId', 'sm.id'))
-            ->andWhere($qb->expr()->andX(
+            ->andWhere($qb->expr()->orX(
                 $qb->expr()->eq('smc.countryCode', $qb->expr()->literal($city->getCountry()->getCode())),
-                $qb->expr()->orX(
-                    $qb->expr()->in('smc.cityGeonameIds', $city->getGeonameIdentifier()),
-                    ($city->getState() ? $qb->expr()->in('smc.stateGeonameIds', $city->getState()->getGeonameIdentifier()) : null)
-                )
+                $qb->expr()->in('smc.cityGeonameIds', $city->getGeonameIdentifier()),
+                ($city->getState() ? $qb->expr()->in('smc.stateGeonameIds', $city->getState()->getGeonameIdentifier()) : null)
             ))
-            ->orderBy('hasState', 'DESC')
-            ->orderBy('hasCity', 'DESC')
         ;
 
         $this->convertDqlToSql($qb);
-        $sql = (string)$qb . ' LIMIT 1';
+        $sql = (string)$qb . ' ORDER BY hasState DESC, hasCity DESC LIMIT 1';
 
         $shippingMethodId = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchColumn();
         $shippingMethod = $shippingMethodId ? $this->findOneBy(array('id' => $shippingMethodId)) : null;

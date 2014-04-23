@@ -15,6 +15,10 @@ abstract class ShippingLiftingPrice extends AbstractEntity
     const PRICE_TYPE_ANY_FLOOR = 1;
     const PRICE_TYPE_PER_FLOOR = 2;
 
+    const LIFT_TYPE_NO_LIFT = 1;
+    const LIFT_TYPE_LIFT = 2;
+    const LIFT_TYPE_SERVICE_LIFT = 3;
+
     /**
      * @var integer
      */

@@ -10,7 +10,6 @@ use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -54,9 +53,22 @@ class ShopCartController extends Controller
         ));
 
         $cities = $this->get('weasty_geonames.city.repository')->getCountryCities();
-        $customerCity = $this->get('weasty_geonames.city.locator')->getCity();
 
-        $this->get('shop_shipping.shipping_calculator')->calculate($shopCartCategoriesData, $shopCartSummaryPrice, $customerCity);
+        $customerCity = null;
+        if($request->get('customerCity')){
+            $customerCity = $this->get('weasty_geonames.city.repository')->findOneBy(array(
+                'id' => (int)$request->get('customerCity'),
+            ));
+        }
+        $customerCity = $customerCity ?: $this->get('weasty_geonames.city.locator')->getCity();
+
+        $shippingSummaries =$this->get('shop_shipping.shipping_calculator')->calculate(array(
+            'orderCategories' => $shopCartCategoriesData,
+            'orderSummaryPrice' => $shopCartSummaryPrice,
+            'city' => $customerCity,
+            'liftType' => $request->get('liftType'),
+            'floor' => $request->get('floor', 10),
+        ));
 
         return $this->render('ShopCatalogBundle:ShopCart:default.html.twig', array(
             'title' => 'Оформление заказа',
@@ -64,6 +76,7 @@ class ShopCartController extends Controller
             'cities' => $cities,
             'actions' => $actions,
             'shippingMethods' => $shippingMethods,
+            'shippingSummaries' => $shippingSummaries,
             'shopCartSummary' => $shopCartSummary,
         ));
 

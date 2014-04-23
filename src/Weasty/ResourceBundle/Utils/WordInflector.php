@@ -25,7 +25,8 @@ class WordInflector {
 
         $result = false;
 
-        $json_response = @file_get_contents('http://export.yandex.ru/inflect.xml?name=' . urlencode($word) . '&format=json');
+        $url = 'http://export.yandex.ru/inflect.xml?name=' . urlencode($word) . '&format=json';
+        $json_response = @file_get_contents($url);
         if($json_response){
 
             $response = json_decode($json_response, true);
@@ -54,4 +55,4 @@ class WordInflector {
 
     }
 
-} 
+}

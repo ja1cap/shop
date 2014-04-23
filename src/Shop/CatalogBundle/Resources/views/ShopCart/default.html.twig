@@ -91,42 +91,147 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
-                    </div>
-                    <div>
-                        <div class="large-title">
-                            Доставка
-                        </div>
 
-                        <div class="field">
-                            <div class="picker" style="margin: 10px 0 0">
-                                <select name="customerCity" id="customerCity">
-                                    {% for city in cities %}
-                                        <option value="{{ city.id }}" {{ customerCity.id == city.id ? 'selected="selected"' : ''}}>
-                                            {{ city.localeName(locale) }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
+                        <div style="padding: 0 18px 10px">
+
+                            <div class="large-title">
+                                Доставка
                             </div>
-                        </div>
 
-                        <div class="shipping-methods">
-                            {% for shippingMethod in shippingMethods %}
-                                <div class="shipping-method" style="margin: 0 0 10px">
-                                    <h5>
-                                        {{ shippingMethod.name }}
-                                    </h5>
-                                    <div>
-                                        {{ shippingMethod.description|nl2br }}
+                            <form id="shippingForm" style="margin: 0">
+
+                                <div class="field">
+                                    <div class="picker" style="margin: 10px 0 0">
+                                        <select name="customerCity" id="customerCity">
+                                            {% for city in cities %}
+                                                <option value="{{ city.id }}" {{ customerCity.id == city.id ? 'selected="selected"' : ''}}>
+                                                    {{ city.localeName(locale) }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
-                            {% endfor %}
+
+                                <div>
+
+                                    <div class="field" style="float:left;">
+                                        <label for="liftType">
+                                            Лифт в доме
+                                        </label>
+                                        <div class="picker" style="margin-left: 0">
+                                            <select name="liftType" id="liftType">
+                                                <option value="1" {{ app.request.get('liftType') == 1 ? 'selected="selected"' : '' }}>
+                                                    Нет
+                                                </option>
+                                                <option value="2" {{ app.request.get('liftType') == 2 or not app.request.get('liftType') ? 'selected="selected"' : '' }}>
+                                                    Пассажирский
+                                                </option>
+                                                <option value="3" {{ app.request.get('liftType') == 3 ? 'selected="selected"' : '' }}>
+                                                    Грузовой
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="field" style="float: left; margin-left: 10px">
+                                        <label for="floor">
+                                            Этаж
+                                        </label>
+                                        <div class="picker" style="margin-left: 0">
+                                            <select name="floor" id="floor">
+                                                {% for floor in 1..30 %}
+                                                    <option value="{{ floor }}" {{ app.request.get('floor') == floor or (not app.request.get('floor') and floor == 10) ? 'selected="selected"' : '' }}>
+                                                        {{ floor }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                </div>
+
+                            </form>
+
+                            <script>
+                                $(function(){
+
+                                    var $shippingForm = $('#shippingForm');
+
+                                    $shippingForm.find(':input').change(function(){
+
+                                        $shippingForm.submit();
+
+                                    });
+
+                                });
+                            </script>
+
+                            <div>
+                                {% for shippingSummary in shippingSummaries %}
+                                    <div>
+                                        {% if shippingSummary.category is defined %}
+                                            <h5>
+                                                {{ shippingSummary.category.name }}
+                                            </h5>
+                                        {% endif %}
+                                        {% if shippingSummary.shippingPrice %}
+                                            {% if shippingSummary.shippingPrice.value %}
+                                                <div>
+                                                    Доставка: {{ shippingSummary.shippingPrice|weasty_price }}
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    Бесплатная доставка
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if shippingSummary.liftingPrice %}
+                                            {% if shippingSummary.liftingPrice.value %}
+                                                <div>
+                                                    Подъем на этаж: {{ shippingSummary.liftingPrice|weasty_price }}
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    Бесплантый подъем на этаж
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if shippingSummary.assemblyPrice %}
+                                            {% if shippingSummary.assemblyPrice.value %}
+                                                <div>
+                                                    Сборка: {{ shippingSummary.assemblyPrice|weasty_price }}
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    Бесплантая сборка
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                        {#<div>#}
+                                            {#Сумма доставки для категории - {{ shippingSummary.summaryPrice|weasty_price }}#}
+                                        {#</div>#}
+                                    </div>
+                                {% endfor %}
+                                <div style="border-top: 1px solid #f1f1f1; margin: 10px 0 0; padding: 10px 0 0; font-size: 16px">
+                                    {% if shippingSummaries.getSummaryPrice.value %}
+                                        Стоимость доставки: <span style="color: #f14854">{{ shippingSummaries.getSummaryPrice|weasty_price }}</span>
+                                    {% else %}
+                                        <span style="color: #f14854">Бесплатная доставка</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
 
                     <div class="shop-cart-summary">
                         Сумма заказа:
                         <span class="summary-value">
-                            {{ shopCartSummary.summaryPrice|weasty_price }}
+                            {% set orderSummaryPriceValue = shopCartSummary.summaryPrice + shippingSummaries.getSummaryPrice.value%}
+                            {{ orderSummaryPriceValue|weasty_price }}
                         </span>
                     </div>
                     <form id="order-form" method="post" action="{{ path('shop_cart_order') }}">

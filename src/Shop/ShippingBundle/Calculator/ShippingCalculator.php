@@ -1,5 +1,6 @@
 <?php
 namespace Shop\ShippingBundle\Calculator;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shop\ShippingBundle\Entity\ShippingAssemblyPrice;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Shop\ShippingBundle\Entity\ShippingMethod;
@@ -15,7 +16,7 @@ use Weasty\MoneyBundle\Converter\CurrencyConverterInterface;
  * Class ShippingCalculator
  * @package Shop\ShippingBundle\Calculator
  */
-class ShippingCalculator {
+class ShippingCalculator implements ShippingCalculatorInterface {
 
     /**
      * @var \Shop\ShippingBundle\Entity\ShippingMethodRepository
@@ -45,136 +46,131 @@ class ShippingCalculator {
         $this->proposalPriceCurrencyConverter = $proposalPriceCurrencyConverter;
     }
 
-    public function calculate($orderCategories, $orderSummaryPrice, $city){
+    /**
+     * @param null $options
+     * @return mixed|ShippingSummariesCollection
+     */
+    public function calculate($options = null){
+
+        $optionsCollection = new ArrayCollection($options ?: array());
+
+        $orderCategories = $optionsCollection->get('orderCategories');
+        $orderSummaryPrice = $optionsCollection->get('orderSummaryPrice');
+        $city = $optionsCollection->get('city');
+
+        $summariesCollection = new ShippingSummariesCollection();
+
+        if ($orderCategories && is_array($orderCategories) && $city instanceof City) {
+
+            $this
+                ->buildCategoryShippingCalculators($orderCategories, $orderSummaryPrice, $city)
+                ->map(function($shippingCalculator) use ($options, $summariesCollection) {
+                    if($shippingCalculator instanceof ShippingCalculatorInterface){
+                        $summariesCollection->add($shippingCalculator->calculate($options));
+                    }
+                })
+            ;
+
+        }
+
+        return $summariesCollection;
+
+    }
+
+    /**
+     * @param $orderCategories
+     * @param $orderSummaryPrice
+     * @param $city
+     * @return ArrayCollection
+     */
+    protected function buildCategoryShippingCalculators(array $orderCategories, $orderSummaryPrice, City $city)
+    {
+
+        $categoryShippingCalculators = new ArrayCollection();
 
         $orderCategoryIds = array_keys($orderCategories);
-        //$categoryShippingPrices = array();
 
-        //var_dump($categoryIds);
-        //var_dump($city);
+        $shippingMethod = $this->getShippingMethodRepository()->getCityShippingMethods($city);
 
-        if($orderCategoryIds && is_array($orderCategoryIds) && $orderSummaryPrice && $city instanceof City){
+        if ($shippingMethod instanceof ShippingMethod) {
 
-            $shippingMethod = $this->getShippingMethodRepository()->getCityShippingMethods($city);
+            foreach ($orderCategoryIds as $orderCategoryId) {
 
-            if($shippingMethod instanceof ShippingMethod){
+                $currentShippingAssemblyPrice = null;
 
-                foreach($orderCategoryIds as $orderCategoryId){
+                $orderCategory = $orderCategories[$orderCategoryId];
 
-                    $currentShippingPrice = null;
-                    $currentShippingLiftingPrice = null;
-                    $currentShippingAssemblyPrice = null;
+                if (!isset($orderCategory['category']))
+                    continue;
 
-                    $orderCategory = $orderCategories[$orderCategoryId];
+                $category = $orderCategory['category'];
+                if (!$category instanceof CategoryInterface)
+                    continue;
 
-                    if(!isset($orderCategory['category']))
-                        continue;
+                $categoryShippingCalculator = new CategoryShippingCalculator($category, $this->getCurrencyConverter());
+                $categoryShippingCalculators->set($category->getId(), $categoryShippingCalculator);
 
-                    $category = $orderCategory['category'];
-                    if(!$category instanceof CategoryInterface)
-                        continue;
+                $shippingCategory = $this->getShippingMethodCategoryRepository()->getShippingMethodCategory($shippingMethod->getId(), $orderCategoryId);
 
-                    var_dump($category->getName());
+                if ($shippingCategory instanceof ShippingMethodCategory) {
+                    foreach ($shippingCategory->getPrices() as $shippingCategoryPrice) {
+                        $this->processShippingPrice($shippingCategoryPrice, $orderSummaryPrice, $categoryShippingCalculator);
+                    }
+                }
 
-                    $shippingCategory = $this->getShippingMethodCategoryRepository()->getShippingMethodCategory($shippingMethod->getId(), $orderCategoryId);
+                if (!$categoryShippingCalculator->getShippingPrice() instanceof ShippingPrice) {
+                    foreach ($shippingMethod->getPrices() as $shippingMethodPrice) {
+                        $this->processShippingPrice($shippingMethodPrice, $orderSummaryPrice, $categoryShippingCalculator);
+                    }
+                }
 
-                    if($shippingCategory instanceof ShippingMethodCategory){
+                $shippingPrice = $categoryShippingCalculator->getShippingPrice();
 
-                        foreach($shippingCategory->getPrices() as $shippingCategoryPrice){
+                switch ($shippingPrice ? $shippingPrice->getLiftingType() : null) {
+                    case ShippingPrice::LIFTING_TYPE_INCLUDED:
+                        //@TODO create logic
+                        break;
+                    case ShippingPrice::LIFTING_TYPE_IGNORE:
+                        //@TODO create logic
+                        break;
+                    case ShippingPrice::LIFTING_TYPE_BASIC:
+                    default:
 
-                            $this->processShippingPrice($shippingCategoryPrice, $orderSummaryPrice, $currentShippingPrice);
-
+                        if ($shippingCategory instanceof ShippingMethodCategory) {
+                            foreach ($shippingCategory->getLiftingPrices() as $shippingCategoryAssemblyPrice) {
+                                $this->processShippingLiftingPrice($shippingCategoryAssemblyPrice, $categoryShippingCalculator);
+                            }
                         }
 
-                    }
-
-                    if(!$currentShippingPrice instanceof ShippingPrice){
-
-                        foreach($shippingMethod->getPrices() as $shippingMethodPrice){
-
-                            $this->processShippingPrice($shippingMethodPrice, $orderSummaryPrice, $currentShippingPrice);
-
+                        if (!$categoryShippingCalculator->getShippingLiftingPrice() instanceof ShippingLiftingPrice) {
+                            foreach ($shippingMethod->getLiftingPrices() as $shippingMethodAssemblyPrice) {
+                                $this->processShippingLiftingPrice($shippingMethodAssemblyPrice, $categoryShippingCalculator);
+                            }
                         }
 
-                    }
+                }
 
-                    if($currentShippingPrice instanceof ShippingPrice){
-                        var_dump($this->getCurrencyConverter()->convert($currentShippingPrice));
-                    }
+                switch ($shippingPrice ? $shippingPrice->getAssemblyType() : null) {
+                    case ShippingPrice::ASSEMBLY_TYPE_INCLUDED:
+                        //@TODO create logic
+                        break;
+                    case ShippingPrice::ASSEMBLY_TYPE_IGNORE:
+                        //@TODO create logic
+                        break;
+                    case ShippingPrice::ASSEMBLY_TYPE_BASIC:
+                    default:
 
-                    switch($currentShippingPrice ? $currentShippingPrice->getLiftingType() : null){
-                        case ShippingPrice::LIFTING_TYPE_INCLUDED:
-                            //@TODO create logic
-                            break;
-                        case ShippingPrice::LIFTING_TYPE_IGNORE:
-                            //@TODO create logic
-                            break;
-                        case ShippingPrice::LIFTING_TYPE_BASIC:
-                        default:
-
-                            if($shippingCategory instanceof ShippingMethodCategory){
-
-                                foreach($shippingCategory->getLiftingPrices() as $shippingCategoryAssemblyPrice){
-
-                                    $this->processShippingLiftingPrice($shippingCategoryAssemblyPrice, $currentShippingLiftingPrice);
-
-                                }
-
+                        if ($shippingCategory instanceof ShippingMethodCategory) {
+                            foreach ($shippingCategory->getAssemblyPrices() as $shippingCategoryAssemblyPrice) {
+                                $this->processShippingAssemblyPrice($shippingCategoryAssemblyPrice, $categoryShippingCalculator);
                             }
+                        }
 
-                            if(!$currentShippingLiftingPrice instanceof ShippingLiftingPrice){
-
-                                foreach($shippingMethod->getLiftingPrices() as $shippingMethodAssemblyPrice){
-
-                                    $this->processShippingLiftingPrice($shippingMethodAssemblyPrice, $currentShippingLiftingPrice);
-
-                                }
-
+                        if (!$currentShippingAssemblyPrice instanceof ShippingAssemblyPrice) {
+                            foreach ($shippingMethod->getAssemblyPrices() as $shippingMethodAssemblyPrice) {
+                                $this->processShippingAssemblyPrice($shippingMethodAssemblyPrice, $categoryShippingCalculator);
                             }
-
-                            if($currentShippingLiftingPrice instanceof ShippingLiftingPrice){
-                                var_dump($this->getCurrencyConverter()->convert($currentShippingLiftingPrice->getNoLiftPriceValue(), $currentShippingLiftingPrice->getNoLiftPriceCurrencyNumericCode()));
-                                var_dump($this->getCurrencyConverter()->convert($currentShippingLiftingPrice->getLiftPriceValue(), $currentShippingLiftingPrice->getLiftPriceCurrencyNumericCode()));
-                                var_dump($this->getCurrencyConverter()->convert($currentShippingLiftingPrice->getServiceLiftPriceValue(), $currentShippingLiftingPrice->getServiceLiftPriceCurrencyNumericCode()));
-                            }
-
-                    }
-
-                    switch($currentShippingPrice ? $currentShippingPrice->getAssemblyType() : null){
-                        case ShippingPrice::ASSEMBLY_TYPE_INCLUDED:
-                            //@TODO create logic
-                            break;
-                        case ShippingPrice::ASSEMBLY_TYPE_IGNORE:
-                            //@TODO create logic
-                            break;
-                        case ShippingPrice::ASSEMBLY_TYPE_BASIC:
-                        default:
-
-                            if($shippingCategory instanceof ShippingMethodCategory){
-
-                                foreach($shippingCategory->getAssemblyPrices() as $shippingCategoryAssemblyPrice){
-
-                                    $this->processShippingAssemblyPrice($shippingCategoryAssemblyPrice, $currentShippingAssemblyPrice);
-
-                                }
-
-                            }
-
-                            if(!$currentShippingAssemblyPrice instanceof ShippingAssemblyPrice){
-
-                                foreach($shippingMethod->getAssemblyPrices() as $shippingMethodAssemblyPrice){
-
-                                    $this->processShippingAssemblyPrice($shippingMethodAssemblyPrice, $currentShippingAssemblyPrice);
-
-                                }
-
-                            }
-
-                            if($currentShippingAssemblyPrice instanceof ShippingAssemblyPrice){
-                                var_dump($this->getCurrencyConverter()->convert($currentShippingAssemblyPrice));
-                            }
-
-                    }
+                        }
 
                 }
 
@@ -182,18 +178,17 @@ class ShippingCalculator {
 
         }
 
-        die;
-
+        return $categoryShippingCalculators;
     }
 
     /**
      * @param $shippingPrice
      * @param $orderSummaryPrice
-     * @param $currentShippingPrice
+     * @param $categoryShippingCalculator
      */
-    protected function processShippingPrice($shippingPrice, $orderSummaryPrice, &$currentShippingPrice){
+    protected function processShippingPrice($shippingPrice, $orderSummaryPrice, $categoryShippingCalculator){
 
-        if(!$shippingPrice instanceof ShippingPrice)
+        if(!$shippingPrice instanceof ShippingPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
             return;
 
         switch($shippingPrice->getOrderPriceType()){
@@ -204,7 +199,7 @@ class ShippingCalculator {
 
                 if((!$minOrderPriceValue || $orderSummaryPrice >= $minOrderPriceValue) && (!$maxOrderPriceValue || $orderSummaryPrice <= $maxOrderPriceValue)){
 
-                    $currentShippingPrice = $shippingPrice;
+                    $categoryShippingCalculator->setShippingPrice($shippingPrice);
 
                 }
 
@@ -213,9 +208,9 @@ class ShippingCalculator {
             case $shippingPrice::ORDER_PRICE_TYPE_ANY:
             default:
 
-                if(!$currentShippingPrice instanceof ShippingPrice){
+                if(!$categoryShippingCalculator->getShippingPrice() instanceof ShippingPrice){
 
-                    $currentShippingPrice = $shippingPrice;
+                    $categoryShippingCalculator->setShippingPrice($shippingPrice);
 
                 }
 
@@ -225,24 +220,24 @@ class ShippingCalculator {
 
     /**
      * @param $shippingLiftingPrice
-     * @param $currentShippingLiftingPrice
+     * @param $categoryShippingCalculator
      */
-    protected function processShippingLiftingPrice($shippingLiftingPrice, &$currentShippingLiftingPrice){
+    protected function processShippingLiftingPrice($shippingLiftingPrice, $categoryShippingCalculator){
 
-        if(!$shippingLiftingPrice instanceof ShippingLiftingPrice)
+        if(!$shippingLiftingPrice instanceof ShippingLiftingPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
             return;
 
         switch($shippingLiftingPrice->getPriceType()){
             case $shippingLiftingPrice::PRICE_TYPE_PER_FLOOR:
 
-                $currentShippingLiftingPrice = $shippingLiftingPrice;
+                $categoryShippingCalculator->setShippingLiftingPrice($shippingLiftingPrice);
                 break;
 
             case $shippingLiftingPrice::PRICE_TYPE_ANY_FLOOR:
             default:
 
-                if(!$currentShippingLiftingPrice instanceof ShippingLiftingPrice){
-                    $currentShippingLiftingPrice = $shippingLiftingPrice;
+                if(!$categoryShippingCalculator->getShippingLiftingPrice() instanceof ShippingLiftingPrice){
+                    $categoryShippingCalculator->setShippingLiftingPrice($shippingLiftingPrice);
                 }
 
         }
@@ -251,15 +246,15 @@ class ShippingCalculator {
 
     /**
      * @param $shippingAssemblyPrice
-     * @param $currentShippingAssemblyPrice
+     * @param $categoryShippingCalculator
      */
-    protected function processShippingAssemblyPrice($shippingAssemblyPrice, &$currentShippingAssemblyPrice){
+    protected function processShippingAssemblyPrice($shippingAssemblyPrice, $categoryShippingCalculator){
 
-        if(!$shippingAssemblyPrice instanceof ShippingAssemblyPrice)
+        if(!$shippingAssemblyPrice instanceof ShippingAssemblyPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
             return;
 
-        if(!$currentShippingAssemblyPrice instanceof ShippingAssemblyPrice){
-            $currentShippingAssemblyPrice = $shippingAssemblyPrice;
+        if(!$categoryShippingCalculator->getShippingAssemblyPrice() instanceof ShippingAssemblyPrice){
+            $categoryShippingCalculator->setShippingAssemblyPrice($shippingAssemblyPrice);
         }
 
     }

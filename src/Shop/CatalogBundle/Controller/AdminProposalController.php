@@ -107,7 +107,7 @@ class AdminProposalController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('proposals', array('categoryId' => $category->getId())));
+            return $this->redirect($this->generateUrl('proposal', array('categoryId' => $category->getId(), 'id' => $proposal->getId())));
 
         } else {
 

@@ -75,7 +75,7 @@ class PriceListBuilder {
         $objPHPExcel->setActiveSheetIndex(0);
         $activeSheet = $objPHPExcel->getActiveSheet();
 
-        $aliasesEntities = PriceListAlias::getAliasesEntities();
+        $aliasesEntities = PriceListAlias::getEntitiesAliasesMap();
 
         $identifiersRowIndex = 1;
         $i = 0;

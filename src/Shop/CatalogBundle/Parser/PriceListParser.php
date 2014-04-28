@@ -2,6 +2,8 @@
 namespace Shop\CatalogBundle\Parser;
 
 use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\Contractor;
+use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\Parameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Price;
@@ -43,7 +45,7 @@ class PriceListParser {
         $activeSheet = $objPHPExcel->getActiveSheet();
         $rowIterator = $activeSheet->getRowIterator();
 
-        $aliasesEntities = PriceListAlias::getAliasesEntities();
+        $aliasesEntitiesMap = PriceListAlias::getEntitiesAliasesMap();
 
         $priceListColumnsAliases = array();
         foreach($priceList->getAliases() as $priceListAlias){
@@ -67,16 +69,6 @@ class PriceListParser {
         foreach($rowIterator as $row){
 
             $rowData = array(
-                PriceListAlias::ALIAS_SKU => null,
-                PriceListAlias::ALIAS_MANUFACTURER_SKU => null,
-                PriceListAlias::ALIAS_NAME => null,
-                PriceListAlias::ALIAS_SHORT_DESCRIPTION => null,
-                PriceListAlias::ALIAS_DESCRIPTION => null,
-                PriceListAlias::ALIAS_PRICE => null,
-                PriceListAlias::ALIAS_CURRENCY => null,
-                PriceListAlias::ALIAS_CATEGORY => null,
-                PriceListAlias::ALIAS_MANUFACTURER => null,
-                PriceListAlias::ALIAS_CONTRACTOR => null,
                 'parametersValues' => array(),
             );
 
@@ -150,7 +142,7 @@ class PriceListParser {
                                                         'parameterId' => $parameter->getId(),
                                                         'name' => array(
                                                             $cellValue,
-                                                            str_replace('х', 'x', $cellValue), //@TODO remove
+                                                            str_replace('х', 'x', $cellValue), //Replace russian delimiter with english char
                                                         ),
                                                     ));
 
@@ -197,8 +189,7 @@ class PriceListParser {
 
                 }
 
-                //@TODO refactor to use manufacturer sku
-                $isValid = !array_diff(PriceListAlias::getRequiredAliases(), array_keys(array_filter($rowData)));
+                $isValid = $this->validateRow($rowData);
                 if($isValid){
 
                     if(!$rowData[PriceListAlias::ALIAS_CATEGORY]){
@@ -219,10 +210,10 @@ class PriceListParser {
 
                         $proposalData = array();
 
-                        foreach($aliasesEntities as $alias => $aliasEntity){
+                        foreach($aliasesEntitiesMap as $alias => $aliasEntityMap){
                             if(isset($rowData[$alias])){
 
-                                switch($aliasEntity['entity']){
+                                switch($aliasEntityMap['entity']){
                                     case 'proposal':
 
                                         $proposalData[$alias] = $rowData[$alias];
@@ -230,7 +221,7 @@ class PriceListParser {
 
                                     case 'price':
 
-                                        switch($aliasEntity['property']){
+                                        switch($aliasEntityMap['property']){
 
                                             case 'contractorName';
                                                 $proposalData[$alias] = $rowData[$alias];
@@ -260,8 +251,6 @@ class PriceListParser {
 
                     if($categoryName && $contractorName && $manufacturerName){
 
-                        $sku = $rowData[PriceListAlias::ALIAS_SKU];
-
                         if(!isset($groupedRowsData[$categoryName])){
                             $groupedRowsData[$categoryName] = array();
                         }
@@ -270,7 +259,7 @@ class PriceListParser {
                             $groupedRowsData[$categoryName][$proposalName] = array();
                         }
 
-                        $groupedRowsData[$categoryName][$proposalName][$sku] = $rowData;
+                        $groupedRowsData[$categoryName][$proposalName][] = $rowData;
 
                     }
 
@@ -287,6 +276,9 @@ class PriceListParser {
          */
         $categoryRepository = $this->em->getRepository('ShopCatalogBundle:Category');
         $existingCategories = $categoryRepository->findCategoriesByName($formattedCategoryNames);
+
+        $proposalRepository = $this->getProposalRepository();
+        $priceRepository =$this->getPriceRepository();
 
         foreach($groupedRowsData as $categoryName => $proposals){
 
@@ -324,10 +316,6 @@ class PriceListParser {
             $proposalsNames = array_keys($proposals);
             $formattedProposalsNames = $this->formatNames($proposalsNames);
 
-            /**
-             * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
-             */
-            $proposalRepository = $this->em->getRepository('ShopCatalogBundle:Proposal');
             $existingCategoryProposals = $proposalRepository->findProposalsByName($formattedProposalsNames);
 
             foreach($proposals as $proposalName => $pricesData){
@@ -357,45 +345,39 @@ class PriceListParser {
 
                 }
 
-                foreach($proposalData as $alias => $value){
-                    //@TODO set proposal and price properties by alias
-//                    var_dump($alias);
-//                    var_dump($value);
-                }
+                $proposal = $this->mapProposalData($priceList, $category, $proposal, $proposalData);
 
-                if(!$proposal instanceof Proposal){
+                $skuPriceDataKeys = array();
+                $manufacturerSkuPriceDataKeys = array();
 
-                    $proposal = new Proposal();
-                    $proposal
-                        ->setTitle($proposalName)
-                        ->setStatus(Proposal::STATUS_ON)
-                        ->setManufacturer($priceList->getManufacturer())
-                        ->setDefaultContractor($priceList->getContractor())
-                    ;
+                foreach($pricesData as $priceDataKey => $priceData){
 
-                    $category->addProposal($proposal);
-                    $this->em->persist($proposal);
+                    if(isset($priceData[PriceListAlias::ALIAS_SKU]) && $priceData[PriceListAlias::ALIAS_SKU]){
 
-                }
+                        $sku = $priceData[PriceListAlias::ALIAS_SKU];
+                        $skuPriceDataKeys[$sku] = $priceDataKey;
 
-                if(isset($proposalData['parametersValues']) && is_array($proposalData['parametersValues'])){
+                    }
 
-                    $proposalParametersValues = $proposalData['parametersValues'];
+                    if(isset($priceData[PriceListAlias::ALIAS_MANUFACTURER_SKU]) && $priceData[PriceListAlias::ALIAS_MANUFACTURER_SKU]){
 
-                    $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
-                    $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
+                        $manufacturerSku = $priceData[PriceListAlias::ALIAS_MANUFACTURER_SKU];
+                        $manufacturerSkuPriceDataKeys[$manufacturerSku] = $priceDataKey;
+
+                    }
 
                 }
 
-                if($proposal->getId()){
+                if($proposal && $proposal->getId()){
 
-                    $pricesSku = array_keys($pricesData);
+                    $pricesSku = array_keys($skuPriceDataKeys);
+                    $pricesManufacturerSku = array_keys($manufacturerSkuPriceDataKeys);
 
-                    $priceRepository = $this->em->getRepository('ShopCatalogBundle:Price');
-                    $prices = $priceRepository->findBy(array(
-                        'proposalId' => $proposal->getId(),
-                        'sku' => array_unique($pricesSku),
-                    ));
+                    $prices = $priceRepository->findProposalPricesBySku(
+                        $proposal->getId(),
+                        $pricesSku,
+                        $pricesManufacturerSku
+                    );
 
                 } else {
 
@@ -408,49 +390,36 @@ class PriceListParser {
                  */
                 foreach($prices as $price){
 
-                    if(isset($pricesData[$price->getSku()])){
+                    $priceData = null;
+                    $skuPriceDataKey = ($price->getSku() && isset($skuPriceDataKeys[$price->getSku()])) ? $skuPriceDataKeys[$price->getSku()] : null;
+                    $manufacturerSkuPriceDataKey = ($price->getManufacturerSku() && isset($manufacturerSkuPriceDataKeys[$price->getManufacturerSku()])) ? $manufacturerSkuPriceDataKeys[$price->getManufacturerSku()] : null;
 
-                        $priceData = $pricesData[$price->getSku()];
+                    if($skuPriceDataKey && isset($pricesData[$skuPriceDataKey])){
 
-                        $price
-                            //->setStatus(Price::STATUS_ON)
-                            ->setValue($priceData[PriceListAlias::ALIAS_PRICE])
-                            ->setCurrencyNumericCode($priceData[PriceListAlias::ALIAS_CURRENCY])
-                            ->setContractor($priceList->getContractor())
-                        ;
+                        $priceData = $pricesData[$skuPriceDataKey];
+                        unset($pricesData[$skuPriceDataKey]);
 
-                        $parameterValuesData = $priceData['parametersValues'];
-                        if($parameterValuesData){
-                            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em, $price);
-                            $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
-                        }
+                    } elseif($manufacturerSkuPriceDataKey && isset($priceList[$manufacturerSkuPriceDataKey])){
 
-                        unset($pricesData[$price->getSku()]);
+                        $priceData = $pricesData[$manufacturerSkuPriceDataKey];
 
+                    }
+
+                    if($priceData){
+                        $this->mapPriceData($priceList, $price, $priceData);
                     }
 
                 }
 
                 foreach($pricesData as $priceData){
 
-                    $price = new Price();
-                    $price
-                        ->setStatus(Price::STATUS_ON)
-                        ->setSku($priceData[PriceListAlias::ALIAS_SKU])
-                        ->setValue($priceData[PriceListAlias::ALIAS_PRICE])
-                        ->setCurrencyNumericCode($priceData[PriceListAlias::ALIAS_CURRENCY])
-                        ->setContractor($priceList->getContractor())
-                    ;
+                    $price = $this->mapPriceData($priceList, null, $priceData);
+                    if($price){
 
-                    $proposal->addPrice($price);
+                        $proposal->addPrice($price);
+                        $this->getEm()->persist($price);
 
-                    $parameterValuesData = $priceData['parametersValues'];
-                    if($parameterValuesData){
-                        $priceParameterValuesMapper = new PriceParameterValuesMapper($this->em, $price);
-                        $priceParameterValuesMapper->mapParameterValues($parameterValuesData, false);
                     }
-
-                    $this->em->persist($price);
 
                 }
 
@@ -459,6 +428,206 @@ class PriceListParser {
         }
 
         return $priceList;
+
+    }
+
+    /**
+     * @param $rowData
+     * @return bool
+     */
+    protected function validateRow($rowData)
+    {
+        $rowAliases = array_keys(array_filter($rowData));
+        $isValid = (
+            in_array(PriceListAlias::ALIAS_PRICE, $rowAliases)
+            && in_array(PriceListAlias::ALIAS_CURRENCY, $rowAliases)
+            && (
+                in_array(PriceListAlias::ALIAS_SKU, $rowAliases)
+                ||
+                in_array(PriceListAlias::ALIAS_MANUFACTURER_SKU, $rowAliases)
+            )
+        );
+        return $isValid;
+    }
+
+    /**
+     * @param PriceList $priceList
+     * @param Category $category
+     * @param $proposal
+     * @param $proposalData
+     * @return Proposal
+     */
+    protected function mapProposalData(PriceList $priceList, Category $category, $proposal, $proposalData){
+
+        if(!$proposal instanceof Proposal){
+
+            $proposal = new Proposal();
+            $proposal
+                ->setStatus(Proposal::STATUS_ON)
+                ->setManufacturer($priceList->getManufacturer())
+                ->setDefaultContractor($priceList->getContractor())
+            ;
+
+            $category->addProposal($proposal);
+            $this->em->persist($proposal);
+
+        }
+
+        if(is_array($proposalData)){
+
+            foreach($proposalData as $alias => $value){
+
+                switch($alias){
+                    case PriceListAlias::ALIAS_CATEGORY:
+
+                        $proposal->setCategory($category);
+                        break;
+
+                    case PriceListAlias::ALIAS_MANUFACTURER:
+
+                        if($value){
+
+                            $manufacturerRepository = $this->getManufacturerRepository();
+                            $manufacturer = $manufacturerRepository->findOneBy(array(
+                                'name' => (string)$value,
+                            ));
+
+                            if($manufacturer instanceof Manufacturer){
+
+                                $proposal->setManufacturer($manufacturer);
+
+                            }
+
+                        }
+                        break;
+
+                    case PriceListAlias::ALIAS_CONTRACTOR:
+
+                        if($value){
+
+                            $contractorRepository = $this->getContractorRepository();
+                            $contractor = $contractorRepository->findOneBy(array(
+                                'name' => (string)$value,
+                            ));
+
+                            if($contractor instanceof Contractor){
+
+                                $proposal->setDefaultContractor($contractor);
+
+                            }
+
+                        }
+                        break;
+
+
+                        break;
+                    case 'parametersValues':
+
+                        $proposalParametersValues = $value;
+
+                        $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
+                        $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
+
+                        break;
+
+                    default:
+
+                        $aliasEntityMap = PriceListAlias::getAliasEntityMap($alias);
+                        if(isset($aliasEntityMap['entity']) && $aliasEntityMap['entity'] == 'proposal' && isset($aliasEntityMap['property'])){
+
+                            $proposal[$aliasEntityMap['property']] = $value;
+
+                        }
+
+                }
+
+            }
+
+        }
+
+        return $proposal;
+
+    }
+
+    /**
+     * @param PriceList $priceList
+     * @param $price
+     * @param $priceData
+     * @return mixed
+     */
+    protected function mapPriceData(PriceList $priceList, $price, $priceData){
+
+        if(!$price instanceof Price){
+
+            if(!$priceData[PriceListAlias::ALIAS_SKU]){
+                return null;
+            }
+
+            $price = new Price();
+            $price
+                ->setStatus(Price::STATUS_ON)
+                ->setSku($priceData[PriceListAlias::ALIAS_SKU])
+                ->setManufacturerSku($priceData[PriceListAlias::ALIAS_MANUFACTURER_SKU])
+            ;
+
+        }
+
+        if(is_array($priceData)){
+
+            foreach($priceData as $alias => $value){
+
+                switch($alias){
+                    case PriceListAlias::ALIAS_CONTRACTOR:
+
+                        if($value){
+
+                            $contractorRepository = $this->getContractorRepository();
+                            $contractor = $contractorRepository->findOneBy(array(
+                                'name' => (string)$value,
+                            ));
+
+                            if($contractor instanceof Contractor){
+                                $price->setContractor($contractor);
+                            }
+
+                        }
+                        break;
+
+
+                        break;
+                    case 'parametersValues':
+
+                        if($value){
+
+                            $parameterValuesData = $value;
+
+                            $priceParameterValuesMapper = new PriceParameterValuesMapper($this->getEm(), $price);
+                            $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
+
+                        }
+
+                        break;
+
+                    default:
+
+                        $aliasEntityMap = PriceListAlias::getAliasEntityMap($alias);
+                        if(isset($aliasEntityMap['entity']) && $aliasEntityMap['entity'] == 'price' && isset($aliasEntityMap['property'])){
+
+                            $price[$aliasEntityMap['property']] = $value;
+
+                        }
+
+                }
+
+            }
+
+            if(!$price->getContractor()){
+                $price->setContractor($priceList->getContractor());
+            }
+
+        }
+
+        return $price;
 
     }
 
@@ -496,9 +665,41 @@ class PriceListParser {
     /**
      * @return ObjectManager|object
      */
-    public function getEm()
+    protected function getEm()
     {
         return $this->em;
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\PriceRepository
+     */
+    protected function getPriceRepository(){
+        return $this->getEm()->getRepository('ShopCatalogBundle:Price');
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\ProposalRepository
+     */
+    public function getProposalRepository(){
+        return $this->getEm()->getRepository('ShopCatalogBundle:Proposal');
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getManufacturerRepository()
+    {
+        $manufacturerRepository = $this->getEm()->getRepository('ShopCatalogBundle:Manufacturer');
+        return $manufacturerRepository;
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getContractorRepository()
+    {
+        $contractorRepository = $this->getEm()->getRepository('ShopCatalogBundle:Contractor');
+        return $contractorRepository;
     }
 
 } 

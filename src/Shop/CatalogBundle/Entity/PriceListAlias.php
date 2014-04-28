@@ -27,16 +27,6 @@ class PriceListAlias extends AbstractEntity
     /**
      * @var array
      */
-    public static $requiredAliases = array(
-        self::ALIAS_SKU,
-        self::ALIAS_NAME,
-        self::ALIAS_PRICE,
-        self::ALIAS_CURRENCY,
-    );
-
-    /**
-     * @var array
-     */
     public static $aliasesTitles = array(
         self::ALIAS_SKU => 'Артикул',
         self::ALIAS_MANUFACTURER_SKU => 'Артикул производитель',
@@ -53,7 +43,7 @@ class PriceListAlias extends AbstractEntity
     /**
      * @var array
      */
-    public static $aliasesEntities = array(
+    public static $entitiesAliasesMap = array(
         PriceListAlias::ALIAS_SKU => array(
             'entity' => 'price',
             'property' => 'sku',
@@ -297,37 +287,18 @@ class PriceListAlias extends AbstractEntity
     /**
      * @return array
      */
-    public static function getRequiredAliases()
+    public static function getEntitiesAliasesMap()
     {
-        return self::$requiredAliases;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getRequiredAliasesTitles(){
-        $titles = array();
-        foreach(self::getRequiredAliases() as $alias){
-            $titles[$alias] = self::getAliasesTitle($alias);
-        }
-        return array_filter($titles);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getAliasesEntities()
-    {
-        return self::$aliasesEntities;
+        return self::$entitiesAliasesMap;
     }
 
     /**
      * @param $alias
      * @return null|array
      */
-    public static function getAliasEntity($alias){
-        if(isset(self::$aliasesEntities[$alias])){
-            return self::$aliasesEntities[$alias];
+    public static function getAliasEntityMap($alias){
+        if(isset(self::$entitiesAliasesMap[$alias])){
+            return self::$entitiesAliasesMap[$alias];
         }
         return null;
     }

@@ -306,6 +306,15 @@ class Price extends AbstractEntity
     }
 
     /**
+     * @param $currency
+     * @return $this
+     */
+    public function setCurrency($currency){
+        $this->currencyNumericCode = (int)$currency;
+        return $this;
+    }
+
+    /**
      * Set sku
      *
      * @param string $sku

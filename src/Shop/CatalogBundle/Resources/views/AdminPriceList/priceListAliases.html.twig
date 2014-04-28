@@ -70,7 +70,7 @@
                                         Не учитывать
                                     </option>
                                     {% for alias, title in options %}
-                                        <option value="{{ alias }}" {{ identifier.alias == alias or priceListCurrentColumnsAliases[identifier.column] == alias ? 'selected="selected"' : '' }}>
+                                        <option value="{{ alias }}" {{ (identifier.alias == alias or (priceListCurrentColumnsAliases[identifier.column] is defined and priceListCurrentColumnsAliases[identifier.column] == alias)) ? 'selected="selected"' : '' }}>
                                             {{ title|capitalize }}
                                         </option>
                                     {% endfor %}
@@ -87,11 +87,15 @@
                     </h5>
                     <div class="warning alert">
                         <ol style="margin: 5px 20px 0;">
-                            {% for title in requiredAliases %}
-                                <li>
-                                    {{ title|capitalize }}
-                                </li>
-                            {% endfor %}
+                            <li>
+                                Артукул магазина или производителя
+                            </li>
+                            <li>
+                                Цена
+                            </li>
+                            <li>
+                                Валюта
+                            </li>
                         </ol>
                     </div>
                 </div>

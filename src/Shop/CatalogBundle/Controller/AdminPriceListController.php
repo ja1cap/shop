@@ -341,7 +341,6 @@ class AdminPriceListController extends Controller
             }
 
             return $this->render('ShopCatalogBundle:AdminPriceList:priceListAliases.html.twig', array(
-                'requiredAliases' => PriceListAlias::getRequiredAliasesTitles(),
                 'identifiers' => $identifiers,
                 'options' => $options,
                 'categories' => $categories,
@@ -373,13 +372,14 @@ class AdminPriceListController extends Controller
             throw $this->createNotFoundException('Прайс-лист не найден');
         }
 
-        $parser = new PriceListParser($em);
+        $parser = new PriceListParser($em, $this->get('weasty_money.currency.code.converter'));
         $priceList = $parser->parse($priceList);
 
         $priceList->setStatus(PriceList::STATUS_PARSED);
         $priceList->setUpdateDate(new \DateTime());
 
-        $em->flush();
+//        $em->flush();
+//        die;
 
         return $this->redirect($this->generateUrl('price_lists'));
 

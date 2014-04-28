@@ -15,6 +15,11 @@ class CustomerOrderProposal extends AbstractEntity
     implements \Serializable
 {
 
+    const STATUS_NEW = 1;
+    const STATUS_ACCEPTED = 2;
+    const STATUS_DENIED = 3;
+    const STATUS_COMPLETE = 4;
+
     /**
      * @var integer
      */
@@ -29,6 +34,69 @@ class CustomerOrderProposal extends AbstractEntity
      * @var string
      */
     private $priceValue;
+
+    /**
+     * @var integer
+     */
+    private $status;
+
+    /**
+     * @var \Shop\UserBundle\Entity\AbstractUser
+     */
+    private $manager;
+
+    /**
+     * @var \Shop\UserBundle\Entity\Courier
+     */
+    private $courier;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\CustomerOrder
+     */
+    private $order;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Proposal
+     */
+    private $proposal;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Price
+     */
+    private $price;
+
+    function __construct()
+    {
+        $this->status = self::STATUS_NEW;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            'proposalId' => $this->getProposal()->getId(),
+            'priceId' => $this->getPrice()->getId(),
+            'priceValue' => $this->getPriceValue(),
+            'amount' => $this->getAmount(),
+        ));
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     */
+    public function unserialize($serialized)
+    {}
 
     /**
      * Get id
@@ -85,21 +153,6 @@ class CustomerOrderProposal extends AbstractEntity
     {
         return $this->priceValue;
     }
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\CustomerOrder
-     */
-    private $order;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Proposal
-     */
-    private $proposal;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Price
-     */
-    private $price;
 
     /**
      * Set order
@@ -166,50 +219,6 @@ class CustomerOrderProposal extends AbstractEntity
     {
         return $this->price;
     }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     */
-    public function serialize()
-    {
-        return serialize(array(
-            'proposalId' => $this->getProposal()->getId(),
-            'priceId' => $this->getPrice()->getId(),
-            'priceValue' => $this->getPriceValue(),
-            'amount' => $this->getAmount(),
-        ));
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
-     * @return void
-     */
-    public function unserialize($serialized)
-    {}
-
-    /**
-     * @var integer
-     */
-    private $status;
-
-    /**
-     * @var \Shop\UserBundle\Entity\AbstractUser
-     */
-    private $manager;
-
-    /**
-     * @var \Shop\UserBundle\Entity\Courier
-     */
-    private $courier;
-
 
     /**
      * Set status

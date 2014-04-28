@@ -108,12 +108,12 @@ class ShopCartController extends Controller
 
                 $customerOrder = new CustomerOrder();
                 $customerOrder
-                    ->setStatus(CustomerOrder::STATUS_NEW)
                     ->setCustomerName($customerName)
                     ->setCustomerPhone($customerPhone)
                     ->setCustomerEmail($customerEmail)
                     ->setCustomerComment($customerComment)
-                    ->setCreateDate(new \DateTime());
+                    ->setCreateDate(new \DateTime())
+                ;
 
                 if($action instanceof Action){
                     $customerOrder->setAction($action);
@@ -141,7 +141,8 @@ class ShopCartController extends Controller
                                         ->setProposal($proposal)
                                         ->setPrice($price)
                                         ->setPriceValue($this->get('shop_catalog.price.currency.converter')->convert($price))
-                                        ->setAmount($amount);
+                                        ->setAmount($amount)
+                                    ;
 
                                     $customerOrder->addProposal($orderProposal);
 
@@ -159,10 +160,10 @@ class ShopCartController extends Controller
                 $em->persist($customerOrder);
                 $em->flush();
 
-                $orderInformation = $this->renderView('ShopCatalogBundle:ShopCart:orderInformation.html.twig', array(
-                    'action' => $action,
-                    'shopCartSummary' => $shopCartSummary,
-                ));
+//                $orderInformation = $this->renderView('ShopCatalogBundle:ShopCart:orderInformation.html.twig', array(
+//                    'action' => $action,
+//                    'shopCartSummary' => $shopCartSummary,
+//                ));
 
             }
 
@@ -198,9 +199,6 @@ class ShopCartController extends Controller
             $settings = new Settings();
         }
 
-        /**
-         * @var $twig \Twig_Environment
-         */
         $twig = new \Twig_Environment(new \Twig_Loader_String());
 
         $data = array(

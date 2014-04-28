@@ -10,7 +10,7 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
  * Class CustomerOrder
  * @package Shop\CatalogBundle\Entity
  */
-class CustomerOrder extends \Weasty\DoctrineBundle\Entity\AbstractEntity
+class CustomerOrder extends AbstractEntity
 {
 
     const STATUS_NEW = 1;
@@ -72,7 +72,6 @@ class CustomerOrder extends \Weasty\DoctrineBundle\Entity\AbstractEntity
      * @var integer
      */
     private $id;
-
 
     /**
      * Set status
@@ -328,6 +327,7 @@ class CustomerOrder extends \Weasty\DoctrineBundle\Entity\AbstractEntity
      */
     public function __construct()
     {
+        $this->status = self::STATUS_NEW;
         $this->proposals = new ArrayCollection();
     }
 

@@ -12,6 +12,7 @@ use Shop\ShippingBundle\Entity\ShippingPrice;
 use Weasty\CatalogBundle\Data\CategoryInterface;
 use Weasty\GeonamesBundle\Entity\City;
 use Weasty\MoneyBundle\Converter\CurrencyConverterInterface;
+use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
  * Class ShippingCalculator
@@ -63,6 +64,10 @@ class ShippingCalculator implements ShippingCalculatorInterface {
 
         if($shopCartSummaryCategories instanceof Collection){
             $shopCartSummaryCategories = $shopCartSummaryCategories->toArray();
+        }
+
+        if($shopCartSummaryPrice instanceof PriceInterface){
+            $shopCartSummaryPrice = $shopCartSummaryPrice->getValue();
         }
 
         if ($shopCartSummaryCategories && is_array($shopCartSummaryCategories) && $city instanceof City) {

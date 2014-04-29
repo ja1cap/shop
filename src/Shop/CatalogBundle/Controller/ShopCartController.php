@@ -182,9 +182,6 @@ class ShopCartController extends Controller
                     'shopCartSummary' => $shopCartSummary,
                 ));
 
-                echo($orderInformation);
-                die;
-
             }
 
             $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);

@@ -17,8 +17,6 @@
         <field name="shortDescription" type="string" column="short_description" length="255" nullable="true"/>
         <field name="description" type="text" column="description" nullable="true"/>
 
-        <field name="showOnHomePage" type="boolean" nullable="true"/>
-
         <field name="seoTitle" type="string" nullable="true"/>
         <field name="seoDescription" type="text" nullable="true"/>
         <field name="seoKeywords" type="text" nullable="true"/>

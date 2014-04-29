@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Lsw\SecureControllerBundle\LswSecureControllerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
+            new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
             new JJs\Bundle\GeonamesBundle\JJsGeonamesBundle(),
             new Weasty\ResourceBundle\WeastyResourceBundle(),
             new Weasty\DoctrineBundle\WeastyDoctrineBundle(),

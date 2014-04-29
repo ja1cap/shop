@@ -106,16 +106,6 @@ class ProposalType extends AbstractType {
         }
 
         $builder
-            ->add('showOnHomePage', 'choice', array(
-                'label' => 'Показывать на главной странице',
-                'choices' => array(
-                    'Нет',
-                    'Да',
-                ),
-                'required' => true,
-            ));
-
-        $builder
             ->add('seoTitle', 'text', array(
                 'required' => false,
                 'label' => 'Заголовок страницы (title)',

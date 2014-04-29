@@ -303,10 +303,23 @@ class DefaultController extends Controller
      */
     protected function getProposals(){
 
-        $proposals = $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Proposal')->findBy(array(
-            'status' => Category::STATUS_ON,
-            'showOnHomePage' => true
-        ));
+        /**
+         * @var \Shop\CatalogBundle\Entity\PopularProposalRepository $repository
+         */
+        $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:PopularProposal');
+
+        $proposals = array_filter(
+            array_map(
+                function($popularProposal){
+                    $proposal = $popularProposal['proposal'];
+                    if($proposal instanceof Proposal && $proposal->getStatus() == Proposal::STATUS_ON){
+                        return $proposal;
+                    }
+                    return null;
+                },
+                $repository->findProposals()
+            )
+        );
 
         return $proposals;
 

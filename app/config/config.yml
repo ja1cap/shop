@@ -36,8 +36,9 @@ twig:
       locale: %locale%
     form:
       resources:
-          - 'ShopShippingBundle:Form:fields.html.twig'
-          - 'WeastyMoneyBundle:Form:fields.html.twig'
+          - ShtumiUsefulBundle::fields.html.twig
+          - ShopShippingBundle:Form:fields.html.twig
+          - WeastyMoneyBundle:Form:fields.html.twig
 
 # Assetic Configuration
 assetic:
@@ -97,6 +98,12 @@ fos_user:
     user_class: Shop\UserBundle\Entity\AbstractUser
     group:
         group_class: Shop\UserBundle\Entity\UserGroup
+
+shtumi_useful:
+    autocomplete_entities:
+        proposals:
+            class: ShopCatalogBundle:Proposal
+            search: contains
 
 simple_things_entity_audit:
     audited_entities:

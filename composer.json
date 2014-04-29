@@ -26,7 +26,9 @@
         "leaseweb/secure-controller-bundle": "*",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "jjs/common": "dev-master",
-        "jjs/geonames-bundle": "dev-master"
+        "jjs/geonames-bundle": "dev-master",
+        "sonata-project/admin-bundle": "dev-master",
+        "shtumi/useful-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

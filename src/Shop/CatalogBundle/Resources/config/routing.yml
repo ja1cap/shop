@@ -74,6 +74,22 @@ delete_proposal:
     pattern: /adminCatalog/deleteProposal/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposal }
 
+popular_proposals:
+    pattern: /adminCatalog/popularProposals
+    defaults: { _controller: ShopCatalogBundle:AdminPopularProposal:proposals }
+
+update_popular_proposals:
+    pattern: /adminCatalog/updatePopularProposals
+    defaults: { _controller: ShopCatalogBundle:AdminPopularProposal:updateProposals }
+
+popular_proposal:
+    pattern: /adminCatalog/popularProposal/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPopularProposal:proposal, id: null }
+
+delete_popular_proposal:
+    pattern: /adminCatalog/deletePopularProposal/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminPopularProposal:deleteProposal }
+
 proposal_price:
     pattern: /adminCatalog/proposalPrice/{proposalId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }

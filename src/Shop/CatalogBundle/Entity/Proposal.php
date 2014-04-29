@@ -291,38 +291,9 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * @var boolean
-     */
-    private $showOnHomePage;
-
-
-    /**
-     * Set showOnHomePage
-     *
-     * @param boolean $showOnHomePage
-     * @return Proposal
-     */
-    public function setShowOnHomePage($showOnHomePage)
-    {
-        $this->showOnHomePage = $showOnHomePage;
-
-        return $this;
-    }
-
-    /**
-     * Get showOnHomePage
-     *
-     * @return boolean 
-     */
-    public function getShowOnHomePage()
-    {
-        return $this->showOnHomePage;
-    }
-    /**
      * @var string
      */
     private $seoSlug;
-
 
     /**
      * Set seoSlug

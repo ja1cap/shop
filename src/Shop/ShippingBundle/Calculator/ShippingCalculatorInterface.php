@@ -9,7 +9,7 @@ interface ShippingCalculatorInterface {
 
     /**
      * @param $options
-     * @return mixed
+     * @return ShippingCalculatorResultInterface
      */
     public function calculate($options = null);
 

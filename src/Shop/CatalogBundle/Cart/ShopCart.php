@@ -2,10 +2,12 @@
 namespace Shop\CatalogBundle\Cart;
 
 use Shop\CatalogBundle\Entity\Price;
+use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Entity\ProposalRepository;
 use Shop\CatalogBundle\Entity\CategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Shop\CatalogBundle\Converter\ShopPriceCurrencyConverter;
+use Weasty\CatalogBundle\Data\CategoryInterface;
 
 /**
  * Class ShopCart
@@ -53,15 +55,12 @@ class ShopCart {
     }
 
     /**
-     * @param array $storageData
-     * @return array
+     * @param $storageData
+     * @return ShopCartSummary
      */
     public function getSummary($storageData){
 
-        $proposalIds = array();
-        $priceIds = array();
-        $categoryProposalsSummary = array();
-        $summaryPrice = 0;
+        $shopCartSummary = new ShopCartSummary();
 
         if(isset($storageData['categories']) && is_array($storageData['categories'])){
 
@@ -72,74 +71,91 @@ class ShopCart {
                 if(isset($categoryData['proposalPrices']) && is_array($categoryData['proposalPrices'])){
 
                     $proposalPrices = array_filter($categoryData['proposalPrices']);
+                    if(!$proposalPrices){
+                        continue;
+                    }
 
-                    if($proposalPrices){
+                    $categoryId = (int)$categoryId;
+                    $summaryCategory = $shopCartSummary->getCategories()->get($categoryId);
 
-                        $categoryId = (int)$categoryId;
+                    if(!$summaryCategory instanceof ShopCartSummaryCategory){
 
-                        if(!isset($categoryProposalsSummary[$categoryId])){
+                        $category = $this->categoryRepository->findOneBy(array(
+                            'id' => $categoryId,
+                        ));
 
-                            $category = $this->categoryRepository->findOneBy(array(
-                                'id' => $categoryId,
-                            ));
+                        if($category instanceof CategoryInterface){
 
-                            $categoryProposalsSummary[$categoryId] = array(
-                                'category' => $category,
-                                'proposals' => array(),
-                            );
+                            $summaryCategory = new ShopCartSummaryCategory($category);
+                            $shopCartSummary->getCategories()->set($category->getId(), $summaryCategory);
 
                         }
 
-                        foreach($proposalPrices as $proposalPriceData){
+                    }
 
-                            if(isset($proposalPriceData['id']) && isset($proposalPriceData['proposalId']) && isset($proposalPriceData['amount'])){
+                    if(!$summaryCategory instanceof ShopCartSummaryCategory){
+                        continue;
+                    }
 
-                                $proposalPriceAmount = floatval($proposalPriceData['amount']);
+                    foreach($proposalPrices as $proposalPriceData){
 
-                                if($proposalPriceAmount > 0){
+                        if(isset($proposalPriceData['id']) && isset($proposalPriceData['proposalId']) && isset($proposalPriceData['amount'])){
 
-                                    $priceId = (int)$proposalPriceData['id'];
-                                    $proposalId = (int)$proposalPriceData['proposalId'];
+                            $proposalPriceAmount = floatval($proposalPriceData['amount']);
 
-                                    if(!isset($categoryProposalsSummary[$categoryId]['proposals'][$proposalId])){
+                            if($proposalPriceAmount > 0){
 
-                                        $proposal = $this->proposalRepository->findOneBy(array(
-                                            'id' => $proposalId,
-                                        ));
+                                $priceId = (int)$proposalPriceData['id'];
+                                $proposalId = (int)$proposalPriceData['proposalId'];
 
-                                        if($proposal){
-                                            $proposalIds[] = $proposalId;
-                                        }
+                                $summaryProposal = $summaryCategory->getProposals()->get($proposalId);
 
-                                        $categoryProposalsSummary[$categoryId]['proposals'][$proposalId] = array(
-                                            'proposal' => $proposal,
-                                            'prices' => array()
-                                        );
+                                if(!$summaryProposal instanceof ShopCartSummaryProposal){
+
+                                    $proposal = $this->proposalRepository->findOneBy(array(
+                                        'id' => $proposalId,
+                                    ));
+
+                                    if($proposal instanceof Proposal){
+
+                                        $summaryProposal = new ShopCartSummaryProposal($proposal);
+                                        $summaryCategory->getProposals()->set($proposal->getId(), $summaryProposal);
 
                                     }
+
+                                }
+
+                                if(!$summaryProposal instanceof ShopCartSummaryProposal){
+                                    continue;
+                                }
+
+                                $summaryPrice = $summaryProposal->getPrices()->get($priceId);
+
+                                if(!$summaryPrice instanceof ShopCartSummaryPrice) {
 
                                     $proposalPrice = $this->priceRepository->findOneBy(array(
                                         'id' => $priceId,
                                     ));
 
-                                    if($proposalPrice instanceof Price){
+                                    if ($proposalPrice instanceof Price) {
 
-                                        $priceIds[] = $priceId;
-
-                                        $proposalPriceValue = $this->currencyConverter->convert($proposalPrice);
-                                        $proposalPriceSummary = ($this->currencyConverter->convert($proposalPrice) * $proposalPriceAmount);
-                                        $summaryPrice += $proposalPriceSummary;
-
-                                        $categoryProposalsSummary[$categoryId]['proposals'][$proposalId]['prices'][$priceId] = array(
-                                            'price' => $proposalPrice,
-                                            'value' => $proposalPriceValue,
-                                            'amount' => $proposalPriceAmount,
-                                            'summary' => $proposalPriceSummary,
-                                        );
+                                        $summaryPrice = new ShopCartSummaryPrice($proposalPrice);
+                                        $summaryProposal->getPrices()->set($proposalPrice->getId(), $summaryPrice);
 
                                     }
 
                                 }
+
+                                if(!$summaryPrice instanceof ShopCartSummaryPrice){
+                                    continue;
+                                }
+
+                                $summaryPrice
+                                    ->setAmount($proposalPriceAmount)
+                                    ->getItemPrice()
+                                        ->setValue($this->currencyConverter->convert($summaryPrice->getPrice()))
+                                        ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
+                                ;
 
                             }
 
@@ -153,13 +169,7 @@ class ShopCart {
 
         }
 
-        return array(
-            'proposalIds' => $proposalIds,
-            'priceIds' => $priceIds,
-            'categoryIds' => array_keys($categoryProposalsSummary),
-            'categories' => $categoryProposalsSummary,
-            'summaryPrice' => $summaryPrice,
-        );
+        return $shopCartSummary;
 
     }
 

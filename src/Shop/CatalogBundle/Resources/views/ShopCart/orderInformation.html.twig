@@ -1,6 +1,3 @@
-<h3>
-    Сумма заказа: {{ shopCartSummary.summaryPrice|weasty_price }}
-</h3>
 <table>
     <thead>
         <tr>
@@ -35,6 +32,16 @@
     {% endfor %}
     </tbody>
 </table>
+<div>
+    {% if shopCartSummary.shippingCalculatorResult.summaryPrice.value %}
+        Стоимость доставки: {{ shopCartSummary.shippingCalculatorResult.summaryPrice|weasty_price }}
+    {% else %}
+        Бесплатная доставка
+    {% endif %}
+</div>
+<h3>
+    Общая сумма: {{ shopCartSummary.summaryPrice({'includeShipping':true})|weasty_price }}
+</h3>
 {% if action %}
     <h4>
         Вы выбрали подарок

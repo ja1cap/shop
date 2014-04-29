@@ -9,6 +9,7 @@ use Shop\CatalogBundle\Entity\CustomerOrderProposal;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Settings;
+use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,9 +35,8 @@ class ShopCartController extends Controller
         $shopCartSummary = $this->getShopCartSummary($request);
 
         $actions = array();
-        $shopCartSummaryPrice = $shopCartSummary['summaryPrice'];
-        $shopCartCategoriesData = $shopCartSummary['categories'];
-        $shopCartCategoryIds = $shopCartSummary['categoryIds'];
+        $shopCartSummaryPrice = $shopCartSummary->getSummaryPrice();
+        $shopCartCategoryIds = $shopCartSummary->getCategoryIds();
 
         if($shopCartSummaryPrice && $shopCartCategoryIds){
 
@@ -48,10 +48,6 @@ class ShopCartController extends Controller
 
         }
 
-        $shippingMethods = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod')->findBy(array(), array(
-            'name' => 'ASC',
-        ));
-
         $cities = $this->get('weasty_geonames.city.repository')->getCountryCities();
 
         $customerCity = null;
@@ -61,22 +57,23 @@ class ShopCartController extends Controller
             ));
         }
         $customerCity = $customerCity ?: $this->get('weasty_geonames.city.locator')->getCity();
+        $customerLiftType = $request->get('liftType', ShippingLiftingPrice::LIFT_TYPE_LIFT);
+        $customerFloor = $request->get('floor', 10);
 
-        $shippingSummaries =$this->get('shop_shipping.shipping_calculator')->calculate(array(
-            'orderCategories' => $shopCartCategoriesData,
-            'orderSummaryPrice' => $shopCartSummaryPrice,
+        $shippingCalculatorResult = $this->get('shop_shipping.shipping_calculator')->calculate(array(
+            'shopCartSummaryCategories' => $shopCartSummary->getCategories(),
+            'shopCartSummaryPrice' => $shopCartSummaryPrice,
             'city' => $customerCity,
-            'liftType' => $request->get('liftType'),
-            'floor' => $request->get('floor', 10),
+            'liftType' => $customerLiftType,
+            'floor' => $customerFloor,
         ));
+
+        $shopCartSummary->setShippingCalculatorResult($shippingCalculatorResult);
 
         return $this->render('ShopCatalogBundle:ShopCart:default.html.twig', array(
             'title' => 'Оформление заказа',
-            'customerCity' => $customerCity,
             'cities' => $cities,
             'actions' => $actions,
-            'shippingMethods' => $shippingMethods,
-            'shippingSummaries' => $shippingSummaries,
             'shopCartSummary' => $shopCartSummary,
         ));
 
@@ -88,6 +85,16 @@ class ShopCartController extends Controller
         $customerPhone = $request->get('customerPhone');
         $customerEmail = $request->get('customerEmail') ?: null;
         $customerComment = $request->get('customerComment') ?: null;
+
+        $customerCity = null;
+        if($request->get('customerCity')){
+            $customerCity = $this->get('weasty_geonames.city.repository')->findOneBy(array(
+                'id' => (int)$request->get('customerCity'),
+            ));
+        }
+        $customerCity = $customerCity ?: $this->get('weasty_geonames.city.locator')->getCity();
+        $customerLiftType = $request->get('customerLiftType', ShippingLiftingPrice::LIFT_TYPE_LIFT);
+        $customerFloor = $request->get('customerFloor', 10);
 
         if($customerName && $customerPhone){
 
@@ -103,6 +110,16 @@ class ShopCartController extends Controller
             $orderInformation = null;
 
             $shopCartSummary = $this->getShopCartSummary($request);
+
+            $shippingCalculatorResult = $this->get('shop_shipping.shipping_calculator')->calculate(array(
+                'shopCartSummaryCategories' => $shopCartSummary->getCategories(),
+                'shopCartSummaryPrice' => $shopCartSummary->getSummaryPrice(),
+                'city' => $customerCity,
+                'liftType' => $customerLiftType,
+                'floor' => $customerFloor,
+            ));
+
+            $shopCartSummary->setShippingCalculatorResult($shippingCalculatorResult);
 
             if($shopCartSummary['categories']){
 
@@ -160,14 +177,17 @@ class ShopCartController extends Controller
                 $em->persist($customerOrder);
                 $em->flush();
 
-//                $orderInformation = $this->renderView('ShopCatalogBundle:ShopCart:orderInformation.html.twig', array(
-//                    'action' => $action,
-//                    'shopCartSummary' => $shopCartSummary,
-//                ));
+                $orderInformation = $this->renderView('ShopCatalogBundle:ShopCart:orderInformation.html.twig', array(
+                    'action' => $action,
+                    'shopCartSummary' => $shopCartSummary,
+                ));
+
+                echo($orderInformation);
+                die;
 
             }
 
-//            $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);
+            $this->sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation);
 
             $response = $this->render('ShopCatalogBundle:ShopCart:order.html.twig', array(
                 'title' => 'Заказ оформлен',
@@ -263,8 +283,15 @@ class ShopCartController extends Controller
             $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
             $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
             $currencyConverter = $this->get('shop_catalog.price.currency.converter');
+            $shippingCalculator = $this->get('shop_shipping.shipping_calculator');
 
-            $this->shopCart = new ShopCart($currencyConverter, $categoryRepository, $proposalsRepository, $priceRepository);
+            $this->shopCart = new ShopCart(
+                $currencyConverter,
+                $categoryRepository,
+                $proposalsRepository,
+                $priceRepository,
+                $shippingCalculator
+            );
 
         }
 
@@ -274,7 +301,7 @@ class ShopCartController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return \Shop\CatalogBundle\Cart\ShopCartSummary
      * @throws \InvalidArgumentException
      */
     public function getShopCartSummary(Request $request)

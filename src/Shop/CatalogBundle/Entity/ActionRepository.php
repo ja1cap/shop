@@ -11,7 +11,7 @@ class ActionRepository extends EntityRepository {
 
     /**
      * @param array $categoryIds
-     * @param float $orderSummary
+     * @param $orderSummary
      * @return array
      */
     public function findActions($categoryIds, $orderSummary){
@@ -30,11 +30,11 @@ class ActionRepository extends EntityRepository {
             $qb->expr()->in('ac.category_id', $categoryIds),
             $qb->expr()->orX(
                 $qb->expr()->isNull('a.minOrderSummary'),
-                $qb->expr()->lte('a.minOrderSummary', $orderSummary)
+                $qb->expr()->lte('a.minOrderSummary', floatval($orderSummary))
             ),
             $qb->expr()->orX(
                 $qb->expr()->isNull('a.maxOrderSummary'),
-                $qb->expr()->gte('a.maxOrderSummary', $orderSummary)
+                $qb->expr()->gte('a.maxOrderSummary', floatval($orderSummary))
             )
         );
 

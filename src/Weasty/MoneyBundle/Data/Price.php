@@ -21,7 +21,7 @@ class Price implements PriceInterface {
      * @param integer|float|string $value
      * @param integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface $currency
      */
-    function __construct($value, $currency)
+    function __construct($value = null, $currency = null)
     {
         $this->value = $value;
         $this->currency = $currency;
@@ -29,18 +29,22 @@ class Price implements PriceInterface {
 
     /**
      * @param int|string|CurrencyInterface $currency
+     * @return $this
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+        return $this;
     }
 
     /**
      * @param float|int|string $value
+     * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
+        return $this;
     }
 
     /**
@@ -59,4 +63,12 @@ class Price implements PriceInterface {
         return $this->currency;
     }
 
-} 
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return (string)$this->getValue();
+    }
+
+}

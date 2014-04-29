@@ -54,14 +54,17 @@ class ShopCartSummaryProposal implements \ArrayAccess {
         $proposalSummaryPriceValue = 0;
         $proposalSummaryPriceCurrency = null;
 
-        $this->getPrices()->map(function(ShopCartSummaryPrice $shopCartSummaryPrice) use (&$proposalSummaryPriceValue, &$proposalSummaryPriceCurrency) {
+        /**
+         * @var $shopCartSummaryPrice ShopCartSummaryPrice
+         */
+        foreach($this->getPrices() as $shopCartSummaryPrice){
 
             $summaryPrice = $shopCartSummaryPrice->getSummaryPrice();
 
             $proposalSummaryPriceValue += $summaryPrice->getValue();
             $proposalSummaryPriceCurrency = $summaryPrice->getCurrency();
 
-        });
+        }
 
         return new Price($proposalSummaryPriceValue, $proposalSummaryPriceCurrency);
 

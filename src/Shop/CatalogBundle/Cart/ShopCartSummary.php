@@ -53,13 +53,16 @@ class ShopCartSummary implements \ArrayAccess {
         $summaryPriceValue = 0;
         $summaryPriceCurrency = null;
 
-        $this->getCategories()->map(function(ShopCartSummaryCategory $shopCartSummaryCategory) use (&$summaryPriceValue, &$summaryPriceCurrency) {
+        /**
+         * @var $shopCartSummaryCategory ShopCartSummaryCategory
+         */
+        foreach($this->getCategories() as $shopCartSummaryCategory){
 
             $summaryPrice = $shopCartSummaryCategory->getSummaryPrice();
             $summaryPriceValue += $summaryPrice->getValue();
             $summaryPriceCurrency = $summaryPrice->getCurrency();
 
-        });
+        }
 
         if($optionsCollection->get('includeShipping')){
 
@@ -99,15 +102,21 @@ class ShopCartSummary implements \ArrayAccess {
 
         $proposalIds = array();
 
-        $this->getCategories()->map(function(ShopCartSummaryCategory $summaryCategory) use (&$proposalIds) {
+        /**
+         * @var $summaryCategory ShopCartSummaryCategory
+         */
+        foreach($this->getCategories() as $summaryCategory){
 
-            $summaryCategory->getProposals()->map(function(ShopCartSummaryProposal $summaryProposal) use (&$proposalIds) {
+            /**
+             * @var $summaryProposal ShopCartSummaryProposal
+             */
+            foreach($summaryCategory->getProposals() as $summaryProposal){
 
                 $proposalIds[] = $summaryProposal->getProposal()->getId();
 
-            });
+            }
 
-        });
+        }
 
         return $proposalIds;
 
@@ -120,19 +129,28 @@ class ShopCartSummary implements \ArrayAccess {
 
         $priceIds = array();
 
-        $this->getCategories()->map(function(ShopCartSummaryCategory $summaryCategory) use (&$priceIds) {
+        /**
+         * @var $summaryCategory ShopCartSummaryCategory
+         */
+        foreach($this->getCategories() as $summaryCategory){
 
-            $summaryCategory->getProposals()->map(function(ShopCartSummaryProposal $summaryProposal) use (&$priceIds) {
+            /**
+             * @var $summaryProposal ShopCartSummaryProposal
+             */
+            foreach($summaryCategory->getProposals() as $summaryProposal){
 
-                $summaryProposal->getPrices()->map(function(ShopCartSummaryPrice $summaryPrice) use (&$priceIds) {
+                /**
+                 * @var $summaryPrice ShopCartSummaryPrice
+                 */
+                foreach($summaryProposal->getPrices() as $summaryPrice){
 
                     $priceIds[] = $summaryPrice->getPrice()->getId();
 
-                });
+                }
 
-            });
+            }
 
-        });
+        }
 
         return $priceIds;
 

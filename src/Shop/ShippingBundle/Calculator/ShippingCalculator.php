@@ -78,14 +78,14 @@ class ShippingCalculator implements ShippingCalculatorInterface {
                 ->setFloor($optionsCollection->get('floor'))
             ;
 
-            $this
-                ->buildCategoryShippingCalculators($shopCartSummaryCategories, $shopCartSummaryPrice, $city)
-                ->map(function($shippingCalculator) use ($options, $shippingCalculatorResult) {
-                    if($shippingCalculator instanceof ShippingCalculatorInterface){
-                        $shippingCalculatorResult->addShippingSummary($shippingCalculator->calculate($options));
-                    }
-                })
-            ;
+            $categoryShippingCalculators = $this->buildCategoryShippingCalculators($shopCartSummaryCategories, $shopCartSummaryPrice, $city);
+
+            /**
+             * @var $categoryShippingCalculator ShippingCalculatorInterface
+             */
+            foreach($categoryShippingCalculators as $categoryShippingCalculator){
+                $shippingCalculatorResult->addShippingSummary($categoryShippingCalculator->calculate($options));
+            }
 
         }
 

@@ -75,12 +75,12 @@ class PriceListBuilder {
         $objPHPExcel->setActiveSheetIndex(0);
         $activeSheet = $objPHPExcel->getActiveSheet();
 
-        $aliasesEntities = PriceListAlias::getEntitiesAliasesMap();
+        $aliasesEntitiesMap = PriceListAlias::getEntitiesAliasesMap();
 
         $identifiersRowIndex = 1;
         $i = 0;
 
-        foreach($aliasesEntities as $alias => $aliasEntity){
+        foreach($aliasesEntitiesMap as $alias => $aliasEntityMap){
 
             $aliasTitle = PriceListAlias::getAliasesTitle($alias);
             $cell = $activeSheet->setCellValueByColumnAndRow($i, $identifiersRowIndex, $aliasTitle, true);
@@ -97,7 +97,7 @@ class PriceListBuilder {
         }
 
         $categoryParameterColumns = array();
-        $categoryParameterColumnIndex = count($aliasesEntities);
+        $categoryParameterColumnIndex = count($aliasesEntitiesMap);
 
         foreach($category->getParameters() as $categoryParameter){
 
@@ -138,12 +138,12 @@ class PriceListBuilder {
 
                 $i = 0;
 
-                foreach($aliasesEntities as $aliasEntity){
+                foreach($aliasesEntitiesMap as $aliasEntityMap){
 
                     $value = null;
-                    $property = $aliasEntity['property'];
+                    $property = $aliasEntityMap['property'];
 
-                    switch($aliasEntity['entity']){
+                    switch($aliasEntityMap['entity']){
                         case 'proposal':
 
                             $value = $proposal[$property];
@@ -151,9 +151,9 @@ class PriceListBuilder {
 
                         case 'price':
 
-                            switch($aliasEntity[$property]){
+                            switch($aliasEntityMap[$property]){
                                 default:
-                                    $value = $price[$aliasEntity[$property]];
+                                    $value = $price[$property];
                             }
 
                             break;

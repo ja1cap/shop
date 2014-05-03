@@ -2188,6 +2188,10 @@ body {
       margin-bottom: 10px;
     }
 
+    input[type="file"] {
+      display: block;
+    }
+
     input[type="text"], input[type="password"], input[type="email"] {
 
       width: 100%;

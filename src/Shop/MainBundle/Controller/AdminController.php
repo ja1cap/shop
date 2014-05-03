@@ -5,7 +5,6 @@ namespace Shop\MainBundle\Controller;
 use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Benefit;
 use Shop\MainBundle\Entity\HowWeItem;
-use Shop\MainBundle\Entity\Image;
 use Shop\MainBundle\Entity\Problem;
 use Shop\MainBundle\Entity\Review;
 use Shop\MainBundle\Entity\Settings;

@@ -25,11 +25,13 @@
                             {{ settings.why_link_text|default('ПОЧЕМУ МЫ?') }}
                         </a>
                     </li>
-                    <li>
-                        <a href="/#actions-block">
-                            {{ settings.actions_link_text|default('АКЦИИ') }}
-                        </a>
-                    </li>
+                    {% if actions|length > 0 %}
+                        <li>
+                            <a href="/#actions-block">
+                                {{ settings.actions_link_text|default('АКЦИИ') }}
+                            </a>
+                        </li>
+                    {% endif %}
                     {#<li>#}
                         {#<a href="/#reviews-block">#}
                             {#{{ settings.reviews_link_text|default('ОТЗЫВЫ') }}#}

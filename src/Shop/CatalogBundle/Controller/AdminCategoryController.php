@@ -44,16 +44,16 @@ class AdminCategoryController extends Controller
     {
 
         $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
-        $entity = $repository->findOneBy(array(
+        $category = $repository->findOneBy(array(
             'id' => $id
         ));
 
-        if(!$entity instanceof Category){
-            $entity = new Category;
+        if(!$category instanceof Category){
+            $category = new Category;
         }
 
-        $isNew = !$entity->getId();
-        $form = $this->createForm(new CategoryType(), $entity);
+        $isNew = !$category->getId();
+        $form = $this->createForm(new CategoryType(), $category);
 
         $form->handleRequest($request);
 
@@ -62,19 +62,21 @@ class AdminCategoryController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             if($isNew){
-                $em->persist($entity);
+                $em->persist($category);
             }
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('categories'));
+            return $this->redirect($this->generateUrl('category', array(
+                'id' => $category->getId(),
+            )));
 
         } else {
 
             return $this->render('ShopCatalogBundle:AdminCategory:category.html.twig', array(
                 'title' => $isNew ? 'Добавление категории' : 'Изменение категории',
                 'form' => $form->createView(),
-                'category' => $entity,
+                'category' => $category,
             ));
 
         }

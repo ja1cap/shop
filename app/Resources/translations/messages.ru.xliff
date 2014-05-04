@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="forms.en.xliff">
+        <body>
+            <trans-unit id="unlink">
+                <source>Unlink</source>
+                <target>Удалить</target>
+            </trans-unit>
+            <trans-unit id="binary.content">
+                <source>Binary content</source>
+                <target>Файл</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

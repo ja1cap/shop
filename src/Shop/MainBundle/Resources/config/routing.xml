@@ -15,7 +15,7 @@
         <default key="id">null</default>
     </route>
     <route id="shop_category" pattern="/catalog/{slug}">
-        <default key="_controller">ShopMainBundle:Default:category</default>
+        <default key="_controller">ShopCatalogBundle:Default:category</default>
     </route>
     <route id="shop_proposal" pattern="/catalog/{categorySlug}/{slug}">
         <default key="_controller">ShopMainBundle:Default:proposal</default>

@@ -1683,6 +1683,10 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 .ie9 .radio.checked i, .ie9 .checkbox.checked i { top: 0; }
 
 body { background: #f1f1f1; overflow-y: scroll; }
+body .pull-left { float: left; }
+body .pull-right { float: right; }
+body form .media-fields label { font-size: 12px; }
+body form .media-fields input[type="file"] { display: inline; margin-left: 5px; }
 body .tiles.tiles-blocks li { padding: 10px; border: 1px solid #CCCCCC; margin-bottom: 20px; }
 body .tiles.tiles-blocks li .tile-title { font-size: 16px; margin-bottom: 10px; }
 body .tiles.tiles-blocks li .tile-buttons .btn { width: 49%; margin-bottom: 5px; }

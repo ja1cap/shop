@@ -7,6 +7,31 @@ body {
 
   background: #f1f1f1;
 
+  .pull-left {
+    float: left;
+  }
+
+  .pull-right {
+    float: right;
+  }
+
+  form {
+
+    .media-fields {
+
+      label {
+        font-size: 12px;
+      }
+
+      input[type="file"] {
+        display: inline;
+        margin-left: 5px;
+      }
+
+    }
+
+  }
+
   .tiles {
 
     &.tiles-blocks {

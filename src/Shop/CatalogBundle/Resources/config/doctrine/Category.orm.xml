@@ -7,6 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="status" type="integer"/>
+        <field name="imageId" type="integer"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="slug" type="string" column="slug" length="255"/>
         <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
@@ -33,6 +34,11 @@
                 <order-by-field name="title" direction="ASC"/>
             </order-by>
         </one-to-many>
+        <many-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-one>
         <many-to-many target-entity="Category" field="additionalCategories">
             <order-by>
                 <order-by-field name="name" direction="ASC"/>

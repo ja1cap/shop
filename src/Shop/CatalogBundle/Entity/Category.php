@@ -2,6 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
@@ -71,6 +72,16 @@ class Category extends AbstractEntity
      * @var \Doctrine\Common\Collections\Collection
      */
     private $parameters;
+
+    /**
+     * @var integer|null
+     */
+    private $imageId;
+
+    /**
+     * @var Media|null
+     */
+    private $image;
 
     /**
      * Constructor
@@ -408,5 +419,45 @@ class Category extends AbstractEntity
     public function getParameterGroups()
     {
         return $this->parameterGroups;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getImageId()
+    {
+        return $this->imageId;
+    }
+
+    /**
+     * @param int|null $imageId
+     * @return $this
+     */
+    public function setImageId($imageId)
+    {
+        $this->imageId = $imageId;
+        return $this;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return Category
+     */
+    public function setImage(Media $image = null)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * Get media
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

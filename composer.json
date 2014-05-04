@@ -27,7 +27,10 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "jjs/common": "dev-master",
         "jjs/geonames-bundle": "dev-master",
+        "sonata-project/core-bundle": "~2.2",
+        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
         "sonata-project/admin-bundle": "dev-master",
+        "sonata-project/media-bundle": "dev-master",
         "shtumi/useful-bundle": "dev-master"
     },
     "scripts": {

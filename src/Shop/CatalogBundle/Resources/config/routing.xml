@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="shop_catalog_homepage" pattern="/hello/{name}">
+        <default key="_controller">ShopCatalogBundle:Default:index</default>
+    </route>
+
+    <route id="parameters" pattern="/adminCatalog/parameters">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:parameters</default>
+    </route>
+    <route id="parameter" pattern="/adminCatalog/parameter/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:parameter</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_parameter" pattern="/adminCatalog/deleteParameter/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameter</default>
+    </route>
+
+    <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_parameter_option" pattern="/adminCatalog/deleteParameterOption/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameterOption</default>
+    </route>
+    <route id="update_parameter_options" pattern="/adminCatalog/updateParameterOptions/{parameterId}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:updateParameterOptions</default>
+    </route>
+
+</routes>

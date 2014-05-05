@@ -22,6 +22,13 @@ class ParameterOptionType extends AbstractType {
             'label' => 'Название',
         ));
 
+        $builder->add('image', 'sonata_media_type', array(
+            'provider' => 'sonata.media.provider.image',
+            'context'  => 'parameter_option',
+            'label' => 'Изображение',
+            'required' => false,
+        ));
+
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',

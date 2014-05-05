@@ -91,6 +91,7 @@ class PriceType extends AbstractType {
                     'choices' => $choices,
                     'mapped' => false,
                     'required' => false,
+                    //'multiple' => true,
                 ));
 
             }

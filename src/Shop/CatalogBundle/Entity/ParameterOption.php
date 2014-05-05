@@ -2,13 +2,16 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * ParameterOption
+ * Class ParameterOption
+ * @package Shop\CatalogBundle\Entity
  */
-class ParameterOption
+class ParameterOption extends AbstractEntity
 {
     /**
      * @var integer
@@ -24,6 +27,16 @@ class ParameterOption
      * @var integer
      */
     private $position;
+
+    /**
+     * @var integer
+     */
+    private $imageId;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $image;
 
 
     /**
@@ -192,4 +205,49 @@ class ParameterOption
         return $this->getName();
     }
 
+    /**
+     * Set imageId
+     *
+     * @param integer $imageId
+     * @return ParameterOption
+     */
+    public function setImageId($imageId)
+    {
+        $this->imageId = $imageId;
+
+        return $this;
+    }
+
+    /**
+     * Get imageId
+     *
+     * @return integer 
+     */
+    public function getImageId()
+    {
+        return $this->imageId;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return ParameterOption
+     */
+    public function setImage(Media $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

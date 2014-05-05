@@ -44,21 +44,7 @@
                                     <label for="parameter_{{ parameterData.parameter.id }}">
                                         {{ parameterData.parameter.name }}
                                     </label>
-                                    {% if parameterData.parameter.type == constant('TYPE_SELECT', parameterData.parameter) %}
-                                        <div class="picker-box">
-                                            <div class="picker">
-                                                <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
-                                                    <option value="-1">Не важно</option>
-                                                    {% for option in parameterData.options %}
-                                                        {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
-                                                        <option value="{{ option.id }}" {{ filteredParameterValues[parameterData.parameter.id] == option.id ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                            {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }})
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    {% elseif parameterData.parameter.type == constant('TYPE_CHECKBOXES', parameterData.parameter) %}
+                                    {% if parameterData.parameter.type == constant('TYPE_CHECKBOXES', parameterData.parameter) %}
                                         <div class="checkboxes">
                                             <input type="hidden" name="parameters[{{ parameterData.parameter.id }}][]" value="-1">
                                             {% for option in parameterData.options %}
@@ -71,6 +57,18 @@
                                                     </small>
                                                 </label>
                                             {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="picker-box">
+                                            <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}][]" multiple="multiple">
+                                                <option value="-1">Не важно</option>
+                                                {% for option in parameterData.options %}
+                                                    {% set optionAmounts = (parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined ? parametersOptionsAmounts[parameterData.parameter.id][option.id] : null) %}
+                                                    <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id])) ? "selected='selected'" : "" }} {{ (optionAmounts and optionAmounts.proposalsAmount <= 0) ? "disabled='disabled'" : "" }}>
+                                                        {{ option.name }} ({{ (optionAmounts ? optionAmounts.proposalsAmount : null)|default(0) }})
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -119,12 +117,10 @@
                                                     <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
                                                         <option value="-1">Не важно</option>
                                                         {% for option in parameterData.options %}
-                                                            {% if parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined %}
-                                                                {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
-                                                                <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and filteredParameterValues[parameterData.parameter.id] == option.id) ? "selected='selected'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                                    {{ option.name }} ({{ optionAmounts.proposalsAmount|default(0) }})
-                                                                </option>
-                                                            {% endif %}
+                                                            {% set optionAmounts = (parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined ? parametersOptionsAmounts[parameterData.parameter.id][option.id] : null) %}
+                                                            <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id])) ? "selected='selected'" : "" }} {{ (not optionAmounts or (optionAmounts and optionAmounts.proposalsAmount <= 0)) ? "disabled='disabled'" : "" }}>
+                                                                {{ option.name }} ({{ (optionAmounts ? optionAmounts.proposalsAmount : null)|default(0) }})
+                                                            </option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>

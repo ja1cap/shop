@@ -65,7 +65,9 @@ class AdminParameterController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('parameters'));
+            return $this->redirect($this->generateUrl('parameter', array(
+                'id' => $parameter->getId(),
+            )));
 
         } else {
 

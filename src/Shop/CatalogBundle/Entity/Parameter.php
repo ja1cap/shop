@@ -9,11 +9,13 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
 /**
  * Parameter
  */
-class Parameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
+class Parameter extends AbstractEntity
 {
 
     const TYPE_SELECT = 1;
     const TYPE_CHECKBOXES = 2;
+    const TYPE_IMAGE = 3;
+    const TYPE_IMAGE_WITH_TEXT = 4;
 
     /**
      * @var array
@@ -21,6 +23,8 @@ class Parameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     public static $types = array(
         self::TYPE_SELECT => 'Выпадающий список',
         self::TYPE_CHECKBOXES => 'Флажки',
+        self::TYPE_IMAGE => 'Изображения',
+        self::TYPE_IMAGE_WITH_TEXT => 'Изображения с текстом',
     );
 
     /**
@@ -191,11 +195,11 @@ class Parameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     /**
      * Remove categoryParameters
      *
-     * @param \Shop\CatalogBundle\Entity\CategoryParameter $categoryParameters
+     * @param \Shop\CatalogBundle\Entity\CategoryParameter $categoryParameter
      */
-    public function removeCategoryParameter(CategoryParameter $categoryParameters)
+    public function removeCategoryParameter(CategoryParameter $categoryParameter)
     {
-        $this->categoryParameters->removeElement($categoryParameters);
+        $this->categoryParameters->removeElement($categoryParameter);
     }
 
     /**
@@ -206,6 +210,26 @@ class Parameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
     public function getCategoryParameters()
     {
         return $this->categoryParameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoryNames(){
+
+        $categoryNames = array();
+
+        /**
+         * @var $categoryParameter \Shop\CatalogBundle\Entity\CategoryParameter
+         */
+        foreach($this->getCategoryParameters() as $categoryParameter){
+            $categoryNames[] = $categoryParameter->getCategory()->getName();
+        }
+
+        asort($categoryNames);
+
+        return $categoryNames;
+
     }
 
     /**

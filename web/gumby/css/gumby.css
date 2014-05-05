@@ -1214,9 +1214,9 @@ img { -ms-interpolation-mode: bicubic; }
 .tiles.five_up > li, .tiles.five_up > .tile { margin-left: 1.5%; width: 18.5%; }
 
 /* Nicolas Gallagher's micro clearfix */
-.clearfix { *zoom: 1; }
-.clearfix:before, .clearfix:after { content: ""; display: table; }
-.clearfix:after { clear: both; }
+.clearfix, body .tiles { *zoom: 1; }
+.clearfix:before, body .tiles:before, .clearfix:after, body .tiles:after { content: ""; display: table; }
+.clearfix:after, body .tiles:after { clear: both; }
 
 .row { *zoom: 1; }
 .row:before, .row:after { content: ""; display: table; }
@@ -1687,6 +1687,7 @@ body .pull-left { float: left; }
 body .pull-right { float: right; }
 body form .media-fields label { font-size: 12px; }
 body form .media-fields input[type="file"] { display: inline; margin-left: 5px; }
+body .tiles { overflow: visible; }
 body .tiles.tiles-blocks li { padding: 10px; border: 1px solid #CCCCCC; margin-bottom: 20px; }
 body .tiles.tiles-blocks li .tile-title { font-size: 16px; margin-bottom: 10px; }
 body .tiles.tiles-blocks li .tile-buttons .btn { width: 49%; margin-bottom: 5px; }

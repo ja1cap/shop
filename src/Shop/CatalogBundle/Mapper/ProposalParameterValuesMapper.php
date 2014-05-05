@@ -81,6 +81,11 @@ class ProposalParameterValuesMapper {
 
                 unset($parameterValuesData[$parameterValue->getParameterId()]);
 
+            } elseif($removeEmptyValue) {
+
+                $proposal->removeParameterValue($parameterValue);
+                $em->remove($parameterValue);
+
             }
 
         }

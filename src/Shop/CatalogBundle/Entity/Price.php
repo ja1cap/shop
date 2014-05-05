@@ -196,11 +196,32 @@ class Price extends AbstractEntity
      */
     public function getDescription(){
 
-        return implode('', $this->getParameterValues()->map(function(ParameterValue $parameterValue){
+        $parametersData = array();
 
-            return '<div>' . $parameterValue->getParameter()->getName() . ': ' . $parameterValue->getOption()->getName() . '</div>';
+        /**
+         * @var $parameterValue ParameterValue
+         */
+        foreach($this->getParameterValues() as $parameterValue){
 
-        })->toArray());
+            if(!isset($parametersData[$parameterValue->getParameterId()])){
+
+                $parametersData[$parameterValue->getParameterId()] = array(
+                    'parameterId' => $parameterValue->getParameterId(),
+                    'parameterName' => $parameterValue->getParameter()->getName(),
+                    'values' => array(),
+                );
+
+            }
+
+            $parametersData[$parameterValue->getParameterId()]['values'][] = $parameterValue->getOption()->getName();
+
+        }
+
+        return implode('', array_map(function($parameterData){
+
+            return '<div>' . $parameterData['parameterName'] . ': ' . (implode(', ', $parameterData['values'])) . '</div>';
+
+        }, $parametersData));
 
     }
 

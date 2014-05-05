@@ -378,8 +378,7 @@ class AdminPriceListController extends Controller
         $priceList->setStatus(PriceList::STATUS_PARSED);
         $priceList->setUpdateDate(new \DateTime());
 
-//        $em->flush();
-//        die;
+        $em->flush();
 
         return $this->redirect($this->generateUrl('price_lists'));
 

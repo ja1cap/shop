@@ -91,18 +91,7 @@ class ProposalRepository extends AbstractRepository {
         $minPrice = $priceStep['minPrice'];
         $maxPrice = $priceStep['maxPrice'];
 
-//        $minPriceLength = strlen($minPrice);
-//        $maxPriceLength = strlen($maxPrice);
         $averagePriceLength = strlen(($minPrice + $maxPrice)/2);
-
-//        $minPriceExponent = ($minPriceLength - 1);
-//        $maxPriceExponent = ($maxPriceLength - 1);
-//        $averagePriceExponent = ($averagePriceLength - 1);
-//
-//        var_dump($minPriceExponent);
-//        var_dump($maxPriceExponent);
-//        var_dump($averagePriceExponent);
-//        die;
 
         $priceExponent = 1;
         if($averagePriceLength > 1){
@@ -229,13 +218,6 @@ class ProposalRepository extends AbstractRepository {
 
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
-
-//        foreach($queryParameters as $key => $value){
-//            $sql = str_replace(':' . $key, $value, $sql);
-//        }
-//        echo($sql);
-//        echo("<br/>");
-//        die;
 
         $priceStepsAmounts = $this->getEntityManager()->getConnection()->fetchAll($sql, $queryParameters);
         foreach($priceStepsAmounts as $priceStepAmounts){

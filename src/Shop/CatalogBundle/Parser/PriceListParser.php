@@ -394,12 +394,12 @@ class PriceListParser {
                     $skuPriceDataKey = ($price->getSku() && isset($skuPriceDataKeys[$price->getSku()])) ? $skuPriceDataKeys[$price->getSku()] : null;
                     $manufacturerSkuPriceDataKey = ($price->getManufacturerSku() && isset($manufacturerSkuPriceDataKeys[$price->getManufacturerSku()])) ? $manufacturerSkuPriceDataKeys[$price->getManufacturerSku()] : null;
 
-                    if($skuPriceDataKey && isset($pricesData[$skuPriceDataKey])){
+                    if($skuPriceDataKey !== null && isset($pricesData[$skuPriceDataKey])){
 
                         $priceData = $pricesData[$skuPriceDataKey];
                         unset($pricesData[$skuPriceDataKey]);
 
-                    } elseif($manufacturerSkuPriceDataKey && isset($priceList[$manufacturerSkuPriceDataKey])){
+                    } elseif($manufacturerSkuPriceDataKey !== null && isset($priceList[$manufacturerSkuPriceDataKey])){
 
                         $priceData = $pricesData[$manufacturerSkuPriceDataKey];
 
@@ -526,7 +526,7 @@ class PriceListParser {
                         $proposalParametersValues = $value;
 
                         $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
-                        $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues);
+                        $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues, false);
 
                         break;
 
@@ -602,7 +602,7 @@ class PriceListParser {
                             $parameterValuesData = $value;
 
                             $priceParameterValuesMapper = new PriceParameterValuesMapper($this->getEm(), $price);
-                            $priceParameterValuesMapper->mapParameterValues($parameterValuesData);
+                            $priceParameterValuesMapper->mapParameterValues($parameterValuesData, false);
 
                         }
 

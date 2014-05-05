@@ -125,6 +125,13 @@ sonata_media:
                 small: { width: 150, quality: 100 }
                 small_square: { width: 150, height: 150, quality: 100 }
                 medium:   { width: 350, quality: 100 }
+        parameter_option:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100, quality: 100 }
+                small_square: { width: 100, height: 100, quality: 100 }
+                medium:   { width: 350, quality: 100 }
 
     cdn:
         server:

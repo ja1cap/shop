@@ -7,6 +7,7 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <field name="imageId" column="image_id" type="integer" nullable="true"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="position" type="integer" column="position"/>
         <field name="parameterId" type="integer" column="parameterId"/>
@@ -15,6 +16,11 @@
             <join-columns>
                 <join-column name="parameterId" referenced-column-name="id"/>
             </join-columns>
+        </many-to-one>
+        <many-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-all/>
+            </cascade>
         </many-to-one>
     </entity>
 </doctrine-mapping>

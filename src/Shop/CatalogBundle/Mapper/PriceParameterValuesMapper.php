@@ -24,7 +24,7 @@ class PriceParameterValuesMapper {
     protected $em;
 
     /**
-     * @param ObjectManager $em
+     * @param ObjectManager|object $em
      * @param Price $price
      */
     function __construct(ObjectManager $em, Price $price)
@@ -53,7 +53,27 @@ class PriceParameterValuesMapper {
 
             if(isset($parameterValuesData[$parameterValue ->getParameterId()])){
 
-                $option = $parameterValuesData[$parameterValue->getParameterId()];
+                $parameterValueData = $parameterValuesData[$parameterValue->getParameterId()];
+
+                if(is_array($parameterValueData)){
+
+                    $optionKey = array_search($parameterValue->getOptionId(), $parameterValueData);
+                    $option = $optionKey !== false ? $parameterValue->getOptionId() : null;
+
+                    if($optionKey !== false){
+                        unset($parameterValuesData[$parameterValue->getParameterId()][$optionKey]);
+                    }
+
+                    if(!$parameterValuesData[$parameterValue->getParameterId()]){
+                        unset($parameterValuesData[$parameterValue->getParameterId()]);
+                    }
+
+                } else {
+
+                    $option = $parameterValueData;
+                    unset($parameterValuesData[$parameterValue->getParameterId()]);
+
+                }
 
                 $parameterOption = null;
 
@@ -80,7 +100,10 @@ class PriceParameterValuesMapper {
 
                 }
 
-                unset($parameterValuesData[$parameterValue->getParameterId()]);
+            } elseif($removeEmptyValue){
+
+                $price->removeParameterValue($parameterValue);
+                $em->remove($parameterValue);
 
             }
 
@@ -88,36 +111,48 @@ class PriceParameterValuesMapper {
 
         if($parameterValuesData){
 
-            foreach($parameterValuesData as $parameterId => $option){
+            foreach($parameterValuesData as $parameterId => $parameterValueData){
 
-                $parameterOption = null;
+                if(!is_array($parameterValueData)){
 
-                if($option instanceof ParameterOption){
-
-                    $parameterOption = $option;
-
-                } elseif(is_numeric($option)) {
-
-                    $parameterOption = $option ? $optionsRepository->findOneBy(array(
-                        'id' => (int)$option,
-                    )) : null;
+                    $parameterValueData = array(
+                        $parameterValueData,
+                    );
 
                 }
 
-                if($parameterOption instanceof ParameterOption){
+                foreach($parameterValueData as $option){
 
-                    $parameter = $parametersRepository->findOneBy(array(
-                        'id' => (int)$parameterId,
-                    ));
+                    $parameterOption = null;
 
-                    if($parameter instanceof Parameter){
+                    if($option instanceof ParameterOption){
 
-                        $parameterValue = new ParameterValue();
-                        $parameterValue
-                            ->setParameter($parameter)
-                            ->setOption($parameterOption);
+                        $parameterOption = $option;
 
-                        $price->addParameterValue($parameterValue);
+                    } elseif(is_numeric($option)) {
+
+                        $parameterOption = $option ? $optionsRepository->findOneBy(array(
+                            'id' => (int)$option,
+                        )) : null;
+
+                    }
+
+                    if($parameterOption instanceof ParameterOption){
+
+                        $parameter = $parametersRepository->findOneBy(array(
+                            'id' => (int)$parameterId,
+                        ));
+
+                        if($parameter instanceof Parameter){
+
+                            $parameterValue = new ParameterValue();
+                            $parameterValue
+                                ->setParameter($parameter)
+                                ->setOption($parameterOption);
+
+                            $price->addParameterValue($parameterValue);
+
+                        }
 
                     }
 

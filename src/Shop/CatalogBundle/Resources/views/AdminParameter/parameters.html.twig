@@ -19,6 +19,10 @@
                         {{ parameter.name }}
                     </td>
                     <td>
+                        {% set categoryNames = parameter.categoryNames %}
+                        {{ categoryNames ? categoryNames|join(', ') : 'не используется' }}
+                    </td>
+                    <td>
                         <div class="medium btn default icon-left entypo icon-pencil">
                             <a href="{{ path('parameter', {'id' : parameter.id}) }}">
                                 Изменить

@@ -246,7 +246,7 @@ class AdminProposalController extends Controller
                 if(isset($formData[$parameterElementName])){
                     $parameterValuesData[$categoryParameter->getParameterId()] = $formData[$parameterElementName];
                 } else if($categoryParameter->getParameter()->getIsPriceParameter()) {
-                    $parameterValuesData[$categoryParameter->getParameterId()] = null;
+                    $parameterValuesData[$categoryParameter->getParameterId()] = array();
                 }
 
             });
@@ -260,22 +260,43 @@ class AdminProposalController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('proposal_prices', array('id' => $proposal->getId())));
+            return $this->redirect($this->generateUrl('proposal_price', array(
+                'proposalId' => $proposal->getId(),
+                'id' => $price->getId(),
+            )));
 
         } else {
 
             if(!$isNew){
 
-                $price->getParameterValues()->map(function(ParameterValue $value) use ($form) {
+                $parameterValuesData = array();
+
+                $price->getParameterValues()->map(function(ParameterValue $value) use (&$parameterValuesData) {
+
+                    $parameterFieldName = 'parameter' . $value->getParameterId();
+                    if(!isset($parameterValuesData[$parameterFieldName])){
+                        $parameterValuesData[$parameterFieldName] = array();
+                    }
+
+                    $parameterValuesData[$parameterFieldName][] = $value->getOptionId();
+
+                });
+
+                foreach($parameterValuesData as $fieldName => $value){
 
                     try {
 
-                        $element = $form->get('parameter' . $value->getParameterId());
-                        $element->setData($value->getOptionId());
+                        $field = $form->get($fieldName);
+
+                        if(is_array($value) && !$field->getConfig()->getOption('multiple')){
+                            $value = current($value);
+                        }
+
+                        $field->setData($value);
 
                     } catch(\Exception $e){};
 
-                });
+                }
 
             }
 

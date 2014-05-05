@@ -41,7 +41,7 @@ class ProposalType extends AbstractType {
                 'label' => 'Наименование',
             ))
             ->add('short_description', 'textarea', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'Короткое описание',
                 'attr' => array(
                     'class' => 'maxlength',
@@ -49,7 +49,7 @@ class ProposalType extends AbstractType {
                 )
             ))
             ->add('description', 'textarea', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'Полное описание',
             ))
             ->add('manufacturer', 'entity', array(

@@ -1,0 +1,77 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+{% block main_container %}
+    <div class="proposals-block block-container invert-colors" id="proposals-block">
+
+        <div class="block-img-wrapper">
+            <div class="image-box" style="background-image: url({{ shop_settings.proposals_image_url|default('/img/proposals-block-bg.jpg') }})"></div>
+        </div>
+
+        <div class="row">
+            <div class="six columns">
+                <div style="margin-right: 55px">
+
+                    <h2 class="block-title">
+                        Все категории
+                    </h2>
+                    <div class="block-content well-v-small">
+
+                        <div style="background: white; padding: 10px 5px 1px; overflow: hidden; border: 1px solid #bdccd4">
+
+                            {#@TODO change category tile size depending on categories amount#}
+                            <ul class="tiles two_up">
+                                {% set categories = shop_catalog_categories() %}
+                                {% for category in categories %}
+                                    <li class="clickable-block">
+
+                                        <div style="height: 204px">
+
+                                            <div class="round-image-container" style="width: 146px; height: 146px; margin: 15px auto 10px">
+                                                <div class="nailthumb-container" style="width: 140px; height: 140px">
+                                                    <img src="{% path category.image, 'small_square' %}" alt="{{ category.name }}"/>
+                                                </div>
+                                            </div>
+
+                                            <a href="{{ path('shop_catalog_category', {'slug':category.slug}) }}" class="clickable-block-link" style="font-size: 20px; text-align: center; display: block">
+                                                {{ category.name }}
+                                            </a>
+
+                                        </div>
+
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="six columns">
+
+                {% set popular_proposals = shop_catalog_popular_proposals() %}
+                {% if popular_proposals %}
+
+                    <h2 class="block-title">
+                        {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+                    </h2>
+
+                    <div class="block-body">
+
+                        <div class="well-v-small">
+
+                            {% include 'ShopCatalogBundle:Proposal:proposalsSlider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 2} %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+        {#<div class="block-bottom-shadow"></div>#}
+
+    </div>
+{% endblock %}

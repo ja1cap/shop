@@ -28,10 +28,10 @@ class AdminPopularProposalController extends Controller
     public function proposalsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('proposals_title', 'textarea', array(

@@ -12,7 +12,7 @@
 
                 <div class="manufactures-list">
                     <div class="item">
-                        <a href="{{ path('shop_category', {'slug' : additionalCategoryData.category.slug }) }}">
+                        <a href="{{ path('shop_catalog_category', {'slug' : additionalCategoryData.category.slug }) }}">
                             <span class="manufacturer-image-container">
                                 <span class="nailthumb-container">
                                     <img src="{{ additionalCategoryData.proposalData.proposal.thumbImageUrl }}" alt="{{ additionalCategoryData.category.name }}">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div style="font-size: 18px; margin-bottom: 5px">
-                    <a href="{{ path('shop_category', {'slug' : additionalCategoryData.category.slug }) }}">
+                    <a href="{{ path('shop_catalog_category', {'slug' : additionalCategoryData.category.slug }) }}">
                         {{ additionalCategoryData.category.name }}
                     </a>
                 </div>

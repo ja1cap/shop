@@ -1,97 +1,55 @@
-{% if proposals %}
-<div class="proposals-block block-container invert-colors" id="proposals-block">
+{% set popular_proposals = shop_catalog_popular_proposals() %}
+{% if popular_proposals %}
+    <div class="proposals-block block-container invert-colors" id="proposals-block">
 
-    <div class="block-img-wrapper">
-        <div class="image-box" style="background-image: url({{ settings.proposals_image_url|default('/img/proposals-block-bg.jpg') }})"></div>
-    </div>
+        <div class="block-img-wrapper">
+            <div class="image-box" style="background-image: url({{ shop_settings.proposals_image_url|default('/img/proposals-block-bg.jpg') }})"></div>
+        </div>
 
-    <div class="row catalog-menu">
-        {% set catalog_menu_items_per_row = 4 %}
-        <ul class="tiles {{ word_numbers[( categories|length < catalog_menu_items_per_row ? categories|length : catalog_menu_items_per_row )]  }}_up">
-            {% for category in categories %}
-                {% if(loop.index % catalog_menu_items_per_row == 1 and not loop.first) %}
-                </ul>
-                <ul class="tiles {{ word_numbers[( (categories|length - loop.index0) < catalog_menu_items_per_row ? (categories|length - loop.index0) : catalog_menu_items_per_row )]  }}_up">
-                {% endif %}
-                    <li>
-                        <div class="btn default large">
-                            <a href="{{ path('shop_category', {'slug' : category.slug}) }}">
-                                {{ category.name|capitalize }}
-                            </a>
-                        </div>
-                    </li>
-            {% endfor %}
-        </ul>
-    </div>
+        {#<div class="row catalog-menu">#}
+            {#{% set categories = shop_catalog_categories() %}#}
+            {#{% set catalog_menu_items_per_row = 4 %}#}
+            {#<ul class="tiles {{ word_numbers[( categories|length < catalog_menu_items_per_row ? categories|length : catalog_menu_items_per_row )]  }}_up">#}
+                {#{% for category in categories %}#}
+                    {#{% if(loop.index % catalog_menu_items_per_row == 1 and not loop.first) %}#}
+                    {#</ul>#}
+                    {#<ul class="tiles {{ word_numbers[( (categories|length - loop.index0) < catalog_menu_items_per_row ? (categories|length - loop.index0) : catalog_menu_items_per_row )]  }}_up">#}
+                    {#{% endif %}#}
+                        {#<li>#}
+                            {#<div class="btn default large">#}
+                                {#<a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}">#}
+                                    {#{{ category.name|capitalize }}#}
+                                {#</a>#}
+                            {#</div>#}
+                        {#</li>#}
+                {#{% endfor %}#}
+            {#</ul>#}
+        {#</div>#}
 
-    <h2 class="block-title">
-        {{ settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
-    </h2>
-    <div class="block-description">
-        {{ settings.proposals_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}
-    </div>
+        <h2 class="block-title">
+            {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+        </h2>
+        <div class="block-description">
+            {{ shop_settings.proposals_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}
+        </div>
 
-    <div class="block-body">
+        <div class="block-body">
 
-        <div class="row">
+            <div class="row">
 
-            <div class="{{ proposals|length < 4 ? 'centered columns ' ~ word_numbers[(proposals|length * 3)] : ''}}">
-
-                <div class="proposals-list owl-carousel owl-theme">
-                    {% for proposal in proposals %}
-
-                        <div class="proposal {#discount-proposal#}">
-
-                            <a href="{{ path('shop_proposal', { 'categorySlug' : proposal.category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
-
-                                <span class="image-container">
-                                    <span class="nailthumb-container">
-                                        <img src="{{ proposal.thumbImageUrl|default(proposal.imageUrl) }}">
-                                    </span>
-                                </span>
-
-                                {% if proposal.discount_percent is defined and proposal.discount_percent %}
-                                    {% if proposal.discount_end_date %}
-                                        <span class="countdown proposal-countdown" data-date="{{ proposal.discount_end_date|date }}"></span>
-                                    {% endif %}
-                                    <span class="proposal-discount-percent">
-                                        -{{ proposal.discount_percent }}%
-                                    </span>
-                                {% endif %}
-
-                                <span class="title">
-                                    {{ proposal.title|nl2br }}
-                                </span>
-                                <span class="description">
-                                    {{ proposal.short_description|nl2br }}
-                                </span>
-                                <span class="price">
-                                    от {{ proposal.price|shop_price }}
-                                </span>
-
-                            </a>
-
-                        </div>
-
-                    {% endfor %}
-
-                </div>
+                {% include 'ShopCatalogBundle:Proposal:proposalsSlider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
 
             </div>
 
         </div>
 
+        {% if shop_settings.catalog_file_url %}
+            <a href="{{ shop_settings.catalog_file_url }}" class="download-catalog-btn" target="_blank">
+                {{ shop_settings.catalog_download_title|default('СКАЧАТЬ PDF-КАТАЛОГ') }}
+            </a>
+        {% endif %}
+
+        <div class="block-bottom-shadow"></div>
+
     </div>
-
-    {% if settings.catalog_file_url %}
-    <a href="{{ settings.catalog_file_url }}" class="download-catalog-btn" target="_blank">
-
-        {{ settings.catalog_download_title|default('СКАЧАТЬ PDF-КАТАЛОГ') }}
-
-    </a>
-    {% endif %}
-
-    <div class="block-bottom-shadow"></div>
-
-</div>
 {% endif %}

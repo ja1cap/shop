@@ -16,7 +16,7 @@
                         {#</a>#}
                     {#</li>#}
                     <li>
-                        <a href="/#proposals-block">
+                        <a href="{{ path('shop_catalog_categories') }}">
                             {{ settings.more_link_text|default('КАТАЛОГ') }}
                         </a>
                     </li>
@@ -25,13 +25,11 @@
                             {{ settings.why_link_text|default('ПОЧЕМУ МЫ?') }}
                         </a>
                     </li>
-                    {% if actions|length > 0 %}
-                        <li>
-                            <a href="/#actions-block">
-                                {{ settings.actions_link_text|default('АКЦИИ') }}
-                            </a>
-                        </li>
-                    {% endif %}
+                    <li>
+                        <a href="/#actions-block">
+                            {{ settings.actions_link_text|default('АКЦИИ') }}
+                        </a>
+                    </li>
                     {#<li>#}
                         {#<a href="/#reviews-block">#}
                             {#{{ settings.reviews_link_text|default('ОТЗЫВЫ') }}#}

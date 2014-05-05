@@ -1,11 +1,11 @@
 <h1 class="title">
-    Каталог
+    Все категории
 </h1>
 <ul class="left-bar-menu">
     {% for _category in categories %}
         <li>
             <div class="btn default medium {{ _category.id == category.id ? 'active' : '' }}">
-                <a href="{{ path('shop_category', {'slug' : _category.slug}) }}">
+                <a href="{{ path('shop_catalog_category', {'slug' : _category.slug}) }}">
                     {{ _category.name }}
                 </a>
             </div>

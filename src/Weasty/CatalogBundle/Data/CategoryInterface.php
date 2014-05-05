@@ -7,6 +7,9 @@ namespace Weasty\CatalogBundle\Data;
  */
 interface CategoryInterface {
 
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
     /**
      * @return integer|null
      */

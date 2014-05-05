@@ -152,6 +152,10 @@ body {
 
   }
 
+  .well-v-small {
+    padding: 10px 0;
+  }
+
   .well-v {
     padding: 40px 0;
   }
@@ -189,10 +193,6 @@ body {
       display: block;
       margin: 0 0 10px;
     }
-
-  }
-
-  form {
 
     select[multiple="multiple"] {
       width: 100%;
@@ -280,6 +280,29 @@ body {
   .nailthumb-container {
     display: block;
     margin: 0;
+  }
+
+  .round-image-container {
+
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 156px;
+    height: 156px;
+    margin: 10px auto 30px;
+    border: 3px solid rgb(224, 223, 223);
+    @include border-radius(80px);
+
+    .nailthumb-container {
+      display: block;
+      width: 150px;
+      height: 150px;
+    }
+
+  }
+
+  .clickable-block {
+    cursor: pointer;
   }
 
   .owl-carousel {
@@ -577,7 +600,6 @@ body {
       height: 410px;
       display: block;
       cursor: pointer;
-//      background: rgba(255, 255, 255, 0.5);
       background: white;
       text-align: center;
 
@@ -589,23 +611,7 @@ body {
       }
 
       .image-container {
-
-        display: block;
-        position: relative;
-        overflow: hidden;
-        width: 156px;
-        height: 156px;
-        margin: 10px auto 30px;
-        border: 3px solid rgb(224, 223, 223);
-        @include border-radius(80px);
-//        @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px, 0);
-
-        .nailthumb-container {
-          display: block;
-          width: 150px;
-          height: 150px;
-        }
-
+        @extend .round-image-container;
       }
 
       .title {
@@ -646,7 +652,7 @@ body {
       text-align: center;
       font-size: 40px;
       margin: 0 auto;
-      width: $row-max-width;
+      max-width: $row-max-width;
     }
 
     .block-description {
@@ -655,7 +661,7 @@ body {
       text-align: center;
       font-size: 16px;
       margin: 0 auto;
-      width: $row-max-width;
+      max-width: $row-max-width;
     }
 
     .block-body {
@@ -954,6 +960,10 @@ body {
         }
       }
 
+      .block-description {
+        margin-bottom: 30px;
+      }
+
       .block-body {
 
         margin-top: 0;
@@ -962,7 +972,6 @@ body {
         .owl-item {
 
           width: ($row-max-width / 4) !important;
-          padding-top: 30px;
 
         }
 
@@ -988,6 +997,7 @@ body {
             height: 455px;
 
             .inner-container {
+
               display: block;
               min-height: 455px;
               max-height: 455px;
@@ -998,7 +1008,9 @@ body {
               color: #000000;
 
               &:hover {
-                color: white;
+                &, a {
+                  color: white;
+                }
               }
 
             }

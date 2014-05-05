@@ -805,52 +805,6 @@ class Settings extends AbstractEntity
     }
 
     /**
-     * Set images_title
-     *
-     * @param string $customersTitle
-     * @return Settings
-     */
-    public function setImagesTitle($customersTitle)
-    {
-        $this->images_title = $customersTitle;
-
-        return $this;
-    }
-
-    /**
-     * Get images_title
-     *
-     * @return string 
-     */
-    public function getImagesTitle()
-    {
-        return $this->images_title;
-    }
-
-    /**
-     * Set images_description
-     *
-     * @param string $customersDescription
-     * @return Settings
-     */
-    public function setImagesDescription($customersDescription)
-    {
-        $this->images_description = $customersDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get images_description
-     *
-     * @return string 
-     */
-    public function getImagesDescription()
-    {
-        return $this->images_description;
-    }
-
-    /**
      * Set how_we_title
      *
      * @param string $howWeTitle

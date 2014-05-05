@@ -7,7 +7,6 @@ use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\ParameterOption;
-use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +19,15 @@ class DefaultController extends Controller
 {
 
     const CATALOG_FILTER_COOKIE_NAME = 'filterValues';
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function categoriesAction(){
+
+        return $this->render('ShopCatalogBundle:Default:categories.html.twig');
+
+    }
 
     /**
      * @param $slug
@@ -126,7 +134,6 @@ class DefaultController extends Controller
             'category' => $category,
             'categories' => $this->getCategories(),
             'proposals' => $proposals,
-            'settings' => $this->getSettings(),
             'manufacturers' => $manufacturers,
             'priceIntervalsData' => $priceIntervalsData,
             'filteredPrices' => $filterPrices,
@@ -137,7 +144,7 @@ class DefaultController extends Controller
             'filteredParameterValues' => $filterParametersValuesFilteredByOptionsIds,
         );
 
-        $response = $this->render('ShopMainBundle:Default:proposals.html.twig', $viewParameters);
+        $response = $this->render('ShopCatalogBundle:Default:category.html.twig', $viewParameters);
         $response->headers->setCookie(new Cookie(self::CATALOG_FILTER_COOKIE_NAME, json_encode($filterParametersValues)));
 
         if($request->query->has('manufacturer')){
@@ -209,18 +216,6 @@ class DefaultController extends Controller
 
         }
         return $parametersData;
-    }
-
-    /**
-     * @return object|Settings
-     */
-    protected function getSettings()
-    {
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if (!$settings) {
-            $settings = new Settings();
-        }
-        return $settings;
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Action;
 use Shop\CatalogBundle\Form\Type\ActionType;
-use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +20,10 @@ class AdminActionController extends Controller
      */
     public function actionsAction(Request $request){
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('actions_title', 'textarea', array(

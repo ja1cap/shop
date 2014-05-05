@@ -1704,6 +1704,7 @@ body .left-bar-menu li { padding: 0; margin: 0; }
 body .left-bar-menu li .btn { height: auto; font-size: 14px; line-height: 35px; text-align: left; width: 100%; }
 body .left-bar-menu li .btn:hover, body .left-bar-menu li .btn.active { background: #34495e; }
 body .left-bar-menu li .btn:hover a, body .left-bar-menu li .btn.active a { color: white; }
+body .well-v-small { padding: 10px 0; }
 body .well-v { padding: 40px 0; }
 body .breadcrumb { margin-bottom: 15px; padding-bottom: 5px; border-bottom: 1px solid #CCCCCC; }
 body .breadcrumb ul { overflow: hidden; }
@@ -1725,6 +1726,9 @@ body .image-wrapper { display: block; }
 body .image-wrapper > div { text-align: center; vertical-align: middle; display: table-cell; }
 body .image-wrapper > div img { max-height: 100%; }
 body .nailthumb-container { display: block; margin: 0; }
+body .round-image-container, body .proposals-list .proposal .image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 10px auto 30px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
+body .round-image-container .nailthumb-container, body .proposals-list .proposal .image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
+body .clickable-block { cursor: pointer; }
 body .owl-carousel .owl-buttons .owl-prev, body .owl-carousel .owl-buttons .owl-next { text-indent: -99999px; height: 90px; width: 45px; bottom: 130px; position: absolute; display: block; background: url("/img/sprite.png") no-repeat; }
 body .owl-carousel .owl-buttons .owl-prev { left: -45px; background-position: -484px -325px; }
 body .owl-carousel .owl-buttons .owl-next { right: -45px; background-position: -531px -325px; }
@@ -1766,15 +1770,13 @@ body .manufacturer-image-container { display: block; position: relative; overflo
 body .manufacturer-image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
 body .proposals-list .proposal { height: 410px; display: block; cursor: pointer; background: white; text-align: center; }
 body .proposals-list .proposal .inner-container { padding: 0 5px 20px; display: block; position: relative; color: #000000; }
-body .proposals-list .proposal .image-container { display: block; position: relative; overflow: hidden; width: 156px; height: 156px; margin: 10px auto 30px; border: 3px solid #e0dfdf; -webkit-border-radius: 80px; -moz-border-radius: 80px; -ms-border-radius: 80px; -o-border-radius: 80px; border-radius: 80px; }
-body .proposals-list .proposal .image-container .nailthumb-container { display: block; width: 150px; height: 150px; }
 body .proposals-list .proposal .title { padding: 0 5px; display: block; font-size: 20px; margin-bottom: 5px; }
 body .proposals-list .proposal .description { display: block; font-size: 14px; margin-bottom: 5px; }
 body .proposals-list .proposal .price { display: block; font-size: 20px; }
 body .block-container { position: relative; padding: 30px 0; }
 body .block-container .block-content { position: relative; z-index: 2; }
-body .block-container .block-title { position: relative; z-index: 2; text-align: center; font-size: 40px; margin: 0 auto; width: 960px; }
-body .block-container .block-description { position: relative; z-index: 2; text-align: center; font-size: 16px; margin: 0 auto; width: 960px; }
+body .block-container .block-title { position: relative; z-index: 2; text-align: center; font-size: 40px; margin: 0 auto; max-width: 960px; }
+body .block-container .block-description { position: relative; z-index: 2; text-align: center; font-size: 16px; margin: 0 auto; max-width: 960px; }
 body .block-container .block-body { position: relative; }
 body .block-container.invert-colors .block-description, body .block-container.invert-colors .block-title { color: white; text-shadow: 1px 2px #2E2D2D; }
 body .block-container.invert-colors .block-body { margin: 50px auto; background-color: white; }
@@ -1813,13 +1815,14 @@ body .block-container.proposals-block .catalog-menu .btn { width: 100%; text-ali
 body .block-container.proposals-block .catalog-menu .btn a { color: #34495e; }
 body .block-container.proposals-block .catalog-menu .btn:hover { background: #34495e; }
 body .block-container.proposals-block .catalog-menu .btn:hover a { color: white; }
+body .block-container.proposals-block .block-description { margin-bottom: 30px; }
 body .block-container.proposals-block .block-body { margin-top: 0; background-color: transparent; }
-body .block-container.proposals-block .block-body .owl-item { width: 240px !important; padding-top: 30px; }
+body .block-container.proposals-block .block-body .owl-item { width: 240px !important; }
 body .block-container.proposals-block .block-body .proposals-list .owl-prev, body .block-container.proposals-block .block-body .proposals-list .owl-next { bottom: 160px; }
 body .block-container.proposals-block .block-body .proposals-list .owl-item:first-child .proposal .inner-container { border-left-color: #bdccd4; }
 body .block-container.proposals-block .block-body .proposals-list .proposal { width: 240px; height: 455px; }
 body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container { display: block; min-height: 455px; max-height: 455px; position: relative; padding: 35px 20px; border: 1px solid #bdccd4; border-left-color: rgba(255, 255, 255, 0.5); color: #000000; }
-body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container:hover { color: white; }
+body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container:hover, body .block-container.proposals-block .block-body .proposals-list .proposal .inner-container:hover a { color: white; }
 body .block-container.proposals-block .block-body .proposals-list .proposal:hover { background: #34495e; }
 body .block-container.proposals-block .block-body .proposals-list .proposal:hover .inner-container { border-left-color: #bdccd4; }
 body .block-container.proposals-block .block-body .proposals-list .proposal.discount-proposal { display: block; background: url("/img/discount-pattern.png") repeat center white; }

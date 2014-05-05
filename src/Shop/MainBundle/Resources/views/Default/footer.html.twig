@@ -4,10 +4,10 @@
 
         <div class="footer-info three columns">
             <div class="footer-name">
-                {{ date()|date("Y") }} {{ settings.name }}
+                {{ date()|date("Y") }} {{ shop_settings.name }}
             </div>
             <div class="footer-description">
-                {{ settings.footer_description }}
+                {{ shop_settings.footer_description }}
             </div>
             {#<div class="author">#}
                 {#<div class="design">#}
@@ -21,7 +21,7 @@
 
         <div class="footer-contacts three columns">
             <div class="phone">
-                {{ settings.phone }}
+                {{ shop_settings.phone }}
             </div>
             <div class="callback">
                 <a href="{{ path('callback') }}" class="callback-fancy-box">
@@ -34,25 +34,25 @@
 
             <div class="row">
 
-                {% if settings.vk_url %}
+                {% if shop_settings.vk_url %}
                     <div class="vk four columns">
-                        <a href="{{ settings.vk_url }}" target="_blank">
+                        <a href="{{ shop_settings.vk_url }}" target="_blank">
                             Вконтакте
                         </a>
                     </div>
                 {% endif %}
 
-                {% if settings.fb_url %}
+                {% if shop_settings.fb_url %}
                     <div class="fb four columns">
-                        <a href="{{ settings.fb_url }}" target="_blank">
+                        <a href="{{ shop_settings.fb_url }}" target="_blank">
                             facebook
                         </a>
                     </div>
                 {% endif %}
 
-                {% if settings.google_url %}
+                {% if shop_settings.google_url %}
                     <div class="google four columns">
-                        <a href="{{ settings.google_url }}" target="_blank">
+                        <a href="{{ shop_settings.google_url }}" target="_blank">
                             Google+
                         </a>
                     </div>
@@ -83,8 +83,9 @@
         $('.countdown').countDown();
         $('.request-form-container label').inFieldLabels();
 
-        $('.proposals-block .proposals-list').owlCarousel({
-            items : 4,
+        var $proposalsBlockList = $('.proposals-block .proposals-list');
+        $proposalsBlockList.owlCarousel({
+            items : $proposalsBlockList.data('items-amount') || 4,
             navigation : true,
             pagination : false
         });

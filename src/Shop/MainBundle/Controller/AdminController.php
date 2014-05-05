@@ -7,7 +7,6 @@ use Shop\MainBundle\Entity\Benefit;
 use Shop\MainBundle\Entity\HowWeItem;
 use Shop\MainBundle\Entity\Problem;
 use Shop\MainBundle\Entity\Review;
-use Shop\MainBundle\Entity\Settings;
 use Shop\MainBundle\Entity\Solution;
 use Shop\MainBundle\Entity\WhyUsItem;
 use Shop\MainBundle\Form\Type\SettingsType;
@@ -20,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AdminController extends Controller
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         return $this->render('ShopMainBundle:Admin:index.html.twig');
@@ -28,10 +30,10 @@ class AdminController extends Controller
     public function whyUsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('why_us_title', 'textarea', array(
@@ -149,10 +151,10 @@ class AdminController extends Controller
     public function benefitsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('benefits_title', 'textarea', array(
@@ -270,10 +272,10 @@ class AdminController extends Controller
     public function reviewsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('reviews_title', 'textarea', array(
@@ -406,10 +408,10 @@ class AdminController extends Controller
     public function howWeAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('how_we_title', 'textarea', array(
@@ -527,10 +529,10 @@ class AdminController extends Controller
     public function problemsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('problems_solutions_title', 'textarea', array(
@@ -722,10 +724,10 @@ class AdminController extends Controller
     public function contactsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('contacts_title', 'textarea', array(
@@ -862,10 +864,10 @@ class AdminController extends Controller
 
     public function mailTemplatesAction(Request $request){
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createFormBuilder($settings)
             ->add('customer_email_template', 'textarea', array(
@@ -924,10 +926,10 @@ class AdminController extends Controller
     public function settingsAction(Request $request)
     {
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $form = $this->createForm(new SettingsType(), $settings);
 

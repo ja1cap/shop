@@ -8,7 +8,6 @@ use Shop\CatalogBundle\Entity\CustomerOrder;
 use Shop\CatalogBundle\Entity\CustomerOrderProposal;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
-use Shop\MainBundle\Entity\Settings;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -211,10 +210,10 @@ class ShopCartController extends Controller
      */
     protected function sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation){
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $twig = new \Twig_Environment(new \Twig_Loader_String());
 

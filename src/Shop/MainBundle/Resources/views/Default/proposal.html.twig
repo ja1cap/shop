@@ -17,7 +17,7 @@
 
                     {% include('ShopMainBundle:Default:shopCart.html.twig') %}
 
-                    {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
+                    {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
 
                     {% if (priceIntervalsData is defined and priceIntervalsData.intervals) %}
                         <div class="filters-form-container extraFiltersForm-container">
@@ -59,7 +59,7 @@
                         <div class="proposal-breadcrumb">
                             <ul>
                                 <li>
-                                    <a href="{{ path('shop_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
+                                    <a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
                                     <span class="delimiter">/</span>
                                 </li>
                                 <li>
@@ -126,7 +126,7 @@
                                                     </a>
                                                 {% endif %}
 
-                                                <a href="{{ path('shop_category', {'slug' : category.slug}) }}" class="show-more-proposals">
+                                                <a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}" class="show-more-proposals">
                                                     Посмотреть другие модели
                                                 </a>
 

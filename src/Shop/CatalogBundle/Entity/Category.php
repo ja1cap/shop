@@ -18,9 +18,6 @@ class Category extends AbstractEntity
     implements CategoryInterface
 {
 
-    const STATUS_ON = 1;
-    const STATUS_OFF = 2;
-
     /**
      * @var integer
      */

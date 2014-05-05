@@ -4,17 +4,32 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="christmas_main.example.class">Shop\MainBundle\Example</parameter>
+        <parameter key="shop_main.settings.extension.class">Shop\MainBundle\Twig\ShopSettingsExtension</parameter>
+        <parameter key="shop_main.settings.resource.class">Shop\MainBundle\Data\ShopSettingsResource</parameter>
+        <parameter key="shop_main.settings.entity.class">Shop\MainBundle\Entity\Settings</parameter>
+        <parameter key="shop_main.settings.repository.class">Doctrine\ORM\EntityRepository</parameter>
     </parameters>
 
     <services>
-        <service id="christmas_main.example" class="%christmas_main.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+
+        <service id="shop_main.settings.repository" class="%shop_main.settings.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_main.settings.entity.class%</argument>
         </service>
+
+        <service id="shop_main.settings.resource"
+                 class="%shop_main.settings.resource.class%">
+            <argument type="service" id="shop_main.settings.repository"/>
+        </service>
+
+        <service id="shop_main.settings.extension"
+                 class="%shop_main.settings.extension.class%">
+            <tag name="twig.extension"/>
+            <argument type="service" id="shop_main.settings.resource"/>
+        </service>
+
     </services>
-    -->
+
 </container>

@@ -13,7 +13,7 @@
                     <div class="shop-cart">
                         {% for categoryData in shopCartSummary.categories %}
                             <div class="shop-cart-category">
-                                <a href="{{ path('shop_category', { 'slug' : categoryData.category.slug }) }}">
+                                <a href="{{ path('shop_catalog_category', { 'slug' : categoryData.category.slug }) }}">
                                     {{ categoryData.category.name }}
                                 </a>
                             </div>

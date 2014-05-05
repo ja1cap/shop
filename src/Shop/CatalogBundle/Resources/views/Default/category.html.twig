@@ -7,7 +7,7 @@
         <div class="three columns">
             {% block proposals_left_bar %}
                 {% include('ShopMainBundle:Default:shopCart.html.twig') %}
-                {% include('ShopMainBundle:Default:proposals-left-bar.html.twig') %}
+                {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
                 {% if extraParametersData or (priceIntervalsData is defined and priceIntervalsData.intervals) %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">
@@ -143,7 +143,7 @@
 
                             {% set proposal = proposalData.proposal %}
 
-                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="proposal-fancybox inner-container" data-fancybox-type="ajax" rel="proposals">
+                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="inner-container">
 
                                 <span class="image-container">
                                     <span class="nailthumb-container">
@@ -157,15 +157,6 @@
 
                                 <span class="description">
                                     {{ proposal.shortDescription|nl2br }}
-                                    {#<br/>#}
-                                    {#{{ proposalData.valuesAmount }}#}
-                                    {#<br/>#}
-                                    {#{% for parameterValue in proposal.parameterValues %}#}
-                                        {#<span style="font-weight: bold">#}
-                                            {#{{ parameterValue.parameter.name }} - {{ parameterValue.option.name }}#}
-                                        {#</span>#}
-                                        {#<br/>#}
-                                    {#{% endfor %}#}
                                 </span>
 
                                 <span class="price">
@@ -193,7 +184,7 @@
 
             var $filtersForm = $('#filtersForm, #extraFiltersForm');
 
-            var categoryUrl = '{{ path('shop_category', {'slug' : category.slug}) }}';
+            var categoryUrl = '{{ path('shop_catalog_category', {'slug' : category.slug}) }}';
 
             $(':input', $filtersForm).change(function(){
 

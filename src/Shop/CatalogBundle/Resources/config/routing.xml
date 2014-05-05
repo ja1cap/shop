@@ -6,6 +6,24 @@
         <default key="_controller">ShopCatalogBundle:Default:index</default>
     </route>
 
+    <route id="categories" pattern="/adminCatalog/categories">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
+    </route>
+    <route id="category" pattern="/adminCatalog/category/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:category</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_category" pattern="/adminCatalog/deleteCategory/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategory</default>
+    </route>
+
+    <route id="shop_catalog_categories" pattern="/catalog">
+        <default key="_controller">ShopCatalogBundle:Default:categories</default>
+    </route>
+    <route id="shop_catalog_category" pattern="/catalog/{slug}">
+        <default key="_controller">ShopCatalogBundle:Default:category</default>
+    </route>
+
     <route id="parameters" pattern="/adminCatalog/parameters">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameters</default>
     </route>
@@ -15,6 +33,20 @@
     </route>
     <route id="delete_parameter" pattern="/adminCatalog/deleteParameter/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameter</default>
+    </route>
+
+    <route id="category_parameters" pattern="/adminCatalog/categoryParameters/{categoryId}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameters</default>
+    </route>
+    <route id="category_parameter" pattern="/adminCatalog/categoryParameter/{categoryId}/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameter</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_category_parameter" pattern="/adminCatalog/deleteCategoryParameter/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameter</default>
+    </route>
+    <route id="update_category_parameters" pattern="/adminCatalog/updateCategoryParameters/{categoryId}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:updateCategoryParameters</default>
     </route>
 
     <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">

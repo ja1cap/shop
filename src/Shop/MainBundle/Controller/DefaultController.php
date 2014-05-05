@@ -4,7 +4,6 @@ namespace Shop\MainBundle\Controller;
 
 use Shop\CatalogBundle\Cart\ShopCart;
 use Shop\CatalogBundle\Entity\Action;
-use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Category;
@@ -12,7 +11,6 @@ use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Address;
-use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -99,13 +97,10 @@ class DefaultController extends Controller
 //            ->getForm();
 
         return $this->render('ShopMainBundle:Default:index.html.twig', array(
-            'settings' => $this->getSettings(),
             'request_form' => $request_form->createView(),
 //            'footer_request_form' => $footer_request_form->createView(),
 //            'why_us_items' => $this->getWhyUsItems(),
             'benefits' => $this->getBenefits(),
-            'categories' => $this->getCategories(),
-            'proposals' => $this->getProposals(),
             'actions' => $this->getActions(),
             'reviews' => $this->getReviews(),
 //            'how_we_items' => $this->getHowWeItems(),
@@ -159,10 +154,10 @@ class DefaultController extends Controller
 
     protected function sendEmail(Request $request){
 
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if(!$settings){
-            $settings = new Settings();
-        }
+        /**
+         * @var $settings \Shop\MainBundle\Entity\Settings
+         */
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
 
         $proposal_information = null;
         $proposal_name = $request->get('name');
@@ -302,33 +297,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @return array
-     */
-    protected function getProposals(){
-
-        /**
-         * @var \Shop\CatalogBundle\Entity\PopularProposalRepository $repository
-         */
-        $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:PopularProposal');
-
-        $proposals = array_filter(
-            array_map(
-                function($popularProposal){
-                    $proposal = $popularProposal['proposal'];
-                    if($proposal instanceof Proposal && $proposal->getStatus() == Proposal::STATUS_ON){
-                        return $proposal;
-                    }
-                    return null;
-                },
-                $repository->findProposals()
-            )
-        );
-
-        return $proposals;
-
-    }
-
-    /**
+     * @deprecated
      * @return array
      */
     protected function getCategories(){
@@ -482,7 +451,6 @@ class DefaultController extends Controller
         $additionalCategoriesData = $this->getProposalAdditionalCategories($category, $filterParametersValues);
 
         $response = $this->render('ShopMainBundle:Default:proposal.html.twig', array(
-            'settings' => $this->getSettings(),
             'category' => $category,
             'categories' => $this->getCategories(),
             'additionalCategoriesData' => $additionalCategoriesData,
@@ -507,18 +475,6 @@ class DefaultController extends Controller
 
         return $response;
 
-    }
-
-    /**
-     * @return object|Settings
-     */
-    protected function getSettings()
-    {
-        $settings = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Settings')->findOneBy(array());
-        if (!$settings) {
-            $settings = new Settings();
-        }
-        return $settings;
     }
 
     /**

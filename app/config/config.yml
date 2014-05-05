@@ -122,8 +122,9 @@ sonata_media:
                 - sonata.media.provider.file
 
             formats:
-                small: { width: 150 , quality: 100 }
-                big:   { width: 350 , quality: 100 }
+                small: { width: 150, quality: 100 }
+                small_square: { width: 150, height: 150, quality: 100 }
+                medium:   { width: 350, quality: 100 }
 
     cdn:
         server:

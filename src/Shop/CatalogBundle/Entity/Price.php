@@ -40,6 +40,14 @@ class Price extends AbstractEntity
     protected $value;
 
     /**
+     * @return \Weasty\CatalogBundle\Data\CategoryInterface
+     */
+    public function getCategory()
+    {
+        return $this->getProposal()->getCategory();
+    }
+
+    /**
      * @return integer
      */
     public function getCategoryId()

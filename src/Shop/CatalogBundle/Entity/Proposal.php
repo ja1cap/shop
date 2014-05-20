@@ -4,6 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Weasty\CatalogBundle\Data\ProposalInterface;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
@@ -11,6 +12,7 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class Proposal extends AbstractEntity
+    implements ProposalInterface
 {
 
     const STATUS_ON = 1;

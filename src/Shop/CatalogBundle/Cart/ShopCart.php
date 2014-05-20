@@ -1,167 +1,228 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
 
-use Shop\CatalogBundle\Entity\Price;
-use Shop\CatalogBundle\Entity\Proposal;
-use Shop\CatalogBundle\Entity\ProposalRepository;
-use Shop\CatalogBundle\Entity\CategoryRepository;
-use Doctrine\ORM\EntityRepository;
-use Shop\CatalogBundle\Converter\ShopPriceCurrencyConverter;
-use Weasty\CatalogBundle\Data\CategoryInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\Inflector;
+use Weasty\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\MoneyBundle\Data\Price;
 
 /**
  * Class ShopCart
  * @package Shop\CatalogBundle\Cart
  */
-class ShopCart {
+class ShopCart implements \ArrayAccess {
 
     /**
-     * @var ShopPriceCurrencyConverter
+     * @var mixed
+     */
+    protected $customerCity;
+
+    /**
+     * @var integer|null
+     */
+    protected $customerFloor;
+
+    /**
+     * @var integer|null
+     */
+    protected $customerLiftType;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $categories;
+
+    /**
+     * @var \Shop\ShippingBundle\Calculator\ShippingCalculator
+     */
+    protected $shippingCalculator;
+
+    /**
+     * @var \Weasty\MoneyBundle\Converter\CurrencyConverterInterface
      */
     protected $currencyConverter;
 
-    /**
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
-
-    /**
-     * @var ProposalRepository
-     */
-    protected $proposalRepository;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $priceRepository;
-
-    /**
-     * @param $currencyConverter
-     * @param $categoryRepository
-     * @param $proposalRepository
-     * @param $priceRepository
-     */
-    function __construct(
-        $currencyConverter,
-        $categoryRepository,
-        $proposalRepository,
-        $priceRepository
-    )
+    function __construct($shippingCalculator, $currencyConverter)
     {
+        $this->shippingCalculator = $shippingCalculator;
         $this->currencyConverter = $currencyConverter;
-        $this->categoryRepository = $categoryRepository;
-        $this->proposalRepository = $proposalRepository;
-        $this->priceRepository = $priceRepository;
+        $this->categories = new ArrayCollection();
     }
 
     /**
-     * @param $storageData
-     * @return ShopCartSummary
+     * @param ProposalPriceInterface $proposalPrice
+     * @return ShopCartPrice|null
      */
-    public function getSummary($storageData){
+    public function getProposalPrice(ProposalPriceInterface $proposalPrice){
 
-        $shopCartSummary = new ShopCartSummary();
+        /**
+         * @var $shopCartCategory ShopCartCategory
+         */
+        $shopCartCategory = $this->getCategories()->get($proposalPrice->getCategoryId());
+        if(!$shopCartCategory){
+            return null;
+        }
 
-        if(isset($storageData['categories']) && is_array($storageData['categories'])){
+        /**
+         * @var $shopCartProposal ShopCartProposal
+         */
+        $shopCartProposal = $shopCartCategory->getProposals()->get($proposalPrice->getProposalId());
+        if(!$shopCartProposal){
+            return null;
+        }
 
-            $categories = $storageData['categories'];
+        return $shopCartProposal->getPrices()->get($proposalPrice->getId());
 
-            foreach($categories as $categoryId => $categoryData){
+    }
 
-                if(isset($categoryData['proposalPrices']) && is_array($categoryData['proposalPrices'])){
+    /**
+     * @param ProposalPriceInterface $proposalPrice
+     * @param int $amount
+     * @return $this
+     */
+    public function addProposalPrice(ProposalPriceInterface $proposalPrice, $amount = 1){
 
-                    $proposalPrices = array_filter($categoryData['proposalPrices']);
-                    if(!$proposalPrices){
-                        continue;
-                    }
+        /**
+         * @var $shopCartCategory ShopCartCategory
+         */
+        $shopCartCategory = $this->getCategories()->get($proposalPrice->getCategoryId());
+        if(!$shopCartCategory){
+            $shopCartCategory = new ShopCartCategory($proposalPrice->getCategory());
+            $this->getCategories()->set($proposalPrice->getCategoryId(), $shopCartCategory);
+        }
 
-                    $categoryId = (int)$categoryId;
-                    $summaryCategory = $shopCartSummary->getCategories()->get($categoryId);
+        /**
+         * @var $shopCartProposal ShopCartProposal
+         */
+        $shopCartProposal = $shopCartCategory->getProposals()->get($proposalPrice->getProposalId());
+        if(!$shopCartProposal){
+            $shopCartProposal = new ShopCartProposal($proposalPrice->getProposal());
+            $shopCartCategory->getProposals()->set($proposalPrice->getProposalId(), $shopCartProposal);
+        }
 
-                    if(!$summaryCategory instanceof ShopCartSummaryCategory){
+        /**
+         * @var $shopCartPrice ShopCartPrice
+         */
+        $shopCartPrice = new ShopCartPrice($proposalPrice);
 
-                        $category = $this->categoryRepository->findOneBy(array(
-                            'id' => $categoryId,
-                        ));
+        $shopCartPrice
+            ->setAmount($amount)
+            ->getItemPrice()
+                ->setValue($this->currencyConverter->convert($shopCartPrice->getPrice()))
+                ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
+        ;
 
-                        if($category instanceof CategoryInterface){
+        $shopCartProposal->getPrices()->set($proposalPrice->getId(), $shopCartPrice);
 
-                            $summaryCategory = new ShopCartSummaryCategory($category);
-                            $shopCartSummary->getCategories()->set($category->getId(), $summaryCategory);
+        return $this;
 
-                        }
+    }
 
-                    }
+    /**
+     * @return Price
+     */
+    public function getSummaryPrice(){
 
-                    if(!$summaryCategory instanceof ShopCartSummaryCategory){
-                        continue;
-                    }
+        $summaryPriceValue = 0;
+        $summaryPriceCurrency = null;
 
-                    foreach($proposalPrices as $proposalPriceData){
+        /**
+         * @var $shopCartCategory ShopCartCategory
+         */
+        foreach($this->getCategories() as $shopCartCategory){
 
-                        if(isset($proposalPriceData['id']) && isset($proposalPriceData['proposalId']) && isset($proposalPriceData['amount'])){
+            $summaryPrice = $shopCartCategory->getSummaryPrice();
+            $summaryPriceValue += $summaryPrice->getValue();
+            $summaryPriceCurrency = $summaryPrice->getCurrency();
 
-                            $proposalPriceAmount = floatval($proposalPriceData['amount']);
+        }
 
-                            if($proposalPriceAmount > 0){
+        $summaryPrice = new Price($summaryPriceValue, $summaryPriceCurrency);
 
-                                $priceId = (int)$proposalPriceData['id'];
-                                $proposalId = (int)$proposalPriceData['proposalId'];
+        return $summaryPrice;
 
-                                $summaryProposal = $summaryCategory->getProposals()->get($proposalId);
+    }
 
-                                if(!$summaryProposal instanceof ShopCartSummaryProposal){
+    /**
+     * @return \Shop\ShippingBundle\Calculator\ShippingCalculatorResultInterface
+     */
+    public function calculateShipping(){
 
-                                    $proposal = $this->proposalRepository->findOneBy(array(
-                                        'id' => $proposalId,
-                                    ));
+        return $this->shippingCalculator->calculate([
+            'shopCartCategories' => $this->getCategories(),
+            'shopCartSummaryPrice' => $this->getSummaryPrice(),
+            'city' => $this->getCustomerCity(),
+            'liftType' => $this->getCustomerLiftType(),
+            'floor' => $this->getCustomerFloor(),
+        ]);
 
-                                    if($proposal instanceof Proposal){
+    }
 
-                                        $summaryProposal = new ShopCartSummaryProposal($proposal);
-                                        $summaryCategory->getProposals()->set($proposal->getId(), $summaryProposal);
+    /**
+     * @return ArrayCollection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
 
-                                    }
+    /**
+     * @return array
+     */
+    public function getCategoryIds(){
+        return $this->getCategories()->getKeys();
+    }
 
-                                }
+    /**
+     * @return array
+     */
+    public function getProposalIds(){
 
-                                if(!$summaryProposal instanceof ShopCartSummaryProposal){
-                                    continue;
-                                }
+        $proposalIds = array();
 
-                                $summaryPrice = $summaryProposal->getPrices()->get($priceId);
+        /**
+         * @var $summaryCategory ShopCartCategory
+         */
+        foreach($this->getCategories() as $summaryCategory){
 
-                                if(!$summaryPrice instanceof ShopCartSummaryPrice) {
+            /**
+             * @var $summaryProposal ShopCartProposal
+             */
+            foreach($summaryCategory->getProposals() as $summaryProposal){
 
-                                    $proposalPrice = $this->priceRepository->findOneBy(array(
-                                        'id' => $priceId,
-                                    ));
+                $proposalIds[] = $summaryProposal->getProposal()->getId();
 
-                                    if ($proposalPrice instanceof Price) {
+            }
 
-                                        $summaryPrice = new ShopCartSummaryPrice($proposalPrice);
-                                        $summaryProposal->getPrices()->set($proposalPrice->getId(), $summaryPrice);
+        }
 
-                                    }
+        return $proposalIds;
 
-                                }
+    }
 
-                                if(!$summaryPrice instanceof ShopCartSummaryPrice){
-                                    continue;
-                                }
+    /**
+     * @return array
+     */
+    public function getPriceIds(){
 
-                                $summaryPrice
-                                    ->setAmount($proposalPriceAmount)
-                                    ->getItemPrice()
-                                        ->setValue($this->currencyConverter->convert($summaryPrice->getPrice()))
-                                        ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
-                                ;
+        $priceIds = array();
 
-                            }
+        /**
+         * @var $summaryCategory ShopCartCategory
+         */
+        foreach($this->getCategories() as $summaryCategory){
 
-                        }
+            /**
+             * @var $summaryProposal ShopCartProposal
+             */
+            foreach($summaryCategory->getProposals() as $summaryProposal){
 
-                    }
+                /**
+                 * @var $summaryPrice ShopCartPrice
+                 */
+                foreach($summaryProposal->getPrices() as $summaryPrice){
+
+                    $priceIds[] = $summaryPrice->getPrice()->getId();
 
                 }
 
@@ -169,8 +230,125 @@ class ShopCart {
 
         }
 
-        return $shopCartSummary;
+        return $priceIds;
 
     }
+
+    /**
+     * @param mixed $customerCity
+     * @return $this
+     */
+    public function setCustomerCity($customerCity)
+    {
+        $this->customerCity = $customerCity;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerCity()
+    {
+        return $this->customerCity;
+    }
+
+    /**
+     * @param int|null $customerFloor
+     * @return $this
+     */
+    public function setCustomerFloor($customerFloor)
+    {
+        $this->customerFloor = $customerFloor;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCustomerFloor()
+    {
+        return $this->customerFloor;
+    }
+
+    /**
+     * @param int|null $customerLiftType
+     * @return $this
+     */
+    public function setCustomerLiftType($customerLiftType)
+    {
+        $this->customerLiftType = $customerLiftType;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCustomerLiftType()
+    {
+        return $this->customerLiftType;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     */
+    public function offsetExists($offset)
+    {
+        $method = 'get' . Inflector::classify($offset);
+        return method_exists($this, $method);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     */
+    public function offsetGet($offset)
+    {
+        $method = 'get' . Inflector::classify($offset);
+        if(method_exists($this, $method)){
+            return $this->$method();
+        }
+        return null;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {}
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {}
 
 } 

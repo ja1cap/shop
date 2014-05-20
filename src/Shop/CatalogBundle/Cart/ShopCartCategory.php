@@ -1,49 +1,47 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Shop\CatalogBundle\Entity\Proposal;
+use Weasty\CatalogBundle\Data\CategoryInterface;
 use Weasty\MoneyBundle\Data\Price;
 
 /**
- * Class ShopCartProposalSummary
+ * Class ShopCartCategory
  * @package Shop\CatalogBundle\Cart
  */
-class ShopCartSummaryProposal implements \ArrayAccess {
+class ShopCartCategory implements \ArrayAccess {
 
     /**
-     * @var \Shop\CatalogBundle\Entity\Proposal
+     * @var \Weasty\CatalogBundle\Data\CategoryInterface
      */
-    protected $proposal;
+    protected $category;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
-    protected $prices;
+    protected $proposals;
+
+    function __construct(CategoryInterface $category)
+    {
+        $this->category = $category;
+        $this->proposals = new ArrayCollection();
+    }
 
     /**
-     * @param Proposal $proposal
+     * @return CategoryInterface
      */
-    function __construct(Proposal $proposal)
+    public function getCategory()
     {
-        $this->proposal = $proposal;
-        $this->prices = new ArrayCollection();
+        return $this->category;
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getPrices()
+    public function getProposals()
     {
-        return $this->prices;
-    }
-
-    /**
-     * @return Proposal
-     */
-    public function getProposal()
-    {
-        return $this->proposal;
+        return $this->proposals;
     }
 
     /**
@@ -51,22 +49,18 @@ class ShopCartSummaryProposal implements \ArrayAccess {
      */
     public function getSummaryPrice(){
 
-        $proposalSummaryPriceValue = 0;
-        $proposalSummaryPriceCurrency = null;
+        $categorySummaryPriceValue = 0;
+        $categorySummaryPriceCurrency = null;
 
-        /**
-         * @var $shopCartSummaryPrice ShopCartSummaryPrice
-         */
-        foreach($this->getPrices() as $shopCartSummaryPrice){
+        $this->getProposals()->map(function(ShopCartProposal $shopCartProposal) use (&$categorySummaryPriceValue, &$categorySummaryPriceCurrency) {
 
-            $summaryPrice = $shopCartSummaryPrice->getSummaryPrice();
+            $summaryPrice = $shopCartProposal->getSummaryPrice();
+            $categorySummaryPriceValue += $summaryPrice->getValue();
+            $categorySummaryPriceCurrency = $summaryPrice->getCurrency();
 
-            $proposalSummaryPriceValue += $summaryPrice->getValue();
-            $proposalSummaryPriceCurrency = $summaryPrice->getCurrency();
+        });
 
-        }
-
-        return new Price($proposalSummaryPriceValue, $proposalSummaryPriceCurrency);
+        return new Price($categorySummaryPriceValue, $categorySummaryPriceCurrency);
 
     }
 

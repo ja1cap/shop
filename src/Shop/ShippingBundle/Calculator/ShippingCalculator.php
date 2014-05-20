@@ -56,29 +56,29 @@ class ShippingCalculator implements ShippingCalculatorInterface {
 
         $optionsCollection = new ArrayCollection($options ?: array());
 
-        $shopCartSummaryCategories = $optionsCollection->get('shopCartSummaryCategories');
+        $shopCartCategories = $optionsCollection->get('shopCartCategories');
         $shopCartSummaryPrice = $optionsCollection->get('shopCartSummaryPrice');
         $city = $optionsCollection->get('city');
 
         $shippingCalculatorResult = new ShippingCalculatorResult();
 
-        if($shopCartSummaryCategories instanceof Collection){
-            $shopCartSummaryCategories = $shopCartSummaryCategories->toArray();
+        if($shopCartCategories instanceof Collection){
+            $shopCartCategories = $shopCartCategories->toArray();
         }
 
         if($shopCartSummaryPrice instanceof PriceInterface){
             $shopCartSummaryPrice = $shopCartSummaryPrice->getValue();
         }
 
-        if ($shopCartSummaryCategories && is_array($shopCartSummaryCategories) && $city instanceof City) {
+        if ($shopCartCategories && is_array($shopCartCategories) && $city instanceof City) {
 
             $shippingCalculatorResult
                 ->setCity($city)
-                ->setLiftType($optionsCollection->get('liftType'))
-                ->setFloor($optionsCollection->get('floor'))
+                ->setLiftType($optionsCollection->get('liftType') ?: ShippingLiftingPrice::LIFT_TYPE_LIFT)
+                ->setFloor($optionsCollection->get('floor') ?: 10)
             ;
 
-            $categoryShippingCalculators = $this->buildCategoryShippingCalculators($shopCartSummaryCategories, $shopCartSummaryPrice, $city);
+            $categoryShippingCalculators = $this->buildCategoryShippingCalculators($shopCartCategories, $shopCartSummaryPrice, $city);
 
             /**
              * @var $categoryShippingCalculator ShippingCalculatorInterface
@@ -94,39 +94,43 @@ class ShippingCalculator implements ShippingCalculatorInterface {
     }
 
     /**
-     * @param $shopCartSummaryCategories
+     * @param $shopCartCategories
      * @param $shopCartSummaryPrice
      * @param $city
      * @return ArrayCollection
      */
-    protected function buildCategoryShippingCalculators($shopCartSummaryCategories, $shopCartSummaryPrice, City $city)
+    protected function buildCategoryShippingCalculators($shopCartCategories, $shopCartSummaryPrice, City $city)
     {
 
         $categoryShippingCalculators = new ArrayCollection();
-
-        $categoryIds = array_keys($shopCartSummaryCategories);
 
         $shippingMethod = $this->getShippingMethodRepository()->getCityShippingMethods($city);
 
         if ($shippingMethod instanceof ShippingMethod) {
 
-            foreach ($categoryIds as $categoryId) {
+            foreach ($shopCartCategories as $shopCartCategory) {
 
                 $currentShippingAssemblyPrice = null;
 
-                $shopCartSummaryCategory = $shopCartSummaryCategories[$categoryId];
+                if($shopCartCategory instanceof CategoryInterface){
 
-                if (!isset($shopCartSummaryCategory['category']))
-                    continue;
+                    $category = $shopCartCategory;
 
-                $category = $shopCartSummaryCategory['category'];
-                if (!$category instanceof CategoryInterface)
-                    continue;
+                } else {
+
+                    if (!isset($shopCartCategory['category']))
+                        continue;
+
+                    $category = $shopCartCategory['category'];
+                    if (!$category instanceof CategoryInterface)
+                        continue;
+
+                }
 
                 $categoryShippingCalculator = new CategoryShippingCalculator($category, $this->getCurrencyConverter());
                 $categoryShippingCalculators->set($category->getId(), $categoryShippingCalculator);
 
-                $shippingCategory = $this->getShippingMethodCategoryRepository()->getShippingMethodCategory($shippingMethod->getId(), $categoryId);
+                $shippingCategory = $this->getShippingMethodCategoryRepository()->getShippingMethodCategory($shippingMethod->getId(), $category->getId());
 
                 if ($shippingCategory instanceof ShippingMethodCategory) {
                     foreach ($shippingCategory->getPrices() as $shippingCategoryPrice) {
@@ -205,31 +209,32 @@ class ShippingCalculator implements ShippingCalculatorInterface {
      */
     protected function processShippingPrice($shippingPrice, $shopCartSummaryPrice, $categoryShippingCalculator){
 
-        if(!$shippingPrice instanceof ShippingPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
-            return;
+        if($shippingPrice instanceof ShippingPrice && $categoryShippingCalculator instanceof CategoryShippingCalculator){
 
-        switch($shippingPrice->getOrderPriceType()){
-            case $shippingPrice::ORDER_PRICE_TYPE_RANGE:
+            switch($shippingPrice->getOrderPriceType()){
+                case $shippingPrice::ORDER_PRICE_TYPE_RANGE:
 
-                $minOrderPriceValue = $this->getCurrencyConverter()->convert($shippingPrice->getMinOrderPriceValue(), $shippingPrice->getMinOrderPriceCurrencyNumericCode());
-                $maxOrderPriceValue = $this->getCurrencyConverter()->convert($shippingPrice->getMaxOrderPriceValue(), $shippingPrice->getMaxOrderPriceCurrencyNumericCode());
+                    $minOrderPriceValue = $this->getCurrencyConverter()->convert($shippingPrice->getMinOrderPriceValue(), $shippingPrice->getMinOrderPriceCurrencyNumericCode());
+                    $maxOrderPriceValue = $this->getCurrencyConverter()->convert($shippingPrice->getMaxOrderPriceValue(), $shippingPrice->getMaxOrderPriceCurrencyNumericCode());
 
-                if((!$minOrderPriceValue || $shopCartSummaryPrice >= $minOrderPriceValue) && (!$maxOrderPriceValue || $shopCartSummaryPrice <= $maxOrderPriceValue)){
+                    if((!$minOrderPriceValue || $shopCartSummaryPrice >= $minOrderPriceValue) && (!$maxOrderPriceValue || $shopCartSummaryPrice <= $maxOrderPriceValue)){
 
-                    $categoryShippingCalculator->setShippingPrice($shippingPrice);
+                        $categoryShippingCalculator->setShippingPrice($shippingPrice);
 
-                }
+                    }
 
-                break;
+                    break;
 
-            case $shippingPrice::ORDER_PRICE_TYPE_ANY:
-            default:
+                case $shippingPrice::ORDER_PRICE_TYPE_ANY:
+                default:
 
-                if(!$categoryShippingCalculator->getShippingPrice() instanceof ShippingPrice){
+                    if(!$categoryShippingCalculator->getShippingPrice() instanceof ShippingPrice){
 
-                    $categoryShippingCalculator->setShippingPrice($shippingPrice);
+                        $categoryShippingCalculator->setShippingPrice($shippingPrice);
 
-                }
+                    }
+
+            }
 
         }
 
@@ -241,21 +246,22 @@ class ShippingCalculator implements ShippingCalculatorInterface {
      */
     protected function processShippingLiftingPrice($shippingLiftingPrice, $categoryShippingCalculator){
 
-        if(!$shippingLiftingPrice instanceof ShippingLiftingPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
-            return;
+        if($shippingLiftingPrice instanceof ShippingLiftingPrice && $categoryShippingCalculator instanceof CategoryShippingCalculator){
 
-        switch($shippingLiftingPrice->getPriceType()){
-            case $shippingLiftingPrice::PRICE_TYPE_PER_FLOOR:
+            switch($shippingLiftingPrice->getPriceType()){
+                case $shippingLiftingPrice::PRICE_TYPE_PER_FLOOR:
 
-                $categoryShippingCalculator->setShippingLiftingPrice($shippingLiftingPrice);
-                break;
-
-            case $shippingLiftingPrice::PRICE_TYPE_ANY_FLOOR:
-            default:
-
-                if(!$categoryShippingCalculator->getShippingLiftingPrice() instanceof ShippingLiftingPrice){
                     $categoryShippingCalculator->setShippingLiftingPrice($shippingLiftingPrice);
-                }
+                    break;
+
+                case $shippingLiftingPrice::PRICE_TYPE_ANY_FLOOR:
+                default:
+
+                    if(!$categoryShippingCalculator->getShippingLiftingPrice() instanceof ShippingLiftingPrice){
+                        $categoryShippingCalculator->setShippingLiftingPrice($shippingLiftingPrice);
+                    }
+
+            }
 
         }
 
@@ -267,11 +273,12 @@ class ShippingCalculator implements ShippingCalculatorInterface {
      */
     protected function processShippingAssemblyPrice($shippingAssemblyPrice, $categoryShippingCalculator){
 
-        if(!$shippingAssemblyPrice instanceof ShippingAssemblyPrice || !$categoryShippingCalculator instanceof CategoryShippingCalculator)
-            return;
+        if($shippingAssemblyPrice instanceof ShippingAssemblyPrice && $categoryShippingCalculator instanceof CategoryShippingCalculator){
 
-        if(!$categoryShippingCalculator->getShippingAssemblyPrice() instanceof ShippingAssemblyPrice){
-            $categoryShippingCalculator->setShippingAssemblyPrice($shippingAssemblyPrice);
+            if(!$categoryShippingCalculator->getShippingAssemblyPrice() instanceof ShippingAssemblyPrice){
+                $categoryShippingCalculator->setShippingAssemblyPrice($shippingAssemblyPrice);
+            }
+
         }
 
     }

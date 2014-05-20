@@ -1,67 +1,103 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Util\Inflector;
-use Weasty\CatalogBundle\Data\CategoryInterface;
+use Doctrine\Common\Inflector\Inflector;
+use Weasty\CatalogBundle\Data\ProposalPriceInterface;
 use Weasty\MoneyBundle\Data\Price;
+use Weasty\MoneyBundle\Data\PriceInterface;
 
 /**
- * Class ShopCartSummaryCategory
+ * Class ShopCartPrice
  * @package Shop\CatalogBundle\Cart
  */
-class ShopCartSummaryCategory implements \ArrayAccess {
+class ShopCartPrice implements PriceInterface, \ArrayAccess {
 
     /**
-     * @var \Weasty\CatalogBundle\Data\CategoryInterface
+     * @var \Shop\CatalogBundle\Entity\Price
      */
-    protected $category;
+    protected $price;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Weasty\MoneyBundle\Data\Price
      */
-    protected $proposals;
+    protected $itemPrice;
 
-    function __construct(CategoryInterface $category)
+    /**
+     * @var int|float|null
+     */
+    protected $amount;
+
+    function __construct(ProposalPriceInterface $price)
     {
-        $this->category = $category;
-        $this->proposals = new ArrayCollection();
+        $this->price = $price;
+        $this->amount = 0;
+        $this->itemPrice = new Price();
     }
 
     /**
-     * @return CategoryInterface
+     * @return integer|float|string
      */
-    public function getCategory()
+    public function getValue()
     {
-        return $this->category;
+        return $this->getItemPrice()->getValue();
     }
 
     /**
-     * @return ArrayCollection
+     * @return integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface
      */
-    public function getProposals()
+    public function getCurrency()
     {
-        return $this->proposals;
+        return $this->getItemPrice()->getCurrency();
+    }
+
+    /**
+     * @return float|int|null
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float|int|null $amount
+     * @return $this
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+        return $this;
     }
 
     /**
      * @return Price
      */
-    public function getSummaryPrice(){
+    public function getItemPrice()
+    {
+        return $this->itemPrice;
+    }
 
-        $categorySummaryPriceValue = 0;
-        $categorySummaryPriceCurrency = null;
+    /**
+     * @return ProposalPriceInterface
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
 
-        $this->getProposals()->map(function(ShopCartSummaryProposal $shopCartSummaryProposal) use (&$categorySummaryPriceValue, &$categorySummaryPriceCurrency) {
+    /**
+     * @return Price
+     */
+    public function getSummaryPrice()
+    {
+        return new Price($this->getValue() * $this->getAmount(), $this->getCurrency());
+    }
 
-            $summaryPrice = $shopCartSummaryProposal->getSummaryPrice();
-            $categorySummaryPriceValue += $summaryPrice->getValue();
-            $categorySummaryPriceCurrency = $summaryPrice->getCurrency();
-
-        });
-
-        return new Price($categorySummaryPriceValue, $categorySummaryPriceCurrency);
-
+    /**
+     * @return Price
+     */
+    public function getSummary()
+    {
+        return $this->getSummaryPrice();
     }
 
     /**

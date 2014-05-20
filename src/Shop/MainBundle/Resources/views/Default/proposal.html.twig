@@ -108,14 +108,23 @@
                                                             {% endif %}
                                                             {{ priceData.price|shop_price }}
                                                         </div>
+                                                        <div>
+                                                            Доствка:
+                                                            {% if priceData.shipping.summaryPrice.value %}
+                                                                {{ priceData.shipping.summaryPrice|weasty_price }}
+                                                            {% else %}
+                                                                бесплатная
+                                                            {% endif %}
+                                                            ({{ priceData.shipping.city.getLocaleName(app.request.locale) }})
+                                                        </div>
                                                     {% endif %}
                                                 </div>
 
-                                                {% if price.id not in shopCartSummary.priceIds %}
+                                                {% if price.id not in shopCart.priceIds %}
                                                     <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
                                                         Добавить в корзину
                                                     </a>
-                                                    {% if proposal.categoryId in shopCartSummary.categories|keys and shopCartSummary.categories[proposal.categoryId].proposals|length == 1 %}
+                                                    {% if proposal.categoryId in shopCart.categories|keys and shopCart.categories[proposal.categoryId].proposals|length == 1 %}
                                                         <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
                                                             Заменить в корзине
                                                         </a>

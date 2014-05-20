@@ -1,9 +1,9 @@
-{% if shopCartSummary.priceIds %}
+{% if shopCart.priceIds %}
     <h1 class="title">
         Корзина
     </h1>
     <div class="shop-cart">
-        {% for categoryData in shopCartSummary.categories %}
+        {% for categoryData in shopCart.categories %}
             <div class="shop-cart-category">
                 <a href="{{ path('shop_catalog_category', {'slug':categoryData.category.slug}) }}">
                     {{ categoryData.category.name }}
@@ -66,7 +66,7 @@
             </div>
         {% endfor %}
         <div class="shop-cart-summary">
-            {{ shopCartSummary.summaryPrice|weasty_price }}
+            {{ shopCart.summaryPrice|weasty_price }}
         </div>
         <a href="{{ path('shop_cart') }}" class="purchase-btn">
             Купить

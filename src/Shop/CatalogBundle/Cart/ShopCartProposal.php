@@ -1,102 +1,74 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
-use Doctrine\Common\Inflector\Inflector;
-use Shop\CatalogBundle\Entity\Price as ProposalPrice;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\Inflector;
 use Weasty\MoneyBundle\Data\Price;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\CatalogBundle\Data\ProposalInterface;
 
 /**
- * Class ShopCartSummaryPrice
+ * Class ShopCartProposalSummary
  * @package Shop\CatalogBundle\Cart
  */
-class ShopCartSummaryPrice implements PriceInterface, \ArrayAccess {
+class ShopCartProposal implements \ArrayAccess {
 
     /**
-     * @var \Shop\CatalogBundle\Entity\Price
+     * @var \Shop\CatalogBundle\Entity\Proposal
      */
-    protected $price;
+    protected $proposal;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\Price
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
-    protected $itemPrice;
+    protected $prices;
 
     /**
-     * @var int|float|null
+     * @param ProposalInterface $proposal
      */
-    protected $amount;
-
-    function __construct(ProposalPrice $price)
+    function __construct(ProposalInterface $proposal)
     {
-        $this->price = $price;
-        $this->amount = 0;
-        $this->itemPrice = new Price();
+        $this->proposal = $proposal;
+        $this->prices = new ArrayCollection();
     }
 
     /**
-     * @return integer|float|string
+     * @return ArrayCollection
      */
-    public function getValue()
+    public function getPrices()
     {
-        return $this->getItemPrice()->getValue();
+        return $this->prices;
     }
 
     /**
-     * @return integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface
+     * @return ProposalInterface
      */
-    public function getCurrency()
+    public function getProposal()
     {
-        return $this->getItemPrice()->getCurrency();
-    }
-
-    /**
-     * @return float|int|null
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float|int|null $amount
-     * @return $this
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-        return $this;
+        return $this->proposal;
     }
 
     /**
      * @return Price
      */
-    public function getItemPrice()
-    {
-        return $this->itemPrice;
-    }
+    public function getSummaryPrice(){
 
-    /**
-     * @return ProposalPrice
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
+        $proposalSummaryPriceValue = 0;
+        $proposalSummaryPriceCurrency = null;
 
-    /**
-     * @return Price
-     */
-    public function getSummaryPrice()
-    {
-        return new Price($this->getValue() * $this->getAmount(), $this->getCurrency());
-    }
+        /**
+         * @var $shopCartPrice ShopCartPrice
+         */
+        foreach($this->getPrices() as $shopCartPrice){
 
-    /**
-     * @return Price
-     */
-    public function getSummary()
-    {
-        return $this->getSummaryPrice();
+            $summaryPrice = $shopCartPrice->getSummaryPrice();
+
+            $proposalSummaryPriceValue += $summaryPrice->getValue();
+            $proposalSummaryPriceCurrency = $summaryPrice->getCurrency();
+
+        }
+
+        return new Price($proposalSummaryPriceValue, $proposalSummaryPriceCurrency);
+
     }
 
     /**

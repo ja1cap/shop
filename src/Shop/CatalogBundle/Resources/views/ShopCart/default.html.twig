@@ -1,17 +1,19 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 
+{% set shippingCalculatorResult = shopCart.calculateShipping %}
+
 {% block main_container %}
 
     <div class="shop-cart-container row well-v">
 
-        {% if shopCartSummary.priceIds %}
+        {% if shopCart.priceIds %}
             <div class="row">
                 <div class="seven columns">
                     <h1 class="title">
                         Оформление заказа
                     </h1>
                     <div class="shop-cart">
-                        {% for categoryData in shopCartSummary.categories %}
+                        {% for categoryData in shopCart.categories %}
                             <div class="shop-cart-category">
                                 <a href="{{ path('shop_catalog_category', { 'slug' : categoryData.category.slug }) }}">
                                     {{ categoryData.category.name }}
@@ -104,7 +106,7 @@
                                     <div class="picker" style="margin: 10px 0 0">
                                         <select name="customerCity" id="customerCity">
                                             {% for city in cities %}
-                                                <option value="{{ city.id }}" {{ shopCartSummary.shippingCalculatorResult.city.id == city.id ? 'selected="selected"' : ''}}>
+                                                <option value="{{ city.id }}" {{ shippingCalculatorResult.city.id == city.id ? 'selected="selected"' : ''}}>
                                                     {{ city.localeName(locale) }}
                                                 </option>
                                             {% endfor %}
@@ -120,13 +122,13 @@
                                         </label>
                                         <div class="picker" style="margin-left: 0">
                                             <select name="liftType" id="liftType">
-                                                <option value="1" {{ shopCartSummary.shippingCalculatorResult.liftType == 1 ? 'selected="selected"' : '' }}>
+                                                <option value="1" {{ shippingCalculatorResult.liftType == 1 ? 'selected="selected"' : '' }}>
                                                     Нет
                                                 </option>
-                                                <option value="2" {{ shopCartSummary.shippingCalculatorResult.liftType == 2 ? 'selected="selected"' : '' }}>
+                                                <option value="2" {{ shippingCalculatorResult.liftType == 2 ? 'selected="selected"' : '' }}>
                                                     Пассажирский
                                                 </option>
-                                                <option value="3" {{ shopCartSummary.shippingCalculatorResult.liftType == 3 ? 'selected="selected"' : '' }}>
+                                                <option value="3" {{ shippingCalculatorResult.liftType == 3 ? 'selected="selected"' : '' }}>
                                                     Грузовой
                                                 </option>
                                             </select>
@@ -140,7 +142,7 @@
                                         <div class="picker" style="margin-left: 0">
                                             <select name="floor" id="floor">
                                                 {% for floor in 1..30 %}
-                                                    <option value="{{ floor }}" {{ shopCartSummary.shippingCalculatorResult.floor == floor or (not shopCartSummary.shippingCalculatorResult.floor and floor == 10) ? 'selected="selected"' : '' }}>
+                                                    <option value="{{ floor }}" {{ shopCart.customerFloor == floor or (not shopCart.customerFloor and floor == 10) ? 'selected="selected"' : '' }}>
                                                         {{ floor }}
                                                     </option>
                                                 {% endfor %}
@@ -169,7 +171,7 @@
                             </script>
 
                             <div>
-                                {% for shippingSummary in shopCartSummary.shippingCalculatorResult.shippingSummaries %}
+                                {% for shippingSummary in shippingCalculatorResult.shippingSummaries %}
                                     <div>
                                         {% if shippingSummary.category is defined %}
                                             <h5>
@@ -215,8 +217,8 @@
                                     </div>
                                 {% endfor %}
                                 <div style="border-top: 1px solid #f1f1f1; margin: 10px 0 0; padding: 10px 0 0; font-size: 16px">
-                                    {% if shopCartSummary.shippingCalculatorResult.summaryPrice.value %}
-                                        Стоимость доставки: <span style="color: #f14854">{{ shopCartSummary.shippingCalculatorResult.summaryPrice|weasty_price }}</span>
+                                    {% if shippingCalculatorResult.summaryPrice.value %}
+                                        Стоимость доставки: <span style="color: #f14854">{{ shippingCalculatorResult.summaryPrice|weasty_price }}</span>
                                     {% else %}
                                         <span style="color: #f14854">Бесплатная доставка</span>
                                     {% endif %}
@@ -230,14 +232,14 @@
                     <div class="shop-cart-summary">
                         Общая сумма:
                         <span class="summary-value">
-                            {{ shopCartSummary.summaryPrice({'includeShipping':true})|weasty_price }}
+                            {{ (shopCart.summaryPrice.value + shippingCalculatorResult.summaryPrice.value)|weasty_price }}
                         </span>
                     </div>
                     <form id="order-form" method="post" action="{{ path('shop_cart_order') }}">
 
-                        <input type="hidden" name="customerCityId" id="customerCity" value="{{ shopCartSummary.shippingCalculatorResult.city.id }}">
-                        <input type="hidden" name="customerLiftType" id="customerLiftType" value="{{ shopCartSummary.shippingCalculatorResult.liftType }}">
-                        <input type="hidden" name="customerFloor" id="customerFloor" value="{{ shopCartSummary.shippingCalculatorResult.floor }}">
+                        <input type="hidden" name="customerCityId" id="customerCity" value="{{ shippingCalculatorResult.city.id }}">
+                        <input type="hidden" name="customerLiftType" id="customerLiftType" value="{{ shippingCalculatorResult.liftType }}">
+                        <input type="hidden" name="customerFloor" id="customerFloor" value="{{ shippingCalculatorResult.floor }}">
 
                         <input name="actionId" type="hidden" id="actionId" value="{{ actions|length == 1 ? (actions|first).id : '' }}">
 

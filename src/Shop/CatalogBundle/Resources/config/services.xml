@@ -8,9 +8,12 @@
         <parameter key="shop_catalog.category.repository.class">Shop\CatalogBundle\Entity\CategoryRepository</parameter>
         <parameter key="shop_catalog.proposal.entity.class">Shop\CatalogBundle\Entity\Proposal</parameter>
         <parameter key="shop_catalog.proposal.repository.class">Shop\CatalogBundle\Entity\ProposalRepository</parameter>
+        <parameter key="shop_catalog.price.entity.class">Shop\CatalogBundle\Entity\Price</parameter>
+        <parameter key="shop_catalog.price.repository.class">Shop\CatalogBundle\Entity\PriceRepository</parameter>
         <parameter key="shop_catalog.popular_proposal.entity.class">Shop\CatalogBundle\Entity\PopularProposal</parameter>
         <parameter key="shop_catalog.popular_proposal.repository.class">Shop\CatalogBundle\Entity\PopularProposalRepository</parameter>
         <parameter key="shop_catalog.price.currency.converter.class">Shop\CatalogBundle\Converter\ShopPriceCurrencyConverter</parameter>
+        <parameter key="shop_catalog.shop_cart.factory.class">Shop\CatalogBundle\Cart\ShopCartFactory</parameter>
     </parameters>
 
     <services>
@@ -37,6 +40,21 @@
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
             <argument>%shop_catalog.popular_proposal.entity.class%</argument>
+        </service>
+
+        <service id="shop_catalog.price.repository" class="%shop_catalog.price.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_catalog.price.entity.class%</argument>
+        </service>
+
+        <service id="shop_catalog.shop_cart.factory" class="%shop_catalog.shop_cart.factory.class%">
+            <argument type="service" id="shop_shipping.shipping_calculator"/>
+            <argument type="service" id="shop_catalog.price.currency.converter"/>
+            <argument type="service" id="weasty_geonames.city.locator"/>
+            <argument type="service" id="shop_catalog.category.repository"/>
+            <argument type="service" id="shop_catalog.proposal.repository"/>
+            <argument type="service" id="shop_catalog.price.repository"/>
         </service>
 
         <service id="shop_catalog.proposal.extension"

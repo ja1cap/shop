@@ -2,7 +2,6 @@
 
 namespace Shop\CatalogBundle\Controller;
 
-use Shop\CatalogBundle\Cart\ShopCart;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\Manufacturer;
@@ -129,10 +128,10 @@ class DefaultController extends Controller
             $filterPricesRanges
         );
 
-        $shopCartSummary = $this->getShopCartSummary($request);
+        $shopCart = $this->buildShopCart($request);
 
         $viewParameters = array(
-            'shopCartSummary' => $shopCartSummary,
+            'shopCart' => $shopCart,
             'category' => $category,
             'categories' => $this->getCategories(),
             'proposals' => $proposals,
@@ -299,20 +298,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * @return ShopCart
+     * @return \Shop\CatalogBundle\Cart\ShopCartFactory
      */
-    protected function getShopCart()
+    protected function getShopCartFactory()
     {
-
-        $proposalsRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
-        $categoryRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
-        $priceRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Price');
-        $currencyConverter = $this->get('shop_catalog.price.currency.converter');
-
-        $shopCart = new ShopCart($currencyConverter, $categoryRepository, $proposalsRepository, $priceRepository);
-
-        return $shopCart;
-
+        return $this->get('shop_catalog.shop_cart.factory');
     }
 
     /**
@@ -320,11 +310,10 @@ class DefaultController extends Controller
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getShopCartSummary(Request $request)
+    public function buildShopCart(Request $request)
     {
         $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
-        $shopCartSummary = $this->getShopCart()->getSummary($shopCartStorageData);
-        return $shopCartSummary;
+        return $this->getShopCartFactory()->buildShopCart($shopCartStorageData);
     }
 
 }

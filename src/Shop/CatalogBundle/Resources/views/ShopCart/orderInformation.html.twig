@@ -1,3 +1,4 @@
+{% set shippingCalculatorResult = shopCart.calculateShipping %}
 <table>
     <thead>
         <tr>
@@ -10,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for categoryData in shopCartSummary.categories %}
+    {% for categoryData in shopCart.categories %}
         {% for proposalData in categoryData.proposals %}
             <tr>
                 <td>
@@ -33,14 +34,14 @@
     </tbody>
 </table>
 <div>
-    {% if shopCartSummary.shippingCalculatorResult.summaryPrice.value %}
-        Стоимость доставки: {{ shopCartSummary.shippingCalculatorResult.summaryPrice|weasty_price }}
+    {% if shippingCalculatorResult.summaryPrice.value %}
+        Стоимость доставки: {{ shopCart.shippingCalculatorResult.summaryPrice|weasty_price }}
     {% else %}
         Бесплатная доставка
     {% endif %}
 </div>
 <h3>
-    Общая сумма: {{ shopCartSummary.summaryPrice({'includeShipping':true})|weasty_price }}
+    Общая сумма: {{ (shopCart.summaryPrice.value + shippingCalculatorResult.summaryPrice.value)|weasty_price }}
 </h3>
 {% if action %}
     <h4>

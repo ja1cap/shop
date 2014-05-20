@@ -19,4 +19,19 @@ interface ProposalPriceInterface extends PriceInterface {
      */
     public function getCategoryId();
 
+    /**
+     * @return \Weasty\CatalogBundle\Data\CategoryInterface
+     */
+    public function getCategory();
+
+    /**
+     * @return integer
+     */
+    public function getProposalId();
+
+    /**
+     * @return \Weasty\CatalogBundle\Data\ProposalInterface
+     */
+    public function getProposal();
+
 } 

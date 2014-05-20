@@ -73,16 +73,6 @@ class ShopCartController extends Controller
         $customerEmail = $request->get('customerEmail') ?: null;
         $customerComment = $request->get('customerComment') ?: null;
 
-        $customerCity = null;
-        if($request->get('customerCity')){
-            $customerCity = $this->get('weasty_geonames.city.repository')->findOneBy(array(
-                'id' => (int)$request->get('customerCity'),
-            ));
-        }
-        $customerCity = $customerCity ?: $this->get('weasty_geonames.city.locator')->getCity();
-        $customerLiftType = $request->get('customerLiftType', ShippingLiftingPrice::LIFT_TYPE_LIFT);
-        $customerFloor = $request->get('customerFloor', 10);
-
         if($customerName && $customerPhone){
 
             $action = null;
@@ -98,15 +88,20 @@ class ShopCartController extends Controller
 
             $shopCart = $this->buildShopCart($request);
 
-            $shippingCalculatorResult = $this->get('shop_shipping.shipping_calculator')->calculate(array(
-                'shopCartCategories' => $shopCart->getCategories(),
-                'shopCartSummaryPrice' => $shopCart->getSummaryPrice(),
-                'city' => $customerCity,
-                'liftType' => $customerLiftType,
-                'floor' => $customerFloor,
-            ));
+            if($request->get('customerCity')){
+                $customerCity = $this->get('weasty_geonames.city.repository')->findOneBy(array(
+                    'id' => (int)$request->get('customerCity'),
+                ));
+                $shopCart->setCustomerCity($customerCity);
+            }
 
-            $shopCart->setShippingCalculatorResult($shippingCalculatorResult);
+            $customerLiftType = $request->get('liftType', ShippingLiftingPrice::LIFT_TYPE_LIFT);
+            $customerFloor = $request->get('floor', 10);
+
+            $shopCart
+                ->setCustomerLiftType($customerLiftType)
+                ->setCustomerFloor($customerFloor)
+            ;
 
             if($shopCart['categories']){
 

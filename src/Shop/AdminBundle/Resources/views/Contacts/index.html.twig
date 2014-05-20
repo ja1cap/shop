@@ -1,0 +1,19 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block main_container %}
+    <div style="margin-bottom: 10px">
+        <div class="medium default btn icon-left entypo icon-location">
+            <a href="{{ path('shop_admin_addresses') }}">
+                Адреса
+            </a>
+        </div>
+        <div class="medium default btn icon-left entypo icon-phone">
+            <a href="{{ path('shop_admin_phones') }}">
+                Телефоны
+            </a>
+        </div>
+    </div>
+    {{ form(form) }}
+{% endblock %}

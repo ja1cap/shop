@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * @TODO create manufacturer proposals page
+ * @TODO create proposals paginator
  * Class DefaultController
  * @package Shop\CatalogBundle\Controller
  */

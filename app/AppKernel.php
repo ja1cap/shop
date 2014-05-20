@@ -39,6 +39,7 @@ class AppKernel extends Kernel
             new Weasty\CatalogBundle\WeastyCatalogBundle(),
             new Shop\ShippingBundle\ShopShippingBundle(),
             new Shop\OrderManagementBundle\ShopOrderManagementBundle(),
+            new Shop\AdminBundle\ShopAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

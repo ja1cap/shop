@@ -21,7 +21,7 @@
 
         <div class="footer-contacts three columns">
             <div class="phone">
-                {{ shop_settings.phone }}
+                {{ shop_contacts.phones|join('<br/>')|raw }}
             </div>
             <div class="callback">
                 <a href="{{ path('callback') }}" class="callback-fancy-box">

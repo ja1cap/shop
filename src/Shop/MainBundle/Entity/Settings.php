@@ -51,11 +51,6 @@ class Settings extends AbstractEntity
     /**
      * @var string
      */
-    private $phone;
-
-    /**
-     * @var string
-     */
     private $admin_email;
 
     /**
@@ -353,29 +348,6 @@ class Settings extends AbstractEntity
      */
     public function getLogoUrl(){
         return $this->getFileUrl($this->getLogoFilename());
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     * @return Settings
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 
     /**

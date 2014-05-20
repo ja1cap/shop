@@ -7,6 +7,7 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+        <!--@TODO add contractor retail percent-->
         <field name="name" type="string" column="name" length="255"/>
         <field name="defaultCurrencyNumericCode" type="integer"/>
         <one-to-many target-entity="ContractorCurrency" mapped-by="contractor" field="currencies">

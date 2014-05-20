@@ -5,10 +5,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="shop_main.settings.extension.class">Shop\MainBundle\Twig\ShopSettingsExtension</parameter>
+        <parameter key="shop_main.extension.class">Shop\MainBundle\Twig\ShopExtension</parameter>
         <parameter key="shop_main.settings.resource.class">Shop\MainBundle\Data\ShopSettingsResource</parameter>
         <parameter key="shop_main.settings.entity.class">Shop\MainBundle\Entity\Settings</parameter>
         <parameter key="shop_main.settings.repository.class">Doctrine\ORM\EntityRepository</parameter>
+        <parameter key="shop_main.address.entity.class">Shop\MainBundle\Entity\Address</parameter>
+        <parameter key="shop_main.address.repository.class">Doctrine\ORM\EntityRepository</parameter>
+        <parameter key="shop_main.phone.entity.class">Shop\MainBundle\Entity\Phone</parameter>
+        <parameter key="shop_main.phone.repository.class">Doctrine\ORM\EntityRepository</parameter>
+        <parameter key="shop_main.contacts.resource.class">Shop\MainBundle\Data\ShopContactsResource</parameter>
     </parameters>
 
     <services>
@@ -24,10 +29,30 @@
             <argument type="service" id="shop_main.settings.repository"/>
         </service>
 
-        <service id="shop_main.settings.extension"
-                 class="%shop_main.settings.extension.class%">
+        <service id="shop_main.address.repository" class="%shop_main.address.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_main.address.entity.class%</argument>
+        </service>
+
+        <service id="shop_main.phone.repository" class="%shop_main.phone.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%shop_main.phone.entity.class%</argument>
+        </service>
+
+        <service id="shop_main.contacts.resource"
+                 class="%shop_main.contacts.resource.class%">
+            <argument type="service" id="shop_main.settings.resource"/>
+            <argument type="service" id="shop_main.address.repository"/>
+            <argument type="service" id="shop_main.phone.repository"/>
+        </service>
+
+        <service id="shop_main.extension"
+                 class="%shop_main.extension.class%">
             <tag name="twig.extension"/>
             <argument type="service" id="shop_main.settings.resource"/>
+            <argument type="service" id="shop_main.contacts.resource"/>
         </service>
 
     </services>

@@ -1,3 +1,7 @@
+shop_admin:
+    resource: "@ShopAdminBundle/Resources/config/routing.xml"
+    prefix:   /
+
 gallery:
     resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
     prefix: /media/gallery

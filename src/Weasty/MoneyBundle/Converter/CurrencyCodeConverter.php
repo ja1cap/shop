@@ -33,7 +33,7 @@ class CurrencyCodeConverter implements CurrencyCodeConverterInterface {
     public function getCurrencyCodeType($currencyCode)
     {
 
-        if($currencyCode instanceof CurrencyInterface){
+        if(!$currencyCode || $currencyCode instanceof CurrencyInterface){
             return CurrencyResource::CODE_TYPE_ISO_4217_ALPHABETIC;
         }
 

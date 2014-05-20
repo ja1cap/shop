@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="shop_admin" pattern="/admin">
+        <default key="_controller">ShopAdminBundle:Default:index</default>
+    </route>
+
+    <route id="shop_admin_contacts" pattern="/admin/contacts">
+        <default key="_controller">ShopAdminBundle:Contacts:index</default>
+    </route>
+
+    <route id="shop_admin_addresses" pattern="/admin/addresses">
+        <default key="_controller">ShopAdminBundle:Address:addresses</default>
+    </route>
+    <route id="shop_admin_address" pattern="/admin/address/{id}">
+        <default key="_controller">ShopAdminBundle:Address:address</default>
+        <default key="id">null</default>
+    </route>
+    <route id="shop_admin_delete_address" pattern="/admin/deleteAddress/{id}">
+        <default key="_controller">ShopAdminBundle:Address:deleteAddress</default>
+    </route>
+
+    <route id="shop_admin_phones" pattern="/admin/phones">
+        <default key="_controller">ShopAdminBundle:Phone:phones</default>
+    </route>
+    <route id="shop_admin_phone" pattern="/admin/phone/{id}">
+        <default key="_controller">ShopAdminBundle:Phone:phone</default>
+        <default key="id">null</default>
+    </route>
+    <route id="shop_admin_delete_phone" pattern="/admin/deletePhone/{id}">
+        <default key="_controller">ShopAdminBundle:Phone:deletePhone</default>
+    </route>
+
+</routes>

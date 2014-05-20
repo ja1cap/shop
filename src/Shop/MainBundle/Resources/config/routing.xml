@@ -41,9 +41,6 @@
     <route id="shop_pillow" pattern="/podushki/{slug}">
         <default key="_controller">ShopMainBundle:Default:pillow</default>
     </route>
-    <route id="index" pattern="/admin">
-        <default key="_controller">ShopMainBundle:Admin:index</default>
-    </route>
     <route id="why_us" pattern="/admin/whyUs">
         <default key="_controller">ShopMainBundle:Admin:whyUs</default>
     </route>
@@ -105,17 +102,6 @@
     </route>
     <route id="solution_delete" pattern="/admin/solutionDelete/{id}">
         <default key="_controller">ShopMainBundle:Admin:deleteSolution</default>
-        <default key="id">null</default>
-    </route>
-    <route id="contacts" pattern="/admin/contacts">
-        <default key="_controller">ShopMainBundle:Admin:contacts</default>
-    </route>
-    <route id="address" pattern="/admin/address/{id}">
-        <default key="_controller">ShopMainBundle:Admin:address</default>
-        <default key="id">null</default>
-    </route>
-    <route id="address_delete" pattern="/admin/addressDelete/{id}">
-        <default key="_controller">ShopMainBundle:Admin:deleteAddress</default>
         <default key="id">null</default>
     </route>
     <route id="mail_templates" pattern="/admin/mailTemplates">

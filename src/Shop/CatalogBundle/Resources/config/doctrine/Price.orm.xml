@@ -12,6 +12,7 @@
         <field name="sku" type="string" column="sku"/>
         <field name="manufacturerSku" type="string" column="manufacturerSku" nullable="true"/>
         <field name="proposalId" type="integer" column="proposalId"/>
+        <!--@TODO add contractor price-->
         <field name="contractorId" type="integer" column="contractorId" nullable="true"/>
         <field name="value" type="integer" column="value"/>
         <field name="currencyNumericCode" type="integer" column="currencyNumericCode"/>

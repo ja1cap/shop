@@ -51,7 +51,7 @@ class AdminActionController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 

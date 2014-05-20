@@ -6,7 +6,7 @@
         <field name="proposalId" type="integer" column="proposalId"/>
         <many-to-one target-entity="Proposal" field="proposal">
             <join-columns>
-                <join-column name="proposalId" referenced-column-name="id"/>
+                <join-column name="proposalId" referenced-column-name="id" on-delete="CASCADE"/>
             </join-columns>
         </many-to-one>
     </entity>

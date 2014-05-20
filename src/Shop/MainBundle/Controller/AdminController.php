@@ -2,7 +2,6 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\MainBundle\Entity\Address;
 use Shop\MainBundle\Entity\Benefit;
 use Shop\MainBundle\Entity\HowWeItem;
 use Shop\MainBundle\Entity\Problem;
@@ -19,13 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AdminController extends Controller
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function indexAction()
-    {
-        return $this->render('ShopMainBundle:Admin:index.html.twig');
-    }
 
     public function whyUsAction(Request $request)
     {
@@ -61,7 +53,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 
@@ -182,7 +174,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 
@@ -303,7 +295,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 
@@ -721,147 +713,6 @@ class AdminController extends Controller
 
     }
 
-    public function contactsAction(Request $request)
-    {
-
-        /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
-         */
-        $settings = $this->get('shop_main.settings.resource')->getSettings();
-
-        $form = $this->createFormBuilder($settings)
-            ->add('contacts_title', 'textarea', array(
-                'required' => true,
-                'label' => 'Заголовок блока',
-            ))
-            ->add('phone', 'textarea', array(
-                'required' => true,
-                'label' => 'Телефон',
-            ))
-            ->add('email', 'textarea', array(
-                'required' => false,
-                'label' => 'Email',
-            ))
-            ->add('address', 'textarea', array(
-                'required' => true,
-                'label' => 'Основной адрес',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if($request->getMethod() == 'POST' && $form->isValid()){
-
-            $em = $this->getDoctrine()->getManager();
-
-            if(!$settings->getId()){
-                $em->persist($settings);
-            }
-
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('index'));
-
-        } else {
-
-            $items = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Address')->findAll();
-
-            return $this->render('ShopMainBundle:Admin:contacts.html.twig', array(
-                'form' => $form->createView(),
-                'items' => $items,
-            ));
-
-        }
-
-    }
-
-    public function addressAction($id, Request $request)
-    {
-
-        $address = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Address')->findOneBy(array(
-            'id' => $id
-        ));
-
-        if(!$address){
-            $address = new Address();
-        }
-
-        $form = $this->createFormBuilder($address)
-            ->add('name', 'textarea', array(
-                'required' => true,
-                'label' => 'Адрес',
-            ))
-            ->add('description', 'textarea', array(
-                'required' => true,
-                'label' => 'Дополнительная информация',
-            ))
-            ->add('phones', 'textarea', array(
-                'required' => false,
-                'label' => 'Телефоны',
-            ))
-            ->add('work_schedule', 'textarea', array(
-                'required' => false,
-                'label' => 'Время работы',
-            ))
-            ->add('latitude', 'text', array(
-                'required' => true,
-                'label' => 'Широта',
-            ))
-            ->add('longitude', 'text', array(
-                'required' => true,
-                'label' => 'Долгота',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if($request->getMethod() == 'POST' && $form->isValid()){
-
-            $em = $this->getDoctrine()->getManager();
-
-            if(!$address->getId()){
-                $em->persist($address);
-            }
-
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('contacts'));
-
-        } else {
-
-            return $this->render('ShopMainBundle:Admin:address.html.twig', array(
-                'title' => $address->getId() ? 'Изменение адреса' : 'Добавление адреса',
-                'form' => $form->createView(),
-            ));
-
-        }
-
-    }
-
-    public function deleteAddressAction($id){
-
-        $item = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Address')->findOneBy(array(
-            'id' => $id
-        ));
-
-        if($item){
-
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($item);
-            $em->flush();
-
-        }
-
-        return $this->redirect($this->generateUrl('contacts'));
-
-    }
-
     public function mailTemplatesAction(Request $request){
 
         /**
@@ -907,7 +758,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 
@@ -945,7 +796,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('shop_admin'));
 
         } else {
 

@@ -16,7 +16,6 @@
         <field name="logo_file_name" type="string" nullable="true"/>
 
         <field name="contacts_title" type="text" nullable="true"/>
-        <field name="phone" type="text" nullable="true"/>
         <field name="address" type="text" nullable="true"/>
         <field name="email" type="text" nullable="true"/>
 

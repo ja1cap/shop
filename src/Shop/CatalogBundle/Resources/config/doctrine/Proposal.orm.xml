@@ -24,8 +24,12 @@
         <field name="mainImageId" type="integer" nullable="true"/>
 
         <one-to-one field="mainImage" target-entity="ProposalImage">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
             <join-columns>
-                <join-column name="mainImageId" referenced-column-name="id"/>
+                <join-column name="mainImageId" referenced-column-name="id" on-delete="SET NULL"/>
             </join-columns>
         </one-to-one>
 
@@ -55,7 +59,7 @@
 
         <many-to-one target-entity="Category" field="category">
             <join-columns>
-                <join-column name="categoryId" referenced-column-name="id"/>
+                <join-column name="categoryId" referenced-column-name="id" on-delete="CASCADE"/>
             </join-columns>
         </many-to-one>
 

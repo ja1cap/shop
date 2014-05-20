@@ -35,7 +35,7 @@
 </table>
 <div>
     {% if shippingCalculatorResult.summaryPrice.value %}
-        Стоимость доставки: {{ shopCart.shippingCalculatorResult.summaryPrice|weasty_price }}
+        Стоимость доставки: {{ shippingCalculatorResult.summaryPrice|weasty_price }}
     {% else %}
         Бесплатная доставка
     {% endif %}

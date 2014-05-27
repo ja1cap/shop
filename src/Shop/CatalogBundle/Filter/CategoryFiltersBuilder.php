@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Cookie;
  */
 class CategoryFiltersBuilder {
 
-    const PARAMETER_VALUES_FILTER_COOKIE_NAME = 'filterValues';
+    const PARAMETER_VALUES_FILTER_COOKIE_NAME = 'parameters';
 
     /**
      * @var \Doctrine\Common\Cache\Cache
@@ -104,8 +104,8 @@ class CategoryFiltersBuilder {
      */
     public function setFiltersCookies(Category $category, Request $request, Response $response){
 
-        if($request->query->has(CategoryFiltersBuilder::PARAMETER_VALUES_FILTER_COOKIE_NAME)){
-            $response->headers->setCookie(new Cookie(CategoryFiltersBuilder::PARAMETER_VALUES_FILTER_COOKIE_NAME, json_encode($request->query->get(CategoryFiltersBuilder::PARAMETER_VALUES_FILTER_COOKIE_NAME))));
+        if($request->query->has('parameters')){
+            $response->headers->setCookie(new Cookie(self::PARAMETER_VALUES_FILTER_COOKIE_NAME, json_encode($request->query->get('parameters'))));
         }
 
         if($request->query->has('manufacturer')){
@@ -269,7 +269,9 @@ class CategoryFiltersBuilder {
                             && !$parametersFilteredOptionIds[$categoryParameter->getParameterId()]
                         )
                     ){
-                        $parametersFilteredOptionIds[$categoryParameter->getParameterId()] = array($categoryParameter->getParameter()->getDefaultOptionId());
+                        $parametersFilteredOptionIds[$categoryParameter->getParameterId()] = array(
+                            $categoryParameter->getParameter()->getDefaultOptionId(),
+                        );
                     }
 
                 }

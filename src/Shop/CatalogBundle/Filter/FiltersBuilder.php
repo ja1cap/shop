@@ -112,7 +112,7 @@ class FiltersBuilder {
      */
     public function buildFromRequest(Category $category, Proposal $proposal = null, Request $request){
 
-        $manufacturer = $request->get('manufacturer', $request->cookies->get('manufacturer'));
+        $manufacturer = $request->get('manufacturer', json_decode($request->cookies->get('manufacturer'), true));
         $parametersFilteredOptionIds = $this->getParametersFilteredOptionIds($request);
         $priceRangeSteps = $this->getPriceRageSteps($request, $category);
 
@@ -133,7 +133,7 @@ class FiltersBuilder {
         }
 
         if($request->query->has('manufacturer')){
-            $response->headers->setCookie(new Cookie('manufacturer', $request->query->get('manufacturer')));
+            $response->headers->setCookie(new Cookie('manufacturer', json_encode($request->query->get('manufacturer'))));
         }
 
         if($request->query->has('prices')){

@@ -2058,7 +2058,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .proposal-container .proposal-header-table td.image-cell, .proposal-container .proposal-header-table td.price-cell { width: 50%; }
 .proposal-container .proposal-header-table td.image-cell .proposal-image { margin: 0; }
 .proposal-container .proposal-image { margin-right: 20px; }
-.proposal-container .proposal-image img { min-width: 100%; vertical-align: middle; }
+.proposal-container .proposal-image img { width: 350px; min-width: 350px; vertical-align: middle; }
 .proposal-container .filters-form-container { margin: 0; }
 .proposal-container .filters-form-container .tiles { margin: 0; }
 .proposal-container .filters-form-container .tiles li { width: 48.5%; margin: 0; }

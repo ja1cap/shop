@@ -4,9 +4,10 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Shop\CatalogBundle\Entity\CategoryFilters">
 
-        <!--<indexes>-->
-            <!--<index columns="categoryId,slug"/>-->
-        <!--</indexes>-->
+        <indexes>
+            <index columns="categoryId"/>
+            <index columns="slug"/>
+        </indexes>
 
         <!--<unique-constraints>-->
             <!--<unique-constraint columns="categoryId,slug" name="category_filters_slug" />-->

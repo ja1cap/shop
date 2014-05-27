@@ -4,6 +4,10 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="Shop\CatalogBundle\Entity\CategoryParameterRepository"
             name="Shop\CatalogBundle\Entity\CategoryParameter">
+        <indexes>
+            <index columns="categoryId"/>
+            <index columns="parameterId"/>
+        </indexes>
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -12,8 +16,7 @@
         <field name="groupId" type="integer" column="groupId" nullable="true"/>
         <field name="name" type="string" column="name" nullable="true"/>
         <field name="position" type="integer" column="position"/>
-        <!--@TODO rename filterGroups column name-->
-        <field name="filterGroups" type="simple_array" column="filterGroup"/>
+        <field name="filterGroups" type="simple_array" column="filterGroups"/>
         <many-to-one target-entity="Category" field="category">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>

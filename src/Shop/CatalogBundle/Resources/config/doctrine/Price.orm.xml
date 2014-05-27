@@ -4,6 +4,13 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Shop\CatalogBundle\Entity\Price" repository-class="Shop\CatalogBundle\Entity\PriceRepository">
 
+        <indexes>
+            <index columns="sku"/>
+            <index columns="manufacturerSku"/>
+            <index columns="proposalId"/>
+            <index columns="contractorId"/>
+        </indexes>
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>

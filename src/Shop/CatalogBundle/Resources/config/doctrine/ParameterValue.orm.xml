@@ -4,6 +4,12 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="Shop\CatalogBundle\Entity\ParameterValueRepository"
             name="Shop\CatalogBundle\Entity\ParameterValue">
+        <indexes>
+            <index columns="proposalId"/>
+            <index columns="priceId"/>
+            <index columns="parameterId"/>
+            <index columns="optionId"/>
+        </indexes>
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>

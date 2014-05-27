@@ -69,6 +69,24 @@ body {
     width: 100%;
   }
 
+  .chosen-container-multi {
+
+    .chosen-choices {
+
+      li.search-field {
+
+        input[type=text] {
+
+          height: 25px;
+
+        }
+
+      }
+
+    }
+
+  }
+
   .ui-tooltip {
     max-width: 100%;
   }
@@ -2403,7 +2421,7 @@ $proposal-image-side : 284px;
       .tiles {
         margin: 0;
         padding: 10px 0 0;
-        li {
+        & > li {
           width: 48.5%;
           margin: 0;
         }
@@ -2872,7 +2890,7 @@ $proposal-image-side : 284px;
 
       margin: 0;
 
-      li {
+      & > li {
 
         width: 48.5%;
         margin: 0;

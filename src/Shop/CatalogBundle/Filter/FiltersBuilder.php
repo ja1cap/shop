@@ -56,7 +56,7 @@ class FiltersBuilder {
         )));
 
         $filtersResource = $this->cache->fetch($cacheId);
-        if(true){
+        if(!$filtersResource){
 
             $filtersResource = new FiltersResource();
 

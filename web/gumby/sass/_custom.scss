@@ -2857,8 +2857,8 @@ $proposal-image-side : 284px;
 //    height: $proposal-image-side;
     margin-right: 20px;
     img {
-//      width: $proposal-image-side;
-      min-width: 100%;
+      width: 350px;
+      min-width: 350px;
       vertical-align: middle;
 
     }

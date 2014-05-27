@@ -49,6 +49,17 @@
         <default key="_controller">ShopCatalogBundle:AdminCategory:updateCategoryParameters</default>
     </route>
 
+    <route id="category_filters_list" pattern="/adminCatalog/categoryFiltersList/{categoryId}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryFiltersList</default>
+    </route>
+    <route id="category_filters" pattern="/adminCatalog/categoryFilters/{categoryId}/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryFilters</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_category_filters" pattern="/adminCatalog/deleteCategoryFilters/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryFilters</default>
+    </route>
+
     <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>
         <default key="id">null</default>

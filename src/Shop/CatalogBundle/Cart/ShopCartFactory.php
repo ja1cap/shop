@@ -70,7 +70,7 @@ class ShopCartFactory {
      * @param $storageData
      * @return ShopCart
      */
-    public function buildShopCart($storageData = array()){
+    public function createShopCart($storageData = array()){
 
         $shopCart = new ShopCart($this->shippingCalculator, $this->currencyConverter);
         $shopCart

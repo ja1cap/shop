@@ -1,5 +1,6 @@
 <?php
 namespace Shop\CatalogBundle\Filter;
+use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 
 /**
  * Class Filter
@@ -18,9 +19,9 @@ class Filter implements FilterInterface {
     protected $type = self::TYPE_SELECT;
 
     /**
-     * @var int
+     * @var array
      */
-    public $group = self::GROUP_EXTRA;
+    public $groups = array();
 
     /**
      * @var int[]
@@ -51,21 +52,21 @@ class Filter implements FilterInterface {
     }
 
     /**
-     * @param int $group
+     * @param array $groups
      * @return $this
      */
-    public function setGroup($group)
+    public function setGroups($groups)
     {
-        $this->group = $group;
+        $this->groups = $groups;
         return $this;
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getGroup()
+    public function getGroups()
     {
-        return $this->group;
+        return $this->groups;
     }
 
     /**
@@ -139,4 +140,16 @@ class Filter implements FilterInterface {
         return isset($this->options[$id]) ? $this->options[$id] : null;
     }
 
-} 
+    /**
+     * @return \Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
+     */
+    public function getChoiceList()
+    {
+        $choices = array();
+        foreach($this->options as $option){
+            $choices[$option->getId()] = (string)$option;
+        }
+        return new SimpleChoiceList($choices);
+    }
+
+}

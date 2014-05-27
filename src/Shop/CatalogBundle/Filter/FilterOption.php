@@ -99,4 +99,12 @@ class FilterOption implements FilterOptionInterface {
         return $this->pricesAmount;
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
 } 

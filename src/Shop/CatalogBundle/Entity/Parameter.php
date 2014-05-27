@@ -7,7 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * Parameter
+ * Class Parameter
+ * @package Shop\CatalogBundle\Entity
  */
 class Parameter extends AbstractEntity
 {
@@ -23,8 +24,6 @@ class Parameter extends AbstractEntity
     private $name;
 
     /**
-     * @TODO remove
-     * @deprecated
      * @var boolean
      */
     private $isPriceParameter;
@@ -296,5 +295,28 @@ class Parameter extends AbstractEntity
     public function getDefaultOption()
     {
         return $this->defaultOption;
+    }
+
+    /**
+     * Set isPriceParameter
+     *
+     * @param boolean $isPriceParameter
+     * @return Parameter
+     */
+    public function setIsPriceParameter($isPriceParameter)
+    {
+        $this->isPriceParameter = $isPriceParameter;
+
+        return $this;
+    }
+
+    /**
+     * Get isPriceParameter
+     *
+     * @return boolean 
+     */
+    public function getIsPriceParameter()
+    {
+        return $this->isPriceParameter;
     }
 }

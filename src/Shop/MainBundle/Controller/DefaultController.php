@@ -431,7 +431,7 @@ class DefaultController extends Controller
     public function buildShopCart(Request $request)
     {
         $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
-        return $this->getShopCartFactory()->buildShopCart($shopCartStorageData);
+        return $this->getShopCartFactory()->createShopCart($shopCartStorageData);
     }
 
     /**

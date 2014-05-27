@@ -39,4 +39,9 @@ interface FilterOptionInterface {
      */
     public function getPricesAmount();
 
+    /**
+     * @return string
+     */
+    public function __toString();
+
 }

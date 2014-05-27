@@ -94,6 +94,9 @@ doctrine:
           mappings:
               ApplicationSonataMediaBundle: ~
               SonataMediaBundle: ~
+          dql:
+            string_functions:
+              find_in_set: DoctrineExtensions\Query\Mysql\FindInSet
 
 # Swiftmailer Configuration
 swiftmailer:

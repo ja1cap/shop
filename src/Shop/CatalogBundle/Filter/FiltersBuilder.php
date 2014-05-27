@@ -1,16 +1,17 @@
 <?php
 namespace Shop\CatalogBundle\Filter;
 use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\CategoryFilters;
 use Shop\CatalogBundle\Entity\Proposal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
- * Class CategoryFiltersBuilder
+ * Class FiltersBuilder
  * @package Shop\CatalogBundle\Filter
  */
-class CategoryFiltersBuilder {
+class FiltersBuilder {
 
     const PARAMETER_VALUES_FILTER_COOKIE_NAME = 'parameters';
 
@@ -20,13 +21,19 @@ class CategoryFiltersBuilder {
     protected $cache;
 
     /**
+     * @var \Weasty\MoneyBundle\Twig\AbstractMoneyExtension
+     */
+    protected $moneyExtension;
+
+    /**
      * @var \Shop\CatalogBundle\Entity\ProposalRepository
      */
     protected $proposalRepository;
 
-    function __construct($proposalRepository, $cache)
+    function __construct($proposalRepository, $moneyExtension, $cache)
     {
         $this->proposalRepository = $proposalRepository;
+        $this->moneyExtension = $moneyExtension;
         $this->cache = $cache;
     }
 
@@ -36,29 +43,44 @@ class CategoryFiltersBuilder {
      * @param array $manufacturerIds
      * @param array $parametersFilteredOptionIds
      * @param array $priceRangeSteps
-     * @return CategoryFiltersResource
+     * @return FiltersResource
      */
     public function build(Category $category, Proposal $proposal = null, $manufacturerIds = array(), $parametersFilteredOptionIds = array(), $priceRangeSteps = array()){
 
-        $filtersResource = new CategoryFiltersResource();
+        $cacheId = 'category_filters_resource_' . md5(serialize(array(
+            'categoryId' => $category->getId(),
+            'proposal' => ($proposal ? $proposal->getId() : null),
+            'manufacturer' => $manufacturerIds,
+            self::PARAMETER_VALUES_FILTER_COOKIE_NAME => $parametersFilteredOptionIds,
+            'prices' => $priceRangeSteps,
+        )));
 
-        $manufacturerFilter = $this->buildManufacturerFilter($category, $manufacturerIds);
-        $filtersResource->setManufacturerFilter($manufacturerFilter);
+        $filtersResource = $this->cache->fetch($cacheId);
+        if(true){
 
-        $this->buildParameterFilters($category, $parametersFilteredOptionIds, $filtersResource);
+            $filtersResource = new FiltersResource();
 
-        $priceRangeFilter = $this->buildPriceRangerFilter($category, $priceRangeSteps, $filtersResource);
-        $filtersResource->setPriceRangeFilter($priceRangeFilter);
+            $manufacturerFilter = $this->buildManufacturerFilter($category, $manufacturerIds);
+            $filtersResource->setManufacturerFilter($manufacturerFilter);
 
-        foreach($filtersResource->getParameterFilters() as $parameterFilter){
+            $this->buildParameterFilters($category, $parametersFilteredOptionIds, $filtersResource);
 
-            $parameterOptionsPricesAmount = $this->getProposalRepository()->getParameterOptionsPricesAmount($parameterFilter->getParameterId(), $category->getId(), ($proposal ? $proposal->getId() : null), $filtersResource);
-            foreach($parameterOptionsPricesAmount as $optionId => $pricesAmount){
-                $option = $parameterFilter->getOption($optionId);
-                if($option){
-                    $option->setPricesAmount($pricesAmount);
+            $priceRangeFilter = $this->buildPriceRangerFilter($category, $priceRangeSteps, $filtersResource);
+            $filtersResource->setPriceRangeFilter($priceRangeFilter);
+
+            foreach($filtersResource->getParameterFilters() as $parameterFilter){
+
+                $parameterOptionsPricesAmount = $this->getProposalRepository()->getParameterOptionsPricesAmount($parameterFilter->getParameterId(), $category->getId(), ($proposal ? $proposal->getId() : null), $filtersResource);
+                foreach($parameterOptionsPricesAmount as $optionId => $pricesAmount){
+                    $option = $parameterFilter->getOption($optionId);
+                    if($option){
+                        $option->setPricesAmount($pricesAmount);
+                    }
                 }
+
             }
+
+            $this->cache->save($cacheId, $filtersResource);
 
         }
 
@@ -67,10 +89,26 @@ class CategoryFiltersBuilder {
     }
 
     /**
+     * @param CategoryFilters $categoryFilters
+     * @return FiltersResource
+     */
+    public function buildFromCategoryFilters(CategoryFilters $categoryFilters){
+
+        return $this->build(
+            $categoryFilters->getCategory(),
+            null,
+            $categoryFilters->getManufacturerFilter(),
+            $categoryFilters->getParameterFilters(),
+            $categoryFilters->getPriceRangeFilter()
+        );
+
+    }
+
+    /**
      * @param Category $category
      * @param Proposal $proposal
      * @param Request $request
-     * @return CategoryFiltersResource
+     * @return mixed|FiltersResource
      */
     public function buildFromRequest(Category $category, Proposal $proposal = null, Request $request){
 
@@ -78,21 +116,7 @@ class CategoryFiltersBuilder {
         $parametersFilteredOptionIds = $this->getParametersFilteredOptionIds($request);
         $priceRangeSteps = $this->getPriceRageSteps($request, $category);
 
-        $cacheId = 'category_filters_resource_' . md5(serialize(array(
-            'categoryId' => $category->getId(),
-            'proposal' => ($proposal ? $proposal->getId() : null),
-            'manufacturer' => $manufacturer,
-            self::PARAMETER_VALUES_FILTER_COOKIE_NAME => $parametersFilteredOptionIds,
-            'prices' => $priceRangeSteps,
-        )));
-
-        $filtersResource = $this->cache->fetch($cacheId);
-        if(!$filtersResource){
-            $this->cache->save($cacheId, $filtersResource);
-        }
-        $filtersResource = $this->build($category, $proposal, $manufacturer, $parametersFilteredOptionIds, $priceRangeSteps);
-
-        return $filtersResource;
+        return $this->build($category, $proposal, $manufacturer, $parametersFilteredOptionIds, $priceRangeSteps);
 
     }
 
@@ -140,12 +164,14 @@ class CategoryFiltersBuilder {
             $manufacturerIds = array(
                 (int)$manufacturerIds
             );
-        } else {
+        } elseif(!$manufacturerIds) {
             $manufacturerIds = array();
         }
 
         $filter = new Filter();
-        $filter->setGroup(FilterInterface::GROUP_MAIN);
+        $filter->setGroups(array(
+            FilterInterface::GROUP_MAIN,
+        ));
         $filteredOptionIds = array();
 
         /**
@@ -211,9 +237,9 @@ class CategoryFiltersBuilder {
     /**
      * @param Category $category
      * @param array $parametersFilteredOptionIds
-     * @param CategoryFiltersResource $filtersResource
+     * @param FiltersResource $filtersResource
      */
-    public function buildParameterFilters(Category $category, array $parametersFilteredOptionIds, CategoryFiltersResource $filtersResource)
+    public function buildParameterFilters(Category $category, array $parametersFilteredOptionIds, FiltersResource $filtersResource)
     {
 
         $parametersOptions = $this->getProposalRepository()->findCategoryParametersOptions($category->getId());
@@ -256,7 +282,7 @@ class CategoryFiltersBuilder {
 
                 $parameterFilter
                     ->setName($categoryParameter->getName())
-                    ->setGroup($categoryParameter->getFilterGroup())
+                    ->setGroups($categoryParameter->getFilterGroups())
                 ;
 
                 if($categoryParameter->getParameter()->getDefaultOptionId()){
@@ -331,10 +357,10 @@ class CategoryFiltersBuilder {
     /**
      * @param Category $category
      * @param array $priceRangeSteps
-     * @param CategoryFiltersResource $filtersResource
+     * @param FiltersResource $filtersResource
      * @return Filter
      */
-    protected function buildPriceRangerFilter(Category $category, $priceRangeSteps = array(), CategoryFiltersResource $filtersResource){
+    protected function buildPriceRangerFilter(Category $category, $priceRangeSteps = array(), FiltersResource $filtersResource){
 
         if(!is_array($priceRangeSteps)){
             $priceRangeSteps = array();
@@ -343,7 +369,9 @@ class CategoryFiltersBuilder {
         $filter = new Filter();
         $filter
             ->setType(FilterInterface::TYPE_CHECKBOXES)
-            ->setGroup(FilterInterface::GROUP_EXTRA)
+            ->setGroups(array(
+                FilterInterface::GROUP_EXTRA,
+            ))
         ;
         $filteredOptionIds = array();
 
@@ -355,6 +383,7 @@ class CategoryFiltersBuilder {
                 ->setId($step)
                 ->setMin($priceRange['min'])
                 ->setMax($priceRange['max'])
+                ->setName($this->moneyExtension->formatMoney($priceRange['min'], null, false) . ' - ' . $this->moneyExtension->formatMoney($priceRange['max']))
                 ->setPricesAmount($priceRange['pricesAmount'])
                 ->setIsSelected(in_array($step, $priceRangeSteps))
             ;

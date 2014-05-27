@@ -13,6 +13,11 @@
         <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
         <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255" nullable="true"/>
         <field name="multipleName" type="string" column="multipleName" length="255" nullable="true"/>
+        <one-to-many target-entity="CategoryFilters" mapped-by="category" field="filters">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
         <one-to-many target-entity="CategoryParameter" mapped-by="category" field="parameters">
             <cascade>
                 <cascade-all/>

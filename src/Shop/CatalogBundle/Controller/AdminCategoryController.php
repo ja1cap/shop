@@ -3,6 +3,7 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
+use Shop\CatalogBundle\Entity\CategoryFilters;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\CategoryParameterGroup;
 use Shop\CatalogBundle\Form\Type\CategoryParameterType;
@@ -25,7 +26,7 @@ class AdminCategoryController extends Controller
     public function categoriesAction()
     {
 
-        $categories = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(array(), array(
+        $categories = $this->get('shop_catalog.category.repository')->findBy(array(), array(
             'name' => 'ASC',
         ));
 
@@ -43,7 +44,7 @@ class AdminCategoryController extends Controller
     public function categoryAction($id, Request $request)
     {
 
-        $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
+        $repository = $this->get('shop_catalog.category.repository');
         $category = $repository->findOneBy(array(
             'id' => $id
         ));
@@ -112,7 +113,7 @@ class AdminCategoryController extends Controller
      */
     public function categoryParametersAction($categoryId){
 
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'id' => $categoryId,
         ));
 
@@ -136,7 +137,7 @@ class AdminCategoryController extends Controller
     public function categoryParameterAction($categoryId, $id, Request $request)
     {
 
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'id' => $categoryId,
         ));
 
@@ -230,7 +231,7 @@ class AdminCategoryController extends Controller
     public function updateCategoryParametersAction($categoryId, Request $request)
     {
 
-        $repository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category');
+        $repository = $this->get('shop_catalog.category.repository');
         $category = $repository->findOneBy(array(
             'id' => $categoryId
         ));
@@ -278,9 +279,7 @@ class AdminCategoryController extends Controller
      */
     public function categoryParameterGroupAction($categoryId, $id, Request $request){
 
-        //МКОНДОР-K-101-80x190;
-
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'id' => $categoryId,
         ));
 
@@ -324,6 +323,84 @@ class AdminCategoryController extends Controller
                 'form' => $form->createView(),
                 'category' => $category,
                 'category_parameter_group' => $categoryParameterGroup,
+            ));
+
+        }
+
+    }
+
+    /**
+     * @param $categoryId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function categoryFiltersListAction($categoryId){
+
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
+            'id' => $categoryId,
+        ));
+
+        if(!$category instanceof Category){
+            return $this->redirect($this->generateUrl('categories'));
+        }
+
+        return $this->render('ShopCatalogBundle:AdminCategory:categoryFiltersList.html.twig', array(
+            'category' => $category,
+        ));
+
+    }
+
+    /**
+     * @param $id
+     * @param $categoryId
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function categoryFiltersAction($id, $categoryId, Request $request){
+
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
+            'id' => $categoryId,
+        ));
+
+        if(!$category instanceof Category){
+            return $this->redirect($this->generateUrl('categories'));
+        }
+
+        $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryFilters')->findOneBy(array(
+            'id' => $id,
+        ));
+
+        if(!$categoryFilters instanceof CategoryFilters){
+            $categoryFilters = new CategoryFilters();
+        }
+
+        $isNew = !$categoryFilters->getId();
+        $form = $this->createForm('shop_catalog_category_filters_type', $categoryFilters, array(
+            'category' => $category,
+        ));
+
+        $form->handleRequest($request);
+
+        if($request->getMethod() == 'POST' && $form->isValid()){
+
+            $em = $this->getDoctrine()->getManager();
+
+            if($isNew){
+                $category->addFilter($categoryFilters);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('category_filters_list', array(
+                'categoryId' => $category->getId(),
+            )));
+
+        } else {
+
+            return $this->render('ShopCatalogBundle:AdminCategory:categoryFilters.html.twig', array(
+                'title' => $isNew ? 'Добавление фильтров' : 'Изменение фильтров',
+                'form' => $form->createView(),
+                'category' => $category,
+                'categoryFilters' => $categoryFilters,
             ));
 
         }

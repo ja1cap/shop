@@ -33,9 +33,9 @@ class CategoryParameter extends AbstractEntity
     private $position;
 
     /**
-     * @var integer
+     * @var array
      */
-    private $filterGroup;
+    private $filterGroups = array();
 
     /**
      * @var \Shop\CatalogBundle\Entity\Category
@@ -260,12 +260,12 @@ class CategoryParameter extends AbstractEntity
     /**
      * Set filterType
      *
-     * @param integer $filterType
+     * @param array $filterGroups
      * @return CategoryParameter
      */
-    public function setFilterGroup($filterType)
+    public function setFilterGroups($filterGroups)
     {
-        $this->filterGroup = $filterType;
+        $this->filterGroups = $filterGroups;
 
         return $this;
     }
@@ -273,10 +273,10 @@ class CategoryParameter extends AbstractEntity
     /**
      * Get filterType
      *
-     * @return integer 
+     * @return array
      */
-    public function getFilterGroup()
+    public function getFilterGroups()
     {
-        return $this->filterGroup;
+        return $this->filterGroups;
     }
 }

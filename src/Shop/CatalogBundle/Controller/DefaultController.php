@@ -3,7 +3,7 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Filter\CategoryFiltersBuilder;
+use Shop\CatalogBundle\Entity\CategoryFilters;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,16 +34,31 @@ class DefaultController extends Controller
      */
     public function categoryAction($slug, Request $request){
 
+        $categoryFilters = null;
         $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
             'slug' => $slug,
         ));
 
         if(!$category instanceof Category){
-            return $this->redirect($this->generateUrl('shop'));
+
+            $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryFilters')->findOneBy(array(
+                'slug' => $slug,
+            ));
+
+            if($categoryFilters instanceof CategoryFilters){
+                $category = $categoryFilters->getCategory();
+            } else {
+                return $this->redirect($this->generateUrl('shop'));
+            }
+
         }
 
         $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
-        $filtersResource = $filtersBuilder->buildFromRequest($category, null, $request);
+        if($categoryFilters){
+            $filtersResource = $filtersBuilder->buildFromCategoryFilters($categoryFilters);
+        } else {
+            $filtersResource = $filtersBuilder->buildFromRequest($category, null, $request);
+        }
 
         $proposals = $this->getProposalRepository()->findProposalsByParameters($category->getId(), $filtersResource);
         $shopCart = $this->buildShopCart($request);
@@ -78,7 +93,7 @@ class DefaultController extends Controller
     public function buildShopCart(Request $request)
     {
         $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
-        return $this->getShopCartFactory()->buildShopCart($shopCartStorageData);
+        return $this->getShopCartFactory()->createShopCart($shopCartStorageData);
     }
 
     /**

@@ -3,7 +3,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-use Shop\CatalogBundle\Filter\CategoryFiltersResource;
+use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Filter\FilterInterface;
 use Weasty\DoctrineBundle\Entity\AbstractRepository;
 
@@ -82,10 +82,10 @@ class ProposalRepository extends AbstractRepository {
     /**
      * @param $categoryId
      * @param null $proposalId
-     * @param CategoryFiltersResource $filtersResource
+     * @param FiltersResource $filtersResource
      * @return array
      */
-    public function getPriceIntervalsData($categoryId, $proposalId = null, CategoryFiltersResource $filtersResource){
+    public function getPriceIntervalsData($categoryId, $proposalId = null, FiltersResource $filtersResource){
 
         $priceStep = $this->getProposalPriceRange($categoryId);
         $minPrice = floatval($priceStep['minPrice']);
@@ -237,7 +237,7 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
-    public function findProposalPrice($categoryId, $proposalId, CategoryFiltersResource $filtersResource){
+    public function findProposalPrice($categoryId, $proposalId, FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -359,7 +359,7 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
-    public function findProposalsByParameters($categoryId, CategoryFiltersResource $filtersResource, $page = null, $perPage = null){
+    public function findProposalsByParameters($categoryId, FiltersResource $filtersResource, $page = null, $perPage = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -501,10 +501,12 @@ class ProposalRepository extends AbstractRepository {
             ))
         ;
 
-        $qb->andWhere($qb->expr()->in('cp.filterGroup', array(
-            FilterInterface::GROUP_MAIN,
-            FilterInterface::GROUP_EXTRA,
-        )));
+        $qb->andWhere(
+            $qb->expr()->orX(
+                'FIND_IN_SET(' . FilterInterface::GROUP_MAIN . ', cp.filterGroups) > 0',
+                'FIND_IN_SET(' . FilterInterface::GROUP_EXTRA . ', cp.filterGroups) > 0'
+            )
+        );
 
         $qb
             ->addOrderBy('cp.position')
@@ -555,7 +557,7 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
-    public function getParameterOptionsPricesAmount($parameterId, $categoryId, $proposalId = null, CategoryFiltersResource $filtersResource){
+    public function getParameterOptionsPricesAmount($parameterId, $categoryId, $proposalId = null, FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -701,10 +703,10 @@ class ProposalRepository extends AbstractRepository {
     }
 
     /**
-     * @param CategoryFiltersResource $filtersResource
+     * @param FiltersResource $filtersResource
      * @param QueryBuilder $qb
      */
-    protected function applyPriceFilter(CategoryFiltersResource $filtersResource, QueryBuilder $qb){
+    protected function applyPriceFilter(FiltersResource $filtersResource, QueryBuilder $qb){
 
         $filter = $filtersResource->getPriceRangeFilter();
         $filterPricesExpr = array();

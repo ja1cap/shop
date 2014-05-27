@@ -2,7 +2,6 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shop\CatalogBundle\Filter\FilterInterface;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 use Weasty\CatalogBundle\Data\ProposalPriceInterface;
 
@@ -207,16 +206,6 @@ class Price extends AbstractEntity
     public function getDescription(){
 
         $parametersData = array();
-        $category = $this->getCategory();
-        $categoryParameters = array();
-
-        if($category instanceof Category){
-            foreach($category->getParameters() as $categoryParameter){
-                if($categoryParameter instanceof CategoryParameter){
-                    $categoryParameters[$categoryParameter->getParameterId()] = $categoryParameter;
-                }
-            }
-        }
 
         /**
          * @var $parameterValue ParameterValue
@@ -225,14 +214,7 @@ class Price extends AbstractEntity
 
             if(isset($categoryParameters[$parameterValue->getParameterId()])){
 
-                $categoryParameter = $categoryParameters[$parameterValue->getParameterId()];
-                if(
-                    $categoryParameter instanceof CategoryParameter
-                    && in_array($categoryParameter->getFilterGroup(), array(
-                        FilterInterface::GROUP_MAIN,
-                        FilterInterface::GROUP_EXTRA,
-                    ))
-                ){
+                if($parameterValue->getParameter()->getIsPriceParameter()){
 
                     if(!isset($parametersData[$parameterValue->getParameterId()])){
 

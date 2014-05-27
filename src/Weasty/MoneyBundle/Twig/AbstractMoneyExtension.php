@@ -86,9 +86,12 @@ abstract class AbstractMoneyExtension extends \Twig_Extension {
     /**
      * @param $value
      * @param $currency
+     * @param boolean $appendSymbol
      * @return string
      */
-    public function formatMoney($value, $currency){
+    public function formatMoney($value, $currency = null, $appendSymbol = true){
+
+        $currency = $currency ?: $this->getCurrencyResource()->getDefaultCurrency();
 
         $currencyAlphabeticCode = $this
             ->getCurrencyCodeConverter()
@@ -108,12 +111,16 @@ abstract class AbstractMoneyExtension extends \Twig_Extension {
 
         $result = number_format($value, $fractionDigits, ',', ' ');
 
-        $currencySymbol = $this->getCurrencyResource()->getCurrencySymbol($currencyAlphabeticCode);
-        $prependCurrencySymbol = false;
-        if($prependCurrencySymbol){
-            $result = $currencySymbol . ' ' . $result;
-        } else {
-            $result .= ' ' . $currencySymbol;
+        if($appendSymbol){
+
+            $currencySymbol = $this->getCurrencyResource()->getCurrencySymbol($currencyAlphabeticCode);
+            $prependCurrencySymbol = false;
+            if($prependCurrencySymbol){
+                $result = $currencySymbol . ' ' . $result;
+            } else {
+                $result .= ' ' . $currencySymbol;
+            }
+
         }
 
         return $result;

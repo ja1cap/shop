@@ -7,7 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="name" type="string" column="name" length="255"/>
-        <field name="isPriceParameter" type="boolean" column="isPriceParameter"/>
+        <field name="isPriceParameter" type="boolean" column="isPriceParameter" nullable="true"/>
         <field name="type" type="integer" column="type"/>
         <field name="defaultOptionId" type="integer" column="defaultOptionId" nullable="true"/>
         <one-to-one field="defaultOption" target-entity="ParameterOption">

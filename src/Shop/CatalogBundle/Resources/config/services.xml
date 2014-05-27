@@ -57,8 +57,9 @@
             <argument type="service" id="shop_catalog.price.repository"/>
         </service>
 
-        <service id="shop_catalog.category.filters.builder" class="Shop\CatalogBundle\Filter\CategoryFiltersBuilder">
+        <service id="shop_catalog.category.filters.builder" class="Shop\CatalogBundle\Filter\FiltersBuilder">
             <argument type="service" id="shop_catalog.proposal.repository"/>
+            <argument type="service" id="weasty_money.twig.money_extension"/>
             <argument type="service" id="doctrine.orm.default_result_cache"/>
         </service>
 

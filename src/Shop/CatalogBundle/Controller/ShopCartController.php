@@ -269,7 +269,7 @@ class ShopCartController extends Controller
     public function buildShopCart(Request $request)
     {
         $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
-        $shopCart = $this->getShopCartFactory()->buildShopCart($shopCartStorageData);
+        $shopCart = $this->getShopCartFactory()->createShopCart($shopCartStorageData);
         return $shopCart;
     }
 

@@ -84,26 +84,26 @@
                                                                 {% endif %}
                                                                 ({{ priceData.shipping.city.getLocaleName(app.request.locale) }})
                                                             </div>
-                                                            {% if proposalPriceShippingSummary.liftingPrice %}
-                                                                <div>
-                                                                    Подъем на этаж:
-                                                                    {% if proposalPriceShippingSummary.liftingPrice.value %}
-                                                                        {{ proposalPriceShippingSummary.liftingPrice|weasty_price }}
-                                                                    {% else %}
-                                                                        бесплатно
-                                                                    {% endif %}
-                                                                </div>
-                                                            {% endif %}
-                                                            {% if proposalPriceShippingSummary.assemblyPrice %}
-                                                                <div>
-                                                                    Сборка:
-                                                                    {% if proposalPriceShippingSummary.assemblyPrice.value %}
-                                                                        {{ proposalPriceShippingSummary.assemblyPrice|weasty_price }}
-                                                                    {% else %}
-                                                                        бесплатно
-                                                                    {% endif %}
-                                                                </div>
-                                                            {% endif %}
+                                                            {#{% if proposalPriceShippingSummary.liftingPrice %}#}
+                                                                {#<div>#}
+                                                                    {#Подъем на этаж:#}
+                                                                    {#{% if proposalPriceShippingSummary.liftingPrice.value %}#}
+                                                                        {#{{ proposalPriceShippingSummary.liftingPrice|weasty_price }}#}
+                                                                    {#{% else %}#}
+                                                                        {#бесплатно#}
+                                                                    {#{% endif %}#}
+                                                                {#</div>#}
+                                                            {#{% endif %}#}
+                                                            {#{% if proposalPriceShippingSummary.assemblyPrice %}#}
+                                                                {#<div>#}
+                                                                    {#Сборка:#}
+                                                                    {#{% if proposalPriceShippingSummary.assemblyPrice.value %}#}
+                                                                        {#{{ proposalPriceShippingSummary.assemblyPrice|weasty_price }}#}
+                                                                    {#{% else %}#}
+                                                                        {#бесплатно#}
+                                                                    {#{% endif %}#}
+                                                                {#</div>#}
+                                                            {#{% endif %}#}
                                                         </div>
                                                     {% endif %}
                                                 </div>
@@ -137,11 +137,11 @@
 
                         <div class="proposal-information-container">
 
-                            {% if filtersResource.getParameterFilters %}
+                            {% if filtersResource.getProposalParameterFilters %}
                                 <div class="filters-form-container">
                                     <form id="filtersForm">
                                         <ul class="tiles two_up">
-                                            {% for parameterFilter in filtersResource.getParameterFilters %}
+                                            {% for parameterFilter in filtersResource.getProposalParameterFilters %}
                                                 <li>
                                                     <div class="proposal-select">
                                                         <label for="parameter_{{ parameterFilter.getParameterId }}">

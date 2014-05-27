@@ -457,4 +457,42 @@ class Category extends AbstractEntity
     {
         return $this->image;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $filters;
+
+
+    /**
+     * Add filters
+     *
+     * @param \Shop\CatalogBundle\Entity\CategoryFilters $filters
+     * @return Category
+     */
+    public function addFilter(CategoryFilters $filters)
+    {
+        $this->filters[] = $filters;
+        $filters->setCategory($this);
+        return $this;
+    }
+
+    /**
+     * Remove filters
+     *
+     * @param \Shop\CatalogBundle\Entity\CategoryFilters $filters
+     */
+    public function removeFilter(CategoryFilters $filters)
+    {
+        $this->filters->removeElement($filters);
+    }
+
+    /**
+     * Get filters
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
 }

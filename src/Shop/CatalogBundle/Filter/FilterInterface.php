@@ -10,6 +10,7 @@ interface FilterInterface {
     const GROUP_NONE = 0;
     const GROUP_MAIN = 1;
     const GROUP_EXTRA = 2;
+    const GROUP_PROPOSAL = 3;
 
     const TYPE_SELECT = 1;
     const TYPE_CHECKBOXES = 2;
@@ -22,9 +23,9 @@ interface FilterInterface {
     public function getType();
 
     /**
-     * @return int
+     * @return array
      */
-    public function getGroup();
+    public function getGroups();
 
     /**
      * @return string
@@ -52,5 +53,10 @@ interface FilterInterface {
      * @return null|FilterOptionInterface
      */
     public function getOption($id);
+
+    /**
+     * @return \Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
+     */
+    public function getChoiceList();
 
 } 

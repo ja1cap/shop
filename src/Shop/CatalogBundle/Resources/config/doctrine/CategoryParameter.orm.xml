@@ -12,7 +12,8 @@
         <field name="groupId" type="integer" column="groupId" nullable="true"/>
         <field name="name" type="string" column="name" nullable="true"/>
         <field name="position" type="integer" column="position"/>
-        <field name="filterGroup" type="integer" column="filterGroup"/>
+        <!--@TODO rename filterGroups column name-->
+        <field name="filterGroups" type="simple_array" column="filterGroup"/>
         <many-to-one target-entity="Category" field="category">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>

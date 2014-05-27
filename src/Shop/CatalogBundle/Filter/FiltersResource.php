@@ -2,18 +2,19 @@
 namespace Shop\CatalogBundle\Filter;
 
 /**
- * Class CategoryFiltersResource
+ * Class FiltersResource
  * @package Shop\CatalogBundle\Filter
  */
-class CategoryFiltersResource {
+class FiltersResource {
 
     /**
      * @var array
      */
     public static $filterGroups = array(
+        FilterInterface::GROUP_NONE => 'Нет',
         FilterInterface::GROUP_MAIN => 'Основная',
         FilterInterface::GROUP_EXTRA => 'Дополнительная',
-        FilterInterface::GROUP_NONE => 'Нет',
+        FilterInterface::GROUP_PROPOSAL => 'Фильтры на странице товара',
     );
 
     /**
@@ -103,7 +104,7 @@ class CategoryFiltersResource {
         $filters = array();
 
         foreach($this->parameterFilters as $parameterId => $parameterFilter){
-            if($parameterFilter->getGroup() == $group){
+            if(in_array($group, $parameterFilter->getGroups())){
                 $filters[$parameterId] = $parameterFilter;
             }
         }
@@ -124,6 +125,13 @@ class CategoryFiltersResource {
      */
     public function getExtraParameterFilters(){
         return $this->getGroupParameterFilters(FilterInterface::GROUP_EXTRA);
+    }
+
+    /**
+     * @return array
+     */
+    public function getProposalParameterFilters(){
+        return $this->getGroupParameterFilters(FilterInterface::GROUP_PROPOSAL);
     }
 
     /**

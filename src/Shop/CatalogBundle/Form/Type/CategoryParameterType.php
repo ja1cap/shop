@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryParameter;
+use Shop\CatalogBundle\Filter\CategoryFiltersResource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -48,7 +48,7 @@ class CategoryParameterType extends AbstractType {
 
         $builder
             ->add('filterGroup', 'choice', array(
-                'choices' => CategoryParameter::$filterGroups,
+                'choices' => CategoryFiltersResource::$filterGroups,
                 'label' => 'Группа фильтров',
             ))
             ->add('name', 'text', array(

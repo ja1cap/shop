@@ -12,7 +12,7 @@
         <parameter key="shop_catalog.price.repository.class">Shop\CatalogBundle\Entity\PriceRepository</parameter>
         <parameter key="shop_catalog.popular_proposal.entity.class">Shop\CatalogBundle\Entity\PopularProposal</parameter>
         <parameter key="shop_catalog.popular_proposal.repository.class">Shop\CatalogBundle\Entity\PopularProposalRepository</parameter>
-        <parameter key="shop_catalog.price.currency.converter.class">Shop\CatalogBundle\Converter\ShopPriceCurrencyConverter</parameter>
+        <parameter key="shop_catalog.price.currency.converter.class">Shop\CatalogBundle\Currency\ShopPriceCurrencyConverter</parameter>
         <parameter key="shop_catalog.shop_cart.factory.class">Shop\CatalogBundle\Cart\ShopCartFactory</parameter>
     </parameters>
 
@@ -55,6 +55,11 @@
             <argument type="service" id="shop_catalog.category.repository"/>
             <argument type="service" id="shop_catalog.proposal.repository"/>
             <argument type="service" id="shop_catalog.price.repository"/>
+        </service>
+
+        <service id="shop_catalog.category.filters.builder" class="Shop\CatalogBundle\Filter\CategoryFiltersBuilder">
+            <argument type="service" id="shop_catalog.proposal.repository"/>
+            <argument type="service" id="doctrine.orm.default_result_cache"/>
         </service>
 
         <service id="shop_catalog.proposal.extension"

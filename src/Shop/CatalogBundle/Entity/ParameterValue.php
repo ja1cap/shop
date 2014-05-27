@@ -5,7 +5,8 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ParameterValue
+ * Class ParameterValue
+ * @package Shop\CatalogBundle\Entity
  */
 class ParameterValue
 {
@@ -140,7 +141,7 @@ class ParameterValue
      * @param integer $proposalId
      * @return ParameterValue
      */
-    public function setProposalId($proposalId)
+    protected function setProposalId($proposalId)
     {
         $this->proposalId = $proposalId;
 
@@ -166,7 +167,10 @@ class ParameterValue
     public function setPrice(Price $price = null)
     {
         $this->price = $price;
-        $this->setPriceId($price->getId());
+        $this
+            ->setProposal($price ? $price->getProposal() : null)
+            ->setPriceId($price ? $price->getId() : null)
+        ;
         return $this;
     }
 
@@ -186,10 +190,10 @@ class ParameterValue
      * @param \Shop\CatalogBundle\Entity\Proposal $proposal
      * @return ParameterValue
      */
-    public function setProposal(Proposal $proposal = null)
+    protected function setProposal(Proposal $proposal = null)
     {
         $this->proposal = $proposal;
-        $this->setProposalId($proposal->getId());
+        $this->setProposalId($proposal ? $proposal->getId() : null);
         return $this;
     }
 

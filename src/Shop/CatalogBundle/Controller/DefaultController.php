@@ -3,11 +3,8 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryParameter;
-use Shop\CatalogBundle\Entity\Manufacturer;
-use Shop\CatalogBundle\Entity\ParameterOption;
+use Shop\CatalogBundle\Filter\CategoryFiltersBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -45,255 +42,23 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('shop'));
         }
 
-        $filterParametersValues = $this->getFilterParametersValues($request);
+        $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+        $filtersResource = $filtersBuilder->buildFromRequest($category, null, $request);
 
-        /**
-         * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
-         */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
-
-        $manufacturerId = $request->get('manufacturer', $request->cookies->get('manufacturer'));
-        $manufacturers = $proposalRepository->findCategoryManufacturers($category->getId());
-        $manufacturerIds = array_map(function(Manufacturer $manufacturer){
-            return $manufacturer->getId();
-        }, $manufacturers);
-        if(!in_array($manufacturerId, $manufacturerIds)){
-            $manufacturerId = null;
-        }
-
-        $parametersOptions = $proposalRepository->findCategoryParametersOptions($category->getId());
-        $parametersData = $this->buildParametersData($parametersOptions);
-
-        $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
-
-        $priceIntervalsData = $proposalRepository->getPriceIntervalsData($category->getId(), $manufacturerId, $filterParametersValuesFilteredByOptionsIds);
-        $priceInterval = $priceIntervalsData['interval'];
-        $validFilterPrices = array_keys($priceIntervalsData['intervals']);
-
-        $filterPrices = $request->get('prices', json_decode($request->cookies->get('prices' . $category->getId()), true));
-
-        if(is_array($filterPrices)){
-            $filterPrices = array_filter($filterPrices, function($filterPrice) use ($validFilterPrices){
-                return in_array($filterPrice, $validFilterPrices);
-            });
-        } else {
-            $filterPrices = array();
-        }
-
-        $filterPricesRanges = array();
-        foreach($filterPrices as $i => $filterPrice){
-            $filterPricesRanges[$i] = array(
-                'min' => $filterPrice,
-                'max' => $filterPrice + $priceInterval,
-            );
-        }
-
-        $parametersOptionsAmounts = array();
-        foreach($category->getParameters() as $categoryParameter){
-
-            if($categoryParameter instanceof CategoryParameter){
-
-                $filterParameterValues = $filterParametersValuesFilteredByOptionsIds;
-
-                if(isset($filterParameterValues[$categoryParameter->getParameterId()])){
-                    unset($filterParameterValues[$categoryParameter->getParameterId()]);
-                }
-
-                $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $manufacturerId, $filterParameterValues, $filterPricesRanges);
-
-            }
-
-        }
-
-        $extraParametersData = array_filter(
-            $category->getParameters()->map(function(CategoryParameter $categoryParameter) use (&$parametersData) {
-
-                if($categoryParameter->getFilterGroup() == $categoryParameter::FILTER_GROUP_EXTRA && isset($parametersData[$categoryParameter->getParameterId()])){
-
-                    $parameterData = $parametersData[$categoryParameter->getParameterId()];
-                    unset($parametersData[$categoryParameter->getParameterId()]);
-                    return $parameterData;
-
-                }
-
-                return false;
-
-            })->toArray()
-        );
-
-        $proposals = $proposalRepository->findProposalsByParameters(
-            $category->getId(),
-            $manufacturerId,
-            $filterParametersValuesFilteredByOptionsIds,
-            $filterPricesRanges
-        );
-
+        $proposals = $this->getProposalRepository()->findProposalsByParameters($category->getId(), $filtersResource);
         $shopCart = $this->buildShopCart($request);
 
         $viewParameters = array(
             'shopCart' => $shopCart,
             'category' => $category,
-            'categories' => $this->getCategories(),
             'proposals' => $proposals,
-            'manufacturers' => $manufacturers,
-            'priceIntervalsData' => $priceIntervalsData,
-            'filteredPrices' => $filterPrices,
-            'parametersData' => $parametersData,
-            'extraParametersData' => $extraParametersData,
-            'parametersOptionsAmounts' => $parametersOptionsAmounts,
-            'filteredManufacturer' => $manufacturerId,
-            'filteredParameterValues' => $filterParametersValuesFilteredByOptionsIds,
+            'filtersResource' => $filtersResource,
         );
 
         $response = $this->render('ShopCatalogBundle:Default:category.html.twig', $viewParameters);
-        $response->headers->setCookie(new Cookie(self::CATALOG_FILTER_COOKIE_NAME, json_encode($filterParametersValues)));
-
-        if($request->query->has('manufacturer')){
-            $response->headers->setCookie(new Cookie('manufacturer', $manufacturerId));
-        }
-
-        if($request->query->has('prices')){
-            $response->headers->setCookie(new Cookie('prices' . $category->getId(), json_encode($filterPrices)));
-        }
+        $filtersBuilder->setFiltersCookies($category, $request, $response);
 
         return $response;
-
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    protected function getFilterParametersValues(Request $request)
-    {
-        $cookieName = self::CATALOG_FILTER_COOKIE_NAME;
-        $cookie = $request->cookies->get($cookieName);
-
-        if ($cookie) {
-
-            $cookie = json_decode($request->cookies->get($cookieName), true);
-            if (!is_array($cookie)) {
-                $cookie = null;
-            }
-
-        }
-
-        $values = $request->get('parameters', $cookie);
-
-        if (is_array($values)) {
-            $values = array_filter($values);
-        } else {
-            $values = array();
-        }
-
-        return $values;
-
-    }
-
-    /**
-     * @param array $parametersOptions
-     * @return array
-     */
-    protected function buildParametersData(array $parametersOptions)
-    {
-
-        $parametersData = array();
-
-        /**
-         * @var $parameterOption \Shop\CatalogBundle\Entity\ParameterOption
-         */
-        foreach ($parametersOptions as $parameterOption) {
-
-            if (!isset($parametersData[$parameterOption->getParameterId()])) {
-
-                $parametersData[$parameterOption->getParameterId()] = array(
-                    'parameter' => $parameterOption->getParameter(),
-                    'options' => array(),
-                );
-
-            }
-
-            $parametersData[$parameterOption->getParameterId()]['options'][] = $parameterOption;
-
-        }
-        return $parametersData;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getCategories(){
-        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(
-            array(
-                'status' => Category::STATUS_ON
-            ),
-            array(
-                'name' => 'ASC',
-            )
-        );
-    }
-
-    /**
-     * @param $filteredParametersValues
-     * @param $parametersData
-     * @return array
-     */
-    protected function filterParametersValuesByOptionsIds($filteredParametersValues, $parametersData)
-    {
-
-        $newFilteredParametersValues = array();
-
-        foreach($parametersData as $parameterId => $parameterData){
-
-            /**
-             * @var $parameter \Shop\CatalogBundle\Entity\Parameter
-             */
-            $parameter = $parameterData['parameter'];
-
-            $parameterOptionsIds = array_map(function(ParameterOption $parameterOption){
-                return $parameterOption->getId();
-            }, $parameterData['options']);
-
-            if(isset($filteredParametersValues[$parameterId])){
-
-                $filteredParameterValue = $filteredParametersValues[$parameterId];
-
-                if (is_array($filteredParameterValue)) {
-
-                    $filteredParameterOptionsIds = array();
-
-                    foreach ($filteredParameterValue as $parameterOptionId) {
-                        if ($parameterOptionId && in_array($parameterOptionId, $parameterOptionsIds)) {
-                            $filteredParameterOptionsIds[] = $parameterOptionId;
-                        }
-                    }
-
-                    if ($filteredParameterOptionsIds) {
-                        $newFilteredParametersValues[$parameterId] = $filteredParameterOptionsIds;
-                    }
-
-                } else {
-
-                    $parameterOptionId = $filteredParameterValue;
-
-                    if ($filteredParameterValue && in_array($parameterOptionId, $parameterOptionsIds)) {
-
-                        $newFilteredParametersValues[$parameterId] = $parameterOptionId;
-
-                    }
-
-                }
-
-
-            } elseif($parameter->getDefaultOptionId() && in_array($parameter->getDefaultOptionId(), $parameterOptionsIds)) {
-
-                $newFilteredParametersValues[$parameterId] = $parameter->getDefaultOptionId();
-
-            }
-
-        }
-
-        return $newFilteredParametersValues;
 
     }
 
@@ -314,6 +79,13 @@ class DefaultController extends Controller
     {
         $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
         return $this->getShopCartFactory()->buildShopCart($shopCartStorageData);
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\ProposalRepository
+     */
+    protected function getProposalRepository(){
+        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
     }
 
 }

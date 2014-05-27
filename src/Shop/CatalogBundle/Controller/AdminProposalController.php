@@ -12,7 +12,6 @@ use Shop\CatalogBundle\Form\Type\PriceType;
 use Shop\CatalogBundle\Form\Type\ProposalType;
 use Shop\CatalogBundle\Mapper\PriceMapper;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
-use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
 use Shop\MainBundle\Form\Type\ImageType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,23 +86,6 @@ class AdminProposalController extends Controller
                 $proposal->setCategory($category);
                 $em->persist($proposal);
             }
-
-            $formData = $request->get($form->getName());
-            $parameterValuesData = array();
-
-            $category->getParameters()->map(function(CategoryParameter $categoryParameter) use($formData, &$parameterValuesData) {
-
-                $parameterElementName = 'parameter' . $categoryParameter->getParameterId();
-                if(isset($formData[$parameterElementName])){
-                    $parameterValuesData[$categoryParameter->getParameterId()] = $formData[$parameterElementName];
-                } else if(!$categoryParameter->getParameter()->getIsPriceParameter()) {
-                    $parameterValuesData[$categoryParameter->getParameterId()] = null;
-                }
-
-            });
-
-            $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->getDoctrine()->getManager(), $proposal);
-            $proposalParameterValuesMapper->mapParameterValues($parameterValuesData);
 
             $em->flush();
 
@@ -245,7 +227,7 @@ class AdminProposalController extends Controller
                 $parameterElementName = 'parameter' . $categoryParameter->getParameterId();
                 if(isset($formData[$parameterElementName])){
                     $parameterValuesData[$categoryParameter->getParameterId()] = $formData[$parameterElementName];
-                } else if($categoryParameter->getParameter()->getIsPriceParameter()) {
+                } else {
                     $parameterValuesData[$categoryParameter->getParameterId()] = array();
                 }
 

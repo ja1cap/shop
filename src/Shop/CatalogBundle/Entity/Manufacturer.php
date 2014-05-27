@@ -11,6 +11,7 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
  */
 class Manufacturer extends AbstractEntity
 {
+
     /**
      * @var integer
      */
@@ -20,7 +21,6 @@ class Manufacturer extends AbstractEntity
      * @var string
      */
     private $name;
-
 
     /**
      * Get id
@@ -54,6 +54,7 @@ class Manufacturer extends AbstractEntity
     {
         return $this->name;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */

@@ -6,8 +6,6 @@ use Shop\CatalogBundle\Entity\Proposal;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryParameter;
-use Shop\CatalogBundle\Entity\ParameterOption;
 
 /**
  * Class ProposalType
@@ -75,35 +73,6 @@ class ProposalType extends AbstractType {
                 'choices' => Proposal::$statuses,
                 'label' => 'Статус',
             ));
-
-        /**
-         * @var $categoryParameter CategoryParameter
-         */
-        foreach($this->getCategory()->getParameters() as $categoryParameter){
-
-            if(!$categoryParameter->getParameter()->getIsPriceParameter()){
-
-                $options = $categoryParameter->getParameter()->getOptions();
-
-                $choices = array();
-
-                /**
-                 * @var $option ParameterOption
-                 */
-                foreach($options as $option){
-                    $choices[$option->getId()] = $option->getName();
-                }
-
-                $builder->add('parameter' . $categoryParameter->getParameterId(), 'choice', array(
-                    'label' => $categoryParameter->getName(),
-                    'choices' => $choices,
-                    'mapped' => false,
-                    'required' => false,
-                ));
-
-            }
-
-        }
 
         $builder
             ->add('seoTitle', 'text', array(

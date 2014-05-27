@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Builder;
+namespace Shop\CatalogBundle\PriceList;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Shop\CatalogBundle\Entity\Category;
@@ -12,7 +12,7 @@ use Shop\CatalogBundle\Entity\Proposal;
 
 /**
  * Class PriceListBuilder
- * @package Shop\CatalogBundle\Builder
+ * @package Shop\CatalogBundle\PriceList
  */
 class PriceListBuilder {
 
@@ -167,21 +167,6 @@ class PriceListBuilder {
                 }
 
                 foreach($price->getParameterValues() as $parameterValue){
-
-                    if($parameterValue instanceof ParameterValue){
-
-                        if(isset($categoryParameterColumns[$parameterValue->getParameterId()])){
-
-                            $parameterColumn = $categoryParameterColumns[$parameterValue->getParameterId()];
-                            $activeSheet->setCellValueByColumnAndRow($parameterColumn, $identifiersRowIndex, $parameterValue->getOption()->getName());
-
-                        }
-
-                    }
-
-                }
-
-                foreach($proposal->getParameterValues() as $parameterValue){
 
                     if($parameterValue instanceof ParameterValue){
 

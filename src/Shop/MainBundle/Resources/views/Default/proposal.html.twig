@@ -1,11 +1,9 @@
-{#{% extends 'ShopMainBundle:Default:proposals.html.twig' %}#}
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 
 {% block title %}{{ proposal.seoTitle|default(proposal.title) }}{% endblock %}
 {% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
 {% block keywords %}{{ proposal.seoKeywords }}{% endblock %}
 
-{#{% block proposals_main_container %}#}
 {% block main_container %}
 
     <div class="proposal-container row well-v">
@@ -16,40 +14,7 @@
                 <div class="three columns">
 
                     {% include('ShopMainBundle:Default:shopCart.html.twig') %}
-
                     {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
-
-                    {% if (priceIntervalsData is defined and priceIntervalsData.intervals) %}
-                        <div class="filters-form-container extraFiltersForm-container">
-                            <form id="extraFiltersForm" class="extraFiltersForm">
-                                {% if priceIntervalsData.intervals %}
-                                    <div class="proposal-select">
-                                        <label for="prices">
-                                            Цена
-                                        </label>
-                                        <div class="checkboxes">
-                                            <input type="hidden" name="prices[]" value="-1">
-                                            {% for intervalData in priceIntervalsData.intervals %}
-                                                <label for="priceStep{{ intervalData.priceStep }}">
-                                                    <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                    {% if intervalData.priceStep > 0 %}
-                                                        {{ intervalData.priceStep|weasty_price }}
-                                                        -
-                                                    {% else %}
-                                                        до
-                                                    {% endif %}
-                                                    {{ (intervalData.priceStep + priceIntervalsData.interval)|weasty_price }}
-                                                    <small class="amount">
-                                                        ({{ intervalData.pricesAmount|default(0) }})
-                                                    </small>
-                                                </label>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </form>
-                        </div>
-                    {% endif %}
 
                 </div>
                 <div class="nine columns">
@@ -149,23 +114,26 @@
 
                         <div class="proposal-information-container">
 
-                            {% if parametersData %}
+                            {% if filtersResource.getParameterFilters %}
                                 <div class="filters-form-container">
                                     <form id="filtersForm">
                                         <ul class="tiles two_up">
-                                            {% for parameterData in parametersData %}
+                                            {% for parameterFilter in filtersResource.getParameterFilters %}
                                                 <li>
                                                     <div class="proposal-select">
-                                                        <label for="parameter_{{ parameterData.parameter.id }}">
-                                                            {{ parameterData.parameter.name }}
+                                                        <label for="parameter_{{ parameterFilter.getParameterId }}">
+                                                            {{ parameterFilter.getName }}
                                                         </label>
                                                         <div class="picker">
-                                                            <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                            <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}]">
                                                                 <option value="-1">Не важно</option>
-                                                                {% for option in parameterData.options %}
-                                                                    {% set optionAmounts = (parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined ? parametersOptionsAmounts[parameterData.parameter.id][option.id] : null) %}
-                                                                    <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and filteredParameterValues[parameterData.parameter.id] == option.id) ? "selected='selected'" : "" }} {{ (optionAmounts and optionAmounts.proposalsAmount <= 0) ? "disabled='disabled'" : "" }}>
-                                                                        {{ option.name }} ({{ (optionAmounts ? optionAmounts.proposalsAmount : null)|default(0) }})
+                                                                {% for option in parameterFilter.getOptions %}
+                                                                    <option
+                                                                            value="{{ option.getId }}"
+                                                                            {{ option.getIsSelected ? "selected='selected'" : "" }}
+                                                                            {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                                            >
+                                                                        {{ option.getName }} ({{ option.getPricesAmount }})
                                                                     </option>
                                                                 {% endfor %}
                                                             </select>
@@ -212,19 +180,9 @@
                                 <div class="proposal-actions owl-carousel owl-theme">
                                     {% for action in actions %}
                                         <div class="proposal-action">
-                                            {#<a href="#">#}
                                             <span class="proposal-action-image-container">
-                                                    <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
-                                                </span>
-                                            {#</a>#}
-                                            {#<div style="text-align: center">#}
-                                            {#<div style="font-size: 18px; margin: 10px 0;">#}
-                                            {#{{ action.title }}#}
-                                            {#</div>#}
-                                            {#<div style="margin-bottom: 10px">#}
-                                            {#{{ action.description }}#}
-                                            {#</div>#}
-                                            {#</div>#}
+                                                <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
+                                            </span>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -251,17 +209,6 @@
                         document.location = proposalUrl + '?' +$filtersForm.serialize();
 
                     });
-
-//                    $('.manufacturer-image-container').nailthumb({
-//                        method : 'resize'
-//                    });
-//
-//                    $('.manufactures-list').owlCarousel({
-//                        autoPlay: 3000,
-//                        navigation : false,
-//                        pagination : false,
-//                        singleItem: true
-//                    });
 
                     $('.proposal-actions').owlCarousel({
                         autoPlay: 5000,

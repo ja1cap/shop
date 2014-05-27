@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Shop\CatalogBundle\Filter\FilterInterface;
 use Weasty\DoctrineBundle\Entity\AbstractEntity;
 use Weasty\CatalogBundle\Data\ProposalPriceInterface;
 
@@ -200,28 +201,55 @@ class Price extends AbstractEntity
     }
 
     /**
+     * @TODO refactor
      * @return string
      */
     public function getDescription(){
 
         $parametersData = array();
+        $category = $this->getCategory();
+        $categoryParameters = array();
+
+        if($category instanceof Category){
+            foreach($category->getParameters() as $categoryParameter){
+                if($categoryParameter instanceof CategoryParameter){
+                    $categoryParameters[$categoryParameter->getParameterId()] = $categoryParameter;
+                }
+            }
+        }
 
         /**
          * @var $parameterValue ParameterValue
          */
         foreach($this->getParameterValues() as $parameterValue){
 
-            if(!isset($parametersData[$parameterValue->getParameterId()])){
+            if(isset($categoryParameters[$parameterValue->getParameterId()])){
 
-                $parametersData[$parameterValue->getParameterId()] = array(
-                    'parameterId' => $parameterValue->getParameterId(),
-                    'parameterName' => $parameterValue->getParameter()->getName(),
-                    'values' => array(),
-                );
+                $categoryParameter = $categoryParameters[$parameterValue->getParameterId()];
+                if(
+                    $categoryParameter instanceof CategoryParameter
+                    && in_array($categoryParameter->getFilterGroup(), array(
+                        FilterInterface::GROUP_MAIN,
+                        FilterInterface::GROUP_EXTRA,
+                    ))
+                ){
+
+                    if(!isset($parametersData[$parameterValue->getParameterId()])){
+
+                        $parametersData[$parameterValue->getParameterId()] = array(
+                            'parameterId' => $parameterValue->getParameterId(),
+                            'parameterName' => $parameterValue->getParameter()->getName(),
+                            'values' => array(),
+                        );
+
+                    }
+
+                    $parametersData[$parameterValue->getParameterId()]['values'][] = $parameterValue->getOption()->getName();
+
+
+                }
 
             }
-
-            $parametersData[$parameterValue->getParameterId()]['values'][] = $parameterValue->getOption()->getName();
 
         }
 

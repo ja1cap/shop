@@ -2029,7 +2029,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .shop-cart-container .shop-cart .shop-cart-proposal-price:first-child { margin-top: 5px; }
 .shop-cart-container .shop-cart-category-proposal table { margin: 0; border: none; }
 .shop-cart-container .shop-cart-category-proposal table td { vertical-align: middle; border: none; }
-.shop-cart-container .shop-cart-category-proposal table .image-cell { width: 30%; }
+.shop-cart-container .shop-cart-category-proposal table .image-cell { width: 30%; vertical-align: top; }
 .shop-cart-container .shop-cart-category-proposal table .information-cell { width: 60%; }
 .shop-cart-container .shop-cart-category-proposal table .information-cell .shop-cart-proposal-description { padding: 10px 0; }
 .shop-cart-container .shop-cart-category-proposal .shop-cart-proposal-price .price { font-size: 16px; }

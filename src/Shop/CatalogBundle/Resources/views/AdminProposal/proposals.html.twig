@@ -18,9 +18,8 @@
         <table style="margin: 10px 0">
             <thead>
             <tr>
-                <th style="width: 25%">Наименование</th>
+                <th style="width: 30%">Наименование</th>
                 <th>Описание</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -30,49 +29,42 @@
                         <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
                             {{ proposal.title }}
                         </span>
-                        {% if proposal.price %}
-                            <span style="font-weight: normal; display: block">
+                        <div>
+                            {% if proposal.price %}
+                                <span style="font-weight: normal; display: block">
                                 от {{ proposal.price|shop_price }}
                             </span>
-                        {% else %}
-                            <span class="warning label">
+                            {% else %}
+                                <span class="warning label">
                                 Цена не установлена
                             </span>
-                        {% endif %}
+                            {% endif %}
+                        </div>
+                        <div>
+                            <div class="small btn default">
+                                <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="small primary btn">
+                                <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
+                                    Цены
+                                </a>
+                            </div>
+                            <div class="small primary btn">
+                                <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
+                                    Фотографии
+                                </a>
+                            </div>
+                            <div class="small btn danger">
+                                <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td>
                         {{ proposal.short_description }}
-                        {% if not proposal.parameterValues.isEmpty %}
-                        <div style="margin-top: 5px;">
-                            {% for parameterValue in proposal.parameterValues %}
-                                <div style="font-weight: bold">
-                                    {{ parameterValue.parameter.name }} - {{ parameterValue.option.name }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="medium primary btn icon-left entypo icon-flow-tree">
-                            <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
-                                Цены
-                            </a>
-                        </div>
-                        <div class="medium primary btn icon-left entypo icon-picture">
-                            <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
-                                Фотографии
-                            </a>
-                        </div>
-                        <div class="medium btn default">
-                            <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-                                Изменить
-                            </a>
-                        </div>
-                        <div class="medium btn danger">
-                            <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить
-                            </a>
-                        </div>
                     </td>
                 </tr>
             {% endfor %}

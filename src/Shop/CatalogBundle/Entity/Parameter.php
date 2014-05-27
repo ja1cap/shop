@@ -12,21 +12,6 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
 class Parameter extends AbstractEntity
 {
 
-    const TYPE_SELECT = 1;
-    const TYPE_CHECKBOXES = 2;
-    const TYPE_IMAGE = 3;
-    const TYPE_IMAGE_WITH_TEXT = 4;
-
-    /**
-     * @var array
-     */
-    public static $types = array(
-        self::TYPE_SELECT => 'Выпадающий список',
-        self::TYPE_CHECKBOXES => 'Флажки',
-        self::TYPE_IMAGE => 'Изображения',
-        self::TYPE_IMAGE_WITH_TEXT => 'Изображения с текстом',
-    );
-
     /**
      * @var integer
      */
@@ -38,6 +23,8 @@ class Parameter extends AbstractEntity
     private $name;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var boolean
      */
     private $isPriceParameter;
@@ -79,29 +66,6 @@ class Parameter extends AbstractEntity
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set isPriceParameter
-     *
-     * @param boolean $isPriceParameter
-     * @return Parameter
-     */
-    public function setIsPriceParameter($isPriceParameter)
-    {
-        $this->isPriceParameter = $isPriceParameter;
-
-        return $this;
-    }
-
-    /**
-     * Get isPriceParameter
-     *
-     * @return boolean 
-     */
-    public function getIsPriceParameter()
-    {
-        return $this->isPriceParameter;
     }
 
     /**

@@ -2,70 +2,90 @@
 {% block title %}{{ page.seoTitle|default(category.name) }}{% endblock %}
 {% block description %}{{ page.seoDescription|default(category.name) }}{% endblock %}
 {% block keywords %}{{ page.seoKeywords|default(category.name) }}{% endblock %}
+
+{% set mainParameterFilters = filtersResource.getMainParameterFilters %}
+{% set extraParameterFilters = filtersResource.getExtraParameterFilters %}
+{% set priceRangeFilter = filtersResource.getPriceRangeFilter %}
+
 {% block main_container %}
     <div class="row well-v">
         <div class="three columns">
             {% block proposals_left_bar %}
                 {% include('ShopMainBundle:Default:shopCart.html.twig') %}
                 {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
-                {% if extraParametersData or (priceIntervalsData is defined and priceIntervalsData.intervals) %}
+                {% if extraParameterFilters or priceRangeFilter.getOptions %}
                     <div class="filters-form-container extraFiltersForm-container">
                         <div class="title">
                             Дополнительные фильтры
                         </div>
                         <form id="extraFiltersForm" class="extraFiltersForm">
-                            {% if (priceIntervalsData is defined and priceIntervalsData.intervals) %}
+                            {% if priceRangeFilter.getOptions %}
                                 <div class="proposal-select">
                                     <label for="prices">
                                         Цена
                                     </label>
                                     <div class="checkboxes">
                                         <input type="hidden" name="prices[]" value="-1">
-                                        {% for intervalData in priceIntervalsData.intervals %}
-                                            <label for="priceStep{{ intervalData.priceStep }}">
-                                                <input name="prices[]" id="priceStep{{ intervalData.priceStep }}" value="{{ intervalData.priceStep }}" type="checkbox" {{ intervalData.priceStep in filteredPrices ? "checked='checked'" : "" }} {{ intervalData.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                {% if intervalData.priceStep > 0 %}
-                                                    {{ intervalData.priceStep|weasty_price }}
-                                                    -
-                                                {% else %}
+                                        {% for option in priceRangeFilter.getOptions if option.getPricesAmount > 0 %}
+                                            <label for="priceStep{{ option.getId }}">
+                                                <input
+                                                        name="prices[]"
+                                                        id="priceStep{{ option.getId }}"
+                                                        value="{{ option.getId }}"
+                                                        type="checkbox"
+                                                        {{ option.getIsSelected ? "checked='checked'" : "" }}
+                                                        {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                        >
+                                                {% if loop.first %}
                                                     до
+                                                {% else %}
+                                                    {{ option.getMin|weasty_price }}
+                                                    -
                                                 {% endif %}
-                                                {{ (intervalData.priceStep + priceIntervalsData.interval)|weasty_price }}
+                                                {{ option.getMax|weasty_price }}
                                                 <small class="amount">
-                                                    ({{ intervalData.proposalsAmount|default(0) }})
+                                                    ({{ option.getPricesAmount|default(0) }})
                                                 </small>
                                             </label>
                                         {% endfor %}
                                     </div>
                                 </div>
                             {% endif %}
-                            {% for parameterData in extraParametersData %}
+                            {% for parameterFilter in extraParameterFilters %}
                                 <div class="proposal-select">
-                                    <label for="parameter_{{ parameterData.parameter.id }}">
-                                        {{ parameterData.parameter.name }}
+                                    <label for="parameter_{{ parameterFilter.getParameterId }}">
+                                        {{ parameterFilter.getName }}
                                     </label>
-                                    {% if parameterData.parameter.type == constant('TYPE_CHECKBOXES', parameterData.parameter) %}
+                                    {% if parameterFilter.getType == constant('TYPE_CHECKBOXES', parameterFilter) %}
                                         <div class="checkboxes">
-                                            <input type="hidden" name="parameters[{{ parameterData.parameter.id }}][]" value="-1">
-                                            {% for option in parameterData.options %}
-                                                {% set optionAmounts = parametersOptionsAmounts[parameterData.parameter.id][option.id] %}
-                                                <label for="parameterOption{{ option.id }}">
-                                                    <input name="parameters[{{ parameterData.parameter.id }}][]" id="parameterOption{{ option.id }}" value="{{ option.id }}" type="checkbox" {{ (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id]) ? "checked='checked'" : "" }} {{ optionAmounts.proposalsAmount <= 0 ? "disabled='disabled'" : "" }}>
-                                                    {{ option.name }}
+                                            <input type="hidden" name="parameters[{{ parameterFilter.getParameterId }}][]" value="-1">
+                                            {% for option in parameterFilter.getOptions %}
+                                                <label for="parameterOption{{ option.getId }}">
+                                                    <input
+                                                        name="parameters[{{ parameterFilter.getParameterId }}][]"
+                                                        id="parameterOption{{ option.getId }}" value="{{ option.getId }}"
+                                                        type="checkbox"
+                                                        {{ option.getIsSelected ? "checked='checked'" : "" }}
+                                                        {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                    >
+                                                    {{ option.getName }}
                                                     <small class="amount">
-                                                        ({{ optionAmounts.proposalsAmount|default(0) }})
+                                                        ({{ option.getPricesAmount|default(0) }})
                                                     </small>
                                                 </label>
                                             {% endfor %}
                                         </div>
                                     {% else %}
                                         <div class="picker-box">
-                                            <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}][]" multiple="multiple">
+                                            <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" multiple="multiple">
                                                 <option value="-1">Не важно</option>
-                                                {% for option in parameterData.options %}
-                                                    {% set optionAmounts = (parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined ? parametersOptionsAmounts[parameterData.parameter.id][option.id] : null) %}
-                                                    <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id])) ? "selected='selected'" : "" }} {{ (optionAmounts and optionAmounts.proposalsAmount <= 0) ? "disabled='disabled'" : "" }}>
-                                                        {{ option.name }} ({{ (optionAmounts ? optionAmounts.proposalsAmount : null)|default(0) }})
+                                                {% for option in parameterFilter.getOptions %}
+                                                    <option
+                                                        value="{{ option.getId }}"
+                                                        {{ option.getIsSelected ? "selected='selected'" : "" }}
+                                                        {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                    >
+                                                        {{ option.getName }} ({{ option.getPricesAmount }})
                                                     </option>
                                                 {% endfor %}
                                             </select>
@@ -80,7 +100,7 @@
         </div>
         <div class="nine columns">
             {% block proposals_main_container %}
-                {% if parametersData or (manufacturers and manufacturers|length > 1) %}
+                {% if mainParameterFilters or filtersResource.getManufacturerFilter.getOptions|length > 1 %}
                     <div class="">
                         <div class="filters-form-container">
                             <div class="title">
@@ -88,7 +108,7 @@
                             </div>
                             <form id="filtersForm" class="mainFiltersForm">
                                 <ul class="tiles two_up">
-                                    {% if manufacturers and manufacturers|length > 1 %}
+                                    {% if filtersResource.getManufacturerFilter.getOptions|length > 1 %}
                                         <li>
                                             <div class="proposal-select">
                                                 <label for="manufacturers">
@@ -97,9 +117,9 @@
                                                 <div class="picker">
                                                     <select id="manufacturers" name="manufacturer">
                                                         <option value="">Не важно</option>
-                                                        {% for manufacturer in manufacturers %}
-                                                            <option value="{{ manufacturer.id }}" {{ filteredManufacturer == manufacturer.id ? "selected='selected'" : "" }}>
-                                                                {{ manufacturer.name }}
+                                                        {% for option in filtersResource.getManufacturerFilter.getOptions %}
+                                                            <option value="{{ option.getId }}" {{ option.getIsSelected ? "selected='selected'" : "" }}>
+                                                                {{ option.getName }}
                                                             </option>
                                                         {% endfor %}
                                                     </select>
@@ -107,19 +127,22 @@
                                             </div>
                                         </li>
                                     {% endif %}
-                                    {% for parameterData in parametersData %}
+                                    {% for parameterFilter in mainParameterFilters %}
                                         <li>
                                             <div class="proposal-select">
-                                                <label for="parameter_{{ parameterData.parameter.id }}">
-                                                    {{ parameterData.parameter.name }}
+                                                <label for="parameter_{{ parameterFilter.getParameterId }}">
+                                                    {{ parameterFilter.getName }}
                                                 </label>
                                                 <div class="picker">
-                                                    <select id="parameter_{{ parameterData.parameter.id }}" name="parameters[{{ parameterData.parameter.id }}]">
+                                                    <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}]">
                                                         <option value="-1">Не важно</option>
-                                                        {% for option in parameterData.options %}
-                                                            {% set optionAmounts = (parametersOptionsAmounts[parameterData.parameter.id][option.id] is defined ? parametersOptionsAmounts[parameterData.parameter.id][option.id] : null) %}
-                                                            <option value="{{ option.id }}" {{ (filteredParameterValues[parameterData.parameter.id] is defined and (filteredParameterValues[parameterData.parameter.id] == option.id or option.id in filteredParameterValues[parameterData.parameter.id])) ? "selected='selected'" : "" }} {{ (not optionAmounts or (optionAmounts and optionAmounts.proposalsAmount <= 0)) ? "disabled='disabled'" : "" }}>
-                                                                {{ option.name }} ({{ (optionAmounts ? optionAmounts.proposalsAmount : null)|default(0) }})
+                                                        {% for option in parameterFilter.getOptions %}
+                                                            <option
+                                                                    value="{{ option.getId }}"
+                                                                    {{ option.getIsSelected ? "selected='selected'" : "" }}
+                                                                    {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                                    >
+                                                                {{ option.getName }} ({{ option.getPricesAmount }})
                                                             </option>
                                                         {% endfor %}
                                                     </select>

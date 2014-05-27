@@ -321,6 +321,9 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     *
+     * @TODO remove
+     * @deprecated
      * @var \Doctrine\Common\Collections\Collection
      */
     private $parameterValues;
@@ -329,19 +332,22 @@ class Proposal extends AbstractEntity
     /**
      * Add parameterValues
      *
+     * @TODO remove
+     * @deprecated
      * @param \Shop\CatalogBundle\Entity\ParameterValue $parameterValues
      * @return Proposal
      */
     public function addParameterValue(ParameterValue $parameterValues)
     {
         $this->parameterValues[] = $parameterValues;
-        $parameterValues->setProposal($this);
         return $this;
     }
 
     /**
      * Remove parameterValues
      *
+     * @TODO remove
+     * @deprecated
      * @param \Shop\CatalogBundle\Entity\ParameterValue $parameterValues
      */
     public function removeParameterValue(ParameterValue $parameterValues)
@@ -352,7 +358,9 @@ class Proposal extends AbstractEntity
     /**
      * Get parameterValues
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @TODO remove
+     * @deprecated
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getParameterValues()
     {

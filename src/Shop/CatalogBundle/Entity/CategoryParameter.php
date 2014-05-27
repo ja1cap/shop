@@ -9,12 +9,8 @@ use Weasty\DoctrineBundle\Entity\AbstractEntity;
  * Class CategoryParameter
  * @package Shop\CatalogBundle\Entity
  */
-class CategoryParameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
+class CategoryParameter extends AbstractEntity
 {
-
-    const FILTER_GROUP_NONE = 0;
-    const FILTER_GROUP_MAIN = 1;
-    const FILTER_GROUP_EXTRA = 2;
 
     /**
      * @var integer
@@ -40,15 +36,6 @@ class CategoryParameter extends \Weasty\DoctrineBundle\Entity\AbstractEntity
      * @var integer
      */
     private $filterGroup;
-
-    /**
-     * @var array
-     */
-    public static $filterGroups = array(
-        self::FILTER_GROUP_MAIN => 'Основная',
-        self::FILTER_GROUP_EXTRA => 'Дополнительная',
-        self::FILTER_GROUP_NONE => 'Нет',
-    );
 
     /**
      * @var \Shop\CatalogBundle\Entity\Category

@@ -2,15 +2,15 @@
 
 namespace Shop\CatalogBundle\Controller;
 
-use Shop\CatalogBundle\Builder\PriceListBuilder;
+use Shop\CatalogBundle\PriceList\PriceListBuilder;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\Manufacturer;
 use Shop\CatalogBundle\Entity\PriceList;
 use Shop\CatalogBundle\Entity\PriceListAlias;
 use Shop\CatalogBundle\Form\Type\CreatePriceListType;
 use Shop\CatalogBundle\Form\Type\PriceListType;
-use Shop\CatalogBundle\Mapper\PriceListMapper;
-use Shop\CatalogBundle\Parser\PriceListParser;
+use Shop\CatalogBundle\PriceList\PriceListMapper;
+use Shop\CatalogBundle\PriceList\PriceListParser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Shop\CatalogBundle\Entity\PriceListRepository;

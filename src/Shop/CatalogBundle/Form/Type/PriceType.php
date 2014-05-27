@@ -73,35 +73,32 @@ class PriceType extends AbstractType {
          */
         foreach($this->getCategory()->getParameters() as $categoryParameter){
 
-            if($categoryParameter->getParameter()->getIsPriceParameter()){
+            $options = $categoryParameter->getParameter()->getOptions();
 
-                $options = $categoryParameter->getParameter()->getOptions();
+            $choices = array();
 
-                $choices = array();
-
-                /**
-                 * @var $option ParameterOption
-                 */
-                foreach($options as $option){
-                    $choices[$option->getId()] = $option->getName();
-                }
-
-                $builder->add('parameter' . $categoryParameter->getParameterId(), 'choice', array(
-                    'label' => $categoryParameter->getName(),
-                    'choices' => $choices,
-                    'mapped' => false,
-                    'required' => false,
-                    //'multiple' => true,
-                ));
-
+            /**
+             * @var $option ParameterOption
+             */
+            foreach($options as $option){
+                $choices[$option->getId()] = $option->getName();
             }
+
+            $builder->add('parameter' . $categoryParameter->getParameterId(), 'choice', array(
+                'label' => $categoryParameter->getName(),
+                'choices' => $choices,
+                'mapped' => false,
+                'required' => false,
+                //'multiple' => true,
+            ));
 
         }
 
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
-            ));
+            ))
+        ;
 
     }
 

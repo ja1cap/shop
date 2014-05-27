@@ -2,7 +2,7 @@
     Все категории
 </h1>
 <ul class="left-bar-menu">
-    {% for _category in categories %}
+    {% for _category in shop_catalog_categories() %}
         <li>
             <div class="btn default medium {{ _category.id == category.id ? 'active' : '' }}">
                 <a href="{{ path('shop_catalog_category', {'slug' : _category.slug}) }}">

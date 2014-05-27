@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Mapper;
+namespace Shop\CatalogBundle\PriceList;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\Contractor;
@@ -7,7 +7,7 @@ use Shop\CatalogBundle\Entity\Manufacturer;
 
 /**
  * Class PriceListMapper
- * @package Shop\CatalogBundle\Mapper
+ * @package Shop\CatalogBundle\PriceList
  */
 class PriceListMapper {
 

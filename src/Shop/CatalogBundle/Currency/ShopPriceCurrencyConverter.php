@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Converter;
+namespace Shop\CatalogBundle\Currency;
 
 use Shop\CatalogBundle\Entity\ContractorCurrency;
 use Shop\CatalogBundle\Entity\Price;
@@ -7,8 +7,8 @@ use Weasty\MoneyBundle\Converter\CurrencyConverter;
 use Weasty\MoneyBundle\Data\CurrencyResource;
 
 /**
- * Class ShopPriceConverter
- * @package Shop\CatalogBundle\Converter
+ * Class ShopPriceCurrencyConverter
+ * @package Shop\CatalogBundle\Currency
  */
 class ShopPriceCurrencyConverter extends CurrencyConverter {
 

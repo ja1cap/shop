@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Form\Type;
 
 use Shop\CatalogBundle\Entity\Parameter;
+use Shop\CatalogBundle\Filter\CategoryFiltersResource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -37,15 +38,8 @@ class ParameterType extends AbstractType {
                 'label' => 'Название',
             ))
             ->add('type', 'choice', array(
-                'choices' => Parameter::$types,
+                'choices' => CategoryFiltersResource::$filterTypes,
                 'label' => 'Тип елемента',
-            ))
-            ->add('isPriceParameter', 'choice', array(
-                'choices' => array(
-                    'нет',
-                    'да',
-                ),
-                'label' => 'Относится к цене',
             ))
         ;
 

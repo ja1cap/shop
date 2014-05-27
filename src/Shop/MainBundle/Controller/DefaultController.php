@@ -4,7 +4,6 @@ namespace Shop\MainBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Action;
 use Shop\CatalogBundle\Entity\CategoryParameter;
-use Shop\CatalogBundle\Entity\ParameterOption;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
@@ -12,10 +11,8 @@ use Shop\CatalogBundle\Entity\Proposal;
 use Shop\MainBundle\Entity\Address;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Shop\CatalogBundle\Entity\Parameter;
 
 /**
  * Class DefaultController
@@ -23,11 +20,6 @@ use Shop\CatalogBundle\Entity\Parameter;
  */
 class DefaultController extends Controller
 {
-
-    /**
-     * @deprecated
-     */
-    const CATALOG_FILTER_COOKIE_NAME = 'filterValues';
 
     public function indexAction()
     {
@@ -299,21 +291,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @deprecated
-     * @return array
-     */
-    protected function getCategories(){
-        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findBy(
-            array(
-                'status' => Category::STATUS_ON
-            ),
-            array(
-                'name' => 'ASC',
-            )
-        );
-    }
-
-    /**
      * @param $slug
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -329,86 +306,33 @@ class DefaultController extends Controller
             $criteria['seoSlug'] = (string)$slug;
         }
 
-        $proposalRepository = $this->getProposalRepository();
-
-        $proposal = $proposalRepository->findOneBy($criteria);
+        $proposal = $this->getProposalRepository()->findOneBy($criteria);
 
         if(!$proposal instanceof Proposal){
             throw $this->createNotFoundException('Товар не найден');
         }
 
-        $parametersOptions = $proposalRepository->findProposalParametersOptions($proposal->getId());
-        $parametersData = $this->buildParametersData($parametersOptions);
-        $filterParametersValues = $this->getFilterParametersValues($request);
-
-        $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
-
         $category = $proposal->getCategory();
 
-        $priceIntervalsData = $proposalRepository->getPriceIntervalsData($category->getId(), $proposal->getManufacturerId(), $filterParametersValuesFilteredByOptionsIds, $proposal->getId());
-        $priceInterval = $priceIntervalsData['interval'];
-        $validFilterPrices = array_keys($priceIntervalsData['intervals']);
+        $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+        $filtersResource = $filtersBuilder->buildFromRequest($category, $proposal, $request);
 
-        $filterPrices = $request->get('prices', json_decode($request->cookies->get('prices' . $category->getId()), true));
-
-        if(is_array($filterPrices)){
-            $filterPrices = array_filter($filterPrices, function($filterPrice) use ($validFilterPrices){
-                return in_array($filterPrice, $validFilterPrices);
-            });
-        } else {
-            $filterPrices = array();
-        }
-
-        $filterPricesRanges = array();
-        foreach($filterPrices as $i => $filterPrice){
-            $filterPricesRanges[$i] = array(
-                'min' => $filterPrice,
-                'max' => $filterPrice + $priceInterval,
-            );
-        }
-
-        $proposalFeatures = array();
-        $parametersOptionsAmounts = array();
-
-        foreach($category->getParameters() as $categoryParameter){
-
-            if($categoryParameter instanceof CategoryParameter){
-
-                $proposalFeatures[$categoryParameter->getParameterId()] = null;
-
-                if($categoryParameter->getParameter()->getIsPriceParameter()){
-
-                    $filterParameterValues = $filterParametersValuesFilteredByOptionsIds;
-
-                    if(isset($filterParameterValues[$categoryParameter->getParameterId()])){
-                        unset($filterParameterValues[$categoryParameter->getParameterId()]);
-                    }
-
-                    $parametersOptionsAmounts[$categoryParameter->getParameterId()] = $proposalRepository->getParameterOptionsAmounts($categoryParameter->getParameter(), $category->getId(), $proposal->getManufacturerId(), $filterParameterValues, $filterPricesRanges, $proposal->getId());
-
-                }
-
-            }
-
-        }
-
-        foreach($proposal->getParameterValues() as $parameterValue){
-            if($parameterValue instanceof ParameterValue){
-                if(array_key_exists($parameterValue->getParameterId(), $proposalFeatures)){
-                    $proposalFeatures[$parameterValue->getParameterId()] = $parameterValue;
-                }
-            }
-        }
-
-        $priceData = $proposalRepository->findProposalPrice(
+        $priceData = $this->getProposalRepository()->findProposalPrice(
             $category->getId(),
             $proposal->getId(),
-            $filterParametersValuesFilteredByOptionsIds,
-            $filterPricesRanges
+            $filtersResource
         );
         $price = $priceData ? $priceData['priceEntity'] : null;
 
+        $proposalFeatures = array();
+
         if($price instanceof Price){
+
+            foreach($category->getParameters() as $categoryParameter){
+                if($categoryParameter instanceof CategoryParameter){
+                    $proposalFeatures[$categoryParameter->getParameterId()] = null;
+                }
+            }
 
             foreach($price->getParameterValues() as $parameterValue){
                 if($parameterValue instanceof ParameterValue){
@@ -471,11 +395,10 @@ class DefaultController extends Controller
         }
         $priceData['shipping'] = $shippingCalculatorResult;
 
-        $additionalCategoriesData = $this->getProposalAdditionalCategories($category, $filterParametersValues);
+        $additionalCategoriesData = $this->getProposalAdditionalCategories($category, $request);
 
         $response = $this->render('ShopMainBundle:Default:proposal.html.twig', array(
             'category' => $category,
-            'categories' => $this->getCategories(),
             'additionalCategoriesData' => $additionalCategoriesData,
             'proposal' => $proposal,
             'price' => $price,
@@ -483,80 +406,12 @@ class DefaultController extends Controller
             'proposalFeatures' => array_filter($proposalFeatures),
             'actions' => $actions,
             'shopCart' => $shopCart,
-            'parametersData' => $parametersData,
-            'parametersOptionsAmounts' => $parametersOptionsAmounts,
-            'filteredParameterValues' => $filterParametersValuesFilteredByOptionsIds,
-//            'priceIntervalsData' => $priceIntervalsData,
-//            'filteredPrices' => $filterPrices,
+            'filtersResource' => $filtersResource,
         ));
-
-        $response->headers->setCookie(new Cookie(self::CATALOG_FILTER_COOKIE_NAME, json_encode($filterParametersValues)));
-
-        if($request->query->has('prices')){
-            $response->headers->setCookie(new Cookie('prices' . $category->getId(), json_encode($filterPrices)));
-        }
+        $filtersBuilder->setFiltersCookies($category, $request, $response);
 
         return $response;
 
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    protected function getFilterParametersValues(Request $request)
-    {
-        $cookieName = self::CATALOG_FILTER_COOKIE_NAME;
-        $cookie = $request->cookies->get($cookieName);
-
-        if ($cookie) {
-
-            $cookie = json_decode($request->cookies->get($cookieName), true);
-            if (!is_array($cookie)) {
-                $cookie = null;
-            }
-
-        }
-
-        $values = $request->get('parameters', $cookie);
-
-        if (is_array($values)) {
-            $values = array_filter($values);
-        } else {
-            $values = array();
-        }
-
-        return $values;
-
-    }
-
-    /**
-     * @param array $parametersOptions
-     * @return array
-     */
-    protected function buildParametersData(array $parametersOptions)
-    {
-
-        $parametersData = array();
-
-        /**
-         * @var $parameterOption ParameterOption
-         */
-        foreach ($parametersOptions as $parameterOption) {
-
-            if (!isset($parametersData[$parameterOption->getParameterId()])) {
-
-                $parametersData[$parameterOption->getParameterId()] = array(
-                    'parameter' => $parameterOption->getParameter(),
-                    'options' => array(),
-                );
-
-            }
-
-            $parametersData[$parameterOption->getParameterId()]['options'][] = $parameterOption;
-
-        }
-        return $parametersData;
     }
 
     /**
@@ -580,99 +435,29 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $filteredParametersValues
-     * @param $parametersData
+     * @param Category $category
+     * @param Request $request
      * @return array
      */
-    protected function filterParametersValuesByOptionsIds($filteredParametersValues, $parametersData)
+    protected function getProposalAdditionalCategories(Category $category, Request $request)
     {
 
-        $newFilteredParametersValues = array();
-
-        foreach($parametersData as $parameterId => $parameterData){
-
-            /**
-             * @var $parameter Parameter
-             */
-            $parameter = $parameterData['parameter'];
-
-            $parameterOptionsIds = array_map(function(ParameterOption $parameterOption){
-                return $parameterOption->getId();
-            }, $parameterData['options']);
-
-            if(isset($filteredParametersValues[$parameterId])){
-
-                $filteredParameterValue = $filteredParametersValues[$parameterId];
-
-                if (is_array($filteredParameterValue)) {
-
-                    $filteredParameterOptionsIds = array();
-
-                    foreach ($filteredParameterValue as $parameterOptionId) {
-                        if ($parameterOptionId && in_array($parameterOptionId, $parameterOptionsIds)) {
-                            $filteredParameterOptionsIds[] = $parameterOptionId;
-                        }
-                    }
-
-                    if ($filteredParameterOptionsIds) {
-                        $newFilteredParametersValues[$parameterId] = $filteredParameterOptionsIds;
-                    }
-
-                } else {
-
-                    $parameterOptionId = $filteredParameterValue;
-
-                    if ($filteredParameterValue && in_array($parameterOptionId, $parameterOptionsIds)) {
-
-                        $newFilteredParametersValues[$parameterId] = $parameterOptionId;
-
-                    }
-
-                }
-
-
-            } elseif($parameter->getDefaultOptionId() && in_array($parameter->getDefaultOptionId(), $parameterOptionsIds)) {
-
-                $newFilteredParametersValues[$parameterId] = $parameter->getDefaultOptionId();
-
-            }
-
-        }
-
-        return $newFilteredParametersValues;
-
-    }
-
-    /**
-     * @param $category
-     * @param $filterParametersValues
-     * @return array
-     */
-    protected function getProposalAdditionalCategories(Category $category, $filterParametersValues)
-    {
-
-        $proposalRepository = $this->getProposalRepository();
-
-        $additionalCategories = $category->getAdditionalCategories();
         $additionalCategoriesData = array();
 
         /**
          * @var $additionalCategory Category
          */
-        foreach ($additionalCategories as $additionalCategory) {
+        foreach ($category->getAdditionalCategories() as $additionalCategory) {
 
-            $parametersOptions = $proposalRepository->findCategoryParametersOptions($additionalCategory->getId());
-            $parametersData = $this->buildParametersData($parametersOptions);
+            $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+            $filtersResource = $filtersBuilder->buildFromRequest($additionalCategory, null, $request);
 
-            $filterParametersValuesFilteredByOptionsIds = $this->filterParametersValuesByOptionsIds($filterParametersValues, $parametersData);
-
-            $additionalCategoryProposals = $proposalRepository->findProposalsByParameters($additionalCategory->getId(), null, $filterParametersValuesFilteredByOptionsIds, null, 1, 1);
+            $additionalCategoryProposals = $this->getProposalRepository()->findProposalsByParameters($additionalCategory->getId(), $filtersResource, 1, 1);
             if ($additionalCategoryProposals) {
 
                 $additionalCategoriesData[$additionalCategory->getId()] = array(
                     'category' => $additionalCategory,
                     'proposalData' => current($additionalCategoryProposals),
-//                    'manufacturers' => $proposalRepository->findCategoryManufacturers($additionalCategory->getId(), $filteredParameterValues),
                 );
 
             }

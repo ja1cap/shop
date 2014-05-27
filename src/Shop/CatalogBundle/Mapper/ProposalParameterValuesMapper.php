@@ -8,6 +8,7 @@ use Shop\CatalogBundle\Entity\Proposal;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
+ * @TODO remove
  * Class ProposalParameterValuesMapper
  * @package Shop\CatalogBundle\Mapper
  */
@@ -24,6 +25,7 @@ class ProposalParameterValuesMapper {
     protected $em;
 
     /**
+     * @deprecated
      * @param ObjectManager|object $em
      * @param Proposal $proposal
      */

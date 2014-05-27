@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Parser;
+namespace Shop\CatalogBundle\PriceList;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\Contractor;
@@ -12,12 +12,11 @@ use Shop\CatalogBundle\Entity\PriceListAlias;
 use Doctrine\Common\Persistence\ObjectManager;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
-use Shop\CatalogBundle\Mapper\ProposalParameterValuesMapper;
 use Weasty\MoneyBundle\Data\CurrencyResource;
 
 /**
  * Class PriceListParser
- * @package Shop\CatalogBundle\Parser
+ * @package Shop\CatalogBundle\PriceList
  */
 class PriceListParser {
 
@@ -166,15 +165,7 @@ class PriceListParser {
 
                                             }
 
-                                            if($parameter->getIsPriceParameter()){
-
-                                                $rowData['parametersValues'][$parameterId] = $parameterOption;
-
-                                            } else {
-
-                                                $proposalParametersValues[$parameterId] = $parameterOption;
-
-                                            }
+                                            $rowData['parametersValues'][$parameterId] = $parameterOption;
 
                                         }
 
@@ -517,17 +508,6 @@ class PriceListParser {
                             }
 
                         }
-                        break;
-
-
-                        break;
-                    case 'parametersValues':
-
-                        $proposalParametersValues = $value;
-
-                        $proposalParameterValuesMapper = new ProposalParameterValuesMapper($this->em, $proposal);
-                        $proposalParameterValuesMapper->mapParameterValues($proposalParametersValues, false);
-
                         break;
 
                     default:

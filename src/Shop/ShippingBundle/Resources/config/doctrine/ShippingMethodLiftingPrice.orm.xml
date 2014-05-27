@@ -7,7 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
         <field name="shippingMethodId" type="integer" column="shippingMethodId"/>
-        <many-to-one target-entity="ShippingMethod" field="shippingMethod">
+        <many-to-one target-entity="ShippingMethod" field="shippingMethod" inversed-by="liftingPrices">
             <join-columns>
                 <join-column name="shippingMethodId" referenced-column-name="id"/>
             </join-columns>

@@ -34,7 +34,7 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="ShippingMethod" field="shippingMethod">
+        <many-to-one target-entity="ShippingMethod" field="shippingMethod" inversed-by="categories">
             <join-columns>
                 <join-column name="shippingMethodId" referenced-column-name="id"/>
             </join-columns>

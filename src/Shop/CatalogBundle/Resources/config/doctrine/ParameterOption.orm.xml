@@ -15,7 +15,7 @@
         <field name="position" type="integer" column="position"/>
         <field name="parameterId" type="integer" column="parameterId"/>
         <one-to-many target-entity="ParameterValue" mapped-by="option" field="optionValues"/>
-        <many-to-one target-entity="Parameter" field="parameter">
+        <many-to-one target-entity="Parameter" field="parameter" inversed-by="options">
             <join-columns>
                 <join-column name="parameterId" referenced-column-name="id"/>
             </join-columns>

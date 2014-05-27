@@ -18,7 +18,7 @@
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
         </one-to-many>
-        <many-to-one target-entity="Category" field="category">
+        <many-to-one target-entity="Category" field="category" inversed-by="parameterGroups">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>
             </join-columns>

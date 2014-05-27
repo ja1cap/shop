@@ -3,13 +3,16 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="Shop\CatalogBundle\Entity\CategoryRepository" name="Shop\CatalogBundle\Entity\Category">
+        <indexes>
+            <index columns="slug"/>
+        </indexes>
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
         <field name="status" type="integer"/>
         <field name="imageId" type="integer" nullable="true" column="image_id"/>
         <field name="name" type="string" column="name" length="255"/>
-        <field name="slug" type="string" column="slug" length="255"/>
+        <field name="slug" type="string" column="slug" length="255" unique="true"/>
         <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
         <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255" nullable="true"/>
         <field name="multipleName" type="string" column="multipleName" length="255" nullable="true"/>

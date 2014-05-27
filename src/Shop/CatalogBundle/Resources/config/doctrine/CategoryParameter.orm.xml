@@ -17,17 +17,17 @@
         <field name="name" type="string" column="name" nullable="true"/>
         <field name="position" type="integer" column="position"/>
         <field name="filterGroups" type="simple_array" column="filterGroups"/>
-        <many-to-one target-entity="Category" field="category">
+        <many-to-one target-entity="Category" field="category" inversed-by="parameters">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>
             </join-columns>
         </many-to-one>
-        <many-to-one target-entity="Parameter" field="parameter">
+        <many-to-one target-entity="Parameter" field="parameter" inversed-by="categoryParameters">
             <join-columns>
                 <join-column name="parameterId" referenced-column-name="id"/>
             </join-columns>
         </many-to-one>
-        <many-to-one target-entity="CategoryParameterGroup" field="group">
+        <many-to-one target-entity="CategoryParameterGroup" field="group" inversed-by="parameters">
             <join-columns>
                 <join-column name="groupId" referenced-column-name="id" nullable="true"/>
             </join-columns>

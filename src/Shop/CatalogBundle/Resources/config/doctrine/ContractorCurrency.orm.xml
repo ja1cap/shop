@@ -13,7 +13,7 @@
         <field name="contractorId" type="integer" column="contractorId"/>
         <field name="numericCode" type="integer" column="numericCode"/>
         <field name="value" type="float" column="value"/>
-        <many-to-one target-entity="Contractor" field="contractor">
+        <many-to-one target-entity="Contractor" field="contractor" inversed-by="currencies">
             <join-columns>
                 <join-column name="contractorId" referenced-column-name="id"/>
             </join-columns>

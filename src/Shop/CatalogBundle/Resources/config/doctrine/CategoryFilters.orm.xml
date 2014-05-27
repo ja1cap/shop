@@ -25,7 +25,7 @@
         <field name="parameterFilters" type="json_array" column="parameterFilters" nullable="true"/>
         <field name="priceRangeFilter" type="json_array" column="priceRangeFilter" nullable="true"/>
 
-        <many-to-one target-entity="Category" field="category">
+        <many-to-one target-entity="Category" field="category" inversed-by="filters">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id"/>
             </join-columns>

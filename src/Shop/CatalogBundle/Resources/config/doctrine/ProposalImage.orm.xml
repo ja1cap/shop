@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Shop\CatalogBundle\Entity\ProposalImage">
         <field name="proposalId" type="integer" column="proposalId"/>
-        <many-to-one target-entity="Proposal" field="proposal">
+        <many-to-one target-entity="Proposal" field="proposal" inversed-by="images">
             <join-columns>
                 <join-column name="proposalId" referenced-column-name="id" on-delete="CASCADE"/>
             </join-columns>

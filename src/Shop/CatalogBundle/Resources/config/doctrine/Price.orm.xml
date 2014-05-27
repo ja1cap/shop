@@ -34,7 +34,7 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="Proposal" field="proposal">
+        <many-to-one target-entity="Proposal" field="proposal" inversed-by="prices">
             <join-columns>
                 <join-column name="proposalId" referenced-column-name="id"/>
             </join-columns>

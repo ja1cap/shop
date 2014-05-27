@@ -63,13 +63,13 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="Category" field="category">
+        <many-to-one target-entity="Category" field="category" inversed-by="proposals">
             <join-columns>
                 <join-column name="categoryId" referenced-column-name="id" on-delete="CASCADE"/>
             </join-columns>
         </many-to-one>
 
-        <many-to-one target-entity="Manufacturer" field="manufacturer">
+        <many-to-one target-entity="Manufacturer" field="manufacturer" inversed-by="proposals">
             <join-columns>
                 <join-column name="manufacturerId" referenced-column-name="id"/>
             </join-columns>

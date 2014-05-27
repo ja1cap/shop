@@ -74,13 +74,36 @@
                                                             {{ priceData.price|shop_price }}
                                                         </div>
                                                         <div>
-                                                            Доставка:
-                                                            {% if priceData.shipping.summaryPrice.value %}
-                                                                {{ priceData.shipping.summaryPrice|weasty_price }}
-                                                            {% else %}
-                                                                бесплатная
+                                                            {% set proposalPriceShippingSummary = priceData.shipping.shippingSummaries|first %}
+                                                            <div>
+                                                                Доставка:
+                                                                {% if proposalPriceShippingSummary.shippingPrice.value %}
+                                                                    {{ proposalPriceShippingSummary.shippingPrice|weasty_price }}
+                                                                {% else %}
+                                                                    бесплатно
+                                                                {% endif %}
+                                                                ({{ priceData.shipping.city.getLocaleName(app.request.locale) }})
+                                                            </div>
+                                                            {% if proposalPriceShippingSummary.liftingPrice %}
+                                                                <div>
+                                                                    Подъем на этаж:
+                                                                    {% if proposalPriceShippingSummary.liftingPrice.value %}
+                                                                        {{ proposalPriceShippingSummary.liftingPrice|weasty_price }}
+                                                                    {% else %}
+                                                                        бесплатно
+                                                                    {% endif %}
+                                                                </div>
                                                             {% endif %}
-                                                            ({{ priceData.shipping.city.getLocaleName(app.request.locale) }})
+                                                            {% if proposalPriceShippingSummary.assemblyPrice %}
+                                                                <div>
+                                                                    Сборка:
+                                                                    {% if proposalPriceShippingSummary.assemblyPrice.value %}
+                                                                        {{ proposalPriceShippingSummary.assemblyPrice|weasty_price }}
+                                                                    {% else %}
+                                                                        бесплатно
+                                                                    {% endif %}
+                                                                </div>
+                                                            {% endif %}
                                                         </div>
                                                     {% endif %}
                                                 </div>

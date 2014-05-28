@@ -9,7 +9,6 @@ use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Entity\ProposalImage;
 use Shop\CatalogBundle\Form\Type\PriceType;
-use Shop\CatalogBundle\Form\Type\ProposalType;
 use Shop\CatalogBundle\Mapper\PriceMapper;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
 use Shop\MainBundle\Form\Type\ImageType;
@@ -74,7 +73,8 @@ class AdminProposalController extends Controller
         }
 
         $isNew = !$proposal->getId();
-        $form = $this->createForm(new ProposalType($category), $proposal);
+        $formType = $request->get('_form_type', 'shop_catalog_proposal_type');
+        $form = $this->createForm($formType, $proposal);
 
         $form->handleRequest($request);
 
@@ -89,27 +89,13 @@ class AdminProposalController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('proposal', array('categoryId' => $category->getId(), 'id' => $proposal->getId())));
+            $redirectRoute = $request->get('_redirect_route', $request->get('_route'));
+            return $this->redirect($this->generateUrl($redirectRoute, array('categoryId' => $category->getId(), 'id' => $proposal->getId())));
 
         } else {
 
-            if(!$isNew){
-
-                $proposal->getParameterValues()->map(function(ParameterValue $value) use ($form) {
-
-                    try{
-
-                        $element = $form->get('parameter' . $value->getParameterId());
-                        $element->setData($value->getOptionId());
-
-                    } catch(\Exception $e){};
-
-                });
-
-            }
-
             return $this->render('ShopCatalogBundle:AdminProposal:proposal.html.twig', array(
-                'title' => $isNew ? 'Добавление товара' : 'Изменение товара',
+                'title' => $isNew ? 'Добавление товара' : $proposal->getName(),
                 'form' => $form->createView(),
                 'category' => $category,
                 'proposal' => $proposal,

@@ -15,6 +15,10 @@ proposal:
     pattern: /adminCatalog/proposal/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, id: null }
 
+proposal_seo:
+    pattern: /adminCatalog/proposalSeo/{categoryId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, _form_type: shop_admin_seo_type }
+
 delete_proposal:
     pattern: /adminCatalog/deleteProposal/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposal }

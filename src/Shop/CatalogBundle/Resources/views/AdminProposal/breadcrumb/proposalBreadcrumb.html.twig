@@ -3,7 +3,7 @@
     {{ parent() }}
     <li class="medium btn default">
         <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-            {{ proposal.title|default(title)|capitalize }}
+            {{ proposal.name|default(title) }}
         </a>
     </li>
 {% endblock %}

@@ -32,4 +32,13 @@
         <default key="_controller">ShopAdminBundle:Phone:deletePhone</default>
     </route>
 
+    <route id="shop_admin_media_browser" pattern="/admin/media/browser">
+        <default key="_sonata_admin">sonata.media.admin.media</default>
+        <default key="_controller">CoopTilleulsCKEditorSonataMediaBundle:MediaAdmin:browser</default>
+    </route>
+    <route id="shop_admin_media_upload" pattern="/admin/media/upload">
+        <default key="_sonata_admin">sonata.media.admin.media</default>
+        <default key="_controller">CoopTilleulsCKEditorSonataMediaBundle:MediaAdmin:upload</default>
+    </route>
+
 </routes>

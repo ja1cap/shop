@@ -29,10 +29,13 @@
         "jjs/common": "dev-master",
         "jjs/geonames-bundle": "dev-master",
         "sonata-project/core-bundle": "~2.2",
-        "sonata-project/doctrine-orm-admin-bundle": "dev-master",
-        "sonata-project/admin-bundle": "dev-master",
-        "sonata-project/media-bundle": "dev-master",
-        "shtumi/useful-bundle": "dev-master"
+        "sonata-project/block-bundle": "~2.2",
+        "sonata-project/doctrine-orm-admin-bundle": "2.2.*@dev",
+        "sonata-project/admin-bundle": "2.2.*@dev",
+        "sonata-project/media-bundle": "2.2.*@dev",
+        "shtumi/useful-bundle": "dev-master",
+        "tilleuls/ckeditor-sonata-media-bundle": "dev-master",
+        "egeloen/ckeditor-bundle": "2.*"
     },
     "scripts": {
         "post-install-cmd": [

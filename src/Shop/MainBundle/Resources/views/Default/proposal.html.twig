@@ -192,8 +192,12 @@
                             </table>
                         {% endif %}
 
-                        <div class="proposal-description">
-                            {{ proposal.description|nl2br }}
+                        <div class="proposal-description cke-content">
+                            {% if proposal.description|striptags|length == proposal.description|length %}
+                                {{ proposal.description|nl2br }}
+                            {% else %}
+                                {{ proposal.description|raw }}
+                            {% endif %}
                         </div>
 
                         {% if actions %}

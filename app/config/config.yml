@@ -5,6 +5,7 @@ imports:
 parameters:
   country_code: BY
   currency_code: BYR
+  security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap
 
 framework:
     #esi:             ~
@@ -113,6 +114,21 @@ fos_user:
     group:
         group_class: Shop\UserBundle\Entity\UserGroup
 
+sonata_admin:
+#    security:
+#        handler: sonata.admin.security.handler.acl
+#        # acl security information
+#        information:
+#            GUEST:    [VIEW, LIST]
+#            STAFF:    [EDIT, LIST, CREATE]
+#            EDITOR:   [OPERATOR, EXPORT]
+#            ADMIN:    [MASTER]
+#        # permissions not related to an object instance and also to be available when objects do not exist
+#        # the DELETE admin permission means the user is allowed to batch delete objects
+#        admin_permissions: [CREATE, LIST, DELETE, UNDELETE, EXPORT, OPERATOR, MASTER]
+#        # permission related to the objects
+#        object_permissions: [VIEW, EDIT, DELETE, UNDELETE, OPERATOR, MASTER, OWNER]
+
 sonata_media:
     default_context: default
     db_driver: doctrine_orm
@@ -124,6 +140,14 @@ sonata_media:
                 - sonata.media.provider.image
                 - sonata.media.provider.file
 
+            formats:
+                small: { width: 150, quality: 100 }
+                small_square: { width: 150, height: 150, quality: 100 }
+                medium:   { width: 350, quality: 100 }
+
+        image:
+            providers:
+                - sonata.media.provider.image
             formats:
                 small: { width: 150, quality: 100 }
                 small_square: { width: 150, height: 150, quality: 100 }
@@ -157,6 +181,37 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+ivory_ck_editor:
+    default_config: default
+    configs:
+        default:
+            #filebrowserBrowseRoute: shop_admin_media_browser
+            filebrowserImageBrowseRoute: shop_admin_media_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+                context: image
+            #filebrowserUploadRoute: shop_admin_media_upload
+            #filebrowserUploadRouteParameters:
+            #    provider: sonata.media.provider.file
+            filebrowserImageUploadRoute: shop_admin_media_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+                context: image
+
+coop_tilleuls_ck_editor_sonata_media:
+  templates:
+      browser: WeastyResourceBundle:MediaAdmin:browser.html.twig
+      layout: WeastyResourceBundle:MediaAdmin:layout.html.twig
+#      upload: null
 
 shtumi_useful:
     autocomplete_entities:

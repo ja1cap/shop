@@ -5,10 +5,14 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="shop_catalog.form.type.proposal.class">Shop\CatalogBundle\Form\Type\ProposalType</parameter>
         <parameter key="shop_catalog.form.type.category_filters.class">Shop\CatalogBundle\Form\Type\CategoryFiltersType</parameter>
     </parameters>
 
     <services>
+        <service id="shop_catalog.form.type.proposal" class="%shop_catalog.form.type.proposal.class%">
+            <tag name="form.type" alias="shop_catalog_proposal_type" />
+        </service>
         <service id="shop_catalog.form.type.category_filters" class="%shop_catalog.form.type.category_filters.class%">
             <tag name="form.type" alias="shop_catalog_category_filters_type" />
             <argument type="service" id="shop_catalog.category.filters.builder"/>

@@ -1,9 +1,5 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
-
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
-    {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalImagesBreadcrumb.html.twig') }}
+{% extends "ShopCatalogBundle:AdminProposal:proposalLayout.html.twig" %}
+{% block proposal_content %}
     <div class="medium secondary btn">
         <a href="{{ path('proposal_image', {'proposalId':proposal.id}) }}">
             Добавить фотографию

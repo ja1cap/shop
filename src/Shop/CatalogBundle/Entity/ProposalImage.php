@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Shop\MainBundle\Entity\Image;
 
 /**
+ * @TODO remove
+ * @deprecated use media image
  * Class ProposalImage
  * @package Shop\CatalogBundle\Entity
  */

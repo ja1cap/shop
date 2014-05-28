@@ -1,15 +1,13 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminProposal:proposalLayout.html.twig" %}
+{% block proposal_content %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
-    {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalPricesBreadcrumb.html.twig') }}
     <div class="medium secondary btn">
         <a href="{{ path('proposal_price', {'proposalId' : proposal.id}) }}">
             Добавить цену
         </a>
     </div>
-    {% if proposal.prices and not proposal.prices.isEmpty %}
+
+    {% if proposal.prices and proposal.prices|length > 0 %}
         <table style="margin: 10px 0">
             <thead>
             <tr>

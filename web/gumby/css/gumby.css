@@ -1687,6 +1687,21 @@ body .pull-left { float: left; }
 body .pull-right { float: right; }
 body form .media-fields label { font-size: 12px; }
 body form .media-fields input[type="file"] { display: inline; margin-left: 5px; }
+body .cke-content blockquote { font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; padding: 2px 0; border-style: solid; border-color: #ccc; border-width: 0; }
+body .cke-content .cke_contents_ltr blockquote { padding-left: 20px; padding-right: 8px; border-left-width: 5px; }
+body .cke-content .cke_contents_rtl blockquote { padding-left: 8px; padding-right: 20px; border-right-width: 5px; }
+body .cke-content a { color: #0782C1; }
+body .cke-content ol, body .cke-content ul, body .cke-content dl { /* IE7: reset rtl list margin. (#7334) */ *margin-right: 0px; /* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/ padding: 0 40px; }
+body .cke-content h1, body .cke-content h2, body .cke-content h3, body .cke-content h4, body .cke-content h5, body .cke-content h6 { font-weight: normal; line-height: 1.2; }
+body .cke-content hr { border: 0px; border-top: 1px solid #ccc; }
+body .cke-content img.right { border: 1px solid #ccc; float: right; margin-left: 15px; padding: 5px; }
+body .cke-content img.left { border: 1px solid #ccc; float: left; margin-right: 15px; padding: 5px; }
+body .cke-content pre { white-space: pre-wrap; /* CSS 2.1 */ word-wrap: break-word; /* IE7 */ -moz-tab-size: 4; -o-tab-size: 4; -webkit-tab-size: 4; tab-size: 4; }
+body .cke-content .marker { background-color: Yellow; }
+body .cke-content span[lang] { font-style: italic; }
+body .cke-content figure { text-align: center; border: solid 1px #ccc; border-radius: 2px; background: rgba(0, 0, 0, 0.05); padding: 10px; margin: 10px 20px; display: inline-block; }
+body .cke-content figure > figcaption { text-align: center; display: block; /* For IE8 */ }
+body .cke-content a > img { padding: 1px; margin: 1px; border: none; outline: 1px solid #0782C1; }
 body .tiles { overflow: visible; }
 body .tiles.tiles-blocks li { padding: 10px; border: 1px solid #CCCCCC; margin-bottom: 20px; }
 body .tiles.tiles-blocks li .tile-title { font-size: 16px; margin-bottom: 10px; }

@@ -1,0 +1,19 @@
+{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+
+{% block title %}{{ title|default(proposal.name) }}{% endblock %}
+
+{% block main_container %}
+    {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalBreadcrumb.html.twig') }}
+    <section class="vertical tabs">
+        <ul class="tab-nav three columns">
+            {% block proposal_menu %}
+                {{ include('ShopCatalogBundle:AdminProposal:proposalMenuListItems.html.twig') }}
+            {% endblock %}
+        </ul>
+        <div class="tab-content nine columns active">
+            {% block proposal_content %}
+                {{ form(form) }}
+            {% endblock %}
+        </div>
+    </section>
+{% endblock %}

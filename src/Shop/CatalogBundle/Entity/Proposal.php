@@ -2,6 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\CatalogBundle\Data\ProposalInterface;
@@ -39,9 +40,100 @@ class Proposal extends AbstractEntity
     private $description;
 
     /**
+     * @TODO remove
+     * @deprecated use media image
+     * @var integer
+     */
+    private $mainImageId;
+
+    /**
+     * @TODO remove
+     * @deprecated use media image
+     * @var \Shop\CatalogBundle\Entity\ProposalImage
+     */
+    private $mainImage;
+
+    /**
+     * @TODO remove
+     * @deprecated use media image twig helper
      * @var \Doctrine\Common\Collections\Collection
      */
     private $images;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $prices;
+
+    /**
+     * @var string
+     */
+    private $seoTitle;
+
+    /**
+     * @var string
+     */
+    private $seoDescription;
+
+    /**
+     * @var string
+     */
+    private $seoKeywords;
+
+    /**
+     * @var string
+     */
+    private $seoSlug;
+
+    /**
+     * @var integer
+     */
+    private $categoryId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Category
+     */
+    private $category;
+
+    /**
+     * @var integer
+     */
+    private $manufacturerId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Manufacturer
+     */
+    private $manufacturer;
+
+    /**
+     * @var integer
+     */
+    private $defaultContractorId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Contractor
+     */
+    private $defaultContractor;
+
+    /**
+     * @var integer
+     */
+    private $status;
+
+    /**
+     * @var integer
+     */
+    private $mainMediaImageId;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $mainMediaImage;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $mediaImages;
 
     /**
      * @var array
@@ -52,6 +144,17 @@ class Proposal extends AbstractEntity
     );
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->prices = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->mediaImages = new ArrayCollection();
+    }
+
+
+    /**
      * Get id
      *
      * @return integer 
@@ -59,6 +162,14 @@ class Proposal extends AbstractEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getTitle();
     }
 
     /**
@@ -136,22 +247,13 @@ class Proposal extends AbstractEntity
         return $this->description;
     }
 
+    /**
+     * @TODO remove
+     * @deprecated use media image twig helper
+     * @return null|string
+     */
     public function getImageUrl(){
         return $this->getMainImage() ? $this->getMainImage()->getUrl() : null;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $prices;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->prices = new ArrayCollection();
-        $this->images = new ArrayCollection();
     }
 
     /**
@@ -199,22 +301,6 @@ class Proposal extends AbstractEntity
         return $price;
 
     }
-
-    /**
-     * @var string
-     */
-    private $seoTitle;
-
-    /**
-     * @var string
-     */
-    private $seoDescription;
-
-    /**
-     * @var string
-     */
-    private $seoKeywords;
-
 
     /**
      * Set seoTitle
@@ -286,16 +372,13 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     * @TODO remove
+     * @deprecated use media image twig helper
      * @return null|string
      */
     public function getThumbImageUrl(){
         return $this->getMainImage() ? $this->getMainImage()->getThumbUrl() : null;
     }
-
-    /**
-     * @var string
-     */
-    private $seoSlug;
 
     /**
      * Set seoSlug
@@ -368,17 +451,6 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * @var integer
-     */
-    private $categoryId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Category
-     */
-    private $category;
-
-
-    /**
      * Set categoryId
      *
      * @param integer $categoryId
@@ -430,17 +502,6 @@ class Proposal extends AbstractEntity
     public function getCategoryName(){
         return $this->getCategory() ? $this->getCategory()->getName() : null;
     }
-
-    /**
-     * @var integer
-     */
-    private $manufacturerId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Manufacturer
-     */
-    private $manufacturer;
-
 
     /**
      * Set manufacturerId
@@ -496,17 +557,6 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * @var integer
-     */
-    private $defaultContractorId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Contractor
-     */
-    private $defaultContractor;
-
-
-    /**
      * Set defaultContractorId
      *
      * @param integer $defaultContractorId
@@ -551,11 +601,6 @@ class Proposal extends AbstractEntity
     {
         return $this->defaultContractor;
     }
-    /**
-     * @var integer
-     */
-    private $status;
-
 
     /**
      * Set status
@@ -583,6 +628,8 @@ class Proposal extends AbstractEntity
     /**
      * Add images
      *
+     * @TODO remove
+     * @deprecated use media image
      * @param \Shop\CatalogBundle\Entity\ProposalImage $image
      * @return Proposal
      */
@@ -596,6 +643,8 @@ class Proposal extends AbstractEntity
     /**
      * Remove images
      *
+     * @TODO remove
+     * @deprecated use media image
      * @param \Shop\CatalogBundle\Entity\ProposalImage $images
      */
     public function removeImage(ProposalImage $images)
@@ -606,26 +655,20 @@ class Proposal extends AbstractEntity
     /**
      * Get images
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @TODO remove
+     * @deprecated use media image
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getImages()
     {
         return $this->images;
     }
-    /**
-     * @var integer
-     */
-    private $mainImageId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\ProposalImage
-     */
-    private $mainImage;
-
 
     /**
      * Set mainImageId
      *
+     * @TODO remove
+     * @deprecated use media image
      * @param integer $mainImageId
      * @return Proposal
      */
@@ -639,7 +682,9 @@ class Proposal extends AbstractEntity
     /**
      * Get mainImageId
      *
-     * @return integer 
+     * @TODO remove
+     * @deprecated use media image
+     * @return integer
      */
     public function getMainImageId()
     {
@@ -649,6 +694,8 @@ class Proposal extends AbstractEntity
     /**
      * Set mainImage
      *
+     * @TODO remove
+     * @deprecated use media image
      * @param \Shop\CatalogBundle\Entity\ProposalImage $mainImage
      * @return Proposal
      */
@@ -662,10 +709,99 @@ class Proposal extends AbstractEntity
     /**
      * Get mainImage
      *
-     * @return \Shop\CatalogBundle\Entity\ProposalImage 
+     * @TODO remove
+     * @deprecated use media image
+     * @return \Shop\CatalogBundle\Entity\ProposalImage
      */
     public function getMainImage()
     {
         return $this->mainImage;
     }
+
+    /**
+     * Add mediaImages
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaImages
+     * @return Proposal
+     */
+    public function addMediaImage(Media $mediaImages)
+    {
+        $this->mediaImages[] = $mediaImages;
+
+        return $this;
+    }
+
+    /**
+     * Remove mediaImages
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mediaImages
+     */
+    public function removeMediaImage(Media $mediaImages)
+    {
+        $this->mediaImages->removeElement($mediaImages);
+    }
+
+    /**
+     * Get mediaImages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMediaImages()
+    {
+        return $this->mediaImages;
+    }
+
+    /**
+     * Set mainMediaImageId
+     *
+     * @param integer $mainMediaImageId
+     * @return Proposal
+     */
+    public function setMainMediaImageId($mainMediaImageId)
+    {
+        $this->mainMediaImageId = $mainMediaImageId;
+
+        return $this;
+    }
+
+    /**
+     * Get mainMediaImageId
+     *
+     * @return integer 
+     */
+    public function getMainMediaImageId()
+    {
+        return $this->mainMediaImageId;
+    }
+
+    /**
+     * Set mainMediaImage
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $mainMediaImage
+     * @return Proposal
+     */
+    public function setMainMediaImage(Media $mainMediaImage = null)
+    {
+        $this->mainMediaImage = $mainMediaImage;
+        $this->mainMediaImageId = $mainMediaImage ? $mainMediaImage->getId() : null;
+        return $this;
+    }
+
+    /**
+     * Get mainMediaImage
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getMainMediaImage()
+    {
+        return $this->mainMediaImage;
+    }
+
+    /**
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getImage(){
+        return $this->getMainMediaImage();
+    }
+
 }

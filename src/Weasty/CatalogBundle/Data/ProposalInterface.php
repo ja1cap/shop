@@ -12,4 +12,9 @@ interface ProposalInterface {
      */
     public function getId();
 
+    /**
+     * @return string
+     */
+    public function getName();
+
 } 

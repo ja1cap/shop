@@ -1,0 +1,131 @@
+{% extends base_template %}
+
+{% set ckParameters = {'CKEditor': app.request.get('CKEditor'), 'CKEditorFuncNum': app.request.get('CKEditorFuncNum')} %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(function () {
+            $(".select").click(function (e) {
+                e.preventDefault();
+                window.opener.CKEDITOR.tools.callFunction({{ app.request.get('CKEditorFuncNum')|escape('js') }}, $(this).attr("href"));
+                window.close();
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block list_table %}
+    <div>
+        {% set batchactions = admin.batchactions %}
+        {% if admin.datagrid.results|length > 0 %}
+            <table class="table table-bordered table-striped">
+                {% block table_body %}
+                    <tbody>
+                    {% for object in admin.datagrid.results %}
+                        <tr>
+                            {% for field_description in admin.list.elements %}
+                                {% if field_description.name == 'custom' %}
+                                    <td>
+                                        <div>
+                                            <a href="{% path object, 'reference' %}" class="select" style="float: left; margin-right: 6px;">{% thumbnail object, 'admin' with {'width': 75, 'height': 60} %}</a>
+
+                                            <strong><a href="{% path object, 'reference' %}" class="select">{{ object.name }}</a></strong> <br />
+                                            {{ object.providerName|trans({}, 'SonataMediaBundle') }}{% if object.width %}: {{ object.width }}{% if object.height %}x{{ object.height }}{% endif %}px{% endif %}
+
+                                            {% if formats[object.id]|length > 0 %}
+                                                - {{ 'title.formats'|trans({}, 'SonataMediaBundle') }}:
+                                                {% for name, format in formats[object.id] %}
+                                                    <a href="{% path object, name %}" class="select">{{ name|trans({}, 'SonataMediaBundle') }}</a> {% if format.width %}({{ format.width }}{% if format.height %}x{{ format.height }}{% endif %}px){% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <br />
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% endblock %}
+
+                {% block table_footer %}
+                    <tr>
+                        <th>
+                            <div class="form-inline">
+                                <div class="pull-right">
+                                    {% block pager_results %}
+                                        {% block num_pages %}
+                                            {{ admin.datagrid.pager.page }} / {{ admin.datagrid.pager.lastpage }}
+                                            &nbsp;-&nbsp;
+                                        {% endblock %}
+
+                                        {% block num_results %}
+                                            {% transchoice admin.datagrid.pager.nbresults with {'%count%': admin.datagrid.pager.nbresults} from 'SonataAdminBundle' %}list_results_count{% endtranschoice %}
+                                            &nbsp;-&nbsp;
+                                        {% endblock %}
+
+                                        {% block max_per_page %}
+                                            <label class="control-label" for="{{ admin.uniqid }}_per_page">{% trans from 'SonataAdminBundle' %}label_per_page{% endtrans %}</label>
+                                            <select class="per-page small" id="{{ admin.uniqid }}_per_page" style="width: auto; height: auto">
+                                                {% for per_page in admin.getperpageoptions %}
+                                                    <option {% if per_page == admin.datagrid.pager.maxperpage %}selected="selected"{% endif %} value="{{ admin.generateUrl('browser', {'filter': admin.datagrid.values|merge({'_per_page': per_page})}|merge(ckParameters)) }}">
+                                                        {{ per_page }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% endblock %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+
+                    {% block pager_links %}
+                        {% if admin.datagrid.pager.haveToPaginate() %}
+                            <tr>
+                                <td>
+                                    <div class="pagination pagination-centered">
+                                        <ul>
+                                            {% if admin.datagrid.pager.page > 2  %}
+                                                <li><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, 1)|merge(ckParameters)) }}" title="{{ 'link_first_pager'|trans({}, 'SonataAdminBundle') }}">&laquo;</a></li>
+                                            {% endif %}
+
+                                            {% if admin.datagrid.pager.page != admin.datagrid.pager.previouspage %}
+                                                <li><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, admin.datagrid.pager.previouspage)|merge(ckParameters)) }}" title="{{ 'link_previous_pager'|trans({}, 'SonataAdminBundle') }}">&lsaquo;</a></li>
+                                            {% endif %}
+
+                                            {# Set the number of pages to display in the pager #}
+                                            {% for page in admin.datagrid.pager.getLinks() %}
+                                                {% if page == admin.datagrid.pager.page %}
+                                                    <li class="active"><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, page)|merge(ckParameters)) }}">{{ page }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, page)|merge(ckParameters)) }}">{{ page }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if admin.datagrid.pager.page != admin.datagrid.pager.nextpage %}
+                                                <li><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, admin.datagrid.pager.nextpage)|merge(ckParameters)) }}" title="{{ 'link_next_pager'|trans({}, 'SonataAdminBundle') }}">&rsaquo;</a></li>
+                                            {% endif %}
+
+                                            {% if admin.datagrid.pager.page != admin.datagrid.pager.lastpage and admin.datagrid.pager.lastpage != admin.datagrid.pager.nextpage %}
+                                                <li><a href="{{ admin.generateUrl('browser', admin.modelmanager.paginationparameters(admin.datagrid, admin.datagrid.pager.lastpage)|merge(ckParameters)) }}" title="{{ 'link_last_pager'|trans({}, 'SonataAdminBundle') }}">&raquo;</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        {% endif %}
+                    {% endblock %}
+
+                {% endblock %}
+            </table>
+        {% else %}
+            <p class="notice">
+                {{ 'no_result'|trans({}, 'SonataAdminBundle') }}
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

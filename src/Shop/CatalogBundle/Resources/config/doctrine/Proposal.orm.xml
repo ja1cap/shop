@@ -28,6 +28,7 @@
         <field name="seoKeywords" type="text" nullable="true"/>
         <field name="seoSlug" type="string" nullable="true"/>
         <field name="mainImageId" type="integer" nullable="true"/>
+        <field name="mainMediaImageId" type="integer" nullable="true"/>
 
         <one-to-one field="mainImage" target-entity="ProposalImage">
             <cascade>
@@ -36,6 +37,16 @@
             </cascade>
             <join-columns>
                 <join-column name="mainImageId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
+
+        <one-to-one field="mainMediaImage" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="mainMediaImageId" referenced-column-name="id" on-delete="SET NULL"/>
             </join-columns>
         </one-to-one>
 
@@ -80,6 +91,12 @@
                 <join-column name="defaultContractorId" referenced-column-name="id" nullable="true"/>
             </join-columns>
         </many-to-one>
+
+        <many-to-many field="mediaImages" target-entity="Application\Sonata\MediaBundle\Entity\Media" fetch="LAZY">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-many>
 
     </entity>
 </doctrine-mapping>

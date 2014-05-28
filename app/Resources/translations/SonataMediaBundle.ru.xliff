@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="images_browser">
+                <source>images_browser</source>
+                <target>Выбор изображения</target>
+            </trans-unit>
+            <trans-unit id="image_small">
+                <source>image_small</source>
+                <target>маленькое</target>
+            </trans-unit>
+            <trans-unit id="image_small_square">
+                <source>image_small_square</source>
+                <target>маленькое квадратное</target>
+            </trans-unit>
+            <trans-unit id="image_medium">
+                <source>image_medium</source>
+                <target>среднее</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

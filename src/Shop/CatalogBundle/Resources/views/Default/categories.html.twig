@@ -26,9 +26,9 @@
                                         <div style="height: 204px">
 
                                             <div class="round-image-container" style="width: 146px; height: 146px; margin: 15px auto 10px">
-                                                <div class="nailthumb-container" style="width: 140px; height: 140px">
-                                                    <img src="{% path category.image, 'small_square' %}" alt="{{ category.name }}"/>
-                                                </div>
+                                                {#<div class="nailthumb-container" style="width: 140px; height: 140px">#}
+                                                    <img src="{% path category.image, 'small_square' %}" alt="{{ category.name }}" height="140px"/>
+                                                {#</div>#}
                                             </div>
 
                                             <a href="{{ path('shop_catalog_category', {'slug':category.slug}) }}" class="clickable-block-link" style="font-size: 20px; text-align: center; display: block">

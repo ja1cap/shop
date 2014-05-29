@@ -57,7 +57,8 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                 $images = $proposal->getImages();
                 foreach($images as $image){
 
-                    $imagePath = $image->getFilePath($image->getImageFileName());
+                    $thumbImagePath = $image->getFilePath($image->getThumbImageFileName());
+                    $imagePath = file_exists($thumbImagePath) ? $thumbImagePath : $image->getFilePath($image->getImageFileName());
 
                     if(file_exists($imagePath)){
 
@@ -104,7 +105,8 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
             $mainImage = $proposal->getMainImage();
             if($mainImage){
 
-                $imagePath = $mainImage->getFilePath($mainImage->getImageFileName());
+                $thumbImagePath = $mainImage->getFilePath($mainImage->getThumbImageFileName());
+                $imagePath = file_exists($thumbImagePath) ? $thumbImagePath : $mainImage->getFilePath($mainImage->getImageFileName());
 
                 if(file_exists($imagePath)){
 

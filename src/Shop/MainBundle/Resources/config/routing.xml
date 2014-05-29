@@ -14,30 +14,35 @@
         <default key="_controller">ShopMainBundle:Default:orderProposal</default>
         <default key="id">null</default>
     </route>
-    <route id="shop_proposal" pattern="/catalog/{categorySlug}/{slug}">
-        <default key="_controller">ShopMainBundle:Default:proposal</default>
-    </route>
+    <!--@TODO remove -->
     <route id="shop_beds" pattern="/krovati">
         <default key="_controller">ShopMainBundle:Default:beds</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_bed" pattern="/krovati/{slug}">
         <default key="_controller">ShopMainBundle:Default:bed</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_mattresses" pattern="/matrasy">
         <default key="_controller">ShopMainBundle:Default:mattresses</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_mattress" pattern="/matrasy/{slug}">
         <default key="_controller">ShopMainBundle:Default:mattress</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_bed_bases" pattern="/osnovaniya">
         <default key="_controller">ShopMainBundle:Default:bedBases</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_bed_base" pattern="/osnovaniya/{slug}">
         <default key="_controller">ShopMainBundle:Default:bedBase</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_pillows" pattern="/podushki">
         <default key="_controller">ShopMainBundle:Default:pillows</default>
     </route>
+    <!--@TODO remove -->
     <route id="shop_pillow" pattern="/podushki/{slug}">
         <default key="_controller">ShopMainBundle:Default:pillow</default>
     </route>

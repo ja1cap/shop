@@ -12,15 +12,8 @@
             <div class="shop-cart-category-proposals">
                 {% for proposalData in categoryData.proposals %}
                     <div class="shop-cart-category-proposal">
-                        {#<a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">#}
-                        {#<span class="shop-cart-proposal-image">#}
-                            {#<span class="nailthumb-container">#}
-                                {#<img src="{{ proposalData.proposal.thumbImageUrl }}">#}
-                            {#</span>#}
-                        {#</span>#}
-                        {#</a>#}
                         <div class="shop-cart-proposal-name">
-                            <a href="{{ path('shop_proposal', { 'categorySlug' : categoryData.category.slug, 'slug' : proposalData.proposal.seoSlug|default(proposalData.proposal.id) }) }}">
+                            <a href="{{ shop_catalog_proposal_url(proposal) }}">
                                 {{ proposalData.proposal.title }}
                             </a>
                         </div>

@@ -24,6 +24,10 @@
         <default key="_controller">ShopCatalogBundle:Default:category</default>
     </route>
 
+    <route id="shop_catalog_proposal" pattern="/catalog/{categorySlug}/{slug}">
+        <default key="_controller">ShopCatalogBundle:Default:proposal</default>
+    </route>
+
     <route id="parameters" pattern="/adminCatalog/parameters">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameters</default>
     </route>

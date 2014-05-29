@@ -58,7 +58,7 @@ class ShopProposalExtension extends \Twig_Extension {
         if($proposal instanceof Proposal){
 
             //@TODO rename route name to shop_catalog_proposal
-            $url = $this->urlGenerator->generate('shop_proposal', array(
+            $url = $this->urlGenerator->generate('shop_catalog_proposal', array(
                 'categorySlug' => $proposal->getCategory()->getSlug(),
                 'slug' => $proposal->getSeoSlug() ?: $proposal->getId(),
             ));

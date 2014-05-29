@@ -1752,7 +1752,7 @@ body .owl-carousel .owl-buttons .owl-next { right: -45px; background-position: -
 body .download-catalog-btn { line-height: 111px; position: relative; z-index: 8; text-align: center; font-size: 40px; display: block; width: 549px; height: 111px; background: url("/img/sprite.png") no-repeat -113px -590px; color: white; margin: 50px auto 10px; }
 body .download-catalog-btn:hover { background: url("/img/sprite.png") no-repeat -782px -590px; }
 body .proposal-discount-percent { font-weight: bold; line-height: 43px; color: white; display: block; width: 43px; height: 43px; text-align: center; background: url("/img/sprite.png") no-repeat -142px -432px; }
-body .header-container { z-index: 100; left: 0; top: 0; position: fixed; width: 100%; -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); background: white; }
+body .header-container { z-index: 100; position: relative; width: 100%; -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); background: white; }
 body .header-container .header { overflow: hidden; height: 100px; }
 body .header-container .header .header-logo { float: left; }
 body .header-container .header .header-logo .image-wrapper { height: 100px; }
@@ -1779,7 +1779,7 @@ body .footer .row .footer-social .columns a { color: white; font-size: 18px; wid
 body .footer .row .footer-social .vk { background: #0071bc; }
 body .footer .row .footer-social .fb { background: #3fa9f5; }
 body .footer .row .footer-social .google { background: #de616e; }
-body .main-container { max-width: 1280px; padding-top: 100px; margin: 0 auto; overflow: hidden; background: white; -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
+body .main-container { max-width: 1280px; margin: 0 auto; overflow: hidden; background: white; -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25); }
 body .request-form-container { position: relative; width: 650px; margin: 50px auto 60px; -webkit-border-radius: 10px; -moz-border-radius: 10px; -ms-border-radius: 10px; -o-border-radius: 10px; border-radius: 10px; background-color: #34495e; background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #34495e), color-stop(100%, #34495e)); background-image: -webkit-linear-gradient(#34495e, #34495e); background-image: -moz-linear-gradient(#34495e, #34495e); background-image: -o-linear-gradient(#34495e, #34495e); background-image: linear-gradient(#34495e, #34495e); -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.35); -moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.35); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.35); }
 body .request-form-container form { padding: 55px 50px 35px; display: block; }
 body .request-form-container form .submit-btn { margin: 40px auto 0; cursor: pointer; display: block; text-align: center; outline: none; font-size: 35px; color: white; width: 430px; line-height: 70px; border: 3px solid white; background: #fd5253; -webkit-border-radius: 10px; -moz-border-radius: 10px; -ms-border-radius: 10px; -o-border-radius: 10px; border-radius: 10px; }

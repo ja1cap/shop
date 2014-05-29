@@ -164,12 +164,10 @@
 
                             {% set proposal = proposalData.proposal %}
 
-                            <a href="{{ path('shop_proposal', { 'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id) }) }}" class="inner-container">
+                            <a href="{{ shop_catalog_proposal_url(proposal) }}" class="inner-container">
 
                                 <span class="image-container">
-                                    {#<span class="nailthumb-container">#}
-                                        <img src="{% path proposal.image, 'small_square' %}">
-                                    {#</span>#}
+                                    <img src="{% path proposal.image, 'small_square' %}">
                                 </span>
 
                                 <span class="title">

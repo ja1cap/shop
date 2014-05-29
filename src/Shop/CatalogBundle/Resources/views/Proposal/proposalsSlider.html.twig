@@ -9,9 +9,7 @@
             <div class="inner-container">
 
                 <span class="image-container">
-                    {#<span class="nailthumb-container">#}
-                        <img src="{% path proposal.image, 'small_square' %}">
-                    {#</span>#}
+                    <img src="{% path proposal.image, 'small_square' %}">
                 </span>
 
                 {% if proposal.discount_percent is defined and proposal.discount_percent %}

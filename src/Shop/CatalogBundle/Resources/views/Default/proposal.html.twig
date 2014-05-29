@@ -67,7 +67,6 @@
                                                 <div class="proposal-price-container">
                                                     {% if price %}
                                                         <div class="price">
-                                                            {#{{ priceData.maxPrice }}#}
                                                             {% if priceData.maxPrice > priceData.price %}
                                                                 от
                                                             {% endif %}
@@ -217,7 +216,7 @@
                             </div>
                         {% endif %}
 
-                        {% include "ShopMainBundle:Default:proposalAdditionalCategories.html.twig" %}
+                        {% include "ShopCatalogBundle:Default:proposalAdditionalCategories.html.twig" %}
 
                     </div>
 
@@ -230,7 +229,7 @@
 
                     var $filtersForm = $('#filtersForm, #extraFiltersForm');
 
-                    var proposalUrl = '{{ path('shop_proposal', {'categorySlug' : category.slug, 'slug' : proposal.seoSlug|default(proposal.id)}) }}';
+                    var proposalUrl = '{{ shop_catalog_proposal_url(proposal) }}';
 
                     $(':input', $filtersForm).change(function(){
 

@@ -503,9 +503,7 @@ body {
   .header-container {
 
     z-index: 100;
-    left: 0;
-    top: 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px);
     background: white;
@@ -664,7 +662,6 @@ body {
   .main-container {
 
     max-width: $max-width;
-    padding-top: $header-height;
     margin: 0 auto;
     overflow: hidden;
     background: white;

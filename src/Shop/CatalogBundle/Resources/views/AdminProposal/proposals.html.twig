@@ -30,6 +30,8 @@
                             {{ proposal.title }}
                         </span>
                         {% thumbnail proposal.image, 'small' %}
+                        {% thumbnail proposal.image, 'small_square' %}
+                        {% thumbnail proposal.image, 'medium' %}
                         <img src="{{ proposal.thumbImageUrl }}" height="150">
                         <div>
                             {% if proposal.price %}

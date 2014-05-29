@@ -10,7 +10,7 @@
 
                 <span class="image-container">
                     <span class="nailthumb-container">
-                        <img src="{{ proposal.thumbImageUrl|default(proposal.imageUrl) }}">
+                        <img src="{% path proposal.image, 'small_square' %}">
                     </span>
                 </span>
 

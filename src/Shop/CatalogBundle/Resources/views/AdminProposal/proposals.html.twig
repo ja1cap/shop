@@ -29,10 +29,6 @@
                         <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
                             {{ proposal.title }}
                         </span>
-                        {% thumbnail proposal.image, 'small' %}
-                        {% thumbnail proposal.image, 'small_square' %}
-                        {% thumbnail proposal.image, 'medium' %}
-                        <img src="{{ proposal.thumbImageUrl }}" height="150">
                         <div>
                             {% if proposal.price %}
                                 <span style="font-weight: normal; display: block">

@@ -72,7 +72,7 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                         $media = $mediaManager->findOneBy(array(
                             'providerName' => $mediaCommandInput->getParameterOption('providerName'),
                             'context' => $mediaCommandInput->getParameterOption('context'),
-                            'name' => $image->getImageFileName(),
+                            'name' => pathinfo($imagePath, PATHINFO_BASENAME),
                         ));
 
                         if($media instanceof Media){
@@ -87,7 +87,7 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                             $media = $mediaManager->findOneBy(array(
                                 'providerName' => $mediaCommandInput->getParameterOption('providerName'),
                                 'context' => $mediaCommandInput->getParameterOption('context'),
-                                'name' => $image->getImageFileName(),
+                                'name' => pathinfo($imagePath, PATHINFO_BASENAME),
                             ));
 
                             if($media instanceof Media){
@@ -120,7 +120,7 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                     $media = $mediaManager->findOneBy(array(
                         'providerName' => $mediaCommandInput->getParameterOption('providerName'),
                         'context' => $mediaCommandInput->getParameterOption('context'),
-                        'name' => $mainImage->getImageFileName(),
+                        'name' => pathinfo($imagePath, PATHINFO_BASENAME),
                     ));
 
                     if($media instanceof Media){
@@ -135,7 +135,7 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                         $media = $mediaManager->findOneBy(array(
                             'providerName' => $mediaCommandInput->getParameterOption('providerName'),
                             'context' => $mediaCommandInput->getParameterOption('context'),
-                            'name' => $mainImage->getImageFileName(),
+                            'name' => pathinfo($imagePath, PATHINFO_BASENAME),
                         ));
 
                         if($media instanceof Media){

@@ -1,10 +1,8 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
 
 {% block title %}Управление прайс-листами{% endblock %}
 
-{% block main_container %}
-
-    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListsBreadcrumb.html.twig') }}
+{% block page_content %}
 
     <div class="medium primary btn">
         <a href="{{ path('price_list') }}">

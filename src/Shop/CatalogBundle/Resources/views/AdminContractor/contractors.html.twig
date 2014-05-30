@@ -1,10 +1,8 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
 
 {% block title %}Управление контрагентами{% endblock %}
 
-{% block main_container %}
-
-    {{ include('ShopCatalogBundle:AdminContractor:breadcrumb/contractorsBreadcrumb.html.twig') }}
+{% block page_content %}
 
     <div class="medium primary btn">
         <a href="{{ path('contractor') }}">

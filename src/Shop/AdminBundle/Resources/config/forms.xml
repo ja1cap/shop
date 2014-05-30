@@ -6,11 +6,17 @@
 
     <parameters>
         <parameter key="shop_admin.form.type.seo.class">Shop\AdminBundle\Form\Type\SeoType</parameter>
+        <parameter key="shop_admin.form.type.media_image.class">Shop\AdminBundle\Form\Type\MediaImageType</parameter>
     </parameters>
 
     <services>
         <service id="shop_admin.form.type.seo" class="%shop_admin.form.type.seo.class%">
             <tag name="form.type" alias="shop_admin_seo_type" />
+        </service>
+        <service id="shop_admin.form.type.media_image" class="%shop_admin.form.type.media_image.class%">
+            <tag name="form.type" alias="shop_admin_media_image_type" />
+            <argument type="service" id="sonata.media.pool" />
+            <argument>Application\Sonata\MediaBundle\Entity\Media</argument>
         </service>
     </services>
 

@@ -4,7 +4,9 @@
         <div class="pull-left">
             {% if value is not empty and value.providerReference %}
                 <div class="pull-left" style="margin-right: 10px">
-                    {% thumbnail value, 'small_square' with {'class': 'img-polaroid media-object'} %}
+                    <a href="{% path value, 'reference' %}" class="fancybox">
+                        {% thumbnail value, 'small_square' with {'class': 'img-polaroid media-object'} %}
+                    </a>
                 </div>
                 {% if form.vars['provider'] != 'sonata.media.provider.image' %}
                     {% if sonata_admin_enabled is defined and sonata_admin_enabled %}

@@ -1,0 +1,27 @@
+<li class="{{ app.request.get('_route') == 'category' ? 'active' : '' }}">
+    <a href="{{ path('category', {'id' : category.id}) }}">
+        Информация
+    </a>
+</li>
+{% if category.id %}
+    {#<li class="{{ app.request.get('_route') == 'category_seo' ? 'active' : '' }}">#}
+        {#<a href="{{ path('category_seo', {'id' : category.id }) }}">#}
+            {#SEO#}
+        {#</a>#}
+    {#</li>#}
+    <li class="{{ app.request.get('_route') == 'proposals' ? 'active' : '' }}">
+        <a href="{{ path('proposals', {'categoryId' : category.id}) }}">
+            Товары
+        </a>
+    </li>
+    <li class="{{ app.request.get('_route') == 'category_parameters' ? 'active' : '' }}">
+        <a href="{{ path('category_parameters', {'categoryId' : category.id}) }}">
+            Параметры
+        </a>
+    </li>
+    <li class="{{ app.request.get('_route') == 'category_filters_list' ? 'active' : '' }}">
+        <a href="{{ path('category_filters_list', {'categoryId' : category.id}) }}">
+            Фильтры
+        </a>
+    </li>
+{% endif %}

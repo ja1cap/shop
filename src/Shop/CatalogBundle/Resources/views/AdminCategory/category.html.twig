@@ -1,13 +1,1 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
-
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
-    {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig') }}
-    {% if category.id %}
-        <div style="margin-bottom: 10px">
-            {{ include('ShopCatalogBundle:AdminCategory:categoryNavigationButtons.html.twig') }}
-        </div>
-    {% endif %}
-    {{ form(form) }}
-{% endblock %}
+{% extends "ShopCatalogBundle:AdminCategory:categoryLayout.html.twig" %}

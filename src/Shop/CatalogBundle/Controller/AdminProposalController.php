@@ -2,16 +2,15 @@
 
 namespace Shop\CatalogBundle\Controller;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
-use Shop\CatalogBundle\Entity\ProposalImage;
 use Shop\CatalogBundle\Form\Type\PriceType;
 use Shop\CatalogBundle\Mapper\PriceMapper;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
-use Shop\MainBundle\Form\Type\ImageType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,7 +62,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $id,
         ));
@@ -115,7 +114,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $id
         ));
@@ -146,7 +145,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $id
         ));
@@ -175,7 +174,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $proposalId
         ));
@@ -315,7 +314,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $id
         ));
@@ -345,7 +344,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $proposalId
         ));
@@ -354,29 +353,37 @@ class AdminProposalController extends Controller
             throw $this->createNotFoundException('Товар не найден');
         }
 
-        $category = $proposal->getCategory();
-
-        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+        /**
+         * @var \Sonata\MediaBundle\Entity\MediaManager $mediaManager
+         */
+        $mediaManager = $this->get('sonata.media.manager.media');
+        $image = $mediaManager->findOneBy(array(
             'id' => $id,
         ));
 
-        if(!$image instanceof ProposalImage){
-            $image = new ProposalImage();
+        if(!$image instanceof Media){
+            $image = $mediaManager->create();
         }
 
         $isNew = !$image->getId();
-        $form = $this->createForm(new ImageType(), $image);
+        $form = $this->createForm('shop_admin_media_image_type', $image);
 
         $form->handleRequest($request);
 
         if($request->getMethod() == 'POST' && $form->isValid()){
 
-            $em = $this->getDoctrine()->getManager();
-
             if($isNew){
-                $proposal->addImage($image);
+
+                $image->setContext($form->getConfig()->getOption('context'));
+                $image->setProviderName($form->getConfig()->getOption('provider'));
+
+                $proposal->addMediaImage($image);
+
             }
 
+            $mediaManager->save($image);
+
+            $em = $this->getDoctrine()->getManager();
             $em->flush();
 
             return $this->redirect($this->generateUrl('proposal_images', array('id' => $proposal->getId())));
@@ -386,7 +393,7 @@ class AdminProposalController extends Controller
             return $this->render('ShopCatalogBundle:AdminProposal:proposalImage.html.twig', array(
                 'title' => $isNew ? 'Добавление' : 'Изменение',
                 'form' => $form->createView(),
-                'category' => $category,
+                'category' => $proposal->getCategory(),
                 'proposal' => $proposal,
                 'image' => $image,
             ));
@@ -406,7 +413,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $proposalId
         ));
@@ -415,15 +422,19 @@ class AdminProposalController extends Controller
             throw $this->createNotFoundException('Товар не найден');
         }
 
-        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+        /**
+         * @var \Sonata\MediaBundle\Entity\MediaManager $mediaManager
+         */
+        $mediaManager = $this->get('sonata.media.manager.media');
+        $image = $mediaManager->findOneBy(array(
             'id' => $id,
         ));
 
-        if(!$image instanceof ProposalImage){
+        if(!$image instanceof Media){
             throw $this->createNotFoundException('Фотография не найдена');
         }
 
-        $proposal->setMainImage($image);
+        $proposal->setMainMediaImage($image);
         $em = $this->getDoctrine()->getManager();
         $em->flush();
 
@@ -444,7 +455,7 @@ class AdminProposalController extends Controller
         /**
          * @var $proposalRepository \Shop\CatalogBundle\Entity\ProposalRepository
          */
-        $proposalRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        $proposalRepository = $this->get('shop_catalog.proposal.repository');
         $proposal = $proposalRepository->findOneBy(array(
             'id' => $proposalId
         ));
@@ -453,16 +464,21 @@ class AdminProposalController extends Controller
             throw $this->createNotFoundException('Товар не найден');
         }
 
-        $image = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalImage')->findOneBy(array(
+        /**
+         * @var \Sonata\MediaBundle\Entity\MediaManager $mediaManager
+         */
+        $mediaManager = $this->get('sonata.media.manager.media');
+        $image = $mediaManager->findOneBy(array(
             'id' => $id,
         ));
 
-        if(!$image instanceof ProposalImage){
+        if(!$image instanceof Media){
             throw $this->createNotFoundException('Фотография не найдена');
         }
 
+        $proposal->removeMediaImage($image);
+
         $em = $this->getDoctrine()->getManager();
-        $em->remove($image);
         $em->flush();
 
         return $this->redirect($this->generateUrl('proposal_images', array('id' => $proposal->getId())));

@@ -1,9 +1,8 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:categoryLayout.html.twig" %}
 
 {% block title %}Параметра категории{% endblock %}
 
-{% block main_container %}
-    {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryParametersBreadcrumb.html.twig') }}
+{% block page_content %}
     {% if category.id and category.parameters.count < total_parameters_amount %}
         <div class="medium primary btn">
             <a href="{{ path('category_parameter', {'categoryId' : category.id}) }}">

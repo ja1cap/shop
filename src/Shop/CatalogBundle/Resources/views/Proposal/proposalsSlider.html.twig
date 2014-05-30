@@ -9,7 +9,7 @@
             <div class="inner-container">
 
                 <span class="image-container">
-                    <img src="{% path proposal.image, 'small_square' %}">
+                    <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
                 </span>
 
                 {% if proposal.discount_percent is defined and proposal.discount_percent %}

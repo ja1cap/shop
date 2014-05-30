@@ -31,10 +31,6 @@
         <field name="mainMediaImageId" type="integer" nullable="true"/>
 
         <one-to-one field="mainImage" target-entity="ProposalImage">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
             <join-columns>
                 <join-column name="mainImageId" referenced-column-name="id" on-delete="SET NULL"/>
             </join-columns>
@@ -94,7 +90,7 @@
 
         <many-to-many field="mediaImages" target-entity="Application\Sonata\MediaBundle\Entity\Media" fetch="LAZY">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
             </cascade>
         </many-to-many>
 

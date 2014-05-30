@@ -1,0 +1,41 @@
+{% extends "ShopAdminBundle::layout.html.twig" %}
+
+{% block page_menu %}
+
+    <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
+        <a href="{{ path('categories') }}">
+            Категории
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'popular_proposals' ? 'active' : '' }}">
+        <a href="{{ path('popular_proposals') }}">
+            Популярные предложения
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'manufacturers' ? 'active' : '' }}">
+        <a href="{{ path('manufacturers') }}">
+            Производители
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'contractors' ? 'active' : '' }}">
+        <a href="{{ path('contractors') }}">
+            Контрагенты
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'price_lists' ? 'active' : '' }}">
+        <a href="{{ path('price_lists') }}">
+            Прайс-листы
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
+        <a href="{{ path('parameters') }}">
+            Базовые параметры
+        </a>
+    </li>
+
+{% endblock %}

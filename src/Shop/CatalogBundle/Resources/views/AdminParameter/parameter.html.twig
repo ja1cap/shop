@@ -1,8 +1,6 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
+{% block page_content %}
     {{ form(form) }}
     {% if parameter.id %}
         <hr/>

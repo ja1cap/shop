@@ -1,9 +1,9 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopAdminBundle::layout.html.twig" %}
 
 {% block body %}
 
     <div class="admin-container">
-        {{ include("ShopAdminBundle:Default:header.html.twig") }}
+        {{ include("ShopAdminBundle::header.html.twig") }}
         <div class="row dashboard">
             <ul class="four_up tiles">
                 {{ include("ShopAdminBundle:Default:menuItems.html.twig") }}

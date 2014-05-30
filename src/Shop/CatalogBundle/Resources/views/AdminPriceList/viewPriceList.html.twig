@@ -1,10 +1,6 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
-
-    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+{% block page_content %}
 
     <div class="large btn primary" style="margin-bottom: 20px">
         <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">

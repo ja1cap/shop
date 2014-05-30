@@ -1,8 +1,1 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
-
-{% block title %}{{ title }}{% endblock %}
-
-{% block main_container %}
-    {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryParameterGroupBreadcrumb.html.twig') }}
-    {{ form(form) }}
-{% endblock %}
+{% extends "ShopCatalogBundle:AdminCategory:categoryLayout.html.twig" %}

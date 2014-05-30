@@ -1,8 +1,7 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:categoryLayout.html.twig" %}
 
 {% block title %}Фильтры категории{% endblock %}
-
-{% block main_container %}
+{% block page_content %}
     <div>
         <div class="medium primary btn">
             <a href="{{ path('category_filters', {'categoryId' : category.id}) }}">

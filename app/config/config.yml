@@ -39,8 +39,9 @@ twig:
       resources:
           - ::fields.html.twig
           - ShtumiUsefulBundle::fields.html.twig
-          - ShopShippingBundle:Form:fields.html.twig
-          - WeastyMoneyBundle:Form:fields.html.twig
+          - ShopAdminBundle::fields.html.twig
+          - ShopShippingBundle::fields.html.twig
+          - WeastyMoneyBundle::fields.html.twig
 
 # Assetic Configuration
 assetic:

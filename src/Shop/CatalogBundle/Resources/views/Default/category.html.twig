@@ -7,11 +7,11 @@
 {% set extraParameterFilters = filtersResource.getExtraParameterFilters %}
 {% set priceRangeFilter = filtersResource.getPriceRangeFilter %}
 
-{% block main_container %}
+{% block page_container %}
     <div class="row well-v">
         <div class="three columns">
             {% block proposals_left_bar %}
-                {% include('ShopMainBundle:Default:shopCart.html.twig') %}
+                {% include('ShopCatalogBundle:ShopCart:small.html.twig') %}
                 {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
                 {% if extraParameterFilters or priceRangeFilter.getOptions %}
                     <div class="filters-form-container extraFiltersForm-container">
@@ -99,7 +99,7 @@
             {% endblock %}
         </div>
         <div class="nine columns">
-            {% block proposals_main_container %}
+            {% block proposals_page_container %}
                 {% if mainParameterFilters or filtersResource.getManufacturerFilter.getOptions|length > 1 %}
                     <div class="">
                         <div class="filters-form-container">
@@ -167,7 +167,7 @@
                             <a href="{{ shop_catalog_proposal_url(proposal) }}" class="inner-container">
 
                                 <span class="image-container">
-                                    <img src="{% path proposal.image, 'small_square' %}">
+                                    <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
                                 </span>
 
                                 <span class="title">

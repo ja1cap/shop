@@ -2,7 +2,7 @@
 
 {% set shippingCalculatorResult = shopCart.calculateShipping %}
 
-{% block main_container %}
+{% block page_container %}
 
     <div class="shop-cart-container row well-v">
 
@@ -27,14 +27,12 @@
                                             <tr>
                                                 <td class="image-cell">
                                                 <span class="shop-cart-proposal-image">
-                                                    <span class="nailthumb-container">
-                                                        <img src="{{ proposalData.proposal.thumbImageUrl }}">
-                                                    </span>
+                                                    <img src="{% path proposalData.proposal.image, 'small_square' %}" alt="{{ proposalData.proposal.name }}" title="{{ proposalData.proposal.name }}">
                                                 </span>
                                                 </td>
                                                 <td class="information-cell">
                                                     <div class="shop-cart-proposal-name">
-                                                        <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                                        <a href="{{ shop_catalog_proposal_url(proposalData.proposal) }}">
                                                             {{ proposalData.proposal.title }}
                                                         </a>
                                                     </div>

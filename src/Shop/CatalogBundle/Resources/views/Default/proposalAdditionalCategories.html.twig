@@ -15,20 +15,11 @@
                         <a href="{{ path('shop_catalog_category', {'slug' : additionalCategoryData.category.slug }) }}">
                             <span class="manufacturer-image-container">
                                 <span class="nailthumb-container">
-                                    <img src="{{ additionalCategoryData.proposalData.proposal.thumbImageUrl }}" alt="{{ additionalCategoryData.category.name }}">
+                                    <img src="{% path additionalCategoryData.proposalData.proposal.image, 'small_square' %}" alt="{{ additionalCategoryData.category.name }}">
                                 </span>
                             </span>
                         </a>
                     </div>
-                    {% if additionalCategoryData.manufacturers is defined %}
-                        {% for manufacturer in additionalCategoryData.manufacturers %}
-                            <div class="item" style="padding: 0 15px">
-                                <div class="manufacturer-image-container" style="width: 200px; height: 200px">
-                                    <img src="{{ manufacturer.thumb_image_url }}" alt="{{ manufacturer.name }}">
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
                 </div>
 
                 <div style="font-size: 18px; margin-bottom: 5px">

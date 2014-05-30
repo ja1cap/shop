@@ -1,5 +1,5 @@
 {% extends "ShopCatalogBundle:AdminProposal:proposalLayout.html.twig" %}
-{% block proposal_content %}
+{% block page_content %}
     <div class="medium secondary btn">
         <a href="{{ path('proposal_image', {'proposalId':proposal.id}) }}">
             Добавить фотографию
@@ -8,34 +8,38 @@
     {% if not proposal.images.isEmpty %}
         <table style="margin: 10px 0">
             <tbody>
-            {% for image in proposal.images %}
+            {% for image in proposal.mediaImages %}
                 <tr>
                     <td style="text-align: center">
-                        <a href="{{ image.url }}" rel="proposalImages" class="fancybox">
-                            <img src="{{ image.thumbUrl }}" style="max-width: 400px">
+                        <a href="{% path image, 'reference' %}" rel="proposalImages" class="fancybox">
+                            <img src="{% path image, 'small_square' %}">
                         </a>
                     </td>
                     <td>
-                        {% if image.id == proposal.mainImageId %}
-                            <span class="label primary" style="margin-bottom: 5px">
-                                Главная фотография
-                            </span>
-                        {% else %}
-                            <div class="medium btn primary" style="width: 100%">
-                                <a href="{{ path('proposal_set_main_image', {'proposalId':proposal.id, 'id' : image.id}) }}">
-                                    Сделать главной
+                        <div>
+                            {% if image.id == proposal.mainMediaImageId %}
+                                <div>
+                                <span class="label primary" style="margin-bottom: 5px">
+                                    Главная фотография
+                                </span>
+                                </div>
+                            {% else %}
+                                <div class="medium btn primary">
+                                    <a href="{{ path('proposal_set_main_image', {'proposalId':proposal.id, 'id' : image.id}) }}">
+                                        Сделать главной
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="medium btn default">
+                                <a href="{{ path('proposal_image', {'proposalId':proposal.id, 'id' : image.id}) }}">
+                                    Изменить
                                 </a>
                             </div>
-                        {% endif %}
-                        <div class="medium btn default" style="width: 100%">
-                            <a href="{{ path('proposal_image', {'proposalId':proposal.id, 'id' : image.id}) }}">
-                                Изменить
-                            </a>
-                        </div>
-                        <div class="medium btn danger" style="width: 100%">
-                            <a href="{{ path('delete_proposal_image', {'proposalId':proposal.id, 'id' : image.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить
-                            </a>
+                            <div class="medium btn danger">
+                                <a href="{{ path('delete_proposal_image', {'proposalId':proposal.id, 'id' : image.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
                         </div>
                     </td>
                 </tr>

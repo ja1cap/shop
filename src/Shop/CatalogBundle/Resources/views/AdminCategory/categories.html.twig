@@ -1,36 +1,8 @@
-{% extends "ShopMainBundle:Admin:layout.html.twig" %}
+{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
 
 {% block title %}Управление категориями{% endblock %}
 
-{% block main_container %}
-
-    <div style="margin-bottom: 10px">
-        <div class="medium default btn icon-left entypo icon-star">
-            <a href="{{ path('popular_proposals') }}">
-                Популярные предложения
-            </a>
-        </div>
-        <div class="medium default btn icon-left entypo icon-book">
-            <a href="{{ path('manufacturers') }}">
-                Производители
-            </a>
-        </div>
-        <div class="medium default btn icon-left entypo icon-suitcase">
-            <a href="{{ path('contractors') }}">
-                Контрагенты
-            </a>
-        </div>
-        <div class="medium default btn icon-left entypo icon-doc-text">
-            <a href="{{ path('price_lists') }}">
-                Прайс-листы
-            </a>
-        </div>
-        <div class="medium default btn icon-left entypo icon-menu">
-            <a href="{{ path('parameters') }}">
-                Базовые параметры
-            </a>
-        </div>
-    </div>
+{% block page_content %}
 
     <div class="medium primary btn">
         <a href="{{ path('category') }}">
@@ -40,7 +12,7 @@
 
     {% if categories %}
         <div style="margin: 10px 0;">
-            <ul class="tiles three_up tiles-blocks">
+            <ul class="tiles two_up tiles-blocks">
                 {% for category in categories %}
                     <li>
                         <div class="tile-title">

@@ -4,7 +4,7 @@
 {% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
 {% block keywords %}{{ proposal.seoKeywords }}{% endblock %}
 
-{% block main_container %}
+{% block page_container %}
 
     <div class="proposal-container row well-v">
 
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="three columns">
 
-                    {% include('ShopMainBundle:Default:shopCart.html.twig') %}
+                    {% include('ShopCatalogBundle:ShopCart:small.html.twig') %}
                     {% include('ShopCatalogBundle:Default:categoryLeftBar.html.twig') %}
 
                 </div>
@@ -40,20 +40,18 @@
                                 <tr>
                                     <td class="image-cell">
                                         <div class="proposal-image">
-                                            <a href="{{ proposal.image_url }}" class="fancybox" rel="proposalImages">
-                                                <img src="{{ proposal.thumb_image_url }}">
+                                            <a href="{% path proposal.image, 'reference' %}" class="fancybox proposal-image" rel="proposalImages">
+                                                <img src="{% path proposal.image, 'medium' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
                                             </a>
                                         </div>
                                         <div style="margin-top: 5px; text-align: center">
-                                            {% set imageUrls = [] %}
-                                            {% if proposal.images|length > 1 %}
-                                                {% for image in proposal.images %}
-                                                    {% set imageUrls = imageUrls|merge([image.url]) %}
-                                                    <a href="{{ image.url }}" class="fancybox" rel="proposalImages" style="display: none;">
-                                                        <img src="{{ image.thumb_url }}">
+                                            {% if proposal.mediaImages|length > 1 %}
+                                                {% for image in proposal.mediaImages if image.getId != proposal.mainMediaImageId %}
+                                                    <a href="{% path image, 'reference' %}" class="fancybox proposal-image" rel="proposalImages" style="display: none;">
+                                                        <img src="{% path image, 'medium' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
                                                     </a>
                                                 {% endfor %}
-                                                <a href="#" onclick="$.fancybox.open({{ imageUrls|json_encode }}, {openEffect: 'none', closeEffect: 'none', padding: 0, loop : false, helpers: {overlay: {locked: false}}}); return false;">
+                                                <a href="#" onclick="var imageUrls = $('.proposal-image').map(function(){ return $(this).attr('href'); }); $.fancybox.open(imageUrls, {openEffect: 'none', closeEffect: 'none', padding: 0, loop : false, helpers: {overlay: {locked: false}}}); return false;">
                                                     Просмотреть фотографии
                                                 </a>
                                             {% endif %}

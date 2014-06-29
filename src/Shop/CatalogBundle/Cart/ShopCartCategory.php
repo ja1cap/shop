@@ -3,8 +3,8 @@ namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\CatalogBundle\Data\CategoryInterface;
-use Weasty\MoneyBundle\Data\Price;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Money\Price\Price;
 
 /**
  * Class ShopCartCategory
@@ -13,7 +13,7 @@ use Weasty\MoneyBundle\Data\Price;
 class ShopCartCategory implements \ArrayAccess {
 
     /**
-     * @var \Weasty\CatalogBundle\Data\CategoryInterface
+     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
      */
     protected $category;
 

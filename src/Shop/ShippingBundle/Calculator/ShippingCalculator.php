@@ -9,10 +9,10 @@ use Shop\ShippingBundle\Entity\ShippingMethodCategory;
 use Shop\ShippingBundle\Entity\ShippingMethodCategoryRepository;
 use Shop\ShippingBundle\Entity\ShippingMethodRepository;
 use Shop\ShippingBundle\Entity\ShippingPrice;
-use Weasty\CatalogBundle\Data\CategoryInterface;
-use Weasty\GeonamesBundle\Entity\City;
-use Weasty\MoneyBundle\Converter\CurrencyConverterInterface;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\GeonamesBundle\Entity\City;
+use Weasty\Money\Currency\Converter\CurrencyConverterInterface;
+use Weasty\Money\Price\PriceInterface;
 
 /**
  * Class ShippingCalculator
@@ -31,12 +31,12 @@ class ShippingCalculator implements ShippingCalculatorInterface {
     protected $shippingMethodCategoryRepository;
 
     /**
-     * @var \Weasty\MoneyBundle\Converter\CurrencyConverterInterface
+     * @var \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     protected $currencyConverter;
 
     /**
-     * @var \Weasty\MoneyBundle\Converter\CurrencyConverterInterface
+     * @var \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     protected $proposalPriceCurrencyConverter;
 
@@ -284,7 +284,7 @@ class ShippingCalculator implements ShippingCalculatorInterface {
     }
 
     /**
-     * @return CurrencyConverterInterface
+     * @return \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     public function getCurrencyConverter()
     {
@@ -292,7 +292,7 @@ class ShippingCalculator implements ShippingCalculatorInterface {
     }
 
     /**
-     * @return CurrencyConverterInterface
+     * @return \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     public function getProposalPriceCurrencyConverter()
     {

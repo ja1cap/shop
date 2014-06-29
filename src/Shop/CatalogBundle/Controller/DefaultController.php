@@ -11,6 +11,7 @@ use Shop\CatalogBundle\Entity\Proposal;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 
 /**
  * @TODO create manufacturer proposals page
@@ -27,9 +28,7 @@ class DefaultController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function categoriesAction(){
-
         return $this->render('ShopCatalogBundle:Default:categories.html.twig');
-
     }
 
     /**
@@ -44,7 +43,7 @@ class DefaultController extends Controller
             'slug' => $slug,
         ));
 
-        if(!$category instanceof Category){
+        if(!$category instanceof CategoryInterface){
 
             $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryFilters')->findOneBy(array(
                 'slug' => $slug,
@@ -137,34 +136,9 @@ class DefaultController extends Controller
         }
 
         $shopCart = $this->buildShopCart($request);
-
-        $actions = array();
-
         $shippingCalculatorResult = null;
 
         if($price instanceof Price){
-
-            $shopCartSummaryPrice = $shopCart['summaryPrice'];
-            $shopCartPricesIds = $shopCart['priceIds'];
-
-            if(!in_array($price->getId(), $shopCartPricesIds)){
-                $possibleSummaryPrice = ($shopCartSummaryPrice + $this->get('shop_catalog.price.currency.converter')->convert($price));
-            } else {
-                $possibleSummaryPrice = $shopCartSummaryPrice;
-            }
-
-            $shopCartCategoryIds = $shopCart['categoryIds'];
-            $possibleCategoryIds = array_unique(array_merge($shopCartCategoryIds, array($category->getId())));
-
-            if($possibleSummaryPrice && $possibleCategoryIds){
-
-                /**
-                 * @var $actionRepository \Shop\CatalogBundle\Entity\ActionRepository
-                 */
-                $actionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action');
-                $actions = $actionRepository->findActions($possibleCategoryIds, $possibleSummaryPrice);
-
-            }
 
             $customerCity = null;
             if($request->get('customerCity')){
@@ -188,6 +162,13 @@ class DefaultController extends Controller
         $priceData['shipping'] = $shippingCalculatorResult;
 
         $additionalCategoriesData = $this->getProposalAdditionalCategories($category, $request);
+
+
+        /**
+         * @var $actionRepository \Shop\DiscountBundle\Entity\ActionRepository
+         */
+        $actionRepository = $this->get('shop_discount.action.repository');
+        $actions = $actionRepository->findActions($proposal->getId());
 
         $response = $this->render('ShopCatalogBundle:Default:proposal.html.twig', array(
             'category' => $category,

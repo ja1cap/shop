@@ -2,9 +2,9 @@
 namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Inflector\Inflector;
-use Weasty\CatalogBundle\Data\ProposalPriceInterface;
-use Weasty\MoneyBundle\Data\Price;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\Money\Price\Price;
+use Weasty\Money\Price\PriceInterface;
 
 /**
  * Class ShopCartPrice
@@ -18,7 +18,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     protected $price;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\Price
+     * @var \Weasty\Money\Price\Price
      */
     protected $itemPrice;
 
@@ -43,7 +43,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface
+     * @return integer|string|\Weasty\Money\Currency\CurrencyInterface
      */
     public function getCurrency()
     {
@@ -69,7 +69,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Data\\Weasty\Money\Price\Price
      */
     public function getItemPrice()
     {
@@ -85,7 +85,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Data\\Weasty\Money\Price\Price
      */
     public function getSummaryPrice()
     {
@@ -93,7 +93,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Price\Price
      */
     public function getSummary()
     {

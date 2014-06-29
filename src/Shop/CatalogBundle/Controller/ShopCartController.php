@@ -2,7 +2,7 @@
 
 namespace Shop\CatalogBundle\Controller;
 
-use Shop\CatalogBundle\Entity\Action;
+use Shop\DiscountBundle\Entity\Action;
 use Shop\CatalogBundle\Entity\CustomerOrder;
 use Shop\CatalogBundle\Entity\CustomerOrderProposal;
 use Shop\CatalogBundle\Entity\Price;
@@ -27,19 +27,8 @@ class ShopCartController extends Controller
 
         $shopCart = $this->buildShopCart($request);
 
+        //@TODO get actions
         $actions = array();
-        $shopCartSummaryPrice = $shopCart->getSummaryPrice();
-        $shopCartCategoryIds = $shopCart->getCategoryIds();
-
-        if($shopCartSummaryPrice && $shopCartCategoryIds){
-
-            /**
-             * @var $actionRepository \Shop\CatalogBundle\Entity\ActionRepository
-             */
-            $actionRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action');
-            $actions = $actionRepository->findActions($shopCartCategoryIds, $shopCartSummaryPrice);
-
-        }
 
         $cities = $this->get('weasty_geonames.city.repository')->getCountryCities();
         if($request->get('customerCity')){
@@ -79,7 +68,7 @@ class ShopCartController extends Controller
             $actionId = $request->get('actionId');
 
             if($actionId){
-                $action = $this->getDoctrine()->getRepository('ShopCatalogBundle:Action')->findOneBy(array(
+                $action = $this->get('shop_discount.action.repository')->findOneBy(array(
                     'id' => (int)$actionId,
                 ));
             }

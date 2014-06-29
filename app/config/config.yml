@@ -39,9 +39,10 @@ twig:
       resources:
           - ::fields.html.twig
           - ShtumiUsefulBundle::fields.html.twig
-          - ShopAdminBundle::fields.html.twig
           - ShopShippingBundle::fields.html.twig
+          - WeastyDoctrineBundle::fields.html.twig
           - WeastyMoneyBundle::fields.html.twig
+          - WeastyAdminBundle::fields.html.twig
 
 # Assetic Configuration
 assetic:
@@ -82,7 +83,11 @@ doctrine:
       entity_managers:
         default:
           auto_mapping: true
-          metadata_cache_driver: apc
+          metadata_cache_driver:
+              type: memcache
+              host: localhost
+              port: 11211
+              instance_class: Memcache
           query_cache_driver:
               type: memcache
               host: localhost

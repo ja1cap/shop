@@ -28,7 +28,7 @@ class AdminProposalController extends Controller
     public function proposalsAction($categoryId)
     {
 
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'id' => $categoryId,
         ));
 
@@ -43,6 +43,23 @@ class AdminProposalController extends Controller
     }
 
     /**
+     * @param null $categoryId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function proposalsBrowserAction($categoryId = null){
+
+        $categoryRepository = $this->get('shop_catalog.category.repository');
+        $category = $categoryId ? $categoryRepository->findOneBy(array('id' => $categoryId)) : null;
+        $categories = $categoryRepository->findBy(array(), array('name' => 'ASC'));
+
+        return $this->render('ShopCatalogBundle:AdminProposal:proposalsBrowser.html.twig', array(
+            'category' => $category,
+            'categories' => $categories,
+        ));
+
+    }
+
+    /**
      * @param $categoryId
      * @param $id
      * @param Request $request
@@ -51,7 +68,7 @@ class AdminProposalController extends Controller
     public function proposalAction($categoryId, $id, Request $request)
     {
 
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'id' => $categoryId,
         ));
 
@@ -72,7 +89,7 @@ class AdminProposalController extends Controller
         }
 
         $isNew = !$proposal->getId();
-        $formType = $request->get('_form_type', 'shop_catalog_proposal_type');
+        $formType = $request->get('_form_type', 'shop_catalog_proposal');
         $form = $this->createForm($formType, $proposal);
 
         $form->handleRequest($request);
@@ -366,7 +383,7 @@ class AdminProposalController extends Controller
         }
 
         $isNew = !$image->getId();
-        $form = $this->createForm('shop_admin_media_image_type', $image);
+        $form = $this->createForm('weasty_admin_media_image_type', $image);
 
         $form->handleRequest($request);
 

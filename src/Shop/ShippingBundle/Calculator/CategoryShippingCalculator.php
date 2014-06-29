@@ -3,10 +3,10 @@ namespace Shop\ShippingBundle\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
-use Weasty\CatalogBundle\Data\CategoryInterface;
-use Weasty\MoneyBundle\Converter\CurrencyConverterInterface;
-use Weasty\MoneyBundle\Data\Price;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Money\Currency\Converter\CurrencyConverterInterface;
+use Weasty\Money\Price\Price;
+use Weasty\Money\Price\PriceInterface;
 
 /**
  * Class CategoryShippingCalculator
@@ -15,7 +15,7 @@ use Weasty\MoneyBundle\Data\PriceInterface;
 class CategoryShippingCalculator implements ShippingCalculatorInterface {
 
     /**
-     * @var CurrencyConverterInterface
+     * @var \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     protected $currencyConverter;
 
@@ -180,7 +180,7 @@ class CategoryShippingCalculator implements ShippingCalculatorInterface {
     }
 
     /**
-     * @return CurrencyConverterInterface
+     * @return \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     public function getCurrencyConverter()
     {

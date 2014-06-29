@@ -3,12 +3,15 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity repository-class="Shop\CatalogBundle\Entity\CategoryRepository" name="Shop\CatalogBundle\Entity\Category">
+
         <indexes>
             <index columns="slug"/>
         </indexes>
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
+
         <field name="status" type="integer"/>
         <field name="imageId" type="integer" nullable="true" column="image_id"/>
         <field name="name" type="string" column="name" length="255"/>
@@ -16,11 +19,13 @@
         <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
         <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255" nullable="true"/>
         <field name="multipleName" type="string" column="multipleName" length="255" nullable="true"/>
+
         <one-to-many target-entity="CategoryFilters" mapped-by="category" field="filters">
             <cascade>
                 <cascade-all/>
             </cascade>
         </one-to-many>
+
         <one-to-many target-entity="CategoryParameter" mapped-by="category" field="parameters">
             <cascade>
                 <cascade-all/>
@@ -29,6 +34,7 @@
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
         </one-to-many>
+
         <one-to-many target-entity="CategoryParameterGroup" mapped-by="category" field="parameterGroups">
             <cascade>
                 <cascade-all/>
@@ -37,20 +43,24 @@
                 <order-by-field name="position" direction="ASC"/>
             </order-by>
         </one-to-many>
+
         <one-to-many target-entity="Proposal" mapped-by="category" field="proposals">
             <order-by>
                 <order-by-field name="title" direction="ASC"/>
             </order-by>
         </one-to-many>
+
         <many-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
             <cascade>
                 <cascade-all/>
             </cascade>
         </many-to-one>
+
         <many-to-many target-entity="Category" field="additionalCategories">
             <order-by>
                 <order-by-field name="name" direction="ASC"/>
             </order-by>
         </many-to-many>
+
     </entity>
 </doctrine-mapping>

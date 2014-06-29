@@ -6,16 +6,18 @@ use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\CatalogBundle\Data\CategoryInterface;
-use Weasty\ResourceBundle\Utils\WordInflector;
+use Shop\CatalogBundle\CollectionElement\CategoryElement;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
+use Weasty\Doctrine\Entity\AbstractEntity;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Resource\Utils\WordInflector;
 
 /**
  * Class Category
  * @package Shop\CatalogBundle\Entity
  */
 class Category extends AbstractEntity
-    implements CategoryInterface
+    implements CategoryInterface, CacheCollectionEntityInterface
 {
 
     /**
@@ -104,6 +106,15 @@ class Category extends AbstractEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new CategoryElement($collection, $this);
     }
 
     /**

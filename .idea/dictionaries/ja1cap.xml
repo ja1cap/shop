@@ -3,6 +3,7 @@
     <words>
       <w>ablativus</w>
       <w>accusativus</w>
+      <w>actioncondition</w>
       <w>autocomplete</w>
       <w>ckeditor</w>
       <w>clearfix</w>
@@ -15,11 +16,13 @@
       <w>inflector</w>
       <w>kondor</w>
       <w>maxlength</w>
+      <w>menubar</w>
       <w>nailthumb</w>
       <w>nullable</w>
       <w>paginator</w>
       <w>popv</w>
       <w>praepositionalis</w>
+      <w>scrollbars</w>
       <w>shtumi</w>
       <w>simplethings</w>
       <w>sylius</w>
@@ -29,6 +32,7 @@
       <w>unserialize</w>
       <w>vsematrasy</w>
       <w>weasty</w>
+      <w>weastyresource</w>
       <w>xliff</w>
     </words>
   </dictionary>

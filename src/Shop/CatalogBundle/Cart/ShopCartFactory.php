@@ -1,9 +1,9 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
 
-use Weasty\CatalogBundle\Data\CategoryInterface;
-use Weasty\CatalogBundle\Data\ProposalInterface;
-use Weasty\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
 
 /**
  * Class ShopCartFactory
@@ -12,12 +12,12 @@ use Weasty\CatalogBundle\Data\ProposalPriceInterface;
 class ShopCartFactory {
 
     /**
-     * @var \Weasty\GeonamesBundle\Data\CityLocator
+     * @var \Weasty\Bundle\GeonamesBundle\Data\CityLocator
      */
     protected $cityLocator;
 
     /**
-     * @var \Weasty\MoneyBundle\Converter\CurrencyConverterInterface
+     * @var \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     protected $currencyConverter;
 

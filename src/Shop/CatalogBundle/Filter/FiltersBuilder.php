@@ -1,11 +1,12 @@
 <?php
 namespace Shop\CatalogBundle\Filter;
-use Shop\CatalogBundle\Entity\Category;
+
 use Shop\CatalogBundle\Entity\CategoryFilters;
-use Shop\CatalogBundle\Entity\Proposal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
 
 /**
  * Class FiltersBuilder
@@ -21,7 +22,7 @@ class FiltersBuilder {
     protected $cache;
 
     /**
-     * @var \Weasty\MoneyBundle\Twig\AbstractMoneyExtension
+     * @var \Weasty\Money\Twig\AbstractMoneyExtension
      */
     protected $moneyExtension;
 
@@ -30,22 +31,28 @@ class FiltersBuilder {
      */
     protected $proposalRepository;
 
-    function __construct($proposalRepository, $moneyExtension, $cache)
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
+    protected $categoryParameterRepository;
+
+    function __construct($proposalRepository, $categoryParameterRepository, $moneyExtension, $cache)
     {
         $this->proposalRepository = $proposalRepository;
+        $this->categoryParameterRepository = $categoryParameterRepository;
         $this->moneyExtension = $moneyExtension;
         $this->cache = $cache;
     }
 
     /**
-     * @param Category $category
-     * @param Proposal $proposal
+     * @param CategoryInterface $category
+     * @param ProposalInterface $proposal
      * @param array $manufacturerIds
      * @param array $parametersFilteredOptionIds
      * @param array $priceRangeSteps
      * @return FiltersResource
      */
-    public function build(Category $category, Proposal $proposal = null, $manufacturerIds = array(), $parametersFilteredOptionIds = array(), $priceRangeSteps = array()){
+    public function build(CategoryInterface $category, ProposalInterface $proposal = null, $manufacturerIds = array(), $parametersFilteredOptionIds = array(), $priceRangeSteps = array()){
 
         $cacheId = 'category_filters_resource_' . md5(serialize(array(
             'categoryId' => $category->getId(),
@@ -105,12 +112,12 @@ class FiltersBuilder {
     }
 
     /**
-     * @param Category $category
-     * @param Proposal $proposal
+     * @param CategoryInterface $category
+     * @param ProposalInterface $proposal
      * @param Request $request
      * @return mixed|FiltersResource
      */
-    public function buildFromRequest(Category $category, Proposal $proposal = null, Request $request){
+    public function buildFromRequest(CategoryInterface $category, ProposalInterface $proposal = null, Request $request){
 
         $manufacturer = $request->get('manufacturer', json_decode($request->cookies->get('manufacturer'), true));
         $parametersFilteredOptionIds = $this->getParametersFilteredOptionIds($request);
@@ -121,12 +128,12 @@ class FiltersBuilder {
     }
 
     /**
-     * @param Category $category
+     * @param CategoryInterface $category
      * @param Request $request
      * @param Response $response
      * @return $this
      */
-    public function setFiltersCookies(Category $category, Request $request, Response $response){
+    public function setFiltersCookies(CategoryInterface $category, Request $request, Response $response){
 
         if($request->query->has('parameters')){
             $response->headers->setCookie(new Cookie(self::PARAMETER_VALUES_FILTER_COOKIE_NAME, json_encode($request->query->get('parameters'))));
@@ -145,6 +152,13 @@ class FiltersBuilder {
     }
 
     /**
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    protected function getCategoryParameterRepository(){
+        return $this->categoryParameterRepository;
+    }
+
+    /**
      * @return \Shop\CatalogBundle\Entity\ProposalRepository
      */
     protected function getProposalRepository()
@@ -153,11 +167,11 @@ class FiltersBuilder {
     }
 
     /**
-     * @param Category $category
+     * @param CategoryInterface $category
      * @param int[] $manufacturerIds
      * @return FilterInterface[]
      */
-    public function buildManufacturerFilter(Category $category, $manufacturerIds = array())
+    public function buildManufacturerFilter(CategoryInterface $category, $manufacturerIds = array())
     {
 
         if ($manufacturerIds && !is_array($manufacturerIds)) {
@@ -235,11 +249,11 @@ class FiltersBuilder {
     }
 
     /**
-     * @param Category $category
+     * @param CategoryInterface $category
      * @param array $parametersFilteredOptionIds
      * @param FiltersResource $filtersResource
      */
-    public function buildParameterFilters(Category $category, array $parametersFilteredOptionIds, FiltersResource $filtersResource)
+    public function buildParameterFilters(CategoryInterface $category, array $parametersFilteredOptionIds, FiltersResource $filtersResource)
     {
 
         $parametersOptions = $this->getProposalRepository()->findCategoryParametersOptions($category->getId());
@@ -271,9 +285,12 @@ class FiltersBuilder {
         }
 
         /**
-         * @var \Shop\CatalogBundle\Entity\CategoryParameter $categoryParameter
+         * @var \Shop\CatalogBundle\Entity\CategoryParameter[] $categoryParameters
          */
-        foreach($category->getParameters() as $categoryParameter){
+        $categoryParameters = $this->getCategoryParameterRepository()->findBy(array(
+            'categoryId' => $category->getId(),
+        ));
+        foreach($categoryParameters as $categoryParameter){
 
             $parameterFilter = $filtersResource->getParameterFilter($categoryParameter->getParameterId());
             if($parameterFilter){
@@ -340,10 +357,10 @@ class FiltersBuilder {
 
     /**
      * @param Request $request
-     * @param Category $category
+     * @param CategoryInterface $category
      * @return array
      */
-    public function getPriceRageSteps(Request $request, Category $category)
+    public function getPriceRageSteps(Request $request, CategoryInterface $category)
     {
         $priceRangeSteps = $request->get('prices', json_decode($request->cookies->get('prices' . $category->getId()), true));
         if (!is_array($priceRangeSteps)) {
@@ -355,12 +372,12 @@ class FiltersBuilder {
     }
 
     /**
-     * @param Category $category
+     * @param CategoryInterface $category
      * @param array $priceRangeSteps
      * @param FiltersResource $filtersResource
      * @return Filter
      */
-    protected function buildPriceRangerFilter(Category $category, $priceRangeSteps = array(), FiltersResource $filtersResource){
+    protected function buildPriceRangerFilter(CategoryInterface $category, $priceRangeSteps = array(), FiltersResource $filtersResource){
 
         if(!is_array($priceRangeSteps)){
             $priceRangeSteps = array();

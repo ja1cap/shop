@@ -1683,10 +1683,15 @@ table.rounded thead th, table.rounded thead td, table.rounded caption + tbody tr
 .ie9 .radio.checked i, .ie9 .checkbox.checked i { top: 0; }
 
 body { background: #f1f1f1; overflow-y: scroll; }
+body .help { font-size: 12px; color: #4f5255; }
+body .help .icon-info { min-width: 10px; margin: 0; position: relative; top: -2px; }
 body .pull-left { float: left; }
 body .pull-right { float: right; }
 body form .media-fields label { font-size: 12px; }
 body form .media-fields input[type="file"] { display: inline; margin-left: 5px; }
+body .browser-items-form-element { margin-bottom: 10px; }
+body .browser-items-form-element > ul { margin-bottom: 0; }
+body .browser-items-form-element > ul li { padding-bottom: 0; }
 body .cke-content blockquote { font-style: italic; font-family: Georgia, Times, "Times New Roman", serif; padding: 2px 0; border-style: solid; border-color: #ccc; border-width: 0; }
 body .cke-content .cke_contents_ltr blockquote { padding-left: 20px; padding-right: 8px; border-left-width: 5px; }
 body .cke-content .cke_contents_rtl blockquote { padding-left: 8px; padding-right: 20px; border-right-width: 5px; }
@@ -1702,6 +1707,17 @@ body .cke-content span[lang] { font-style: italic; }
 body .cke-content figure { text-align: center; border: solid 1px #ccc; border-radius: 2px; background: rgba(0, 0, 0, 0.05); padding: 10px; margin: 10px 20px; display: inline-block; }
 body .cke-content figure > figcaption { text-align: center; display: block; /* For IE8 */ }
 body .cke-content a > img { padding: 1px; margin: 1px; border: none; outline: 1px solid #0782C1; }
+body table thead { background: transparent; color: black; }
+body table tr td:first-child { font-weight: normal; }
+body .more-container { position: relative; }
+body .more-container .more-inner-container { -webkit-transition-property: max-height; -moz-transition-property: max-height; -o-transition-property: max-height; transition-property: max-height; -webkit-transition-duration: 3s; -moz-transition-duration: 3s; -o-transition-duration: 3s; transition-duration: 3s; overflow: hidden; max-height: 9999px; }
+body .more-container .more-btn-container { position: relative; display: none; }
+body .more-container .more-btn-container .more-btn { text-align: center; padding: 5px 10px; display: block; }
+body .more-container.collapsed .more-inner-container { max-height: 115px; }
+body .more-container.collapsed .more-btn-container { display: block; }
+body table.dataTable thead td, body table.dataTable thead th { border-top: none; border-bottom: none; }
+body table.dataTable tbody tr:last-child td { border-bottom: 1px solid #e5e5e5; }
+body table.dataTable.no-footer { border-bottom: none; }
 body .tiles { overflow: visible; }
 body .tiles.tiles-blocks li { padding: 10px; border: 1px solid #CCCCCC; margin-bottom: 20px; }
 body .tiles.tiles-blocks li .tile-title { font-size: 16px; margin-bottom: 10px; }
@@ -1984,6 +2000,7 @@ body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 .admin-container form label { display: inline; font-size: 16px; margin-bottom: 5px; }
 .admin-container form textarea { width: 100%; height: 50px; border: 1px solid #CCCCCC; padding: 5px; margin-bottom: 10px; }
 .admin-container form select { display: block; height: 28px; margin-top: 2px; margin-bottom: 10px; }
+.admin-container form .chosen-container { margin-bottom: 10px; }
 .admin-container form input[type="file"] { display: block; }
 .admin-container form input[type="text"], .admin-container form input[type="password"], .admin-container form input[type="email"] { width: 100%; padding: 5px; margin-bottom: 10px; border: 1px solid #CCCCCC; }
 .admin-container form input[type="text"][type="checkbox"], .admin-container form input[type="password"][type="checkbox"], .admin-container form input[type="email"][type="checkbox"] { width: auto; }

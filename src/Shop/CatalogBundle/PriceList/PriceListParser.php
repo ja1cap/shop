@@ -12,7 +12,7 @@ use Shop\CatalogBundle\Entity\PriceListAlias;
 use Doctrine\Common\Persistence\ObjectManager;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Mapper\PriceParameterValuesMapper;
-use Weasty\MoneyBundle\Data\CurrencyResource;
+use Weasty\Money\Currency\CurrencyResource;
 
 /**
  * Class PriceListParser
@@ -26,7 +26,7 @@ class PriceListParser {
     protected $em;
 
     /**
-     * @var \Weasty\MoneyBundle\Converter\CurrencyCodeConverter
+     * @var \Weasty\Money\Currency\Code\CurrencyCodeConverter
      */
     protected $currencyCodeConverter;
 
@@ -635,7 +635,7 @@ class PriceListParser {
     }
 
     /**
-     * @return \Weasty\MoneyBundle\Converter\CurrencyCodeConverter
+     * @return \Weasty\Money\Currency\Code\CurrencyCodeConverter
      */
     public function getCurrencyCodeConverter()
     {

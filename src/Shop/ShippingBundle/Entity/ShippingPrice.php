@@ -3,8 +3,8 @@
 namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\Doctrine\Entity\AbstractEntity;
+use Weasty\Money\Price\PriceInterface;
 
 /**
  * Class ShippingPrice

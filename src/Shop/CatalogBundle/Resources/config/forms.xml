@@ -6,15 +6,19 @@
 
     <parameters>
         <parameter key="shop_catalog.form.type.proposal.class">Shop\CatalogBundle\Form\Type\ProposalType</parameter>
+        <parameter key="shop_catalog.form.type.category.class">Shop\CatalogBundle\Form\Type\CategoryType</parameter>
         <parameter key="shop_catalog.form.type.category_filters.class">Shop\CatalogBundle\Form\Type\CategoryFiltersType</parameter>
     </parameters>
 
     <services>
         <service id="shop_catalog.form.type.proposal" class="%shop_catalog.form.type.proposal.class%">
-            <tag name="form.type" alias="shop_catalog_proposal_type" />
+            <tag name="form.type" alias="shop_catalog_proposal" />
+        </service>
+        <service id="shop_catalog.form.type.category" class="%shop_catalog.form.type.category.class%">
+            <tag name="form.type" alias="shop_catalog_category" />
         </service>
         <service id="shop_catalog.form.type.category_filters" class="%shop_catalog.form.type.category_filters.class%">
-            <tag name="form.type" alias="shop_catalog_category_filters_type" />
+            <tag name="form.type" alias="shop_catalog_category_filters" />
             <argument type="service" id="shop_catalog.category.filters.builder"/>
         </service>
     </services>

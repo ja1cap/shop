@@ -1,3 +1,11 @@
+shop_discount:
+    resource: "@ShopDiscountBundle/Resources/config/routing.xml"
+    prefix:   /
+
+weasty_admin:
+    resource: "@WeastyAdminBundle/Resources/config/routing.xml"
+    prefix:   /
+
 admin:
     resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
     prefix: /sonata_admin

@@ -169,24 +169,55 @@
 
                         </div>
 
-                        {% if proposalFeatures %}
-                            <div class="large-title" style="margin-bottom: 10px">
-                                Особенности модели
+                        {% if actions %}
+                            <div class="large-title">
+                                Акции
                             </div>
-                            <table>
-                                <tbody>
-                                {% for parameterValue in proposalFeatures if parameterValue.id %}
-                                    <tr>
-                                        <td>
-                                            {{ parameterValue.parameter.name }}
-                                        </td>
-                                        <td>
-                                            {{ parameterValue.option.name }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="proposal-actions-container">
+                                <div class="proposal-actions owl-carousel owl-theme">
+                                    {% for actionData in actions %}
+                                        {% set action = actionData.action %}
+                                        <div class="proposal-action">
+                                            <span class="proposal-action-image-container">
+                                                {#<img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">#}
+                                            </span>
+                                            <div>
+                                                {{ action.name }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if proposalFeatures %}
+                            <div class="more-container {{ proposalFeatures|length > 3 ? 'collapsed' : ''}}">
+                                <div class="large-title" style="margin-bottom: 10px">
+                                    Особенности модели
+                                </div>
+                                <div class="more-inner-container">
+                                    <table>
+                                        <tbody>
+                                        {% for parameterValue in proposalFeatures if parameterValue.id %}
+                                            <tr>
+                                                <td>
+                                                    {{ parameterValue.parameter.name }}
+                                                </td>
+                                                <td>
+                                                    {{ parameterValue.option.name }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="more-btn-container">
+                                    <div class="block-top-shadow"></div>
+                                    <a href="#" class="more-btn" onclick="$(this).closest('.more-container').toggleClass('collapsed'); return false;">
+                                        Показать все
+                                    </a>
+                                </div>
+                            </div>
                         {% endif %}
 
                         <div class="proposal-description cke-content">
@@ -196,23 +227,6 @@
                                 {{ proposal.description|raw }}
                             {% endif %}
                         </div>
-
-                        {% if actions %}
-                            <div class="large-title">
-                                Можете выбрать подарок
-                            </div>
-                            <div class="proposal-actions-container">
-                                <div class="proposal-actions owl-carousel owl-theme">
-                                    {% for action in actions %}
-                                        <div class="proposal-action">
-                                            <span class="proposal-action-image-container">
-                                                <img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">
-                                            </span>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endif %}
 
                         {% include "ShopCatalogBundle:Default:proposalAdditionalCategories.html.twig" %}
 

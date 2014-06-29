@@ -1,7 +1,7 @@
 <?php
 namespace Shop\ShippingBundle\Entity;
 
-use Weasty\DoctrineBundle\Entity\AbstractRepository;
+use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
  * Class ShippingMethodCategoryRepository
@@ -9,7 +9,12 @@ use Weasty\DoctrineBundle\Entity\AbstractRepository;
  */
 class ShippingMethodCategoryRepository extends AbstractRepository {
 
-    public function getShippingMethodCategory($shippingMethodCategoryId, $categoryId){
+    /**
+     * @param $shippingMethodId
+     * @param $categoryId
+     * @return null|\Shop\ShippingBundle\Entity\ShippingMethodCategory
+     */
+    public function getShippingMethodCategory($shippingMethodId, $categoryId){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -19,7 +24,7 @@ class ShippingMethodCategoryRepository extends AbstractRepository {
             ))
             ->from('ShopShippingBundle:ShippingMethodCategory', 'smc')
             ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('smc.shippingMethodId', $shippingMethodCategoryId),
+                $qb->expr()->eq('smc.shippingMethodId', $shippingMethodId),
                 'FIND_IN_SET(' . (int)$categoryId . ', smc.categoryIds)'
             ))
         ;
@@ -27,8 +32,8 @@ class ShippingMethodCategoryRepository extends AbstractRepository {
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
 
-        $shippingMethodCategoryId = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchColumn();
-        $shippingMethodCategory = $shippingMethodCategoryId ? $this->findOneBy(array('id' => $shippingMethodCategoryId)) : null;
+        $shippingMethodId = $this->getEntityManager()->getConnection()->executeQuery($sql)->fetchColumn();
+        $shippingMethodCategory = $shippingMethodId ? $this->findOneBy(array('id' => $shippingMethodId)) : null;
 
         return $shippingMethodCategory;
 

@@ -1,13 +1,13 @@
 <?php
 namespace Shop\CatalogBundle\Twig;
 
-use Weasty\MoneyBundle\Twig\AbstractMoneyExtension;
+use Weasty\Money\Twig\AbstractMoneyExtension;
 
 /**
  * Class ShopPriceExtension
  * @package Shop\CatalogBundle\Twig
  */
-class ShopPriceExtension extends AbstractMoneyExtension {
+class ShopPriceExtension extends \Weasty\Money\Twig\AbstractMoneyExtension {
 
     /**
      * Returns a list of filters to add to the existing list.

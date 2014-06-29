@@ -1,0 +1,137 @@
+{% extends "::base.html.twig" %}
+{% block body %}
+    <div class="admin-container" style="padding-top: 20px;">
+        <div class="row" style="width: 900px;">
+            {% if category %}
+                <div style="background:white; border: 1px solid #e5e5e5; position: fixed; z-index: 100; top: 20px; height: 75px; width: 299px; border-radius: 4px 0 0 4px;">
+                    <div style="padding: 5px 14px">
+                        <div>
+                            Выбрано <span class="selected-amount">0</span> шт.
+                        </div>
+                        <div class="medium primary btn">
+                            <a href="#" class="complete-selection">
+                                Готово
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <section class="vertical tabs">
+                    <ul class="tab-nav four columns" style="padding-top: 95px;">
+                        {% for _category in categories %}
+                            <li class="{{ category.id == _category.id ? 'active' : '' }}">
+                                <a href="{{ path('proposals_browser', {'categoryId':_category.id, 'addFunctionName' : app.request.get('addFunctionName')}) }}">
+                                    {{ _category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="tab-content eight columns active">
+                        <table id="items-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Наименование</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% set proposals = category.proposals %}
+                            {% if proposals|length > 0 %}
+                                {% for proposal in proposals %}
+                                    <tr class="item">
+                                        <td>
+                                            <input type="checkbox" value="{{ proposal.id }}" id="proposal-{{ proposal.id }}" class="select-item">
+                                        </td>
+                                        <td>
+                                            <label for="proposal-{{ proposal.id }}" class="item-name">
+                                                {{ proposal.name }}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                Нет товаров
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            {% else %}
+                <table>
+                    <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>
+                                {{ category.id }}
+                            </td>
+                            <td>
+                                <a href="{{ path('proposals_browser', {'categoryId':category.id, 'addFunctionName':app.request.get('addFunctionName')}) }}">
+                                    {{ category.name }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/bundles/weastyresource/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="txt/css" href="/bundles/weastyresource/DataTables/media/css/jquery.dataTables.min.css">
+    <script>
+        $(function(){
+
+            $('#items-table').dataTable({
+                "order": [ 1, 'asc' ],
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 }
+                ],
+                "language": {
+                    "url" : '//cdn.datatables.net/plug-ins/28e7751dbec/i18n/Russian.json'
+                }
+            });
+
+            var selectors = {
+                selectItem : '.select-item',
+                selectedAmount : '.selected-amount',
+                item : '.item',
+                itemName : '.item-name',
+                completeSelection : '.complete-selection'
+            };
+
+            var items = {};
+
+            $(selectors.selectItem).change(function(){
+
+                var $item = $(this).closest(selectors.item),
+                    $itemName = $(selectors.itemName, $item);
+
+                var item = {
+                    id : $(this).val(),
+                    name : $itemName.text().trim()
+                };
+
+                if($(this).is(':checked')){
+                    items[item.id] = item;
+                } else {
+                    delete items[item.id];
+                }
+
+                $(selectors.selectedAmount).text(Object.keys(items).length);
+
+            });
+
+            $(selectors.completeSelection).click(function(event){
+
+                event.preventDefault();
+
+                window.opener.{{ app.request.get('addFunctionName') }}(items);
+                window.close();
+
+            });
+
+        });
+    </script>
+{% endblock %}

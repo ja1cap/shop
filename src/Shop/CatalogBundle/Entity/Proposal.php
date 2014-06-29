@@ -5,8 +5,8 @@ namespace Shop\CatalogBundle\Entity;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\CatalogBundle\Data\ProposalInterface;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class Proposal
@@ -153,6 +153,13 @@ class Proposal extends AbstractEntity
         $this->mediaImages = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
 
     /**
      * Get id

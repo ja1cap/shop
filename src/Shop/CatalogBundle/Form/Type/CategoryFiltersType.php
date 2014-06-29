@@ -100,7 +100,7 @@ class CategoryFiltersType extends AbstractType {
      */
     public function getName()
     {
-        return 'shop_catalog_category_filters_type';
+        return 'shop_catalog_category_filters';
     }
 
 } 

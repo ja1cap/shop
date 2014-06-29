@@ -9,27 +9,27 @@ use Doctrine\Common\Util\Inflector;
 class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess {
 
     /**
-     * @var \Weasty\CatalogBundle\Data\CategoryInterface
+     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
      */
     protected $category;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\PriceInterface|null
+     * @var \Weasty\Money\Price\PriceInterface|null
      */
     protected $summaryPrice;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\PriceInterface|null
+     * @var \Weasty\Money\Price\PriceInterface|null
      */
     protected $shippingPrice;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\PriceInterface|null
+     * @var \Weasty\Money\Price\PriceInterface|null
      */
     protected $liftingPrice;
 
     /**
-     * @var \Weasty\MoneyBundle\Data\PriceInterface|null
+     * @var \Weasty\Money\Price\PriceInterface|null
      */
     protected $assemblyPrice;
 
@@ -39,7 +39,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return \Weasty\CatalogBundle\Data\CategoryInterface
+     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
      */
     public function getCategory()
     {
@@ -47,7 +47,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return null|\Weasty\MoneyBundle\Data\PriceInterface
+     * @return null|\Weasty\Money\Price\PriceInterface
      */
     public function getAssemblyPrice()
     {
@@ -55,7 +55,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @param null|\Weasty\MoneyBundle\Data\PriceInterface $assemblyPrice
+     * @param null|\Weasty\Money\Price\PriceInterface $assemblyPrice
      */
     public function setAssemblyPrice($assemblyPrice)
     {
@@ -63,7 +63,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return null|\Weasty\MoneyBundle\Data\PriceInterface
+     * @return null|\Weasty\Money\Price\PriceInterface
      */
     public function getLiftingPrice()
     {
@@ -71,7 +71,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @param null|\Weasty\MoneyBundle\Data\PriceInterface $liftingPrice
+     * @param null|\Weasty\Money\Price\PriceInterface $liftingPrice
      */
     public function setLiftingPrice($liftingPrice)
     {
@@ -79,7 +79,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return null|\Weasty\MoneyBundle\Data\PriceInterface
+     * @return null|\Weasty\Money\Price\PriceInterface
      */
     public function getShippingPrice()
     {
@@ -87,7 +87,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @param null|\Weasty\MoneyBundle\Data\PriceInterface $shippingPrice
+     * @param null|\Weasty\Money\Price\PriceInterface $shippingPrice
      */
     public function setShippingPrice($shippingPrice)
     {
@@ -95,7 +95,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return null|\Weasty\MoneyBundle\Data\PriceInterface
+     * @return null|\Weasty\Money\Price\PriceInterface
      */
     public function getSummaryPrice()
     {
@@ -103,7 +103,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @param null|\Weasty\MoneyBundle\Data\PriceInterface $summaryPrice
+     * @param null|\Weasty\Money\Price\PriceInterface $summaryPrice
      */
     public function setSummaryPrice($summaryPrice)
     {

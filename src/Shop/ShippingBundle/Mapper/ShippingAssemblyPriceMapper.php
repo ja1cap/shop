@@ -2,7 +2,6 @@
 namespace Shop\ShippingBundle\Mapper;
 use Doctrine\Common\Util\Inflector;
 use Shop\ShippingBundle\Entity\ShippingAssemblyPrice;
-use Shop\ShippingBundle\Entity\ShippingPrice;
 
 /**
  * Class ShippingAssemblyPriceMapper

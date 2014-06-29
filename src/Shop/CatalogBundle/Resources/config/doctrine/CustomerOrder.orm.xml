@@ -37,7 +37,8 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one target-entity="Action" field="action">
+        <!--@TODO get action by id using actions repository-->
+        <many-to-one target-entity="Shop\DiscountBundle\Entity\Action" field="action">
             <join-columns>
                 <join-column name="actionId" referenced-column-name="id"/>
             </join-columns>

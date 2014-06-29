@@ -1,0 +1,123 @@
+{% use 'form_div_layout.html.twig' with form_widget_simple as base_form_widget_simple %}
+{% block field_help %}
+    {% if help|default %}
+        <span class="help">
+            <i class="icon-info"></i>
+            {{ help }}
+        </span>
+    {% endif %}
+{% endblock %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-element-container">
+            {{ form_label(form, label|default(null)) }}
+            {{ form_errors(form) }}
+            <div>
+                {{ block('field_help') }}
+                {{ form_widget(form) }}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block weasty_admin_media_image_type_widget %}
+    {{ block('sonata_media_type_widget') }}
+{% endblock %}
+
+{% block weasty_admin_browser_type_widget %}
+
+    {% set itemsCountVarName = 'items_count_'~form.vars.id %}
+    {% set addFunctionName = 'add_'~form.vars.id %}
+    {% set deleteFunctionName = 'delete_'~form.vars.id %}
+
+    <div class="browser-items-form-element" id="{{ form.vars.id }}">
+        <ul class="items-list" data-prototype="{{ prototype is defined and prototype ? form_widget(prototype)|e : null }}">
+            {% for item in form %}
+                <li class="item">
+                    {{ form_errors(item) }}
+                    {{ form_widget(item) }}
+                    <a href="#" class="delete-item" onclick="if(confirm('Вы уверены, что хотите удалить?')){ {{ deleteFunctionName }}($(this)); } return false;">
+                        Удалить
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if allow_add %}
+            <a href="#" id="add-{{ form.vars.id }}">
+                Добавить
+            </a>
+        {% endif %}
+        <script>
+
+            var {{ itemsCountVarName }} = {{ form|length }};
+
+            function {{ deleteFunctionName }}($btn){
+                $btn.closest('.item').remove();
+            }
+
+            function {{ addFunctionName }}(items){
+
+                var selectors = {
+                    formElement : '#{{ form.vars.id }}',
+                    itemsList : '.items-list',
+                    item : '.item',
+                    itemValue : '{{ '.' ~ item_value_element_class }}'
+                };
+
+                var $formElement = $(selectors.formElement);
+                var $itemsList = $(selectors.itemsList, $formElement);
+                var deleteBtnHtml = '\n <a href="#" class="delete-item" onclick="if(confirm(\'Вы уверены, что хотите удалить?\')){ {{ deleteFunctionName }}($(this)); } return false;">Удалить</a>';
+
+                $.each(items, function(id, item){
+
+                    var newWidgetHtml = $itemsList
+                            .attr('data-prototype')
+                            .replace(/__name__/g, {{ itemsCountVarName }}),
+                        $newWidget = $(newWidgetHtml);
+
+                    $newWidget.find(selectors.itemValue).val(item.id);
+
+                    var $newLi = $('<li/>').html($newWidget);
+                    $newLi.addClass('item');
+                    $newLi.append(item.name);
+                    $newLi.append(deleteBtnHtml);
+
+                    $newLi.appendTo($itemsList);
+
+                    {{ itemsCountVarName }}++;
+
+                });
+
+            }
+
+            $(function(){
+
+                var addItemSelector = '#add-{{ form.vars.id }}';
+                $(addItemSelector).click(function(){
+
+                    var popupWindowWidth = 960;
+                    window.open(
+                            '{{ path(browser_path, {'addFunctionName' : addFunctionName}) }}',
+                            'Выбор',
+                            [
+                                'left=' + (window.outerWidth - popupWindowWidth) / 2,
+                                'top=' + (window.outerHeight * .15),
+                                'width=' + popupWindowWidth,
+                                'height=' + (window.outerHeight * .7),
+                                'menubar=no',
+                                'location=no',
+                                'resizable=yes',
+                                'scrollbars=yes',
+                                'status=yes'
+                            ].join(',')
+                    );
+
+                    return false;
+
+                });
+
+            });
+        </script>
+    </div>
+{% endblock %}

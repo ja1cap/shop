@@ -2,7 +2,6 @@
 
 namespace Shop\MainBundle\Controller;
 
-use Shop\CatalogBundle\Entity\Action;
 use Shop\MainBundle\Entity\Address;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -211,14 +210,14 @@ class DefaultController extends Controller
      * @return array
      */
     protected function getActions(){
-        return $this->getDoctrine()->getManager()->getRepository('ShopCatalogBundle:Action')->findBy(
+        return array()/*$this->get('shop_discount.action.repository')->findBy(
             array(
                 'status' => Action::STATUS_ON,
             ),
             array(
                 'position' => 'ASC',
             )
-        );
+        )*/;
     }
 
     /**

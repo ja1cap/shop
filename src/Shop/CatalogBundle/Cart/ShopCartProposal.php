@@ -3,8 +3,8 @@ namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\MoneyBundle\Data\Price;
-use Weasty\CatalogBundle\Data\ProposalInterface;
+use Weasty\Money\Price\Price;
+use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
 
 /**
  * Class ShopCartProposalSummary
@@ -48,7 +48,7 @@ class ShopCartProposal implements \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Data\Price
      */
     public function getSummaryPrice(){
 

@@ -3,7 +3,7 @@ namespace Shop\ShippingBundle\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\MoneyBundle\Data\Price;
+use Weasty\Money\Price\Price;
 
 /**
  * Class ShippingCalculatorResult
@@ -14,7 +14,7 @@ class ShippingCalculatorResult
 {
 
     /**
-     * @var \Weasty\GeonamesBundle\Entity\City
+     * @var \Weasty\Bundle\GeonamesBundle\Entity\City
      */
     protected $city;
 
@@ -82,7 +82,7 @@ class ShippingCalculatorResult
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Price\Price
      */
     public function getSummaryPrice(){
 
@@ -101,7 +101,7 @@ class ShippingCalculatorResult
     }
 
     /**
-     * @return \Weasty\GeonamesBundle\Entity\City
+     * @return \Weasty\Bundle\GeonamesBundle\Entity\City
      */
     public function getCity()
     {
@@ -109,7 +109,7 @@ class ShippingCalculatorResult
     }
 
     /**
-     * @param \Weasty\GeonamesBundle\Entity\City $city
+     * @param \Weasty\Bundle\GeonamesBundle\Entity\City $city
      * @return $this
      */
     public function setCity($city)

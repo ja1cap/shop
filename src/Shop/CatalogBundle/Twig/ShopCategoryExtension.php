@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Twig;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Weasty\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 
 /**
  * Class ShopCategoryExtension

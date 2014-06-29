@@ -5,7 +5,6 @@ namespace Shop\CatalogBundle\Controller;
 use Shop\CatalogBundle\Entity\PopularProposal;
 use Shop\CatalogBundle\Form\Type\PopularProposalType;
 use Shop\CatalogBundle\Mapper\PopularProposalMapper;
-use Shop\MainBundle\Entity\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

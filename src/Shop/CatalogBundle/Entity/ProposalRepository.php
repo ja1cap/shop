@@ -5,7 +5,7 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Filter\FilterInterface;
-use Weasty\DoctrineBundle\Entity\AbstractRepository;
+use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
  * Class ProposalRepository

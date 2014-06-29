@@ -8,7 +8,7 @@ namespace Shop\ShippingBundle\Calculator;
 interface ShippingCalculatorResultInterface {
 
     /**
-     * @return \Weasty\MoneyBundle\Data\PriceInterface
+     * @return \Weasty\Money\Price\PriceInterface
      */
     public function getSummaryPrice();
 

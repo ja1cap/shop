@@ -85,7 +85,7 @@ class ProposalType extends AbstractType {
      */
     public function getName()
     {
-        return 'shop_catalog_proposal_type';
+        return 'shop_catalog_proposal';
     }
 
 } 

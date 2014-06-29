@@ -2,7 +2,7 @@
 
 namespace Shop\CatalogBundle\Entity;
 
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class PopularProposal

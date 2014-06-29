@@ -7,7 +7,6 @@ use Shop\CatalogBundle\Entity\CategoryFilters;
 use Shop\CatalogBundle\Entity\CategoryParameter;
 use Shop\CatalogBundle\Entity\CategoryParameterGroup;
 use Shop\CatalogBundle\Form\Type\CategoryParameterType;
-use Shop\CatalogBundle\Form\Type\CategoryType;
 use Shop\CatalogBundle\Entity\CategoryParameterRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,7 +53,7 @@ class AdminCategoryController extends Controller
         }
 
         $isNew = !$category->getId();
-        $form = $this->createForm(new CategoryType(), $category);
+        $form = $this->createForm('shop_catalog_category', $category);
 
         $form->handleRequest($request);
 
@@ -374,7 +373,7 @@ class AdminCategoryController extends Controller
         }
 
         $isNew = !$categoryFilters->getId();
-        $form = $this->createForm('shop_catalog_category_filters_type', $categoryFilters, array(
+        $form = $this->createForm('shop_catalog_category_filters', $categoryFilters, array(
             'category' => $category,
         ));
 

@@ -11,13 +11,17 @@ proposals:
     pattern: /adminCatalog/proposals/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }
 
+proposals_browser:
+    pattern: /adminCatalog/proposalsBrowser/{categoryId}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalsBrowser, categoryId: null }
+
 proposal:
     pattern: /adminCatalog/proposal/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, id: null }
 
 proposal_seo:
     pattern: /adminCatalog/proposalSeo/{categoryId}/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, _form_type: shop_admin_seo_type }
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, _form_type: weasty_admin_seo_type }
 
 delete_proposal:
     pattern: /adminCatalog/deleteProposal/{id}
@@ -79,21 +83,6 @@ delete_manufacturer:
     pattern: /adminCatalog/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
 
-actions:
-    pattern: /admin/actions
-    defaults: { _controller: ShopCatalogBundle:AdminAction:actions }
-
-update_actions_positions:
-    pattern: /admin/actions/updatePositions
-    defaults: { _controller: ShopCatalogBundle:AdminAction:updateActionsPosition }
-
-action:
-    pattern: /admin/action/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminAction:action, id: null }
-
-delete_action:
-    pattern: /admin/deleteAction/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminAction:deleteAction }
 shop_cart:
     pattern: /shopCart
     defaults: { _controller: ShopCatalogBundle:ShopCart:default }

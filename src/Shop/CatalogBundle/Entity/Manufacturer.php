@@ -4,7 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Manufacturer

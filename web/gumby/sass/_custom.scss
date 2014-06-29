@@ -7,6 +7,17 @@ body {
 
   background: #f1f1f1;
 
+  .help {
+    font-size: 12px;
+    color: #4f5255;
+    .icon-info {
+      min-width: 10px;
+      margin: 0;
+      position: relative;
+      top: -2px;
+    }
+  }
+
   .pull-left {
     float: left;
   }
@@ -30,6 +41,16 @@ body {
 
     }
 
+  }
+
+  .browser-items-form-element {
+    & > ul {
+      margin-bottom: 0;
+      li {
+        padding-bottom: 0;
+      }
+    }
+    margin-bottom: 10px;
   }
 
   .cke-content {
@@ -141,6 +162,101 @@ body {
       margin: 1px;
       border: none;
       outline: 1px solid #0782C1;
+    }
+
+  }
+
+  table {
+
+    thead {
+
+      background: transparent;
+      color: $body-font-color;
+
+    }
+
+    tr {
+      td {
+        &:first-child {
+          font-weight: normal;
+        }
+      }
+    }
+
+  }
+
+  .more-container {
+
+    position: relative;
+
+    .more-inner-container {
+      @include transition-property(max-height);
+      @include transition-duration(3s);
+      overflow: hidden;
+      max-height: 9999px;
+    }
+
+    .more-btn-container {
+      position: relative;
+      display:  none;
+      .more-btn {
+        text-align: center;
+        padding: 5px 10px;
+        display: block;
+      }
+    }
+
+    &.collapsed {
+
+      .more-inner-container {
+        max-height: 115px;
+      }
+
+      .more-btn-container {
+        display: block;
+      }
+
+    }
+
+  }
+
+  table {
+
+    &.dataTable {
+
+      thead {
+
+        td, th {
+
+          border-top: none;
+          border-bottom: none;
+
+        }
+
+      }
+
+      tbody {
+
+        tr {
+
+          &:last-child {
+
+            td {
+
+              border-bottom: 1px solid #e5e5e5;
+
+            }
+
+          }
+
+        }
+
+      }
+
+      &.no-footer {
+        border-bottom: none;
+      }
+
     }
 
   }
@@ -2353,6 +2469,10 @@ body {
       display: block;
       height: 28px;
       margin-top: 2px;
+      margin-bottom: 10px;
+    }
+
+    .chosen-container {
       margin-bottom: 10px;
     }
 

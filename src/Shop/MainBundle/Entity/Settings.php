@@ -4,7 +4,7 @@ namespace Shop\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class Settings

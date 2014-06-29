@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Shop\DiscountBundle\Entity\Action" repository-class="Shop\DiscountBundle\Entity\ActionRepository">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="status" type="integer"/>
+        <field name="position" type="integer"/>
+
+        <field name="title" type="string" column="title" length="255"/>
+        <field name="description" type="text" column="description" nullable="true"/>
+        <field name="content" type="text" column="content" nullable="true"/>
+
+        <one-to-many target-entity="ActionCondition" field="conditions" mapped-by="action">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <order-by>
+                <order-by-field name="priority" direction="DESC"/>
+            </order-by>
+        </one-to-many>
+
+    </entity>
+</doctrine-mapping>

@@ -1,8 +1,8 @@
 <?php
 namespace Shop\ShippingBundle\Entity;
 
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
-use Weasty\MoneyBundle\Data\PriceInterface;
+use Weasty\Doctrine\Entity\AbstractEntity;
+use Weasty\Money\Price\PriceInterface;
 
 /**
  * Class ShippingAssemblyPrice
@@ -70,7 +70,7 @@ abstract class ShippingAssemblyPrice extends AbstractEntity
     }
 
     /**
-     * @return integer|string|\Weasty\MoneyBundle\Data\CurrencyInterface
+     * @return integer|string|\Weasty\Money\Currency\CurrencyInterface
      */
     public function getCurrency()
     {

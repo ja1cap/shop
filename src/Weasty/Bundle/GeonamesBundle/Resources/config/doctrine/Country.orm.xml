@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Weasty\Bundle\GeonamesBundle\Entity\Country"
+            repository-class="Weasty\Bundle\GeonamesBundle\Entity\CountryRepository">
+        <unique-constraints>
+            <unique-constraint name="UNIQ_9CCEF0FA77153098" columns="code"/>
+            <unique-constraint name="UNIQ_9CCEF0FA5E237E06" columns="name"/>
+        </unique-constraints>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="code" type="string" column="code" length="2" nullable="false"/>
+        <field name="name" type="string" column="name" length="50" nullable="false"/>
+        <field name="capital" type="string" column="capital" nullable="true"/>
+        <field name="domain" type="string" column="domain" length="2" nullable="true"/>
+        <field name="postalCodeFormat" type="string" column="postal_code_format" length="60" nullable="true"/>
+        <field name="postalCodeRegex" type="string" column="postal_code_regex" length="180" nullable="true"/>
+        <field name="phonePrefix" type="string" column="phone_prefix" length="20" nullable="true"/>
+        <field name="localeNames" type="json_array" column="locale_names" nullable="false"/>
+        <field name="geonameIdentifier" type="integer" column="geoname_id" nullable="true"/>
+    </entity>
+</doctrine-mapping>

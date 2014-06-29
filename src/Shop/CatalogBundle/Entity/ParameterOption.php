@@ -5,7 +5,7 @@ namespace Shop\CatalogBundle\Entity;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class ParameterOption

@@ -4,7 +4,8 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\DoctrineBundle\Entity\AbstractEntity;
+use Shop\DiscountBundle\Entity\Action;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class CustomerOrder
@@ -318,7 +319,7 @@ class CustomerOrder extends AbstractEntity
     private $proposals;
 
     /**
-     * @var \Shop\CatalogBundle\Entity\Action
+     * @var \Shop\DiscountBundle\Entity\Action
      */
     private $action;
 
@@ -367,7 +368,7 @@ class CustomerOrder extends AbstractEntity
     /**
      * Set action
      *
-     * @param \Shop\CatalogBundle\Entity\Action $action
+     * @param \Shop\DiscountBundle\Entity\Action $action
      * @return CustomerOrder
      */
     public function setAction(Action $action = null)
@@ -379,7 +380,7 @@ class CustomerOrder extends AbstractEntity
     /**
      * Get action
      *
-     * @return \Shop\CatalogBundle\Entity\Action 
+     * @return \Shop\DiscountBundle\Entity\Action
      */
     public function getAction()
     {

@@ -5,8 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
 use Shop\ShippingBundle\Entity\ShippingMethod;
 use Shop\ShippingBundle\Entity\ShippingMethodCountry;
-use Weasty\GeonamesBundle\Entity\City;
-use Weasty\GeonamesBundle\Entity\State;
+use Weasty\Bundle\GeonamesBundle\Entity\City;
+use Weasty\Bundle\GeonamesBundle\Entity\State;
 
 /**
  * Class ShippingMethodMapper
@@ -25,17 +25,17 @@ class ShippingMethodMapper {
     protected $countryCode;
 
     /**
-     * @var \Weasty\GeonamesBundle\Entity\CountryRepository
+     * @var \Weasty\Bundle\GeonamesBundle\Entity\CountryRepository
      */
     protected $countryRepository;
 
     /**
-     * @var \Weasty\GeonamesBundle\Entity\StateRepository
+     * @var \Weasty\Bundle\GeonamesBundle\Entity\StateRepository
      */
     protected $stateRepository;
 
     /**
-     * @var \Weasty\GeonamesBundle\Entity\CityRepository
+     * @var \Weasty\Bundle\GeonamesBundle\Entity\CityRepository
      */
     protected $cityRepository;
 
@@ -188,7 +188,7 @@ class ShippingMethodMapper {
     }
 
     /**
-     * @return \Weasty\GeonamesBundle\Entity\CountryRepository
+     * @return \Weasty\Bundle\GeonamesBundle\Entity\CountryRepository
      */
     public function getCountryRepository()
     {
@@ -196,7 +196,7 @@ class ShippingMethodMapper {
     }
 
     /**
-     * @return \Weasty\GeonamesBundle\Entity\CityRepository
+     * @return \Weasty\Bundle\GeonamesBundle\Entity\CityRepository
      */
     public function getCityRepository()
     {
@@ -204,7 +204,7 @@ class ShippingMethodMapper {
     }
 
     /**
-     * @return \Weasty\GeonamesBundle\Entity\StateRepository
+     * @return \Weasty\Bundle\GeonamesBundle\Entity\StateRepository
      */
     public function getStateRepository()
     {

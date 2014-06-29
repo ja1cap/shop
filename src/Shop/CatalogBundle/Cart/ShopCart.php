@@ -3,8 +3,8 @@ namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\CatalogBundle\Data\ProposalPriceInterface;
-use Weasty\MoneyBundle\Data\Price;
+use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\Money\Price\Price;
 
 /**
  * Class ShopCart
@@ -38,7 +38,7 @@ class ShopCart implements \ArrayAccess {
     protected $shippingCalculator;
 
     /**
-     * @var \Weasty\MoneyBundle\Converter\CurrencyConverterInterface
+     * @var \Weasty\Money\Currency\Converter\CurrencyConverterInterface
      */
     protected $currencyConverter;
 
@@ -119,7 +119,7 @@ class ShopCart implements \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Price\Price
      */
     public function getSummaryPrice(){
 

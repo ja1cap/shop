@@ -3,8 +3,8 @@
 namespace Shop\ShippingBundle\Entity;
 
 use Doctrine\ORM\Query\Expr;
-use Weasty\DoctrineBundle\Entity\AbstractRepository;
-use Weasty\GeonamesBundle\Entity\City;
+use Weasty\Doctrine\Entity\AbstractRepository;
+use Weasty\Bundle\GeonamesBundle\Entity\City;
 
 /**
  * Class ShippingMethodRepository

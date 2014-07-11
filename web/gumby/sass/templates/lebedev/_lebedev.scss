@@ -1,0 +1,66 @@
+@import "lebedev-shop-scss/lebedev";
+
+body {
+
+  .template-lededev {
+
+    .header-container {
+
+      @include header-container();
+
+      .header {
+
+        height: $header-height;
+
+      }
+
+      .header-logo {
+
+        float: left;
+
+        .image-wrapper {
+
+          height: $header-height;
+
+          img {
+            height: 100%;
+            max-height: 100%;
+          }
+
+        }
+
+      }
+
+      .header-inner {
+
+        height: $header-height;
+        float: right;
+
+      }
+
+      .header-menu {
+
+        @include header-menu();
+
+      }
+
+    }
+
+    .main-container {
+      margin-top: $header-container-height;
+    }
+
+    .block-container {
+
+      position: relative;
+      text-align: center;
+
+      .block-title {
+        @include block-title;
+      }
+
+    }
+
+  }
+
+}

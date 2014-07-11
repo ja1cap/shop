@@ -1,0 +1,3 @@
+[submodule "lebedev-shop-scss"]
+    path = web/gumby/sass/templates/lebedev/lebedev-shop-scss
+    url = https://github.com/ja1cap/lebedev-shop-scss.git

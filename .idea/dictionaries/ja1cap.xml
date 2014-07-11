@@ -12,9 +12,12 @@
       <w>fancybox</w>
       <w>geoname</w>
       <w>geonames</w>
+      <w>github</w>
       <w>infieldlabel</w>
       <w>inflector</w>
       <w>kondor</w>
+      <w>lebedev</w>
+      <w>lededev</w>
       <w>maxlength</w>
       <w>menubar</w>
       <w>nailthumb</w>
@@ -23,8 +26,10 @@
       <w>popv</w>
       <w>praepositionalis</w>
       <w>scrollbars</w>
+      <w>scss</w>
       <w>shtumi</w>
       <w>simplethings</w>
+      <w>submodule</w>
       <w>sylius</w>
       <w>symfony</w>
       <w>templating</w>

@@ -40,27 +40,6 @@ class Proposal extends AbstractEntity
     private $description;
 
     /**
-     * @TODO remove
-     * @deprecated use media image
-     * @var integer
-     */
-    private $mainImageId;
-
-    /**
-     * @TODO remove
-     * @deprecated use media image
-     * @var \Shop\CatalogBundle\Entity\ProposalImage
-     */
-    private $mainImage;
-
-    /**
-     * @TODO remove
-     * @deprecated use media image twig helper
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $images;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $prices;
@@ -134,6 +113,26 @@ class Proposal extends AbstractEntity
      * @var \Doctrine\Common\Collections\Collection
      */
     private $mediaImages;
+
+    /**
+     * @var boolean
+     */
+    private $isNew;
+
+    /**
+     * @var boolean
+     */
+    private $isBestseller;
+
+    /**
+     * @var \DateTime
+     */
+    private $createDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $updateDate;
 
     /**
      * @var array
@@ -255,15 +254,6 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * @TODO remove
-     * @deprecated use media image twig helper
-     * @return null|string
-     */
-    public function getImageUrl(){
-        return $this->getMainImage() ? $this->getMainImage()->getUrl() : null;
-    }
-
-    /**
      * Add prices
      *
      * @param \Shop\CatalogBundle\Entity\Price $price
@@ -379,15 +369,6 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * @TODO remove
-     * @deprecated use media image twig helper
-     * @return null|string
-     */
-    public function getThumbImageUrl(){
-        return $this->getMainImage() ? $this->getMainImage()->getThumbUrl() : null;
-    }
-
-    /**
      * Set seoSlug
      *
      * @param string $seoSlug
@@ -408,53 +389,6 @@ class Proposal extends AbstractEntity
     public function getSeoSlug()
     {
         return $this->seoSlug;
-    }
-
-    /**
-     *
-     * @TODO remove
-     * @deprecated
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $parameterValues;
-
-
-    /**
-     * Add parameterValues
-     *
-     * @TODO remove
-     * @deprecated
-     * @param \Shop\CatalogBundle\Entity\ParameterValue $parameterValues
-     * @return Proposal
-     */
-    public function addParameterValue(ParameterValue $parameterValues)
-    {
-        $this->parameterValues[] = $parameterValues;
-        return $this;
-    }
-
-    /**
-     * Remove parameterValues
-     *
-     * @TODO remove
-     * @deprecated
-     * @param \Shop\CatalogBundle\Entity\ParameterValue $parameterValues
-     */
-    public function removeParameterValue(ParameterValue $parameterValues)
-    {
-        $this->parameterValues->removeElement($parameterValues);
-    }
-
-    /**
-     * Get parameterValues
-     *
-     * @TODO remove
-     * @deprecated
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getParameterValues()
-    {
-        return $this->parameterValues;
     }
 
     /**
@@ -633,99 +567,6 @@ class Proposal extends AbstractEntity
     }
 
     /**
-     * Add images
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @param \Shop\CatalogBundle\Entity\ProposalImage $image
-     * @return Proposal
-     */
-    public function addImage(ProposalImage $image)
-    {
-        $this->images[] = $image;
-        $image->setProposal($this);
-        return $this;
-    }
-
-    /**
-     * Remove images
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @param \Shop\CatalogBundle\Entity\ProposalImage $images
-     */
-    public function removeImage(ProposalImage $images)
-    {
-        $this->images->removeElement($images);
-    }
-
-    /**
-     * Get images
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
-     * Set mainImageId
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @param integer $mainImageId
-     * @return Proposal
-     */
-    public function setMainImageId($mainImageId)
-    {
-        $this->mainImageId = $mainImageId;
-
-        return $this;
-    }
-
-    /**
-     * Get mainImageId
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @return integer
-     */
-    public function getMainImageId()
-    {
-        return $this->mainImageId;
-    }
-
-    /**
-     * Set mainImage
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @param \Shop\CatalogBundle\Entity\ProposalImage $mainImage
-     * @return Proposal
-     */
-    public function setMainImage(ProposalImage $mainImage = null)
-    {
-        $this->mainImage = $mainImage;
-        $this->mainImageId = $mainImage ? $mainImage->getId() : null;
-        return $this;
-    }
-
-    /**
-     * Get mainImage
-     *
-     * @TODO remove
-     * @deprecated use media image
-     * @return \Shop\CatalogBundle\Entity\ProposalImage
-     */
-    public function getMainImage()
-    {
-        return $this->mainImage;
-    }
-
-    /**
      * Add mediaImages
      *
      * @param \Application\Sonata\MediaBundle\Entity\Media $mediaImages
@@ -811,4 +652,105 @@ class Proposal extends AbstractEntity
         return $this->getMainMediaImage();
     }
 
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     * @return Proposal
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set updateDate
+     *
+     * @param \DateTime $updateDate
+     * @return Proposal
+     */
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+
+        return $this;
+    }
+
+    /**
+     * Get updateDate
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    public function updateDate(){
+
+        if($this->createDate === null){
+            $this->createDate = new \DateTime();
+        }
+
+        $this->updateDate = new \DateTime();
+
+    }
+
+    /**
+     * Set isNew
+     *
+     * @param boolean $isNew
+     * @return Proposal
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+
+        return $this;
+    }
+
+    /**
+     * Get isNew
+     *
+     * @return boolean 
+     */
+    public function getIsNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * Set isBestseller
+     *
+     * @param boolean $isBestseller
+     * @return Proposal
+     */
+    public function setIsBestseller($isBestseller)
+    {
+        $this->isBestseller = $isBestseller;
+
+        return $this;
+    }
+
+    /**
+     * Get isBestseller
+     *
+     * @return boolean 
+     */
+    public function getIsBestseller()
+    {
+        return $this->isBestseller;
+    }
 }

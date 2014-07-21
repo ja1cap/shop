@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="weasty_catalog.twig.category_extension.class">Weasty\Bundle\CatalogBundle\Twig\CategoryExtension</parameter>
+        <parameter key="weasty_catalog.twig.proposal_extension.class">Weasty\Bundle\CatalogBundle\Twig\ProposalExtension</parameter>
     </parameters>
 
     <services>
@@ -17,9 +18,21 @@
             <argument>%weasty_catalog.category.entity.class%</argument>
         </service>
 
+        <!-- Proposal Repository -->
+        <service id="weasty_catalog.proposal.repository" class="%weasty_catalog.proposal.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%weasty_catalog.proposal.entity.class%</argument>
+        </service>
+
         <service id="weasty_catalog.twig.category_extension" class="%weasty_catalog.twig.category_extension.class%">
             <tag name="twig.extension"/>
             <argument type="service" id="weasty_catalog.category.repository"/>
+        </service>
+
+        <service id="weasty_catalog.twig.proposal_extension" class="%weasty_catalog.twig.proposal_extension.class%">
+            <tag name="twig.extension"/>
+            <argument type="service" id="weasty_catalog.proposal.repository"/>
         </service>
 
     </services>

@@ -10,6 +10,11 @@
             <index columns="defaultContractorId"/>
         </indexes>
 
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="updateDate"/>
+            <lifecycle-callback type="preUpdate" method="updateDate"/>
+        </lifecycle-callbacks>
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -27,14 +32,13 @@
         <field name="seoDescription" type="text" nullable="true"/>
         <field name="seoKeywords" type="text" nullable="true"/>
         <field name="seoSlug" type="string" nullable="true"/>
-        <field name="mainImageId" type="integer" nullable="true"/>
         <field name="mainMediaImageId" type="integer" nullable="true"/>
 
-        <one-to-one field="mainImage" target-entity="ProposalImage">
-            <join-columns>
-                <join-column name="mainImageId" referenced-column-name="id" on-delete="SET NULL"/>
-            </join-columns>
-        </one-to-one>
+        <field name="isNew" type="boolean"/>
+        <field name="isBestseller" type="boolean"/>
+
+        <field name="createDate" type="datetime" column="createDate" nullable="true"/>
+        <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
 
         <one-to-one field="mainMediaImage" target-entity="Application\Sonata\MediaBundle\Entity\Media">
             <cascade>
@@ -46,13 +50,6 @@
             </join-columns>
         </one-to-one>
 
-        <one-to-many target-entity="ParameterValue" mapped-by="proposal" field="parameterValues">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
         <one-to-many target-entity="Price" mapped-by="proposal" field="prices">
             <cascade>
                 <cascade-persist/>
@@ -61,13 +58,6 @@
             <order-by>
                 <order-by-field name="value" direction="ASC"/>
             </order-by>
-        </one-to-many>
-
-        <one-to-many target-entity="ProposalImage" mapped-by="proposal" field="images">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
         </one-to-many>
 
         <many-to-one target-entity="Category" field="category" inversed-by="proposals">

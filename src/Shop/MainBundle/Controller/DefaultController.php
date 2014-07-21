@@ -86,7 +86,6 @@ class DefaultController extends Controller
 //            'footer_request_form' => $footer_request_form->createView(),
 //            'why_us_items' => $this->getWhyUsItems(),
             'benefits' => $this->getBenefits(),
-            'actions' => $this->getActions(),
             'reviews' => $this->getReviews(),
 //            'how_we_items' => $this->getHowWeItems(),
 //            'problems' => $this->getProblems(),
@@ -204,20 +203,6 @@ class DefaultController extends Controller
 
         }
 
-    }
-
-    /**
-     * @return array
-     */
-    protected function getActions(){
-        return array()/*$this->get('shop_discount.action.repository')->findBy(
-            array(
-                'status' => Action::STATUS_ON,
-            ),
-            array(
-                'position' => 'ASC',
-            )
-        )*/;
     }
 
     /**

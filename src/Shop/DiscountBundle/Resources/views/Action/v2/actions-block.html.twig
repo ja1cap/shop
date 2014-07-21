@@ -1,0 +1,26 @@
+{% set actions = shop_discount_actions() %}
+
+{% if actions %}
+    <div class="actions-block block-container" id="actions-block">
+
+        <h2 class="block-title">
+            {{ settings.actions_title|default('АКЦИИ')|nl2br }}
+        </h2>
+
+        {% if settings.actions_description %}
+            <div class="block-description">
+                {{ settings.actions_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+            {% include 'ShopMainBundle:Default:media-list.html.twig' with {
+                'media_list_options' : {
+                    'items' : actions,
+                    'use_slider' : true,
+                }
+            } %}
+        </div>
+
+    </div>
+{% endif %}

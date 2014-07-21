@@ -17,73 +17,91 @@
     </div>
 
     {% if priceLists %}
-        <table style="margin: 10px 0;">
-            <thead>
-            <tr>
-                <th>
-                    ID
-                </th>
-                <th style="width: 40%">
-                    Название
-                </th>
-                <th style="width: 25%">
-                    Статус
-                </th>
-                <th>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for priceList in priceLists %}
+        <div style="margin: 10px 0;">
+            <table class="price-lists-table">
+                <thead>
                 <tr>
-                    <td>
-                        {{ priceList.id }}
-                    </td>
-                    <td>
-                        <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">
-                            {{ priceList.name }}
-                        </a>
-                        {% if priceList.contractor %}
-                            <div>
-                                ({{ priceList.contractor.name }})
-                            </div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ priceList.textStatus }}
-                        {% if priceList.updateDate %}
-                            <div>
-                                {{ priceList.updateDate|date("d.m.Y в H:i:s") }}
-                            </div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="medium btn default icon-left entypo icon-pencil" style="width: 100%">
-                            <a href="{{ path('price_list', {'id' : priceList.id}) }}">
-                                Изменить
-                            </a>
-                        </div>
-                        <div class="medium btn warning icon-left entypo icon-cog" style="width: 100%">
-                            <a href="{{ path('price_list_aliases', {'id' : priceList.id}) }}">
-                                Настроить
-                            </a>
-                        </div>
-                        {#@TODO add price list parse comfirm popup#}
-                        <div class="medium btn default icon-left entypo icon-arrows-ccw" style="width: 100%">
-                            <a href="{{ path('parse_price_list', {'id' : priceList.id}) }}">
-                                Обработать
-                            </a>
-                        </div>
-                        <div class="medium btn danger icon-left entypo icon-trash" style="width: 100%">
-                            <a href="{{ path('delete_price_list', {'id' : priceList.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить
-                            </a>
-                        </div>
-                    </td>
+                    <th>
+                        ID
+                    </th>
+                    <th style="width: 40%">
+                        Название
+                    </th>
+                    <th style="width: 25%">
+                        Статус
+                    </th>
+                    <th>
+                    </th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for priceList in priceLists %}
+                    <tr>
+                        <td>
+                            {{ priceList.id }}
+                        </td>
+                        <td>
+                            <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">
+                                {{ priceList.name }}
+                            </a>
+                            {% if priceList.contractor %}
+                                <div>
+                                    ({{ priceList.contractor.name }})
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ priceList.textStatus }}
+                            {% if priceList.updateDate %}
+                                <div>
+                                    {{ priceList.updateDate|date("d.m.Y в H:i:s") }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="medium btn default icon-left entypo icon-pencil" style="width: 100%">
+                                <a href="{{ path('price_list', {'id' : priceList.id}) }}">
+                                    Изменить
+                                </a>
+                            </div>
+                            <div class="medium btn warning icon-left entypo icon-cog" style="width: 100%">
+                                <a href="{{ path('price_list_aliases', {'id' : priceList.id}) }}">
+                                    Настроить
+                                </a>
+                            </div>
+                            {#@TODO add price list parse comfirm popup#}
+                            <div class="medium btn default icon-left entypo icon-arrows-ccw" style="width: 100%">
+                                <a href="{{ path('parse_price_list', {'id' : priceList.id}) }}">
+                                    Обработать
+                                </a>
+                            </div>
+                            <div class="medium btn danger icon-left entypo icon-trash" style="width: 100%">
+                                <a href="{{ path('delete_price_list', {'id' : priceList.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    Удалить
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <script>
+            $(function(){
+
+                $('.price-lists-table').dataTable({
+                    "aaSorting": [],
+                    "stateSave": true,
+                    "columnDefs": [
+                        { "orderable": false, "targets": 3 }
+                    ],
+                    "language": {
+                        "url" : '//cdn.datatables.net/plug-ins/28e7751dbec/i18n/Russian.json'
+                    }
+                });
+
+            });
+        </script>
     {% endif %}
 
 {% endblock %}

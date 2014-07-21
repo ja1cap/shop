@@ -11,60 +11,82 @@
     {% set proposals = category.proposals %}
 
     {% if proposals %}
-        <table style="margin: 10px 0">
-            <thead>
-            <tr>
-                <th style="width: 40%">Наименование</th>
-                <th>Описание</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for proposal in proposals %}
+        <div style="margin: 10px 0">
+            <table class="proposals-table">
+                <thead>
                 <tr>
-                    <td>
+                    <th>#</th>
+                    <th style="width: 40%">Наименование</th>
+                    <th>Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for proposal in proposals %}
+                    <tr>
+                        <td>
+                            {{ proposal.id }}
+                        </td>
+                        <td>
                         <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
                             {{ proposal.title }}
                         </span>
-                        <div>
-                            {% if proposal.price %}
-                                <span style="font-weight: normal; display: block">
+                            <div>
+                                {% if proposal.price %}
+                                    <span style="font-weight: normal; display: block">
                                 от {{ proposal.price|shop_price }}
                             </span>
-                            {% else %}
-                                <span class="warning label">
+                                {% else %}
+                                    <span class="warning label">
                                 Цена не установлена
                             </span>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <div class="small btn default">
-                                <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-                                    Изменить
-                                </a>
+                                {% endif %}
                             </div>
-                            <div class="small primary btn">
-                                <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
-                                    Цены
-                                </a>
+                            <div>
+                                <div class="small btn default">
+                                    <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
+                                        Изменить
+                                    </a>
+                                </div>
+                                <div class="small primary btn">
+                                    <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
+                                        Цены
+                                    </a>
+                                </div>
+                                <div class="small primary btn">
+                                    <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
+                                        Фотографии
+                                    </a>
+                                </div>
+                                <div class="small btn danger">
+                                    <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        Удалить
+                                    </a>
+                                </div>
                             </div>
-                            <div class="small primary btn">
-                                <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
-                                    Фотографии
-                                </a>
-                            </div>
-                            <div class="small btn danger">
-                                <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                    Удалить
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        {{ proposal.short_description }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                        <td>
+                            {{ proposal.short_description }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <script>
+            $(function(){
+
+                $('.proposals-table').dataTable({
+                    "aaSorting": [],
+                    "stateSave": true,
+                    "columnDefs": [
+                        { "orderable": false, "targets": 2 }
+                    ],
+                    "language": {
+                        "url" : '//cdn.datatables.net/plug-ins/28e7751dbec/i18n/Russian.json'
+                    }
+                });
+
+            });
+        </script>
     {% endif %}
 {% endblock %}

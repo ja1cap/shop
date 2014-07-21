@@ -29,6 +29,20 @@ class ProposalType extends AbstractType {
                 'choices' => Proposal::$statuses,
                 'label' => 'Статус',
             ))
+            ->add('isNew', 'choice', array(
+                'choices' => array(
+                    'Нет',
+                    'Да',
+                ),
+                'label' => 'Новинка',
+            ))
+            ->add('isBestseller', 'choice', array(
+                'choices' => array(
+                    'Нет',
+                    'Да',
+                ),
+                'label' => 'Хит продаж',
+            ))
             ->add('manufacturer', 'entity', array(
                 'class' => 'ShopCatalogBundle:Manufacturer',
                 'property' => 'name',

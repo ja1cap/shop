@@ -56,6 +56,9 @@
         <field name="how_we_title" type="string" nullable="true"/>
         <field name="how_we_description" type="text" nullable="true"/>
 
+        <field name="manufacturers_title" type="string" nullable="true"/>
+        <field name="manufacturers_description" type="text" nullable="true"/>
+
         <field name="problems_solutions_title" type="string" nullable="true"/>
         <field name="problems_solutions_description" type="text" nullable="true"/>
         <field name="problems_title" type="string" nullable="true"/>
@@ -71,6 +74,8 @@
         <field name="more_link_text" type="string" nullable="true"/>
         <field name="reviews_link_text" type="string" nullable="true"/>
         <field name="where_link_text" type="string" nullable="true"/>
+
+        <field name="template_version" type="integer" length="2" column-definition="integer(2) NOT NULL DEFAULT 1"/>
 
     </entity>
 </doctrine-mapping>

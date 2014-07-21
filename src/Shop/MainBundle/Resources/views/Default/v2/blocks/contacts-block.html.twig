@@ -1,0 +1,78 @@
+{% if settings.contacts_title %}
+    <div class="contacts-block block-container" id="contacts-block">
+
+        <h2 class="block-title">
+            {{ settings.contacts_title|nl2br }}
+        </h2>
+        <div class="block-description">
+
+            <div class="address">
+                {{ settings.address }}
+            </div>
+
+            <div class="phone">
+                {{ shop_contacts.phones|join('<br/>')|raw }}
+            </div>
+
+        </div>
+
+    </div>
+    {% if addresses %}
+        <div class="map-container" style="position: relative">
+            <div id="map" style="position: relative;/*margin-bottom: -110px; top: -110px;*/height: 700px"></div>
+        </div>
+        <script id="json_addresses">
+            {{ addresses|json_encode|raw }}
+        </script>
+        <script type="text/javascript">
+            $(function(){
+
+                var myMap,
+                    myPlaceMark,
+                    json_addresses = $.parseJSON($('#json_addresses').html());
+
+                function initMap(){
+
+                    myMap = new ymaps.Map ("map", {
+                        center: [53.9, 27.56],
+                        zoom: 11
+                    });
+
+                    myMap.controls
+                        .add('zoomControl', { left: 5, top: 150 });
+
+                    var markers = new ymaps.GeoObjectCollection();
+
+                    $.each(json_addresses, function(i, address){
+
+                        myPlaceMark = new ymaps.Placemark(
+                                [address['latitude'], address['longitude']],
+                                {
+                                    iconContent: i + 1,
+                                    balloonContent: '<div>' + address['name'] + '</div>' + '<div>' + address['description'] + '</div>'  + '<div>' + address['work_schedule'] + '</div>' + (address['phones'] ? '<div><div style="font-weight: bold; margin: 5px 0;">Телефоны</div>' + address['phones'] + '</div>' : ''),
+                                    hintContent: address['name']
+                                },
+                                {
+                                    draggable: false
+                                }
+                        );
+
+                        markers.add(myPlaceMark);
+
+                    });
+
+                    myMap.geoObjects.add(markers);
+                    if(markers.length > 1){
+                        myMap.setBounds(markers.getBounds());
+                    }
+
+                }
+
+                ymaps.ready(function(){
+                    initMap();
+                });
+
+            });
+        </script>
+    {% endif %}
+{% endif %}

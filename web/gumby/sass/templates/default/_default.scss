@@ -5,6 +5,9 @@ body {
 
   .template-default {
 
+    @import "actions-block";
+    @import "proposals-list";
+
     .header-container {
 
       z-index: 100;
@@ -946,7 +949,6 @@ body {
       }
 
     }
-
 
   }
 

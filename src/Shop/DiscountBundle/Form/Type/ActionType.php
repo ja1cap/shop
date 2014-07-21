@@ -29,6 +29,12 @@ class ActionType extends AbstractType {
                 'choices' => Action::$statuses,
                 'label' => 'Статус',
             ))
+            ->add('image', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'action_image',
+                'label' => 'Изображение',
+                'required' => false,
+            ))
             ->add('description', 'textarea', array(
                 'required' => false,
                 'label' => 'Описание',
@@ -42,7 +48,8 @@ class ActionType extends AbstractType {
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
-            ));
+            ))
+        ;
 
     }
 

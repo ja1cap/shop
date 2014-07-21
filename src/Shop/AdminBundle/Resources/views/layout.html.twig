@@ -5,7 +5,12 @@
 {% set _page_breadcrumb = block('page_breadcrumb') %}
 {% set _page_menu = block('page_menu') %}
 {% set _page_content = block('page_content') %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" type="txt/css" href="/bundles/weastyresource/DataTables/media/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block javascripts %}
+    <script src="/bundles/weastyresource/DataTables/media/js/jquery.dataTables.min.js"></script>
+{% endblock %}
 {% block body %}
     <div class="admin-container">
         {{ include("ShopAdminBundle::header.html.twig") }}

@@ -1,0 +1,11 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="template-{{ shop_settings.template_name }}">
+        {{ include('ShopMainBundle:Default:header.html.twig') }}
+        <div class="main-container">
+            {% block page_container %}
+            {% endblock %}
+            {{ include('ShopMainBundle:Default:footer.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

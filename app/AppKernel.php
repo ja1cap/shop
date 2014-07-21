@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\IntlBundle\SonataIntlBundle(),
             new Sonata\BlockBundle\SonataBlockBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
@@ -45,6 +46,7 @@ class AppKernel extends Kernel
             new Shop\AdminBundle\ShopAdminBundle(),
             new Weasty\Bundle\AdminBundle\WeastyAdminBundle(),
             new Shop\DiscountBundle\ShopDiscountBundle(),
+            new Weasty\Bundle\NewsBundle\WeastyNewsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

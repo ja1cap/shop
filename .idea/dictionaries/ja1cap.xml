@@ -8,6 +8,9 @@
       <w>ckeditor</w>
       <w>clearfix</w>
       <w>clickable</w>
+      <w>datatables</w>
+      <w>defs</w>
+      <w>dropdown</w>
       <w>entityaudit</w>
       <w>fancybox</w>
       <w>geoname</w>
@@ -22,9 +25,11 @@
       <w>menubar</w>
       <w>nailthumb</w>
       <w>nullable</w>
+      <w>orderable</w>
       <w>paginator</w>
       <w>popv</w>
       <w>praepositionalis</w>
+      <w>resizer</w>
       <w>scrollbars</w>
       <w>scss</w>
       <w>shtumi</w>
@@ -35,6 +40,7 @@
       <w>templating</w>
       <w>tilleuls</w>
       <w>unserialize</w>
+      <w>valigin</w>
       <w>vsematrasy</w>
       <w>weasty</w>
       <w>weastyresource</w>

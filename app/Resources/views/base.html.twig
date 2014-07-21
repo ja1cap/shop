@@ -10,7 +10,6 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic&subset=cyrillic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="/gumby/css/gumby.css">
-        {#<script type="text/javascript" src="/gumby/js/libs/jquery-1.10.1.min.js"></script>#}
         <script type="text/javascript" src=" http://yandex.st/jquery/1.8.3/jquery.min.js"></script>
         <link href="/js/jquery-ui-1.10.4.custom/css/flick/jquery-ui-1.10.4.custom.css" rel="stylesheet">
         <script src="/js/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
@@ -26,7 +25,6 @@
         <script type="text/javascript" src="/js/jquery.infieldlabel.js"></script>
         <script type="text/javascript" src="/js/owl.carousel/owl-carousel/owl.carousel.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/js/owl.carousel/owl-carousel/owl.carousel.css">
-        {#<link rel="stylesheet" type="text/css" href="/js/owl.carousel/owl-carousel/owl.theme.css">#}
         <script type="text/javascript" src="/js/nailthumb/jquery.nailthumb.1.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/js/nailthumb/jquery.nailthumb.1.1.min.css">
         <link rel="stylesheet" type="text/css" href="/js/fancybox/source/jquery.fancybox.css">
@@ -40,7 +38,7 @@
         <script type="text/javascript" src="/js/jquery.clickableBlock.js"></script>
         <script type="text/javascript" src="/js/jquery.shop.catalog.js"></script>
         <script type="text/javascript" src="/js/shop.cart/jquery.shop.cart.js"></script>
-
+        {% block head %}{% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
@@ -49,8 +47,28 @@
     <script type="text/javascript">
         $(function(){
 
-            $('.nailthumb-container').nailthumb({
-                method : 'crop'
+            $('.nailthumb-container').each(function(){
+
+                var data = $(this).data(),
+                    nailthumbOptions = {};
+
+                $.each(data, function(key, value){
+
+                    if(key.indexOf('nailthumb') !== false){
+
+                        var optionName = key.replace('nailthumb', '');
+                        optionName = (optionName.substring(0, 1).toLowerCase() + optionName.substring(1));
+
+                        nailthumbOptions[optionName] = value;
+
+                    }
+
+                });
+
+                $(this).nailthumb($.extend({
+                    method : 'crop'
+                }, nailthumbOptions));
+
             });
 
             $(".fancybox").fancybox({

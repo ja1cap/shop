@@ -34,6 +34,16 @@ class CategoryExtension extends \Twig_Extension {
     /**
      * @return array
      */
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('weasty_catalog_category_names', array($this, 'getCategoryNames')),
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function getFunctions(){
         return array(
             new \Twig_SimpleFunction('weasty_catalog_category', array($this, 'getCategory')),
@@ -64,8 +74,7 @@ class CategoryExtension extends \Twig_Extension {
      */
     public function getCategoryNames($categories){
 
-        $firstCategory = current($categories);
-        if(is_numeric($firstCategory)){
+        if(is_numeric(current($categories))){
             $categories = $this->getCategories(array_filter($categories, function($id){
                 return is_numeric($id);
             }));

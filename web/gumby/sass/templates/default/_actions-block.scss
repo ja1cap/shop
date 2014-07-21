@@ -1,0 +1,78 @@
+@import "../../var/settings";
+
+.actions-block {
+
+  .block-body {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    background-color: transparent;
+  }
+
+  .actions-list {
+
+    .owl-buttons {
+
+      .owl-prev {
+
+        margin-top: -45px;
+        bottom: auto;
+        top: 50%;
+        background-position: -491px -428px;
+
+      }
+
+      .owl-next {
+
+        margin-top: -45px;
+        bottom: auto;
+        top: 50%;
+        background-position: -530px -428px;
+
+      }
+
+    }
+
+    .action {
+
+      width: $row-max-width / 2;
+
+      .inner-container {
+        overflow: hidden;
+      }
+
+      .action-image {
+
+        width: 215px;
+        float: left;
+
+        .image-container {
+
+          img {
+            width: 215px;
+          }
+
+        }
+
+      }
+
+      .action-body {
+
+        width: 245px;
+        margin: 0 10px;
+
+        float: left;
+
+        .title {
+
+          font-size: 20px;
+          margin-bottom: 5px;
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

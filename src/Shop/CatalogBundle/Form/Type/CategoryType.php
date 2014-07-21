@@ -34,7 +34,7 @@ class CategoryType extends AbstractType {
             ))
             ->add('image', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'default',
+                'context'  => 'image',
                 'label' => 'Изображение',
                 'required' => false,
             ))

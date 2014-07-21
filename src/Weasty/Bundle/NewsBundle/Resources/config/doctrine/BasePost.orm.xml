@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Weasty\Bundle\NewsBundle\Entity\BasePost">
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist"/>
+            <lifecycle-callback type="preUpdate" method="preUpdate"/>
+        </lifecycle-callbacks>
+
+        <field name="status" type="integer" column="status" length="1"/>
+
+        <field name="title" type="string" column="title"/>
+        <field name="description" type="text" column="description"/>
+        <field name="content" type="text" column="content"/>
+
+        <field name="slug" type="string" column="slug"/>
+
+        <!--<field name="commentsEnabled" type="boolean" column="comments_enabled"/>-->
+        <!--<field name="commentsCloseAt" type="datetime" column="comments_close_at" nullable="true"/>-->
+        <!--<field name="commentsDefaultStatus" type="integer" column="comments_default_status" nullable="false"/>-->
+        <!--<field name="commentsCount" type="integer" column="comments_count" nullable="true"/>-->
+
+        <field name="createDate" type="datetime" column="createDate"/>
+        <field name="updateDate" type="datetime" column="updateDate"/>
+
+    </mapped-superclass>
+</doctrine-mapping>

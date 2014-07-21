@@ -1,0 +1,89 @@
+<div class="header-container" data-spy="affix" data-offset-top="80">
+    <div class="row">
+        <div class="header">
+            <div class="header-logo">
+                <a href="{{ path('shop') }}">
+                    <span class="image-wrapper">
+                        <img src="{{ shop_settings.logo_url|default('/img/logo.png') }}">
+                    </span>
+                </a>
+            </div>
+            <div class="header-inner">
+                <div class="header-menu">
+                    <ul class="header-menu-list">
+                        <li>
+                            <a href="{{ path('shop_catalog_categories') }}">
+                                <span>{{ shop_settings.more_link_text|default('КАТАЛОГ') }}</span>
+                            </a>
+                            {% set categories = shop_catalog_categories() %}
+                            {% if categories %}
+                                <div class="dropdown">
+                                    <ul>
+                                        {% for category in categories %}
+                                            <li>
+                                                <a href="{{ path('shop_catalog_category', {'slug':category.slug}) }}">
+                                                    {{ category.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <a href="/#benefits-block">
+                                <span>{{ shop_settings.why_link_text|default('ПОЧЕМУ МЫ?') }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/#actions-block">
+                                <span>{{ shop_settings.actions_link_text|default('АКЦИИ') }}</span>
+                            </a>
+                        </li>
+                        {% if shop_settings.contacts_title %}
+                            <li>
+                                <a href="/#contacts-block">
+                                    <span>{{ shop_settings.where_link_text|default('КОНТАКТЫ') }}</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+
+        setTimeout(function() {
+
+            if (window.location.hash) {
+
+                var $block = $($(this).attr('href').substr(1)),
+                        $headerContainer = $('.header-container');
+
+                if($block.length > 0){
+                    $.scrollTo($block, 600, {offset:-$headerContainer.height()});
+                }
+
+            }
+
+        }, 1);
+
+        $('.header-menu a').click(function(e){
+
+            var $block = $($(this).attr('href').substr(1)),
+                $headerContainer = $('.header-container');
+
+            if($block.length > 0){
+                e.preventDefault();
+                $.scrollTo($block, 600, {offset:-$headerContainer.height()});
+            }
+
+        });
+
+    })
+</script>

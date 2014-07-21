@@ -19,14 +19,19 @@ class WeastyCatalogExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('weasty_catalog.category.entity.class', $config['category']['entity']['class']);
         $container->setParameter('weasty_catalog.category.repository.class', $config['category']['repository']['class']);
 
+        $container->setParameter('weasty_catalog.proposal.entity.class', $config['proposal']['entity']['class']);
+        $container->setParameter('weasty_catalog.proposal.repository.class', $config['proposal']['repository']['class']);
+
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
         $loader->load('forms.xml');
+
     }
 }

@@ -1,0 +1,37 @@
+.proposals-list {
+
+  .proposal {
+
+    display: block;
+    cursor: pointer;
+    background: white;
+    text-align: center;
+
+    .inner-container {
+      padding: 0 5px 20px;
+      display: block;
+      position: relative;
+      color: #000000;
+    }
+
+    .image-container {
+      @include proposals-list-item-image-wrapper()
+    }
+
+    .title {
+      @include proposals-list-item-title();
+    }
+
+    .description {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .price {
+      @include proposals-list-item-price();
+    }
+
+  }
+
+}

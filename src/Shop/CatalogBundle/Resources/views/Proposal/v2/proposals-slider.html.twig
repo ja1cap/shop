@@ -1,0 +1,36 @@
+{% if proposals_slider_items_amount is not defined %}
+    {% set proposals_slider_items_amount = 4 %}
+{% endif %}
+<div class="proposals-list owl-carousel owl-theme" data-items-amount="{{ proposals_slider_items_amount }}">
+    {% for proposal in proposals_slider_items %}
+
+        <div class="proposal {#discount-proposal#} clickable-block">
+
+            <div class="inner-container">
+
+                <span class="image-container">
+                    <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
+                </span>
+
+                {% if proposal.discount_percent is defined and proposal.discount_percent %}
+                    {% if proposal.discount_end_date %}
+                        <span class="countdown proposal-countdown" data-date="{{ proposal.discount_end_date|date }}"></span>
+                    {% endif %}
+                    <span class="proposal-discount-percent">
+                        -{{ proposal.discount_percent }}%
+                    </span>
+                {% endif %}
+
+                <a href="{{ shop_catalog_proposal_url(proposal) }}" class="title clickable-block-link">
+                    {{ proposal.title|nl2br }}
+                </a>
+                <span class="price">
+                    от {{ proposal.price|shop_price }}
+                </span>
+
+            </div>
+
+        </div>
+
+    {% endfor %}
+</div>

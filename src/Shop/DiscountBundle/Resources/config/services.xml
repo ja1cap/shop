@@ -12,16 +12,25 @@
     </parameters>
 
     <services>
+
         <service id="shop_discount.action.repository" class="%shop_discount.action.repository.class%"
             factory-service="doctrine.orm.entity_manager"
             factory-method="getRepository">
             <argument>%shop_discount.action.entity.class%</argument>
         </service>
+
         <service id="shop_discount.action_condition.repository" class="%shop_discount.action_condition.repository.class%"
             factory-service="doctrine.orm.entity_manager"
             factory-method="getRepository">
             <argument>%shop_discount.action_condition.entity.class%</argument>
         </service>
+
+        <service id="shop_discount.action.extension"
+                 class="Shop\DiscountBundle\Twig\ActionExtension">
+            <tag name="twig.extension"/>
+            <argument type="service" id="shop_discount.action.repository"/>
+        </service>
+
     </services>
 
 </container>

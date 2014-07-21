@@ -1,0 +1,42 @@
+.proposals-list {
+
+  .proposal {
+
+    height: 410px;
+    display: block;
+    cursor: pointer;
+    background: white;
+    text-align: center;
+
+    .inner-container {
+      padding: 0 5px 20px;
+      display: block;
+      position: relative;
+      color: #000000;
+    }
+
+    .image-container {
+      @extend .round-image-container;
+    }
+
+    .title {
+      padding: 0 5px;
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .description {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .price {
+      display: block;
+      font-size: 20px;
+    }
+
+  }
+
+}

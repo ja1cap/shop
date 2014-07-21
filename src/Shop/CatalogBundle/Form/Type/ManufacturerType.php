@@ -22,10 +22,13 @@ class ManufacturerType extends AbstractType {
                 'required' => true,
                 'label' => 'Название',
             ))
-            ->add('image', 'file', array(
+            ->add('image', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'image',
+                'label' => 'Изображение',
                 'required' => false,
-                'label' => 'Логотип',
-            ));
+            ))
+        ;
 
         $builder
             ->add('save', 'submit', array(

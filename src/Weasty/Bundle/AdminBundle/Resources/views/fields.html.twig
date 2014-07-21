@@ -11,12 +11,19 @@
 {% block form_row %}
     {% spaceless %}
         <div class="form-element-container">
-            {{ form_label(form, label|default(null)) }}
-            {{ form_errors(form) }}
-            <div>
-                {{ block('field_help') }}
+            {% if form.vars.block_prefixes[1] == 'checkbox' %}
                 {{ form_widget(form) }}
-            </div>
+                {{ form_label(form, label|default(null)) }}
+                {{ block('field_help') }}
+                {{ form_errors(form) }}
+            {% else %}
+                {{ form_label(form, label|default(null)) }}
+                <div>
+                    {{ block('field_help') }}
+                    {{ form_widget(form) }}
+                </div>
+                {{ form_errors(form) }}
+            {% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -76,14 +83,14 @@
                             .replace(/__name__/g, {{ itemsCountVarName }}),
                         $newWidget = $(newWidgetHtml);
 
-                    $newWidget.find(selectors.itemValue).val(item.id);
-
                     var $newLi = $('<li/>').html($newWidget);
                     $newLi.addClass('item');
                     $newLi.append(item.name);
                     $newLi.append(deleteBtnHtml);
 
                     $newLi.appendTo($itemsList);
+
+                    $newLi.find(selectors.itemValue).val(item.id);
 
                     {{ itemsCountVarName }}++;
 

@@ -4,9 +4,11 @@ namespace Shop\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\Doctrine\Entity\AbstractEntity;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 /**
- * Benefit
+ * Class Benefit
+ * @package Shop\MainBundle\Entity
  */
 class Benefit extends AbstractEntity
 {
@@ -26,10 +28,20 @@ class Benefit extends AbstractEntity
     private $description;
 
     /**
+     * @var integer
+     */
+    private $imageId;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $image;
+
+    /**
+     * @deprecated
      * @var string
      */
     private $imageFileName;
-
 
     /**
      * Get id
@@ -89,7 +101,7 @@ class Benefit extends AbstractEntity
 
     /**
      * Set imageFileName
-     *
+     * @deprecated
      * @param string $imageFileName
      * @return Benefit
      */
@@ -102,24 +114,57 @@ class Benefit extends AbstractEntity
 
     /**
      * Get imageFileName
-     *
-     * @return string 
+     * @deprecated
+     * @return string
      */
     public function getImageFileName()
     {
         return $this->imageFileName;
     }
 
-    public function getImage(){
-        return $this->getFile('imageFileName');
+    /**
+     * Set imageId
+     *
+     * @param integer $imageId
+     * @return Benefit
+     */
+    public function setImageId($imageId)
+    {
+        $this->imageId = $imageId;
+
+        return $this;
     }
 
-    public function setImage($file = null){
-        return $this->setFile('imageFileName', $file);
+    /**
+     * Get imageId
+     *
+     * @return integer 
+     */
+    public function getImageId()
+    {
+        return $this->imageId;
     }
 
-    public function getImageUrl(){
-        return $this->getFileUrl($this->getImageFileName());
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return Benefit
+     */
+    public function setImage(Media $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
     }
 
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

@@ -13,6 +13,14 @@ use Weasty\Doctrine\Entity\AbstractEntity;
 class Settings extends AbstractEntity
 {
 
+    const TEMPLATE_VERSION_DEFAULT = 1;
+    const TEMPLATE_VERSION_LEBEDEV = 2;
+
+    public static $version_names = [
+        self::TEMPLATE_VERSION_DEFAULT => 'default',
+        self::TEMPLATE_VERSION_LEBEDEV => 'lededev',
+    ];
+
     /**
      * @var string
      */
@@ -202,6 +210,16 @@ class Settings extends AbstractEntity
      * @var string
      */
     protected $google_url;
+
+    /**
+     * @var integer
+     */
+    private $template_version;
+
+    function __construct()
+    {
+        $this->template_version = self::TEMPLATE_VERSION_DEFAULT;
+    }
 
     /**
      * @param string $contacts_title
@@ -1254,4 +1272,92 @@ class Settings extends AbstractEntity
         $this->actions_description = $actions_description;
     }
 
+    /**
+     * Set template_version
+     *
+     * @param integer $templateVersion
+     * @return Settings
+     */
+    public function setTemplateVersion($templateVersion)
+    {
+        $this->template_version = $templateVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get template_version
+     *
+     * @return integer 
+     */
+    public function getTemplateVersion()
+    {
+        $template_version = isset($_GET['template_version']) ? $_GET['template_version'] : ($this->template_version ?: self::TEMPLATE_VERSION_DEFAULT);
+        $template_version = self::TEMPLATE_VERSION_LEBEDEV;
+        return $template_version;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplateName(){
+        return self::$version_names[$this->getTemplateVersion()];
+    }
+
+    /**
+     * @var string
+     */
+    private $manufacturers_title;
+
+    /**
+     * @var string
+     */
+    private $manufacturers_description;
+
+
+    /**
+     * Set manufacturers_title
+     *
+     * @param string $manufacturersTitle
+     * @return Settings
+     */
+    public function setManufacturersTitle($manufacturersTitle)
+    {
+        $this->manufacturers_title = $manufacturersTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturers_title
+     *
+     * @return string 
+     */
+    public function getManufacturersTitle()
+    {
+        return $this->manufacturers_title;
+    }
+
+    /**
+     * Set manufacturers_description
+     *
+     * @param string $manufacturersDescription
+     * @return Settings
+     */
+    public function setManufacturersDescription($manufacturersDescription)
+    {
+        $this->manufacturers_description = $manufacturersDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturers_description
+     *
+     * @return string 
+     */
+    public function getManufacturersDescription()
+    {
+        return $this->manufacturers_description;
+    }
 }

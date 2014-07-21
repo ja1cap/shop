@@ -2,12 +2,14 @@
 
 namespace Shop\CatalogBundle\Entity;
 
+use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
- * Manufacturer
+ * Class Manufacturer
+ * @package Shop\CatalogBundle\Entity
  */
 class Manufacturer extends AbstractEntity
 {
@@ -21,6 +23,28 @@ class Manufacturer extends AbstractEntity
      * @var string
      */
     private $name;
+
+    /**
+     * @var integer
+     */
+    private $imageId;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $image;
+
+    /**
+     * @deprecated
+     * @var string
+     */
+    private $thumbImageFileName;
+
+    /**
+     * @deprecated
+     * @var string
+     */
+    private $imageFileName;
 
     /**
      * Get id
@@ -100,20 +124,41 @@ class Manufacturer extends AbstractEntity
     {
         return $this->proposals;
     }
-    /**
-     * @var string
-     */
-    private $thumbImageFileName;
 
     /**
-     * @var string
+     * @return string
      */
-    private $imageFileName;
+    function __toString()
+    {
+        return $this->getName();
+    }
 
+    /**
+     * Set imageId
+     *
+     * @param integer $imageId
+     * @return Manufacturer
+     */
+    public function setImageId($imageId)
+    {
+        $this->imageId = $imageId;
+
+        return $this;
+    }
+
+    /**
+     * Get imageId
+     *
+     * @return integer 
+     */
+    public function getImageId()
+    {
+        return $this->imageId;
+    }
 
     /**
      * Set thumbImageFileName
-     *
+     * @deprecated
      * @param string $thumbImageFileName
      * @return Manufacturer
      */
@@ -126,7 +171,7 @@ class Manufacturer extends AbstractEntity
 
     /**
      * Get thumbImageFileName
-     *
+     * @deprecated
      * @return string 
      */
     public function getThumbImageFileName()
@@ -134,33 +179,9 @@ class Manufacturer extends AbstractEntity
         return $this->thumbImageFileName;
     }
 
-    public function getThumbImage(){
-        return $this->getFile('thumbImageFileName');
-    }
-
-    public function setThumbImage($file = null){
-        return $this->setFile('thumbImageFileName', $file);
-    }
-
-    public function getThumbImageUrl(){
-        return $this->getFileUrl($this->getThumbImageFileName()) ?: $this->getImageUrl();
-    }
-
-    public function getImage(){
-        return $this->getFile('imageFileName');
-    }
-
-    public function setImage($file = null){
-        return $this->setFile('imageFileName', $file);
-    }
-
-    public function getImageUrl(){
-        return $this->getFileUrl($this->getImageFileName());
-    }
-
     /**
      * Set imageFileName
-     *
+     * @deprecated
      * @param string $imageFileName
      * @return Manufacturer
      */
@@ -173,7 +194,7 @@ class Manufacturer extends AbstractEntity
 
     /**
      * Get imageFileName
-     *
+     * @deprecated
      * @return string 
      */
     public function getImageFileName()
@@ -182,11 +203,25 @@ class Manufacturer extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return Manufacturer
      */
-    function __toString()
+    public function setImage(Media $image = null)
     {
-        return $this->getName();
+        $this->image = $image;
+
+        return $this;
     }
 
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

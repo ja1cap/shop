@@ -8,6 +8,7 @@ use Shop\MainBundle\Entity\Problem;
 use Shop\MainBundle\Entity\Review;
 use Shop\MainBundle\Entity\Solution;
 use Shop\MainBundle\Entity\WhyUsItem;
+use Shop\MainBundle\Form\Type\BenefitType;
 use Shop\MainBundle\Form\Type\SettingsType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -192,50 +193,34 @@ class AdminController extends Controller
     public function benefitAction($id, Request $request)
     {
 
-        $item = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Benefit')->findOneBy(array(
+        $benefit = $this->getDoctrine()->getManager()->getRepository('ShopMainBundle:Benefit')->findOneBy(array(
             'id' => $id
         ));
 
-        if(!$item){
-            $item = new Benefit();
+        if(!$benefit){
+            $benefit = new Benefit();
         }
 
-        $form = $this->createFormBuilder($item)
-            ->add('title', 'textarea', array(
-                'required' => true,
-                'label' => 'Заголовок',
-            ))
-            ->add('description', 'textarea', array(
-                'required' => true,
-                'label' => 'Описание',
-            ))
-            ->add('image', 'file', array(
-                'required' => false,
-                'label' => 'Картинка',
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
-
+        $formType = new BenefitType();
+        $form = $this->createForm($formType, $benefit);
         $form->handleRequest($request);
 
         if($request->getMethod() == 'POST' && $form->isValid()){
 
             $em = $this->getDoctrine()->getManager();
 
-            if(!$item->getId()){
-                $em->persist($item);
+            if(!$benefit->getId()){
+                $em->persist($benefit);
             }
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('benefits'));
+            return $this->redirect($this->generateUrl('benefit', ['id' => $benefit->getId()]));
 
         } else {
 
             return $this->render('ShopMainBundle:Admin:form.html.twig', array(
-                'title' => $item->getId() ? 'Изменение элемента' : 'Добавление елемента',
+                'title' => $benefit->getId() ? 'Изменение элемента' : 'Добавление елемента',
                 'form' => $form->createView(),
             ));
 

@@ -5,7 +5,7 @@
             {% if value is not empty and value.providerReference %}
                 <div class="pull-left" style="margin-right: 10px">
                     <a href="{% path value, 'reference' %}" class="fancybox">
-                        {% thumbnail value, 'small_square' with {'class': 'img-polaroid media-object'} %}
+                        {% thumbnail value, 'small' with {'class': 'img-polaroid media-object'} %}
                     </a>
                 </div>
                 {% if form.vars['provider'] != 'sonata.media.provider.image' %}

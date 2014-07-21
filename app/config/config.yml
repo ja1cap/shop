@@ -147,17 +147,37 @@ sonata_media:
                 - sonata.media.provider.file
 
             formats:
-                small: { width: 150, quality: 100 }
-                small_square: { width: 150, height: 150, quality: 100 }
+                small: { width: 220, quality: 100 }
+                small_square: { width: 220, height: 220, quality: 100 }
                 medium:   { width: 350, quality: 100 }
 
         image:
             providers:
                 - sonata.media.provider.image
             formats:
-                small: { width: 150, quality: 100 }
-                small_square: { width: 150, height: 150, quality: 100 }
+                small: { width: 220, quality: 100 }
+                small_square: { width: 220, height: 220, quality: 100 }
                 medium:   { width: 350, quality: 100 }
+
+        action_image:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 220, quality: 100 }
+                small_square: { width: 220, height: 220, quality: 100 }
+                medium:   { width: 350, quality: 100 }
+                medium_rectangle:   { width: 300, height: 150, quality: 100 }
+                large_rectangle:   { width: 500, height: 150, quality: 100 }
+
+        news_image:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 220, quality: 100 }
+                small_square: { width: 220, height: 220, quality: 100 }
+                medium:   { width: 350, quality: 100 }
+                medium_rectangle:   { width: 300, height: 150, quality: 100 }
+                large_rectangle:   { width: 500, height: 150, quality: 100 }
 
         icon:
             providers:
@@ -186,7 +206,9 @@ sonata_media:
             create:     true
     providers:
         image:
-            resizer: sonata.media.resizer.square
+#            resizer: sonata.media.resizer.square
+#            resizer: sonata.media.resizer.simple
+            resizer: weasty_admin.media.resizer.rectangle
 
 sonata_block:
     default_contexts: [cms]
@@ -236,3 +258,8 @@ weasty_catalog:
       class: %shop_catalog.category.entity.class%
     repository:
       class: %shop_catalog.category.repository.class%
+  proposal:
+    entity:
+      class: %shop_catalog.proposal.entity.class%
+    repository:
+      class: %shop_catalog.proposal.repository.class%

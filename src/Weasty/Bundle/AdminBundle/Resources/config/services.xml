@@ -4,17 +4,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="weasty_admin.example.class">Weasty\Bundle\AdminBundle\Example</parameter>
+        <parameter key="weasty_admin.media.resizer.rectangle.class">Weasty\Bundle\AdminBundle\Media\Resizer\RectangleResizer</parameter>
     </parameters>
 
     <services>
-        <service id="weasty_admin.example" class="%weasty_admin.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="weasty_admin.media.resizer.rectangle" class="%weasty_admin.media.resizer.rectangle.class%">
+            <argument type="service" id="sonata.media.adapter.image.gd" />
+            <argument>%sonata.media.resizer.square.adapter.mode%</argument>
+            <argument type="service" id="sonata.media.metadata.proxy" />
         </service>
     </services>
-    -->
+
 </container>

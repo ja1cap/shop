@@ -6,6 +6,7 @@ use Shop\DiscountBundle\Entity\ActionConditionInterface;
 use Shop\DiscountBundle\Entity\ActionInterface;
 use Shop\DiscountBundle\Form\Type\ActionConditionType;
 use Shop\DiscountBundle\Form\Type\ActionType;
+use Shop\DiscountBundle\Mapper\ActionConditionMapper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -227,8 +228,10 @@ class AdminActionController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
+        $mapper = new ActionConditionMapper($actionCondition);
+        $mapper->setEntityManager($em);
 
-        $form = $this->createForm(new ActionConditionType(), $actionCondition);
+        $form = $this->createForm(new ActionConditionType(), $mapper);
         $form->handleRequest($request);
 
         if($request->getMethod() == 'POST' && $form->isValid()){

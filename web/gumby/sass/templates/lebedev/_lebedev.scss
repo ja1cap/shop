@@ -1,18 +1,24 @@
+@import "../../var/settings";
 @import "lebedev-shop-scss/lebedev";
 
 body {
 
   .template-lededev {
 
+    color: $body-font-color;
+
+    @import "common";
+    @import "media-list";
+    @import "manufacturers-list";
+    @import "proposals-list";
+    @import "actions-block";
+    @import "benefits-block";
+    @import "news-block";
+    @import "contacts-block";
+
     .header-container {
 
       @include header-container();
-
-      .header {
-
-        height: $header-height;
-
-      }
 
       .header-logo {
 
@@ -20,7 +26,7 @@ body {
 
         .image-wrapper {
 
-          height: $header-height;
+          height: $header-image-height;
 
           img {
             height: 100%;
@@ -33,7 +39,6 @@ body {
 
       .header-inner {
 
-        height: $header-height;
         float: right;
 
       }
@@ -52,11 +57,41 @@ body {
 
     .block-container {
 
-      position: relative;
-      text-align: center;
+      @include block-container();
 
       .block-title {
+        max-width: $row-max-width;
+        margin: 0 auto;
         @include block-title;
+      }
+
+      .block-description {
+        max-width: $row-max-width;
+        font-size: 16px;
+        text-align: center;
+        margin: 7px auto;
+      }
+
+      &.invert-colors {
+
+        color: white;
+
+        .block-title {
+          color: white;
+          text-shadow: 1px 2px #2E2D2D;
+        }
+
+      }
+
+    }
+
+    $proposals-block-tab-content-height: 320px;
+    .proposals-block {
+
+      text-align: center;
+
+      .tab-content {
+        height: $proposals-block-tab-content-height;
       }
 
     }

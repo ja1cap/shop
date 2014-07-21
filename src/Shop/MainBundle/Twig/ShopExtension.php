@@ -33,6 +33,7 @@ class ShopExtension extends \Twig_Extension {
             'settings' => $this->settingsResource->getSettings(), //@TODO use shop_settings variable
             'shop_settings' => $this->settingsResource->getSettings(),
             'shop_contacts' => $this->contactsResource,
+            'word_numbers' => ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'],
         );
     }
 

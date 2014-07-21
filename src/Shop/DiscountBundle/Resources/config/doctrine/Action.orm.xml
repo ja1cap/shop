@@ -11,6 +11,7 @@
         <field name="status" type="integer"/>
         <field name="position" type="integer"/>
 
+        <field name="imageId" type="integer" nullable="true" column="image_id"/>
         <field name="title" type="string" column="title" length="255"/>
         <field name="description" type="text" column="description" nullable="true"/>
         <field name="content" type="text" column="content" nullable="true"/>
@@ -24,6 +25,12 @@
                 <order-by-field name="priority" direction="DESC"/>
             </order-by>
         </one-to-many>
+
+        <many-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-one>
 
     </entity>
 </doctrine-mapping>

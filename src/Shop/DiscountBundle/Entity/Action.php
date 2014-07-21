@@ -4,6 +4,7 @@ namespace Shop\DiscountBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Weasty\Doctrine\Entity\AbstractEntity;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 /**
  * Class Action
@@ -58,6 +59,16 @@ class Action extends AbstractEntity
      * @var \Doctrine\Common\Collections\Collection
      */
     private $conditions;
+
+    /**
+     * @var integer
+     */
+    private $imageId;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $image;
 
     /**
      * Constructor
@@ -237,5 +248,51 @@ class Action extends AbstractEntity
     public function getConditions()
     {
         return $this->conditions;
+    }
+
+    /**
+     * Set imageId
+     *
+     * @param integer $imageId
+     * @return Action
+     */
+    public function setImageId($imageId)
+    {
+        $this->imageId = $imageId;
+
+        return $this;
+    }
+
+    /**
+     * Get imageId
+     *
+     * @return integer 
+     */
+    public function getImageId()
+    {
+        return $this->imageId;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return Action
+     */
+    public function setImage(Media $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

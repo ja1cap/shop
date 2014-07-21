@@ -1,3 +1,7 @@
+weasty_news:
+    resource: "@WeastyNewsBundle/Resources/config/routing.xml"
+    prefix:   /
+
 shop_discount:
     resource: "@ShopDiscountBundle/Resources/config/routing.xml"
     prefix:   /

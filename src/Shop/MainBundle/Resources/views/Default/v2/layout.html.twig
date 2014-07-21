@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+{% block head %}
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="txt/css" href="/bootstrap/css/bootstrap.min.css">
+{% endblock %}
+{% block body %}
+    <div class="template-{{ shop_settings.template_name }}">
+        {{ include('ShopMainBundle:Default:header.html.twig') }}
+        <div class="main-container">
+            {% block page_container %}
+            {% endblock %}
+            {{ include('ShopMainBundle:Default:footer.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

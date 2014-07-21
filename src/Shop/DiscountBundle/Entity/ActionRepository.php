@@ -19,11 +19,11 @@ class ActionRepository extends AbstractRepository {
             ))
             ->from('ShopCatalogBundle:Proposal', 'p')
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->leftJoin('ActionConditionProposal', 'acp', Expr\Join::LEFT_JOIN, $qb->expr()->eq('acp.proposal_id', 'p.id'))
-            ->leftJoin('ActionConditionCategory', 'acc', Expr\Join::LEFT_JOIN, $qb->expr()->eq('acc.category_id', 'c.id'))
+            ->leftJoin('ShopDiscountBundle:ActionConditionProposal', 'acp', Expr\Join::LEFT_JOIN, $qb->expr()->eq('acp.proposalId', 'p.id'))
+            ->leftJoin('ShopDiscountBundle:ActionConditionCategory', 'acc', Expr\Join::LEFT_JOIN, $qb->expr()->eq('acc.categoryId', 'c.id'))
             ->leftJoin('ShopDiscountBundle:ActionCondition', 'ac', Expr\Join::LEFT_JOIN, $qb->expr()->orX(
-                $qb->expr()->eq('ac.id', 'acc.condition_id'),
-                $qb->expr()->eq('ac.id', 'acp.condition_id')
+                $qb->expr()->eq('ac.id', 'acc.conditionId'),
+                $qb->expr()->eq('ac.id', 'acp.conditionId')
             ))
         ;
 

@@ -44,4 +44,12 @@ class ShopSettingsResource {
         return $this->settings;
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function get($key){
+        return $this->getSettings()->offsetGet($key);
+    }
+
 } 

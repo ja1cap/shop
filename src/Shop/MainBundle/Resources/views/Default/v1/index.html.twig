@@ -1,0 +1,14 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+{% block page_container %}
+    {#{{ include('ShopMainBundle:Default:v1/blocks/main-block.html.twig') }}#}
+    {{ include('ShopCatalogBundle:Proposal:proposals-block.html.twig') }}
+    {#{{ include('ShopMainBundle:Default:v1/blocks/why-us-block.html.twig') }}#}
+    {{ include('ShopMainBundle:Default:v1/blocks/benefits-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/actions-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/reviews-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/how-we-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/problems-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/contacts-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v1/blocks/request-block.html.twig') }}
+    {#{{ include('ShopMainBundle:Default:v1/blocks/request-block.html.twig', {'request_form' : footer_request_form}) }}#}
+{% endblock %}

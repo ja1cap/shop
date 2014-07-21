@@ -9,6 +9,8 @@
         </id>
 
         <field name="name" type="string" column="name" length="255"/>
+        <field name="imageId" type="integer" nullable="true" column="image_id"/>
+
         <field name="thumbImageFileName" type="string" column="thumb_image_file_name" length="255" nullable="true"/>
         <field name="imageFileName" type="string" column="image_file_name" length="255" nullable="true"/>
 
@@ -20,5 +22,12 @@
                 <order-by-field name="title" direction="ASC"/>
             </order-by>
         </one-to-many>
+
+        <many-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-one>
+
     </entity>
 </doctrine-mapping>

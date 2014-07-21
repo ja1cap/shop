@@ -2,12 +2,9 @@
 
 namespace Shop\DiscountBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
-use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\Proposal;
-use Weasty\Doctrine\Entity\AbstractEntity;
 use Weasty\Money\Price\Price;
+use Weasty\Doctrine\Entity\AbstractEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class ActionCondition
@@ -41,6 +38,11 @@ class ActionCondition extends AbstractEntity
      * @var \Doctrine\Common\Collections\Collection
      */
     private $proposals;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $gifts;
 
     /**
      * @var integer
@@ -92,6 +94,7 @@ class ActionCondition extends AbstractEntity
      */
     public function __construct()
     {
+        $this->gifts = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->discountCategories = new ArrayCollection();
         $this->proposals = new ArrayCollection();
@@ -153,78 +156,6 @@ class ActionCondition extends AbstractEntity
     {
         return $this->action;
     }
-
-    /**
-     * Add categories
-     *
-     * @param \Shop\CatalogBundle\Entity\Category $categories
-     * @return ActionCondition
-     */
-    public function addCategory(Category $categories)
-    {
-        $this->categories[] = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Remove categories
-     *
-     * @param \Shop\CatalogBundle\Entity\Category $categories
-     */
-    public function removeCategory(Category $categories)
-    {
-        $this->categories->removeElement($categories);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * Add proposals
-     *
-     * @param \Shop\CatalogBundle\Entity\Proposal $proposals
-     * @return ActionCondition
-     */
-    public function addProposal(Proposal $proposals)
-    {
-        $this->proposals[] = $proposals;
-
-        return $this;
-    }
-
-    /**
-     * Remove proposals
-     *
-     * @param \Shop\CatalogBundle\Entity\Proposal $proposals
-     */
-    public function removeProposal(Proposal $proposals)
-    {
-        $this->proposals->removeElement($proposals);
-    }
-
-    /**
-     * Get proposals
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProposals()
-    {
-        return $this->proposals;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $gifts;
-
 
     /**
      * Set type
@@ -293,38 +224,6 @@ class ActionCondition extends AbstractEntity
     public function getIsComplex()
     {
         return $this->isComplex;
-    }
-
-    /**
-     * Add gifts
-     *
-     * @param \Shop\CatalogBundle\Entity\Proposal $gift
-     * @return ActionCondition
-     */
-    public function addGift(Proposal $gift)
-    {
-        $this->gifts[] = $gift;
-        return $this;
-    }
-
-    /**
-     * Remove gifts
-     *
-     * @param \Shop\CatalogBundle\Entity\Proposal $gift
-     */
-    public function removeGift(Proposal $gift)
-    {
-        $this->gifts->removeElement($gift);
-    }
-
-    /**
-     * Get gifts
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGifts()
-    {
-        return $this->gifts;
     }
 
     /**
@@ -456,14 +355,100 @@ class ActionCondition extends AbstractEntity
     }
 
     /**
-     * Add discountCategories
+     * Add categories
      *
-     * @param \Shop\CatalogBundle\Entity\Category $discountCategory
+     * @param \Shop\DiscountBundle\Entity\ActionConditionCategory $categories
      * @return ActionCondition
      */
-    public function addDiscountCategory(Category $discountCategory)
+    public function addCategory(ActionConditionCategory $categories)
     {
-        $this->discountCategories[] = $discountCategory;
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionCategory $categories
+     */
+    public function removeCategory(ActionConditionCategory $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoryIds(){
+
+        return $this->getCategories()->map(function(ActionConditionCategory $actionConditionCategory){
+            return $actionConditionCategory->getCategoryId();
+        })->toArray();
+
+    }
+
+    /**
+     * Add proposals
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionProposal $proposals
+     * @return ActionCondition
+     */
+    public function addProposal(ActionConditionProposal $proposals)
+    {
+        $this->proposals[] = $proposals;
+        $proposals->setCondition($this);
+        return $this;
+    }
+
+    /**
+     * Remove proposals
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionProposal $proposals
+     */
+    public function removeProposal(ActionConditionProposal $proposals)
+    {
+        $this->proposals->removeElement($proposals);
+    }
+
+    /**
+     * Get proposals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProposals()
+    {
+        return $this->proposals;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProposalIds(){
+        return $this->getProposals()->map(function(ActionConditionProposal $actionConditionProposal){
+            return $actionConditionProposal->getProposalId();
+        })->toArray();
+    }
+
+    /**
+     * Add discountCategories
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountCategory $discountCategories
+     * @return ActionCondition
+     */
+    public function addDiscountCategory(ActionConditionDiscountCategory $discountCategories)
+    {
+        $this->discountCategories[] = $discountCategories;
 
         return $this;
     }
@@ -471,11 +456,11 @@ class ActionCondition extends AbstractEntity
     /**
      * Remove discountCategories
      *
-     * @param \Shop\CatalogBundle\Entity\Category $discountCategory
+     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountCategory $discountCategories
      */
-    public function removeDiscountCategory(Category $discountCategory)
+    public function removeDiscountCategory(ActionConditionDiscountCategory $discountCategories)
     {
-        $this->discountCategories->removeElement($discountCategory);
+        $this->discountCategories->removeElement($discountCategories);
     }
 
     /**
@@ -489,24 +474,33 @@ class ActionCondition extends AbstractEntity
     }
 
     /**
+     * @return array
+     */
+    public function getDiscountCategoryIds(){
+        return $this->getDiscountCategories()->map(function(ActionConditionDiscountCategory $actionConditionDiscountCategory){
+            return $actionConditionDiscountCategory->getCategoryId();
+        })->toArray();
+    }
+
+    /**
      * Add discountProposals
      *
-     * @param \Shop\CatalogBundle\Entity\Proposal $discountProposal
+     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountProposal $discountProposal
      * @return ActionCondition
      */
-    public function addDiscountProposal(Proposal $discountProposal)
+    public function addDiscountProposal(ActionConditionDiscountProposal $discountProposal)
     {
         $this->discountProposals[] = $discountProposal;
-
+        $discountProposal->setCondition($this);
         return $this;
     }
 
     /**
      * Remove discountProposals
      *
-     * @param \Shop\CatalogBundle\Entity\Proposal $discountProposal
+     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountProposal $discountProposal
      */
-    public function removeDiscountProposal(Proposal $discountProposal)
+    public function removeDiscountProposal(ActionConditionDiscountProposal $discountProposal)
     {
         $this->discountProposals->removeElement($discountProposal);
     }
@@ -520,37 +514,57 @@ class ActionCondition extends AbstractEntity
     {
         return $this->discountProposals;
     }
+
     /**
-     * @ORM\PreFlush
+     * @return array
      */
-    public function mergeDiscountProposals()
+    public function getDiscountProposalIds(){
+        return $this->getDiscountProposals()->map(function(ActionConditionDiscountProposal $actionConditionDiscountProposal){
+            return $actionConditionDiscountProposal->getProposalId();
+        })->toArray();
+    }
+
+
+    /**
+     * Add gifts
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionGiftProposal $gift
+     * @return ActionCondition
+     */
+    public function addGift(ActionConditionGiftProposal $gift)
     {
-        /**
-         * @var $discountProposals \Shop\CatalogBundle\Entity\Proposal[]
-         */
-        $proposals = $this->getProposals();
-        $discountProposals = $this->getDiscountProposals();
-        foreach($discountProposals as $discountProposal){
-            if(!$proposals->contains($discountProposal)){
-                $this->removeDiscountProposal($discountProposal);
-            }
-        }
+        $this->gifts[] = $gift;
+        $gift->setCondition($this);
+        return $this;
     }
 
     /**
-     * @ORM\PreFlush
+     * Remove gifts
+     *
+     * @param \Shop\DiscountBundle\Entity\ActionConditionGiftProposal $gift
      */
-    public function mergeDiscountCategories()
+    public function removeGift(ActionConditionGiftProposal $gift)
     {
-        /**
-         * @var $discountCategories \Shop\CatalogBundle\Entity\Category[]
-         */
-        $categories = $this->getCategories();
-        $discountCategories = $this->getCategories();
-        foreach($discountCategories as $discountCategory){
-            if(!$categories->contains($discountCategory)){
-                $this->removeDiscountCategory($discountCategory);
-            }
-        }
+        $this->gifts->removeElement($gift);
     }
+
+    /**
+     * Get gifts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGifts()
+    {
+        return $this->gifts;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGiftProposalIds(){
+        return $this->gifts->map(function(ActionConditionGiftProposal $giftProposal){
+            return $giftProposal->getProposalId();
+        })->toArray();
+    }
+
 }

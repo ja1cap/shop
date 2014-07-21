@@ -1,0 +1,39 @@
+{% set manufacturers = shop_catalog_manufacturers() %}
+{% if manufacturers %}
+    <div class="block-container" id="manufacturers-block">
+        <h2 class="block-title">
+            {{ shop_settings.manufacturers_title|default('НАШИ БРЕНДЫ')|nl2br }}
+        </h2>
+        {% if shop_settings.manufacturers_description %}
+            <div class="block-description">
+                {{ shop_settings.manufacturers_description|nl2br }}
+            </div>
+        {% endif %}
+        <div class="block-body">
+            <div class="row">
+                <div class="manufacturers-list clearfix">
+                    {% for manufacturer in manufacturers %}
+                        <div class="manufacturer">
+                            <div class="image-container nailthumb-container" data-nailthumb-method="resize" data-nailthumb-proportions="1">
+                                <img src="{% path manufacturer.image, 'small' %}" alt="{{ manufacturer.name }}" title="{{ manufacturer.name }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+
+            var $manufacturersList = $('.manufacturers-list');
+
+            $manufacturersList.owlCarousel({
+                items : 4,
+                navigation : true,
+                pagination : false
+            });
+
+        });
+    </script>
+{% endif %}

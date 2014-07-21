@@ -1,0 +1,24 @@
+{% if benefits %}
+<div class="benefits-block block-container invert-colors" id="benefits-block">
+
+    <h2 class="block-title">
+        {{ settings.benefits_title|default('НАШИ ПРЕИМУЩЕСТВА')|nl2br }}
+    </h2>
+    <div class="block-description">
+        {{ settings.benefits_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}
+    </div>
+
+    <div class="block-body">
+
+        {% include 'ShopMainBundle:Default:media-list.html.twig' with {
+            'media_list_options' : {
+                'items' : benefits,
+                'header_item_image_format' : 'small_square',
+                'item_image_format' : 'small_square',
+            }
+        } %}
+
+    </div>
+
+</div>
+{% endif %}

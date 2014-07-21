@@ -1,14 +1,1 @@
-{% extends 'ShopMainBundle:Default:layout.html.twig' %}
-{% block page_container %}
-    {#{{ include('ShopMainBundle:Default:blocks/main-block.html.twig') }}#}
-    {{ include('ShopMainBundle:Default:blocks/proposals-block.html.twig') }}
-    {#{{ include('ShopMainBundle:Default:blocks/why-us-block.html.twig') }}#}
-    {{ include('ShopMainBundle:Default:blocks/benefits-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/actions-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/reviews-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/how-we-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/problems-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/contacts-block.html.twig') }}
-    {{ include('ShopMainBundle:Default:blocks/request-block.html.twig') }}
-    {#{{ include('ShopMainBundle:Default:blocks/request-block.html.twig', {'request_form' : footer_request_form}) }}#}
-{% endblock %}
+{% extends 'ShopMainBundle:Default:v' ~ shop_settings.template_version ~'/index.html.twig' %}

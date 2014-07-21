@@ -1,0 +1,11 @@
+.big-button {
+  @include big-button;
+}
+
+.tabs-container {
+
+  .tabs {
+    @include tabs();
+  }
+
+}

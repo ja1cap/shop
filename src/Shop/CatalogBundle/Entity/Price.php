@@ -41,6 +41,16 @@ class Price extends AbstractEntity
     protected $value;
 
     /**
+     * @var \DateTime
+     */
+    private $createDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $updateDate;
+
+    /**
      * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
      */
     public function getCategory()
@@ -201,7 +211,6 @@ class Price extends AbstractEntity
     }
 
     /**
-     * @TODO refactor
      * @return string
      */
     public function getDescription(){
@@ -498,4 +507,61 @@ class Price extends AbstractEntity
     {
         return $this->manufacturerSku;
     }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     * @return Price
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set updateDate
+     *
+     * @param \DateTime $updateDate
+     * @return Price
+     */
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+
+        return $this;
+    }
+
+    /**
+     * Get updateDate
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    public function updateDate(){
+
+        if($this->createDate === null){
+            $this->createDate = new \DateTime();
+        }
+
+        $this->updateDate = new \DateTime();
+
+    }
+
 }

@@ -1,0 +1,9 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+{% block page_container %}
+    {{ include('ShopCatalogBundle:Proposal:proposals-block.html.twig') }}
+    {{ include('ShopDiscountBundle:Action:actions-block.html.twig') }}
+    {{ include('ShopCatalogBundle:Manufacturer:manufacturers-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v2/blocks/benefits-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v2/blocks/news-block.html.twig') }}
+    {{ include('ShopMainBundle:Default:v2/blocks/contacts-block.html.twig') }}
+{% endblock %}

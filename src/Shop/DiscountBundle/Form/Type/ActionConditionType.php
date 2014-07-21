@@ -18,26 +18,55 @@ class ActionConditionType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-
         $builder
             ->add('type', 'choice', array(
                 'choices' => ActionConditionResource::$types,
                 'label' => 'Объедининие',
             ))
-            ->add('categories', 'entity', array(
+            ->add('categoryIds', 'weasty_doctrine_entity_type', array(
                 'required' => false,
                 'multiple' => true,
+                'map_as_id' => true,
+                'class' => 'ShopCatalogBundle:Category',
                 'label' => 'Участвующие категории',
                 'help' => 'Выберите категории, для которых при заказе товаров или услуг клиенту будет показываться акция',
-                'class' => 'ShopCatalogBundle:Category',
             ))
-            ->add('proposals', 'weasty_admin_browser_type', array(
+            ->add('proposalIds', 'weasty_admin_browser_type', array(
                 'required' => false,
                 'label' => 'Участвующие товары',
                 'help' => 'Выберите товары и услуги при заказе которых клиенту будет показываться акция',
                 'browser_path' => 'proposals_browser',
                 'item_value_element_class' => 'item-value-element',
                 'options' => array(
+                    'map_as_id' => true,
+                    'class' => 'ShopCatalogBundle:Proposal',
+                ),
+                'prototype_options' => array(
+                    'attr' => array(
+                        'class' => 'item-value-element',
+                    ),
+                ),
+                'allow_add' => true,
+                'allow_delete' => true,
+            ))
+            ->add('discountCategoryIds', 'weasty_doctrine_entity_type', array(
+                'required' => false,
+                'multiple' => true,
+                'map_as_id' => true,
+                'label' => 'Категории, на которые растространяется акция (По умолчанию: все участвующие)',
+                'help' => 'Выберите категории для которых будут действовать условия акции (скидка, акционная цена, подарок)',
+                'class' => 'ShopCatalogBundle:Category',
+            ))
+            ->add('discountProposalIds', 'weasty_admin_browser_type', array(
+                'required' => false,
+                'label' => 'Товары, на которые растространяется акция (По умолчанию: все участвующие)',
+                'help' => 'Выберите товары и услуги для которых будут действовать условия акции (скидка, акционная цена, подарок)',
+                'browser_path' => 'proposals_browser',
+                //'type' => 'shop_discount_action_condition_proposal',
+                //'prototype_type' => 'shop_discount_action_condition_proposal',
+                'item_value_element_class' => 'item-value-element',
+                'options' => array(
+                    'map_as_id' => true,
                     'class' => 'ShopCatalogBundle:Proposal',
                 ),
                 'prototype_options' => array(
@@ -63,40 +92,13 @@ class ActionConditionType extends AbstractType {
                 ),
                 'currency_form_type' => 'weasty_money_currency_numeric',
             ))
-            ->add('discountCategories', 'entity', array(
-                'required' => false,
-                'multiple' => true,
-                'label' => 'Категории, на которые растространяется акция (По умолчанию: все участвующие)',
-                'help' => 'Выберите категории для которых будут действовать условия акции (скидка, акционная цена, подарок)',
-                'class' => 'ShopCatalogBundle:Category',
-            ))
-            ->add('discountProposals', 'weasty_admin_browser_type', array(
-                'required' => false,
-                'label' => 'Товары, на которые растространяется акция (По умолчанию: все участвующие)',
-                'help' => 'Выберите товары и услуги для которых будут действовать условия акции (скидка, акционная цена, подарок)',
-                'browser_path' => 'proposals_browser',
-                'type' => 'shop_discount_action_condition_proposal',
-                'prototype_type' => 'shop_discount_action_condition_proposal',
-                'item_value_element_class' => 'item-value-element',
-                'allow_add' => true,
-                'allow_delete' => true,
-            ))
-//            ->add('discountProposals', 'weasty_admin_browser_type', array(
-//                'required' => false,
-//                'label' => 'Товары, на которые растространяется акция (По умолчанию: все участвующие)',
-//                'browser_path' => 'proposals_browser',
-//                'options' => array(
-//                    'class' => 'ShopCatalogBundle:Proposal',
-//                ),
-//                'allow_add' => true,
-//                'allow_delete' => true,
-//            ))
-            ->add('gifts', 'weasty_admin_browser_type', array(
+            ->add('giftProposalIds', 'weasty_admin_browser_type', array(
                 'required' => false,
                 'label' => 'Возможные подарки',
                 'browser_path' => 'proposals_browser',
                 'item_value_element_class' => 'item-value-element',
                 'options' => array(
+                    'map_as_id' => true,
                     'class' => 'ShopCatalogBundle:Proposal',
                 ),
                 'prototype_options' => array(
@@ -123,7 +125,8 @@ class ActionConditionType extends AbstractType {
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
-            ));
+            ))
+        ;
 
     }
 

@@ -7,6 +7,13 @@
         <indexes>
             <index columns="slug"/>
         </indexes>
+        
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="updateDate"/>
+            <lifecycle-callback type="preUpdate" method="updateDate"/>
+            <lifecycle-callback type="prePersist" method="inflectName"/>
+            <lifecycle-callback type="preUpdate" method="inflectName"/>
+        </lifecycle-callbacks>
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
@@ -18,7 +25,11 @@
         <field name="slug" type="string" column="slug" length="255" unique="true"/>
         <field name="singularName" type="string" column="singularName" length="255" nullable="true"/>
         <field name="singularGenitiveName" type="string" column="singularGenitiveName" length="255" nullable="true"/>
+        <field name="singularAblativusName" type="string" column="singularAblativusName" length="255" nullable="true"/>
+        <field name="singularAccusativusName" type="string" column="singularAccusativusName" length="255" nullable="true"/>
         <field name="multipleName" type="string" column="multipleName" length="255" nullable="true"/>
+        <field name="createDate" type="datetime" column="createDate" nullable="true"/>
+        <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
 
         <one-to-many target-entity="CategoryFilters" mapped-by="category" field="filters">
             <cascade>

@@ -46,13 +46,11 @@ class Category extends AbstractEntity
     private $singularGenitiveName;
 
     /**
-     * @TODO save to database
      * @var string
      */
     private $singularAblativusName;
 
     /**
-     * @TODO save to database
      * @var string
      */
     private $singularAccusativusName;
@@ -83,12 +81,25 @@ class Category extends AbstractEntity
     private $image;
 
     /**
+     * @var \DateTime
+     */
+    private $createDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $updateDate;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->filters = new ArrayCollection();
         $this->parameters = new ArrayCollection();
         $this->parameterGroups = new ArrayCollection();
+        $this->proposals = new ArrayCollection();
+        $this->additionalCategories = new ArrayCollection();
     }
     /**
      * @var array
@@ -141,6 +152,63 @@ class Category extends AbstractEntity
     }
 
     /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     * @return Category
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate ?: new \DateTime();
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set updateDate
+     *
+     * @param \DateTime $updateDate
+     * @return Category
+     */
+    public function setUpdateDate($updateDate)
+    {
+
+        $this->updateDate = $updateDate ?: new \DateTime();
+
+        return $this;
+    }
+
+    public function updateDate(){
+
+        if($this->createDate === null){
+            $this->createDate = new \DateTime();
+        }
+
+        $this->updateDate = new \DateTime();
+
+    }
+
+    /**
+     * Get updateDate
+     *
+     * @return \DateTime
+     */
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
+    }
+
+    /**
      * Set slug
      *
      * @param string $slug
@@ -173,7 +241,6 @@ class Category extends AbstractEntity
     {
         $singularName = strtolower($singularName);
         $this->singularName = $singularName;
-        $this->setSingularGenitiveName(WordInflector::inflect($singularName, WordInflector::CASE_GENITIVE));
         return $this;
     }
 
@@ -189,10 +256,12 @@ class Category extends AbstractEntity
 
     /**
      * @param string $singularGenitiveName
+     * @return $this
      */
     public function setSingularGenitiveName($singularGenitiveName)
     {
         $this->singularGenitiveName = $singularGenitiveName;
+        return $this;
     }
 
     /**
@@ -201,6 +270,18 @@ class Category extends AbstractEntity
     public function getSingularGenitiveName()
     {
         return $this->singularGenitiveName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_GENITIVE);
+    }
+
+    /**
+     * Set singularAccusativusName
+     *
+     * @param string $singularAccusativusName
+     * @return $this
+     */
+    public function setSingularAccusativusName($singularAccusativusName)
+    {
+        $this->singularAccusativusName = $singularAccusativusName;
+        return $this;
     }
 
     /**
@@ -217,6 +298,34 @@ class Category extends AbstractEntity
     public function getSingularAblativusName()
     {
         return $this->singularAblativusName ?: WordInflector::inflect($this->getSingularName(), WordInflector::CASE_ABLATIVUS);
+    }
+
+    /**
+     * Set singularAblativusName
+     *
+     * @param string $singularAblativusName
+     * @return $this
+     */
+    public function setSingularAblativusName($singularAblativusName)
+    {
+        $this->singularAblativusName = $singularAblativusName;
+
+        return $this;
+    }
+
+    public function inflectName()
+    {
+
+        $singularName = $this->getSingularName();
+
+        if($singularName){
+
+            $this->setSingularGenitiveName(WordInflector::inflect($singularName, WordInflector::CASE_GENITIVE));
+            $this->setSingularAccusativusName(WordInflector::inflect($singularName, WordInflector::CASE_ACCUSATIVUS));
+            $this->setSingularAblativusName(WordInflector::inflect($singularName, WordInflector::CASE_ABLATIVUS));
+
+        }
+
     }
 
     /**
@@ -468,11 +577,11 @@ class Category extends AbstractEntity
     {
         return $this->image;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $filters;
-
 
     /**
      * Add filters
@@ -506,4 +615,5 @@ class Category extends AbstractEntity
     {
         return $this->filters;
     }
+
 }

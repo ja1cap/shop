@@ -44,6 +44,8 @@ class ShopProposalExtension extends \Twig_Extension {
         return array(
             new \Twig_SimpleFunction('shop_catalog_proposal_url', array($this, 'getProposalUrl')),
             new \Twig_SimpleFunction('shop_catalog_popular_proposals', array($this, 'getPopularProposals')),
+            new \Twig_SimpleFunction('shop_catalog_new_proposals', array($this, 'getNewProposals')),
+            new \Twig_SimpleFunction('shop_catalog_bestsellers', array($this, 'getBestsellers')),
         );
     }
 
@@ -69,7 +71,7 @@ class ShopProposalExtension extends \Twig_Extension {
     }
 
     /**
-     * @return array
+     * @return \Shop\CatalogBundle\Entity\Proposal[]
      */
     public function getPopularProposals(){
         $proposals = array_filter(
@@ -86,6 +88,34 @@ class ShopProposalExtension extends \Twig_Extension {
         );
 
         return $proposals;
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\Proposal[]
+     */
+    public function getNewProposals(){
+        return $this->proposalRepository->findBy(
+            array(
+                'isNew' => true,
+            ),
+            array(
+                'updateDate' => 'DESC'
+            )
+        );
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\Proposal[]
+     */
+    public function getBestsellers(){
+        return $this->proposalRepository->findBy(
+            array(
+                'isBestseller' => true,
+            ),
+            array(
+                'updateDate' => 'DESC'
+            )
+        );
     }
 
     /**

@@ -4,11 +4,6 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Shop\DiscountBundle\Entity\ActionCondition" repository-class="Shop\DiscountBundle\Entity\ActionConditionRepository">
 
-        <lifecycle-callbacks>
-            <lifecycle-callback type="preFlush" method="mergeDiscountProposals"/>
-            <lifecycle-callback type="preFlush" method="mergeDiscountCategories"/>
-        </lifecycle-callbacks>
-
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -24,81 +19,46 @@
         <field name="priority" type="integer" nullable="true" column-definition="int(6) NOT NULL DEFAULT 1"/>
         <field name="isComplex" type="boolean"/>
 
+        <one-to-many target-entity="ActionConditionCategory" field="categories" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ActionConditionDiscountCategory" field="discountCategories" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ActionConditionProposal" field="proposals" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ActionConditionDiscountProposal" field="discountProposals" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ActionConditionGiftProposal" field="gifts" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
         <many-to-one target-entity="Action" field="action" inversed-by="conditions">
             <join-columns>
                 <join-column name="actionId" referenced-column-name="id" on-delete="CASCADE"/>
             </join-columns>
         </many-to-one>
-
-        <many-to-many target-entity="Shop\CatalogBundle\Entity\Category" field="categories">
-            <join-table name="ActionConditionCategory">
-                <join-columns>
-                    <join-column name="condition_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="category_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </inverse-join-columns>
-            </join-table>
-            <order-by>
-                <order-by-field name="name" direction="ASC"/>
-            </order-by>
-        </many-to-many>
-
-        <many-to-many target-entity="Shop\CatalogBundle\Entity\Category" field="discountCategories">
-            <join-table name="ActionConditionDiscountCategory">
-                <join-columns>
-                    <join-column name="condition_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="category_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </inverse-join-columns>
-            </join-table>
-            <order-by>
-                <order-by-field name="name" direction="ASC"/>
-            </order-by>
-        </many-to-many>
-
-        <many-to-many target-entity="Shop\CatalogBundle\Entity\Proposal" field="proposals">
-            <join-table name="ActionConditionProposal">
-                <join-columns>
-                    <join-column name="condition_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="proposal_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </inverse-join-columns>
-            </join-table>
-            <order-by>
-                <order-by-field name="title" direction="ASC"/>
-            </order-by>
-        </many-to-many>
-
-        <many-to-many target-entity="Shop\CatalogBundle\Entity\Proposal" field="discountProposals">
-            <join-table name="ActionConditionDiscountProposal">
-                <join-columns>
-                    <join-column name="condition_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="proposal_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </inverse-join-columns>
-            </join-table>
-            <order-by>
-                <order-by-field name="title" direction="ASC"/>
-            </order-by>
-        </many-to-many>
-
-        <many-to-many target-entity="Shop\CatalogBundle\Entity\Proposal" field="gifts">
-            <join-table name="ActionConditionGift">
-                <join-columns>
-                    <join-column name="condition_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="proposal_id" referenced-column-name="id" on-delete="CASCADE"/>
-                </inverse-join-columns>
-            </join-table>
-            <order-by>
-                <order-by-field name="title" direction="ASC"/>
-            </order-by>
-        </many-to-many>
 
     </entity>
 </doctrine-mapping>

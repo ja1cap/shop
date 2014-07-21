@@ -1,0 +1,77 @@
+{% set popular_proposals = shop_catalog_popular_proposals() %}
+{% if popular_proposals %}
+    <div class="proposals-block block-container" id="proposals-block">
+
+        <h2 class="block-title">
+            {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+        </h2>
+
+        {% if shop_settings.proposals_description %}
+            <div class="block-description">
+                {{ shop_settings.proposals_description|nl2br }}
+            </div>
+        {% endif %}
+
+        <div class="block-body">
+
+            <div class="row">
+
+                <div class="tabs-container">
+                    <ul class="tabs">
+                        <li class="active">
+                            <a href="#new-proposals-tab">
+                                <span>Новинки</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#bestsellers-tab">
+                                <span>Хиты продаж</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#discount-proposals-tab">
+                                <span>Скидки</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#action-proposals-tab">
+                                <span>Акции</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="new-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                        </div>
+                        <div class="tab-pane fade" id="bestsellers-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                        </div>
+                        <div class="tab-pane fade" id="discount-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                        </div>
+                        <div class="tab-pane fade" id="action-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="{{ path('shop_catalog_categories') }}" class="big-button">
+                        Посмотреть все товары
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        $(function(){
+            $('.tabs a').click(function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+        });
+    </script>
+{% endif %}

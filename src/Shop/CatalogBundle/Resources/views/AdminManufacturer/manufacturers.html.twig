@@ -16,12 +16,10 @@
             {% for manufacturer in manufacturers %}
                 <tr>
                     <td style="text-align: center">
-                        {% if manufacturer.thumb_image_url %}
-                            <div>
-                                <img src="{{ manufacturer.thumb_image_url }}"/>
-                            </div>
-                        {% endif %}
-                        {{ manufacturer.name }}
+                        {% thumbnail manufacturer.image, 'small' %}
+                        <div>
+                            {{ manufacturer.name }}
+                        </div>
                     </td>
                     <td>
                         <div class="medium btn default icon-left entypo icon-pencil">

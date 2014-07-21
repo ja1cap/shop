@@ -5,14 +5,14 @@
         Скидка {{ condition.discountPercent }}%:
         <div>
             <div>
-                {% if condition.discountCategories|length > 0 %}
+                {% if condition.discountCategoryIds|length > 0 %}
                     <div>
-                        - категории: {{ condition.discountCategories|weasty_doctrine_collection_element_names }}
+                        - категории: {{ condition.discountCategoryIds|weasty_catalog_category_names }}
                     </div>
                 {% endif %}
-                {% if condition.discountProposals|length > 0 %}
+                {% if condition.discountProposalIds|length > 0 %}
                     <div>
-                        - товары {{ condition.discountProposals|weasty_doctrine_collection_element_names }}
+                        - товары: {{ condition.discountProposalIds|weasty_catalog_proposal_names }}
                     </div>
                 {% endif %}
             </div>
@@ -25,14 +25,14 @@
         Акционная цена {{ condition.discountPrice|weasty_price }} на
         <div>
             <div>
-                {% if condition.discountCategories|length > 0 %}
+                {% if condition.discountCategoryIds|length > 0 %}
                     <div>
-                        - категории: {{ condition.discountCategories|weasty_doctrine_collection_element_names }}
+                        - категории: {{ condition.discountCategoryIds|weasty_catalog_category_names }}
                     </div>
                 {% endif %}
-                {% if condition.discountProposals|length > 0 %}
+                {% if condition.discountProposalIds|length > 0 %}
                     <div>
-                        - товары {{ condition.discountProposals|weasty_doctrine_collection_element_names }}
+                        - товары: {{ condition.discountProposalIds|weasty_catalog_proposal_names }}
                     </div>
                 {% endif %}
             </div>
@@ -49,7 +49,7 @@
                 Один из подарков:
             {% endif %}
             <div>
-                - {{ condition.gifts|weasty_doctrine_collection_element_names }}
+                - {{ condition.giftProposalIds|weasty_catalog_proposal_names }}
             </div>
         {% else %}
             <span class="danger label">Подарок не указан</span>
@@ -95,12 +95,12 @@
                                     <div>
                                         {% if condition.categories|length > 0 %}
                                             <div>
-                                                - категории: {{ condition.categories|weasty_doctrine_collection_element_names }}
+                                                - категории: {{ condition.categoryIds|weasty_catalog_category_names }}
                                             </div>
                                         {% endif %}
                                         {% if condition.proposals|length > 0 %}
                                             <div>
-                                                - товары: {{ condition.proposals|weasty_doctrine_collection_element_names }}
+                                                - товары: {{ condition.proposalIds|weasty_catalog_proposal_names }}
                                             </div>
                                         {% endif %}
                                     </div>

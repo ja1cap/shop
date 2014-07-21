@@ -7,6 +7,19 @@ body {
 
   background: #f1f1f1;
 
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .tabs-container {
+    .tab-content {
+      display: block;
+      padding: 0 0 10px;
+    }
+  }
+
   .help {
     font-size: 12px;
     color: #4f5255;
@@ -583,6 +596,32 @@ body {
 
     }
 
+    &.valigin-controls {
+
+      .owl-buttons {
+
+        .owl-prev {
+
+          margin-top: -45px;
+          bottom: auto;
+          top: 50%;
+          background-position: -491px -428px;
+
+        }
+
+        .owl-next {
+
+          margin-top: -45px;
+          bottom: auto;
+          top: 50%;
+          background-position: -530px -428px;
+
+        }
+
+      }
+
+    }
+
   }
 
   .download-catalog-btn {
@@ -762,49 +801,6 @@ body {
       display: block;
       width: 150px;
       height: 150px;
-    }
-
-  }
-
-  .proposals-list {
-
-    .proposal {
-
-      height: 410px;
-      display: block;
-      cursor: pointer;
-      background: white;
-      text-align: center;
-
-      .inner-container {
-        padding: 0 5px 20px;
-        display: block;
-        position: relative;
-        color: #000000;
-      }
-
-      .image-container {
-        @extend .round-image-container;
-      }
-
-      .title {
-        padding: 0 5px;
-        display: block;
-        font-size: 20px;
-        margin-bottom: 5px;
-      }
-
-      .description {
-        display: block;
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
-
-      .price {
-        display: block;
-        font-size: 20px;
-      }
-
     }
 
   }
@@ -1427,6 +1423,7 @@ body {
 
       .header-logo {
 
+        float: left;
         overflow: hidden;
 
         .image-wrapper {
@@ -2306,83 +2303,6 @@ $proposal-image-side : 284px;
 
   .proposal-description {
     margin: 0 0 20px 0;
-  }
-
-}
-
-.actions-block {
-
-  .block-body {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    background-color: transparent;
-  }
-
-  .actions-list {
-
-    .owl-buttons {
-
-      .owl-prev {
-
-        margin-top: -45px;
-        bottom: auto;
-        top: 50%;
-        background-position: -491px -428px;
-
-      }
-
-      .owl-next {
-
-        margin-top: -45px;
-        bottom: auto;
-        top: 50%;
-        background-position: -530px -428px;
-
-      }
-
-    }
-
-    .action {
-
-      width: $row-max-width / 2;
-
-      .inner-container {
-        overflow: hidden;
-      }
-
-      .action-image {
-
-        width: 215px;
-        float: left;
-
-        .image-container {
-
-          img {
-            width: 215px;
-          }
-
-        }
-
-      }
-
-      .action-body {
-
-        width: 245px;
-        margin: 0 10px;
-
-        float: left;
-
-        .title {
-
-          font-size: 20px;
-          margin-bottom: 5px;
-
-        }
-
-      }
-
-    }
-
   }
 
 }

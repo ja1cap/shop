@@ -66,6 +66,13 @@ class AdminShippingMethodCategoryController extends Controller
 
             return $this->redirect($this->generateUrl('shipping_methods'));
 
+            /*
+            return $this->redirect($this->generateUrl('shipping_category', [
+                'shippingMethodId' => $shippingMethod->getId(),
+                'id' => $shippingCategory->getId(),
+            ]));
+            */
+
         } else {
 
             return $this->render('ShopShippingBundle:AdminShippingMethodCategory:shippingCategory.html.twig', array(

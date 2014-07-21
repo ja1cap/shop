@@ -45,6 +45,12 @@
         </a>
     </li>
 
+    <li class="{{ app.request.get('_route') == 'weasty_news_admin_posts' ? 'active' : '' }}">
+        <a href="{{ path('weasty_news_admin_posts') }}" class="">
+            Новости
+        </a>
+    </li>
+
     <li class="{{ app.request.get('_route') == 'shop_admin_contacts' ? 'active' : '' }}">
         <a href="{{ path('shop_admin_contacts') }}" class="">
             Контакты

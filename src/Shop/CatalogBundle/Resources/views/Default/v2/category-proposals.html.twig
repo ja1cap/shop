@@ -1,0 +1,11 @@
+{% include 'ShopCatalogBundle:Proposal:proposals-list.html.twig' with {
+    'media_list_options' : {
+        'items' : proposals,
+        'items_per_row' : 3,
+        'centered_items' : false,
+        'clickable_items' : true,
+        'item_route' : 'shop_catalog_proposal',
+        'item_image_format' : 'small_square',
+        'use_item_no_image' : true
+    }
+} %}

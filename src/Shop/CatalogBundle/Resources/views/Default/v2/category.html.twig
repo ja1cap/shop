@@ -1,0 +1,61 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+
+{% block title %}{{ page.seoTitle|default(category.name) }}{% endblock %}
+{% block description %}{{ page.seoDescription|default(category.name) }}{% endblock %}
+{% block keywords %}{{ page.seoKeywords|default(category.name) }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="/js/catalog/jquery.category.js"></script>
+    <script>
+        $(function(){
+
+            var categoryUrl = '{{ path('shop_catalog_category', {'slug' : category.slug}) }}';
+            var catalogCategory = $('#category-container').catalogCategory(categoryUrl);
+
+            catalogCategory.init();
+
+        });
+    </script>
+{% endblock %}
+
+{% block page_container %}
+    <div class="block-container" id="category-container">
+
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ category.name }}
+            </h2>
+        </div>
+
+        <div class="block-body">
+
+            <div class="row">
+                <div class="three columns">
+                    <div class="category-left-bar">
+                        {% block category_left_bar %}
+                            <div class="category-filters-container">
+                                {% include 'ShopCatalogBundle:Default:category-filters.html.twig' %}
+                            </div>
+                        {% endblock %}
+                    </div>
+                </div>
+                <div class="nine columns">
+
+                    {% block category_page_container %}
+
+                        <div class="category-proposals-container">
+
+                            {% include 'ShopCatalogBundle:Default:category-proposals.html.twig' %}
+
+                        </div>
+
+                    {% endblock %}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

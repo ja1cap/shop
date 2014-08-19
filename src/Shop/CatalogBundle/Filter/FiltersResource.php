@@ -1,6 +1,10 @@
 <?php
 namespace Shop\CatalogBundle\Filter;
 
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
+use Shop\CatalogBundle\Filter\ParameterFilter\ParameterFilter;
+use Shop\CatalogBundle\Filter\ParameterFilter\ParameterFilterInterface;
+
 /**
  * Class FiltersResource
  * @package Shop\CatalogBundle\Filter
@@ -25,10 +29,11 @@ class FiltersResource {
         FilterInterface::TYPE_CHECKBOXES => 'Флажки',
 //        FilterInterface::TYPE_IMAGE => 'Изображения',
 //        FilterInterface::TYPE_IMAGE_WITH_TEXT => 'Изображения с текстом',
+//        FilterInterface::TYPE_SLIDER => 'Слайдер',
     );
 
     /**
-     * @var FilterInterface
+     * @var OptionsFilterInterface
      */
     protected $manufacturerFilter;
 
@@ -43,7 +48,7 @@ class FiltersResource {
     protected $parameterFilters = array();
 
     /**
-     * @param \Shop\CatalogBundle\Filter\FilterInterface[] $manufacturerFilter
+     * @param \Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface[] $manufacturerFilter
      * @return $this
      */
     public function setManufacturerFilter($manufacturerFilter)
@@ -53,7 +58,7 @@ class FiltersResource {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Filter\FilterInterface
+     * @return \Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface
      */
     public function getManufacturerFilter()
     {

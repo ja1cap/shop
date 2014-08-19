@@ -33,7 +33,7 @@
         <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
         <script type="text/javascript" src="/js/jquery.scrollTo-1.4.2-min.js"></script>
 
-        <script type="text/javascript" src="/js/jquery.base.js"></script>
+        <script type="text/javascript" src="/js/jquery.helpers.js"></script>
 
         <script type="text/javascript" src="/js/jquery.clickableBlock.js"></script>
         <script type="text/javascript" src="/js/jquery.shop.catalog.js"></script>
@@ -44,80 +44,5 @@
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
-    <script type="text/javascript">
-        $(function(){
-
-            $('.nailthumb-container').each(function(){
-
-                var data = $(this).data(),
-                    nailthumbOptions = {};
-
-                $.each(data, function(key, value){
-
-                    if(key.indexOf('nailthumb') !== false){
-
-                        var optionName = key.replace('nailthumb', '');
-                        optionName = (optionName.substring(0, 1).toLowerCase() + optionName.substring(1));
-
-                        nailthumbOptions[optionName] = value;
-
-                    }
-
-                });
-
-                $(this).nailthumb($.extend({
-                    method : 'crop'
-                }, nailthumbOptions));
-
-            });
-
-            $(".fancybox").fancybox({
-                openEffect	: 'none',
-                closeEffect	: 'none',
-                padding: 0,
-                loop : false,
-                helpers: {
-                    overlay: {
-                        locked: false
-                    }
-                }
-            });
-
-            $('.fancybox-media').fancybox({
-                openEffect  : 'none',
-                closeEffect : 'none',
-                padding: 0,
-                loop : false,
-                helpers : {
-                    media : true,
-                    overlay: {
-                        locked: false
-                    }
-                }
-            });
-
-            $(".callback-fancy-box").fancybox({
-                type: 'ajax',
-                autoCenter : false,
-                fitToView : false,
-                scrolling : 'visible',
-                wrapCSS : 'callback-fancybox dark-fancybox',
-                openEffect	: 'none',
-                closeEffect	: 'none',
-                padding: 0,
-                loop : false,
-                width : 645,
-                minWidth : 645,
-                maxWidth : 645,
-                helpers: {
-                    overlay: {
-                        locked: false
-                    }
-                }
-            });
-
-            $('body').trigger('DOMSubtreeModified');
-
-        })
-    </script>
+    <script type="text/javascript" src="/js/jquery.base.js"></script>
 </html>

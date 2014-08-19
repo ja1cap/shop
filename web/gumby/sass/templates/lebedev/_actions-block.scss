@@ -1,9 +1,27 @@
-@import "../../var/settings";
+@import "settings";
 
 $actions-block-background: rgb(255,231,0);
 
 .actions-block {
 
-  background: $actions-block-background;
+  &.block-container {
+
+    background: $actions-block-background;
+
+    .block-title-container {
+
+      .block-title {
+
+        &:before, &:after {
+
+          background: rgb(0,0,0);
+
+        }
+
+      }
+
+    }
+
+  }
 
 }

@@ -171,7 +171,8 @@ class CategoryParameterGroup extends AbstractEntity
     public function setCategory(Category $category = null)
     {
         $this->category = $category;
-        $this->categoryId = $category ? $category->getId() : null;
+        $this->setCategoryId($category ? $category->getId() : null);
+        $this->setPosition($category->getParameterGroups()->count());
         return $this;
     }
 
@@ -184,4 +185,13 @@ class CategoryParameterGroup extends AbstractEntity
     {
         return $this->category;
     }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getName();
+    }
+
 }

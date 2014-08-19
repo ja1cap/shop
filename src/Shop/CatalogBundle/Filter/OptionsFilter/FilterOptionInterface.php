@@ -1,16 +1,21 @@
 <?php
-namespace Shop\CatalogBundle\Filter;
+namespace Shop\CatalogBundle\Filter\OptionsFilter;
 
 /**
  * Interface FilterOptionInterface
- * @package Shop\CatalogBundle\Filter
+ * @package Shop\CatalogBundle\Filter\OptionsFilter
  */
-interface FilterOptionInterface {
+interface FilterOptionInterface extends \JsonSerializable {
 
     /**
      * @return int
      */
     public function getId();
+
+    /**
+     * @return mixed
+     */
+    public function getValue();
 
     /**
      * @return string
@@ -43,5 +48,10 @@ interface FilterOptionInterface {
      * @return string
      */
     public function __toString();
+
+    /**
+     * @return array
+     */
+    public function toArray();
 
 }

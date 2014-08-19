@@ -1,0 +1,59 @@
+@import "../../var/settings";
+
+$categories-block-item-image-container-height: 224px;
+$categories-block-item-image-container-width: 224px;
+$categories-block-item-image-height: 220px;
+$categories-block-item-image-width: 220px;
+
+.categories-block {
+
+  .block-body {
+
+    .media-list {
+
+      .media-list-item {
+
+        .image-container {
+
+          height: $categories-block-item-image-container-height;
+          width: $categories-block-item-image-container-width;
+
+          margin: 0 auto 10px;
+          border: 2px solid transparent;
+
+          img {
+            border: 1px solid rgb(202,202,202);
+            height: $categories-block-item-image-height;
+            width: $categories-block-item-image-width;
+          }
+
+        }
+
+        &:hover {
+
+          .image-container {
+
+            border-color: $body-link-hover-color;
+
+            img {
+              border-color: $body-link-hover-color;
+            }
+
+          }
+
+        }
+
+        .title {
+
+          text-align: center;
+          padding: 0 10px;
+
+        }
+
+      }
+
+    }
+
+  }
+
+}

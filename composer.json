@@ -28,6 +28,7 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "jjs/common": "dev-master",
         "jjs/geonames-bundle": "dev-master",
+        "jms/serializer-bundle": "~0.11",
         "sonata-project/core-bundle": "~2.2",
         "sonata-project/block-bundle": "~2.2",
         "sonata-project/doctrine-orm-admin-bundle": "dev-master",

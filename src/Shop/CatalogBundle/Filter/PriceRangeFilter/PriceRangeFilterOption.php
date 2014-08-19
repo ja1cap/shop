@@ -1,9 +1,11 @@
 <?php
-namespace Shop\CatalogBundle\Filter;
+namespace Shop\CatalogBundle\Filter\PriceRangeFilter;
+
+use Shop\CatalogBundle\Filter\OptionsFilter\FilterOption;
 
 /**
  * Class PriceRangeFilterOption
- * @package Shop\CatalogBundle\Filter
+ * @package Shop\CatalogBundle\Filter\PriceRangeFilter
  */
 class PriceRangeFilterOption extends FilterOption {
 
@@ -16,6 +18,14 @@ class PriceRangeFilterOption extends FilterOption {
      * @var float
      */
     public $max;
+
+    /**
+     * @return int|mixed
+     */
+    public function getValue()
+    {
+        return $this->id;
+    }
 
     /**
      * @param float $max

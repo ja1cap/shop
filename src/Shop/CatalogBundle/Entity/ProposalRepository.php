@@ -4,7 +4,9 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Shop\CatalogBundle\Filter\FiltersResource;
-use Shop\CatalogBundle\Filter\FilterInterface;
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
+use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
 use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
@@ -43,7 +45,7 @@ class ProposalRepository extends AbstractRepository {
      * @param $categoryId
      * @return array
      */
-    public function getProposalPriceRange($categoryId){
+    public function getPriceRange($categoryId){
 
         $queryParameters = array(
             'price_status' => Price::STATUS_ON,
@@ -87,9 +89,9 @@ class ProposalRepository extends AbstractRepository {
      */
     public function getPriceIntervalsData($categoryId, $proposalId = null, FiltersResource $filtersResource){
 
-        $priceStep = $this->getProposalPriceRange($categoryId);
-        $minPrice = floatval($priceStep['minPrice']);
-        $maxPrice = floatval($priceStep['maxPrice']);
+        $priceRange = $this->getPriceRange($categoryId);
+        $minPrice = floatval($priceRange['minPrice']);
+        $maxPrice = floatval($priceRange['maxPrice']);
 
         $averagePriceLength = strlen(($minPrice + $maxPrice)/2);
 
@@ -149,13 +151,26 @@ class ProposalRepository extends AbstractRepository {
         $minPriceStep = floor($minPrice / $priceInterval) * $priceInterval;
         for($i = 0; $i <= $priceIntervalsAmount; $i++){
 
-            $priceStep = $i * $priceInterval;
+            $priceRange = $i * $priceInterval;
 
-            if($priceStep >= $minPriceStep && in_array($priceStep, $existingPriceSteps)){
+            if($priceRange >= $minPriceStep && in_array($priceRange, $existingPriceSteps)){
 
-                $priceIntervals[$priceStep] = array(
-                    'min' => $priceStep,
-                    'max' => $priceStep + $priceInterval,
+                $min = $priceRange;
+                $max = $priceRange + $priceInterval;
+
+                if($min == 0){
+
+                    $min = $minPrice;
+
+                } elseif($max >= $maxPrice){
+
+                    $max = $maxPrice;
+
+                }
+
+                $priceIntervals[$priceRange] = array(
+                    'min' => $min,
+                    'max' => $max,
                     'pricesAmount' => 0,
                 );
 
@@ -208,7 +223,7 @@ class ProposalRepository extends AbstractRepository {
             ->andWhere($qb->expr()->andX(
                 $qb->expr()->eq('p.categoryId', ':category_id'),
                 ($proposalId ? $qb->expr()->eq('p.id', ':proposal_id') : null),
-                ($filtersResource->getManufacturerFilter()->getFilteredOptionIds() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getFilteredOptionIds()) : null)
+                ($filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
             ))
             ->groupBy('priceStep')
             ->orderBy('priceStep', 'ASC')
@@ -218,10 +233,10 @@ class ProposalRepository extends AbstractRepository {
         $sql = (string)$qb;
 
         $priceStepsAmounts = $this->getEntityManager()->getConnection()->executeQuery($sql, $queryParameters)->fetchAll(\PDO::FETCH_KEY_PAIR);
-        foreach($priceStepsAmounts as $priceStep => $pricesAmount){
+        foreach($priceStepsAmounts as $priceRange => $pricesAmount){
 
-            if(isset($priceIntervals[$priceStep])){
-                $priceIntervals[$priceStep]['pricesAmount'] = (int)$pricesAmount;
+            if(isset($priceIntervals[$priceRange])){
+                $priceIntervals[$priceRange]['pricesAmount'] = (int)$pricesAmount;
             }
 
         }
@@ -237,6 +252,12 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
+    /**
+     * @param $categoryId
+     * @param $proposalId
+     * @param FiltersResource $filtersResource
+     * @return mixed
+     */
     public function findProposalPrice($categoryId, $proposalId, FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -315,6 +336,12 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
+    /**
+     * @param $categoryId
+     * @param null $contractorsIds
+     * @param null $manufacturersIds
+     * @return array
+     */
     public function findProposals($categoryId, $contractorsIds = null, $manufacturersIds = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -359,7 +386,14 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
-    public function findProposalsByParameters($categoryId, FiltersResource $filtersResource, $page = null, $perPage = null){
+    /**
+     * @param $categoryId
+     * @param FiltersResource $filtersResource
+     * @param null $page
+     * @param null $perPage
+     * @return array
+     */
+    public function findProposalsByFilters($categoryId, FiltersResource $filtersResource, $page = null, $perPage = null){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -370,6 +404,8 @@ class ProposalRepository extends AbstractRepository {
             'category_id' => (int)$categoryId,
         );
 
+
+        //@TODO add action condition ids list
         $qb
             ->select(array(
                 'p.*',
@@ -413,7 +449,7 @@ class ProposalRepository extends AbstractRepository {
         $qb
             ->andWhere($qb->expr()->andX(
                 $qb->expr()->eq('p.categoryId', ':category_id'),
-                ($filtersResource->getManufacturerFilter()->getFilteredOptionIds() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getFilteredOptionIds()) : null)
+                ($filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
             ))
             ->groupBy('p.id')
             ->addOrderBy('price')
@@ -503,8 +539,8 @@ class ProposalRepository extends AbstractRepository {
 
         $qb->andWhere(
             $qb->expr()->orX(
-                'FIND_IN_SET(' . FilterInterface::GROUP_MAIN . ', cp.filterGroups) > 0',
-                'FIND_IN_SET(' . FilterInterface::GROUP_EXTRA . ', cp.filterGroups) > 0'
+                'FIND_IN_SET(' . OptionsFilterInterface::GROUP_MAIN . ', cp.filterGroups) > 0',
+                'FIND_IN_SET(' . OptionsFilterInterface::GROUP_EXTRA . ', cp.filterGroups) > 0'
             )
         );
 
@@ -557,6 +593,14 @@ class ProposalRepository extends AbstractRepository {
 
     }
 
+    /**
+     * @param $parameterId
+     * @param $categoryId
+     * @param null $proposalId
+     * @param FiltersResource $filtersResource
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function getParameterOptionsPricesAmount($parameterId, $categoryId, $proposalId = null, FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -623,7 +667,7 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('p.categoryId', ':category_id'),
                 $qb->expr()->eq('po.parameterId', ':parameter_id'),
                 ($proposalId ? $qb->expr()->eq('p.id', ':proposal_id') : null),
-                ($filtersResource->getManufacturerFilter()->getFilteredOptionIds() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getFilteredOptionIds()) : null)
+                ($filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
             ))
             ->groupBy('po.id')
         ;
@@ -647,15 +691,15 @@ class ProposalRepository extends AbstractRepository {
         $expressions = array();
 
         /**
-         * @var \Shop\CatalogBundle\Filter\ParameterFilter $parameterFilter
+         * @var \Shop\CatalogBundle\Filter\ParameterFilter\ParameterFilter $parameterFilter
          */
         foreach($parameterFilters as $parameterFilter){
 
-            if($parameterFilter->getFilteredOptionIds()){
+            if($parameterFilter->getValue()){
 
                 $expressions[] = $qb->expr()->andX(
                     $qb->expr()->eq('ppv.parameterId', $parameterFilter->getParameterId()),
-                    $qb->expr()->in('ppv.optionId', $parameterFilter->getFilteredOptionIds())
+                    $qb->expr()->in('ppv.optionId', $parameterFilter->getValue())
                 );
 
             }
@@ -709,26 +753,50 @@ class ProposalRepository extends AbstractRepository {
     protected function applyPriceFilter(FiltersResource $filtersResource, QueryBuilder $qb){
 
         $filter = $filtersResource->getPriceRangeFilter();
-        $filterPricesExpr = array();
 
-        foreach($filter->getFilteredOptionIds() as $optionId){
+        if($filter instanceof OptionsFilter){
 
-            /**
-             * @var \Shop\CatalogBundle\Filter\PriceRangeFilterOption $filterOption
-             */
-            $filterOption = $filter->getOption($optionId);
-            if($filterOption){
+            $filterPricesExpr = array();
 
-                $filterPricesExpr[] = $qb->expr()->andX(
-                    $qb->expr()->gte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterOption->getMin()),
-                    $qb->expr()->lte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterOption->getMax())
-                );
+            foreach($filter->getValue() as $optionId){
+
+                /**
+                 * @var \Shop\CatalogBundle\Filter\PriceRangeFilter\PriceRangeFilterOption $filterOption
+                 */
+                $filterOption = $filter->getOption($optionId);
+                if($filterOption){
+
+                    $filterPricesExpr[] = $qb->expr()->andX(
+                        $qb->expr()->gte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterOption->getMin()),
+                        $qb->expr()->lte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $filterOption->getMax())
+                    );
+
+                }
 
             }
 
-        }
+            $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $filterPricesExpr));
 
-        $qb->andWhere(call_user_func_array(array($qb->expr(), 'orX'), $filterPricesExpr));
+        } elseif($filter instanceof SliderFilter){
+
+            $value = $filter->getValue();
+            $filterPricesExpr = array();
+
+            $min = $value['min'];
+            if($min != $filter->getMinValue()){
+                $filterPricesExpr[] = $qb->expr()->gte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $min);
+            }
+
+            $max = $value['max'];
+            if($max != $filter->getMaxValue()){
+                $filterPricesExpr[] = $qb->expr()->lte('(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)', $max);
+            }
+
+            if($filterPricesExpr){
+                $qb->andWhere(call_user_func_array(array($qb->expr(), 'andX'), $filterPricesExpr));
+            }
+
+        }
 
     }
 

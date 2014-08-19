@@ -11,6 +11,12 @@ use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 class ShopCategoryExtension extends \Twig_Extension {
 
     /**
+     * @TODO refactor
+     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface[]
+     */
+    private $categories;
+
+    /**
      * @var ObjectRepository
      */
     private $categoryRepository;
@@ -25,23 +31,33 @@ class ShopCategoryExtension extends \Twig_Extension {
      */
     public function getFunctions()
     {
+
         return array(
             new \Twig_SimpleFunction('shop_catalog_categories', array($this, 'getCategories'))
         );
+
     }
 
     /**
-     * @return array
+     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface[]
      */
     public  function getCategories(){
-        return $this->categoryRepository->findBy(
-            array(
-                'status' => CategoryInterface::STATUS_ON
-            ),
-            array(
-                'name' => 'ASC',
-            )
-        );
+
+        if($this->categories === null){
+
+            $this->categories = $this->categoryRepository->findBy(
+                array(
+                    'status' => CategoryInterface::STATUS_ON
+                ),
+                array(
+                    'name' => 'ASC',
+                )
+            );
+
+        }
+
+        return $this->categories;
+
     }
 
     /**

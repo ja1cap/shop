@@ -2,19 +2,20 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Shop\MainBundle\Entity\Page">
+    <entity name="Weasty\Bundle\PageBundle\Entity\PageRow">
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="hash" type="string" nullable="false" unique="true"/>
+        <field name="pageId" type="integer" column="pageId"/>
+        <field name="columnsAmount" type="integer" column="columnsAmount"/>
 
-        <field name="seoTitle" type="string" nullable="true"/>
-        <field name="seoDescription" type="string" nullable="true"/>
-        <field name="seoKeywords" type="string" nullable="true"/>
-        <field name="seoSlug" type="string" nullable="true"/>
-        <field name="content" type="text" nullable="true"/>
+        <many-to-one target-entity="Page" field="page">
+            <join-columns>
+                <join-column name="pageId" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
 
     </entity>
 </doctrine-mapping>

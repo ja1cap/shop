@@ -1,0 +1,63 @@
+@import "settings";
+@import "lebedev-shop-scss/lebedev";
+
+.category-proposals-container {
+
+  position: relative;
+  margin-left: 5px;
+
+  .loading {
+    background-position: center 50px;
+  }
+
+  .proposals-list-wrapper {
+
+    .media-list {
+      margin-top: 0;
+    }
+
+  }
+
+}
+
+.filters-form-container {
+
+  .filters-title {
+    padding: 15px 10px;
+    background: rgb(250,250,250);
+    font-size: 16px;
+    line-height: 16px;
+    @include border-radius(5px 5px 0 0);
+  }
+
+  .filters-form {
+    margin: 0;
+    padding: 0;
+  }
+
+  .filter-form-element {
+
+    border-top: 1px solid rgb(202, 202, 202);
+    padding: 15px 10px;
+
+    & > label {
+      font-size: 14px;
+      line-height: 14px;
+    }
+
+  }
+
+}
+
+.category-left-bar {
+
+  width: 220px;
+
+  .filters-form-container {
+
+    border: 1px solid rgb(202, 202, 202);
+    @include border-radius(5px);
+
+  }
+
+}

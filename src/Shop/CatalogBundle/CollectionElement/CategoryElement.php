@@ -40,4 +40,14 @@ class CategoryElement extends CacheCollectionElement
         return parent::buildData($collection, $entity);
     }
 
+    /**
+     * @return array
+     */
+    public function getRouteParameters()
+    {
+        return [
+            'slug' => $this->data['slug'],
+        ];
+    }
+
 } 

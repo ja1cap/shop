@@ -1,0 +1,26 @@
+{% set categories = shop_catalog_categories() %}
+{% if categories %}
+    <div class="categories-block block-container" id="news-block">
+
+        <div class="block-title-container">
+            <h2 class="block-title">
+                Категории товаров
+            </h2>
+        </div>
+
+        <div class="block-body">
+
+            {% include 'ShopMainBundle:Default:media-list.html.twig' with {
+                'media_list_options' : {
+                    'items' : categories,
+                    'items_per_row' : 4,
+                    'clickable_items' : true,
+                    'item_route' : 'shop_catalog_category',
+                    'item_image_format' : 'small_square'
+                }
+            } %}
+
+        </div>
+
+    </div>
+{% endif %}

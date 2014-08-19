@@ -8,6 +8,12 @@ namespace Shop\CatalogBundle\Twig;
 class ShopManufacturerExtension extends \Twig_Extension {
 
     /**
+     * @TODO refactor
+     * @var \Shop\CatalogBundle\Entity\Manufacturer[]
+     */
+    private $manufacturers;
+
+    /**
      * @var \Shop\CatalogBundle\Entity\ManufacturerRepository
      */
     protected $manufacturerRepository;
@@ -34,12 +40,20 @@ class ShopManufacturerExtension extends \Twig_Extension {
      * @return \Shop\CatalogBundle\Entity\Manufacturer[]
      */
     public function getManufacturers(){
-        return $this->manufacturerRepository->findBy(
-            array(),
-            array(
-                'name' => 'ASC',
-            )
-        );
+
+        if($this->manufacturers === null){
+
+            $this->manufacturers = $this->manufacturerRepository->findBy(
+                array(),
+                array(
+                    'name' => 'ASC',
+                )
+            );
+
+        }
+
+        return $this->manufacturers;
+
     }
 
     /**

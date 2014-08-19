@@ -153,6 +153,17 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     * @return array
+     */
+    public function getRouteParameters()
+    {
+        return [
+            'categorySlug' => $this->getCategory()->getSlug(),
+            'slug' => $this->getSeoSlug() ?: $this->getId(),
+        ];
+    }
+
+    /**
      * @return string
      */
     function __toString()
@@ -646,10 +657,24 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     * @return int
+     */
+    public function getImageId(){
+        return $this->getMainMediaImageId();
+    }
+
+    /**
      * @return \Application\Sonata\MediaBundle\Entity\Media
      */
     public function getImage(){
         return $this->getMainMediaImage();
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages(){
+        return $this->getMediaImages();
     }
 
     /**

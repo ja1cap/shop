@@ -1,12 +1,4 @@
 #@TODO continue converting to routins.xml
-category_parameter_group:
-    pattern: /adminCatalog/categoryParameterGroup/{categoryId}/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminCategory:categoryParameterGroup, id: null }
-
-delete_category_parameter_group:
-    pattern: /adminCatalog/deleteCategoryParameterGroup/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup }
-
 proposals:
     pattern: /adminCatalog/proposals/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }

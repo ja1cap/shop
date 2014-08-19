@@ -58,7 +58,7 @@ class ProposalType extends AbstractType {
                     },
                 'label' => 'Контрагент поумолчанию',
             ))
-            ->add('short_description', 'textarea', array(
+            ->add('shortDescription', 'textarea', array(
                 'required' => false,
                 'label' => 'Короткое описание',
                 'attr' => array(

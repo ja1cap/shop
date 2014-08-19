@@ -1,9 +1,12 @@
 {% if settings.contacts_title %}
     <div class="contacts-block block-container" id="contacts-block">
 
-        <h2 class="block-title">
-            {{ settings.contacts_title|nl2br }}
-        </h2>
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ settings.contacts_title|nl2br }}
+            </h2>
+        </div>
+
         <div class="block-description">
 
             <div class="address">

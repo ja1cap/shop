@@ -1,11 +1,12 @@
 <?php
-namespace Shop\CatalogBundle\Filter;
+namespace Shop\CatalogBundle\Filter\ParameterFilter;
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 
 /**
  * Interface ParameterFilterInterface
  * @package Shop\CatalogBundle\Filter
  */
-interface ParameterFilterInterface extends FilterInterface {
+interface ParameterFilterInterface extends OptionsFilterInterface {
 
     /**
      * @return int

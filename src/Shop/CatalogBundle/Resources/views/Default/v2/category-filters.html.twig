@@ -1,0 +1,144 @@
+{% set parameterFilters = filtersResource.getParameterFilters %}
+{% set priceRangeFilter = filtersResource.getPriceRangeFilter %}
+{% set manufacturerFilter = filtersResource.getManufacturerFilter %}
+
+{% if parameterFilters or priceRangeFilter %}
+    <div class="filters-form-container">
+        <div class="title filters-title">
+            Фильтр
+            <a href="#" class="reset-filters-btn">
+                Сбросить
+            </a>
+        </div>
+        <form id="filtersForm" class="filters-form">
+            {% if priceRangeFilter %}
+                <div class="filter-form-element">
+                    <label for="prices">
+                        {{ priceRangeFilter.getName }}
+                    </label>
+                    {% if priceRangeFilter.getType == constant('TYPE_SLIDER', priceRangeFilter) %}
+
+                        <div class="range-slider-container">
+
+                            <div class="range-slider-fields">
+                                <div class="min field-container">
+                                    <label for="minPrice">
+                                        От
+                                    </label>
+                                    <input type="text" id="minPrice" name="prices[min]">
+                                </div>
+                                <div class="max field-container">
+                                    <label for="maxPrice">
+                                        до
+                                    </label>
+                                    <input type="text" id="maxPrice" name="prices[max]">
+                                </div>
+                            </div>
+
+                            {% set priceRangeFilterValue = priceRangeFilter.getValue %}
+                            {% set sliderCurrentMinValue = (priceRangeFilterValue and priceRangeFilterValue.min is defined ? priceRangeFilterValue.min : priceRangeFilter.getMinValue) %}
+                            {% set sliderCurrentMaxValue = (priceRangeFilterValue and priceRangeFilterValue.max is defined ? priceRangeFilterValue.max : priceRangeFilter.getMaxValue) %}
+
+                            {% set priceRangeSlider = {
+                                step : priceRangeFilter.getStep,
+                                min : priceRangeFilter.getMinValue,
+                                max : priceRangeFilter.getMaxValue,
+                                values : [sliderCurrentMinValue, sliderCurrentMaxValue],
+                            } %}
+
+                            <div id="prices-range-slider" class="range-slider" data-slider-options="{{ priceRangeSlider|json_encode }}"></div>
+
+                        </div>
+
+                    {% elseif priceRangeFilter.getType == constant('TYPE_CHECKBOXES', priceRangeFilter) and priceRangeFilter.getOptions %}
+                        <div class="checkboxes">
+                            <input type="hidden" name="prices[]" value="-1">
+                            {% for option in priceRangeFilter.getOptions if option.getPricesAmount > 0 %}
+                                <label for="priceStep{{ option.getId }}">
+                                    <input
+                                            name="prices[]"
+                                            id="priceStep{{ option.getId }}"
+                                            value="{{ option.getId }}"
+                                            type="checkbox"
+                                            {{ option.getIsSelected ? "checked='checked'" : "" }}
+                                            {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                            >
+                                    {% if loop.first %}
+                                        до
+                                    {% else %}
+                                        {{ option.getMin|weasty_price }}
+                                        -
+                                    {% endif %}
+                                    {{ option.getMax|weasty_price }}
+                                    <small class="amount">
+                                        ({{ option.getPricesAmount|default(0) }})
+                                    </small>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if manufacturerFilter.getOptions|length > 1 %}
+                <div class="filter-form-element">
+                    <label for="manufacturers">
+                        {{ manufacturerFilter.getName }}
+                    </label>
+                    <div class="picker-box">
+                        <input type="hidden" name="manufacturer[]" value="-1">
+                        <select id="manufacturers" name="manufacturer[]" multiple="multiple">
+                            {#<option value="-1">Не важно</option>#}
+                            {% for option in manufacturerFilter.getOptions %}
+                                <option value="{{ option.getId }}" {{ option.getIsSelected ? "selected='selected'" : "" }}>
+                                    {{ option.getName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            {% endif %}
+            {% for parameterFilter in parameterFilters %}
+                <div class="filter-form-element">
+                    <label for="parameter_{{ parameterFilter.getParameterId }}">
+                        {{ parameterFilter.getName }}
+                    </label>
+                    <input type="hidden" name="parameters[{{ parameterFilter.getParameterId }}][]" value="-1">
+                    {% if parameterFilter.getType == constant('TYPE_CHECKBOXES', parameterFilter) %}
+                        <div class="checkboxes">
+                            {% for option in parameterFilter.getOptions %}
+                                <label for="parameterOption{{ option.getId }}">
+                                    <input
+                                            name="parameters[{{ parameterFilter.getParameterId }}][]"
+                                            id="parameterOption{{ option.getId }}" value="{{ option.getId }}"
+                                            type="checkbox"
+                                            {{ option.getIsSelected ? "checked='checked'" : "" }}
+                                            {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                            >
+                                    {{ option.getName }}
+                                    <small class="amount">
+                                        ({{ option.getPricesAmount|default(0) }})
+                                    </small>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="picker-box">
+                            <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" multiple="multiple">
+                                {#<option value="-1">Не важно</option>#}
+                                {% for option in parameterFilter.getOptions %}
+                                    <option
+                                            value="{{ option.getId }}"
+                                            {{ option.getIsSelected ? "selected='selected'" : "" }}
+                                            {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                            >
+                                        {{ option.getName }} ({{ option.getPricesAmount }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+{% endif %}

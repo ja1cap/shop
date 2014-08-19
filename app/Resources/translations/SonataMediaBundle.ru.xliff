@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="SonataMediaBundle.en.xliff">
         <body>
             <trans-unit id="images_browser">
                 <source>images_browser</source>
@@ -17,6 +17,14 @@
             <trans-unit id="image_medium">
                 <source>image_medium</source>
                 <target>среднее</target>
+            </trans-unit>
+            <trans-unit id="list.label_description">
+                <source>list.label_description</source>
+                <target>Описание</target>
+            </trans-unit>
+            <trans-unit id="list.label_size">
+                <source>list.label_size</source>
+                <target>Размер</target>
             </trans-unit>
         </body>
     </file>

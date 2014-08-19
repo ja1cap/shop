@@ -1,3 +1,7 @@
+weasty_page:
+    resource: "@WeastyPageBundle/Resources/config/routing.xml"
+    prefix:   /
+
 weasty_news:
     resource: "@WeastyNewsBundle/Resources/config/routing.xml"
     prefix:   /

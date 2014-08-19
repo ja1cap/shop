@@ -1,0 +1,49 @@
+@import "settings";
+
+$manufacturer-image-width: 220px;
+$manufacturer-image-height: 220px;
+
+.manufacturers-block {
+
+  &.block-container {
+
+    padding-bottom: 0;
+
+    .block-body {
+      margin-top: 0;
+    }
+
+  }
+
+  .media-list {
+
+    margin: 0;
+
+    .media-list-item {
+
+
+      .image-container {
+
+        display: block;
+        margin: 0 auto;
+        height: $manufacturer-image-height;
+        width: $manufacturer-image-width;
+
+        img {
+
+          max-height: $manufacturer-image-height;
+          max-width: $manufacturer-image-width;
+
+        }
+
+        .nailthumb-title {
+          display: none;
+        }
+
+      }
+
+    }
+
+  }
+
+}

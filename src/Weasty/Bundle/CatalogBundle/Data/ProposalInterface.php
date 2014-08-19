@@ -1,11 +1,12 @@
 <?php
 namespace Weasty\Bundle\CatalogBundle\Data;
+use Weasty\Resource\Routing\RoutableInterface;
 
 /**
  * Interface ProposalInterface
  * @package Weasty\Bundle\CatalogBundle\Data
  */
-interface ProposalInterface {
+interface ProposalInterface extends RoutableInterface {
 
     /**
      * @return integer

@@ -1,4 +1,4 @@
-@import "../../var/settings";
+@import "settings";
 
 .media-list {
 
@@ -20,6 +20,16 @@
   .media-list-item {
 
     margin-bottom: 10px;
+
+    &.header-item {
+
+      margin-bottom: 20px;
+
+    }
+
+    &.first-in-row {
+      clear: both;
+    }
 
     .inner-container {
       padding: 0 7px;

@@ -31,6 +31,21 @@ body {
     }
   }
 
+  .block {
+    display: block;
+  }
+
+  .loading.block {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    height: 100%;
+    z-index: 1000;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: url("/img/ajax-loader.gif") no-repeat center #ffffff;
+  }
   .pull-left {
     float: left;
   }
@@ -1651,119 +1666,6 @@ $proposal-image-side : 284px;
 
 }
 
-.filters-form-container {
-
-  margin-bottom: 20px;
-  margin-left: 20px;
-
-  > .title {
-
-    display: block;
-    margin: 0;
-    font-size: 25px;
-    line-height: 25px;
-    padding: 0 0 20px 0;
-
-  }
-
-  &.extraFiltersForm-container {
-
-    margin-left: 0;
-    margin-right: 0;
-
-    > .title {
-      font-size: 16px;
-      padding: 0 0 20px;
-    }
-
-  }
-
-  form {
-
-    &.extraFiltersForm {
-
-      background: #f1f1f1;
-      border-bottom: 5px solid #6BC95E;
-
-      .picker {
-
-        border-color: #ccc;
-        background: white;
-
-      }
-
-
-    }
-
-    &.mainFiltersForm {
-
-      background: #f1f1f1;
-      border-bottom: 5px solid #6BC95E;
-
-      .tiles {
-        margin: 0;
-        padding: 10px 0 0;
-        & > li {
-          width: 48.5%;
-          margin: 0;
-        }
-      }
-
-      .proposal-select {
-
-        padding: 0 0 10px 20px;
-
-        .picker {
-
-          border-color: #ccc;
-          background: white;
-
-          select {
-            font-size: 20px;
-            height: 50px;
-          }
-
-        }
-
-      }
-
-
-    }
-
-    margin: 0;
-    padding: 0;
-
-    .picker {
-
-      width: 100%;
-      margin: 0;
-
-      select {
-        width: 100%;
-      }
-
-    }
-
-    .proposal-select {
-
-      padding: 10px 0 0 20px;
-
-      &:last-child {
-        padding-bottom: 10px;
-      }
-
-      .picker-box {
-
-        margin-right: 20px;
-
-      }
-
-    }
-
-  }
-
-}
-
 .shop-cart {
 
   margin-bottom: 20px;
@@ -2309,7 +2211,9 @@ $proposal-image-side : 284px;
 
 .ui-sortable {
 
-  margin: 10px 0;
+  width: 100%;
+  display: block;
+  margin: 0 0 10px;
   border-bottom: 1px solid #cccccc;
 
   li {
@@ -2334,7 +2238,7 @@ $proposal-image-side : 284px;
 
     &.ui-state-highlight {
 
-      height: 42px;
+      min-height: 42px;
       background: #fbdca0;
 
     }

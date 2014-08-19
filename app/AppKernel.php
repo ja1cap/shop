@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Lsw\SecureControllerBundle\LswSecureControllerBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\CoreBundle\SonataCoreBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
@@ -47,6 +48,7 @@ class AppKernel extends Kernel
             new Weasty\Bundle\AdminBundle\WeastyAdminBundle(),
             new Shop\DiscountBundle\ShopDiscountBundle(),
             new Weasty\Bundle\NewsBundle\WeastyNewsBundle(),
+            new Weasty\Bundle\PageBundle\WeastyPageBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

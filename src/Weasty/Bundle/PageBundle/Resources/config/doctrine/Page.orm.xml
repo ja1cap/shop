@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Weasty\Bundle\PageBundle\Entity\PageRepository"
+            name="Weasty\Bundle\PageBundle\Entity\Page">
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist"/>
+            <lifecycle-callback type="preUpdate" method="preUpdate"/>
+        </lifecycle-callbacks>
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="title" type="string" column="title" length="255"/>
+        <field name="slug" type="string" column="slug" length="255"/>
+        <field name="seoTitle" type="string" column="seoTitle" length="255"/>
+        <field name="seoDescription" type="string" column="seoDescription" length="255"/>
+        <field name="seoKeywords" type="string" column="seoKeywords" length="255"/>
+
+        <field name="createDate" type="datetime" column="createDate"/>
+        <field name="updateDate" type="datetime" column="updateDate"/>
+
+        <one-to-many target-entity="PageRow" mapped-by="page" field="rows"/>
+
+    </entity>
+</doctrine-mapping>

@@ -5,7 +5,7 @@ namespace Shop\CatalogBundle\Filter;
  * Interface FilterInterface
  * @package Shop\CatalogBundle\Filter
  */
-interface FilterInterface {
+interface FilterInterface extends \JsonSerializable {
 
     const GROUP_NONE = 0;
     const GROUP_MAIN = 1;
@@ -16,6 +16,7 @@ interface FilterInterface {
     const TYPE_CHECKBOXES = 2;
     const TYPE_IMAGE = 3;
     const TYPE_IMAGE_WITH_TEXT = 4;
+    const TYPE_SLIDER = 5;
 
     /**
      * @return int
@@ -33,30 +34,29 @@ interface FilterInterface {
     public function getName();
 
     /**
-     * @return int[]
+     * @return mixed
      */
-    public function getFilteredOptionIds();
+    public function getValue();
 
     /**
-     * @return FilterOptionInterface[]
-     */
-    public function getOptions();
-
-    /**
-     * @param FilterOptionInterface $filterOption
+     * @param $value
      * @return $this
      */
-    public function addOption(FilterOptionInterface $filterOption);
+    public function setValue($value);
 
     /**
-     * @param $id
-     * @return null|FilterOptionInterface
+     * @return mixed
      */
-    public function getOption($id);
+    public function getMinValue();
 
     /**
-     * @return \Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
+     * @return mixed
      */
-    public function getChoiceList();
+    public function getMaxValue();
 
-} 
+    /**
+     * @return array
+     */
+    public function toArray();
+
+}

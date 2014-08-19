@@ -1,155 +1,74 @@
 <?php
 namespace Shop\CatalogBundle\Filter;
-use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 
 /**
  * Class Filter
  * @package Shop\CatalogBundle\Filter
  */
-class Filter implements FilterInterface {
+class Filter extends AbstractFilter {
 
     /**
-     * @var string
+     * @var mixed
      */
-    public $name;
+    public $minValue;
 
     /**
-     * @var int
+     * @var mixed
      */
-    protected $type = self::TYPE_SELECT;
+    public $maxValue;
 
     /**
-     * @var array
+     * @return mixed
      */
-    public $groups = array();
+    public function getValue()
+    {
+        return $this->value;
+    }
 
     /**
-     * @var int[]
-     */
-    public $filteredOptionIds = array();
-
-    /**
-     * @var FilterOptionInterface[]
-     */
-    public $options = array();
-
-    /**
-     * @param string $name
+     * @param $value
      * @return $this
      */
-    public function setName($name)
+    public function setValue($value)
     {
-        $this->name = $name;
+        $this->value = $value;
         return $this;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getName()
+    public function getMaxValue()
     {
-        return $this->name;
+        return $this->maxValue;
     }
 
     /**
-     * @param array $groups
+     * @param mixed $maxValue
      * @return $this
      */
-    public function setGroups($groups)
+    public function setMaxValue($maxValue)
     {
-        $this->groups = $groups;
+        $this->maxValue = $maxValue;
         return $this;
     }
 
     /**
-     * @return array
+     * @return mixed
      */
-    public function getGroups()
+    public function getMinValue()
     {
-        return $this->groups;
+        return $this->minValue;
     }
 
     /**
-     * @param int $type
+     * @param mixed $minValue
      * @return $this
      */
-    public function setType($type)
+    public function setMinValue($minValue)
     {
-        $this->type = $type;
+        $this->minValue = $minValue;
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getFilteredOptionIds()
-    {
-        return $this->filteredOptionIds;
-    }
-
-    /**
-     * @return FilterOptionInterface[]
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * @param \int[] $filteredOptionIds
-     * @return $this
-     */
-    public function setFilteredOptionIds($filteredOptionIds)
-    {
-        $this->filteredOptionIds = $filteredOptionIds;
-        return $this;
-    }
-
-    /**
-     * @param \Shop\CatalogBundle\Filter\FilterOptionInterface[] $options
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @param FilterOptionInterface $filterOption
-     * @return $this
-     */
-    public function addOption(FilterOptionInterface $filterOption){
-        $this->options[$filterOption->getId()] = $filterOption;
-        return $this;
-    }
-
-    /**
-     * @param $id
-     * @return null|FilterOptionInterface
-     */
-    public function getOption($id){
-        return isset($this->options[$id]) ? $this->options[$id] : null;
-    }
-
-    /**
-     * @return \Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
-     */
-    public function getChoiceList()
-    {
-        $choices = array();
-        foreach($this->options as $option){
-            $choices[$option->getId()] = (string)$option;
-        }
-        return new SimpleChoiceList($choices);
-    }
-
-}
+} 

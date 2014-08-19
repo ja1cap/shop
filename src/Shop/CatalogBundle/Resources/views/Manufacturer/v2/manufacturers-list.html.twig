@@ -1,0 +1,12 @@
+{% extends 'ShopMainBundle:Default:media-list.html.twig' %}
+
+{% block media_item_image %}
+    {% if media_item.image is defined and media_item.image %}
+        <div class="image-container nailthumb-container" data-nailthumb-method="resize" data-nailthumb-proportions="1">
+            <img src="{% path media_item.image, _item_image_format %}" alt="{{ _item_title }}" title="{{ _item_title }}"/>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block media_item_body %}
+{% endblock %}

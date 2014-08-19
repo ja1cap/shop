@@ -1,0 +1,120 @@
+{% extends 'ShopMainBundle:Default:media-list.html.twig' %}
+
+{% block media_list %}
+    <div class="proposals-list-wrapper">
+        {{ parent() }}
+    </div>
+    <script>
+        $(function(){
+
+            var $imagesPreviewContainers = $(".images-preview-container");
+
+            $imagesPreviewContainers.each(function(){
+
+                var $imagesPreviewContainer = $(this);
+                var $imagesPreview = $imagesPreviewContainer.children('.images-preview');
+                var $wrap = $imagesPreviewContainer.parent();
+
+                var $previewContainer = $imagesPreviewContainer.closest('.preview-container'),
+                    $imageContainer = $previewContainer.find('.inner-container').find('.image-container');
+
+                $imagesPreviewContainer.sly({
+                    itemNav: 'basic',
+                    smart: 1,
+                    activateOn: 'click',
+                    mouseDragging: 1,
+                    touchDragging: 1,
+                    releaseSwing: 1,
+                    startAt: $imagesPreview.find('.main-image').index(),
+                    //scrollBar: $wrap.find('.scrollbar'),
+                    scrollBy: 1,
+                    //pagesBar: $wrap.find('.pages'),
+                    //activatePageOn: 'click',
+                    speed: 300,
+                    elasticBounds: 1,
+                    easing: 'easeOutExpo',
+                    dragHandle: 1,
+                    dynamicHandle: 1,
+                    clickBar: 1,
+                    prev: $wrap.find('.prev'),
+                    next: $wrap.find('.next')
+                }, {
+                    active : function(eventName, itemIndex){
+
+                        var $imagePreviewContainer = $imagesPreview.find('.image-preview-container').eq(itemIndex),
+                            $image = $imageContainer.find('img'),
+                            imageUrl = $image.attr('src'),
+                            previewImageUrl = $imagePreviewContainer.data('image_url'),
+                            isActive = (imageUrl == previewImageUrl);
+
+                        if(!isActive){
+
+                            $image.attr('src', previewImageUrl);
+
+                        }
+
+                    }
+                });
+
+            });
+
+        })
+    </script>
+{% endblock %}
+
+{% block media_item %}
+
+    {% set proposal_data = media_item %}
+    {% set media_item = proposal_data.proposal %}
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block media_item_inner_container %}
+    {% set media_item_images = media_item.images %}
+    <div class="preview-container {{ media_item_images|length > 1 ? 'visible-left-bar' : '' }}">
+        <div class="preview-left-bar">
+            <div class="wrap">
+                <div class="prev">
+                    -
+                </div>
+                <div class="images-preview-container">
+                    <ul class="images-preview">
+                        {% for image in media_item_images %}
+                            <li class="image-preview-container {{ media_item.image_id == image.id ? 'main-image' : '' }}" data-image_url="{% path image, _item_image_format %}">
+                                <img src="{% path image, 'tiny_square' %}"/>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="next">
+                    +
+                </div>
+            </div>
+        </div>
+        <div class="preview-right-bar">
+            {{ parent() }}
+        </div>
+        <div class="buttons hidden-preview">
+            <a href="#" class="btn btn-primary btn-lg btn-block">
+                Купить
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block media_item_description %}
+
+    <span class="price">
+        {% if proposal_data.maxPrice > proposal_data.price %}
+            от
+        {% endif %}
+        {{ proposal_data.price|shop_price }}
+    </span>
+
+    {#<div class="hidden-preview">#}
+        {#{{ parent() }}#}
+    {#</div>#}
+
+{% endblock %}

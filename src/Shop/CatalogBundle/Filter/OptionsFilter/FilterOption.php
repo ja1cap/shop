@@ -1,9 +1,9 @@
 <?php
-namespace Shop\CatalogBundle\Filter;
+namespace Shop\CatalogBundle\Filter\OptionsFilter;
 
 /**
  * Class FilterOption
- * @package Shop\CatalogBundle\Filter
+ * @package Shop\CatalogBundle\Filter\OptionsFilter
  */
 class FilterOption implements FilterOptionInterface {
 
@@ -43,6 +43,14 @@ class FilterOption implements FilterOptionInterface {
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->getName();
     }
 
     /**
@@ -105,6 +113,25 @@ class FilterOption implements FilterOptionInterface {
     public function __toString()
     {
         return $this->getName();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(){
+        return get_object_vars($this);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.4.0)<br/>
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     */
+    function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
 } 

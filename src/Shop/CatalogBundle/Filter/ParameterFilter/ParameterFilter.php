@@ -1,11 +1,13 @@
 <?php
-namespace Shop\CatalogBundle\Filter;
+namespace Shop\CatalogBundle\Filter\ParameterFilter;
+
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
 
 /**
  * Class ParameterFilter
- * @package Shop\CatalogBundle\Filter
+ * @package Shop\CatalogBundle\Filter\ParameterFilter
  */
-class ParameterFilter extends Filter
+class ParameterFilter extends OptionsFilter
     implements ParameterFilterInterface
 {
 

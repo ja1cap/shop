@@ -3,9 +3,11 @@
 {% if actions %}
     <div class="actions-block block-container" id="actions-block">
 
-        <h2 class="block-title">
-            {{ settings.actions_title|default('АКЦИИ')|nl2br }}
-        </h2>
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ settings.actions_title|default('АКЦИИ')|nl2br }}
+            </h2>
+        </div>
 
         {% if settings.actions_description %}
             <div class="block-description">

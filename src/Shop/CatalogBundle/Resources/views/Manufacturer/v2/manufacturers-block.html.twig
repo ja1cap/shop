@@ -1,39 +1,25 @@
 {% set manufacturers = shop_catalog_manufacturers() %}
 {% if manufacturers %}
-    <div class="block-container" id="manufacturers-block">
-        <h2 class="block-title">
-            {{ shop_settings.manufacturers_title|default('НАШИ БРЕНДЫ')|nl2br }}
-        </h2>
+    <div class="block-container manufacturers-block" id="manufacturers-block">
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ shop_settings.manufacturers_title|default('НАШИ БРЕНДЫ')|nl2br }}
+            </h2>
+        </div>
         {% if shop_settings.manufacturers_description %}
             <div class="block-description">
                 {{ shop_settings.manufacturers_description|nl2br }}
             </div>
         {% endif %}
         <div class="block-body">
-            <div class="row">
-                <div class="manufacturers-list clearfix">
-                    {% for manufacturer in manufacturers %}
-                        <div class="manufacturer">
-                            <div class="image-container nailthumb-container" data-nailthumb-method="resize" data-nailthumb-proportions="1">
-                                <img src="{% path manufacturer.image, 'small' %}" alt="{{ manufacturer.name }}" title="{{ manufacturer.name }}">
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
+            {% include 'ShopCatalogBundle:Manufacturer:manufacturers-list.html.twig' with {
+                'media_list_options' : {
+                    'items' : manufacturers,
+                    'items_per_row' : 4,
+                    'use_slider' : true,
+                    'item_image_format' : 'small'
+                }
+            } %}
         </div>
     </div>
-    <script>
-        $(function(){
-
-            var $manufacturersList = $('.manufacturers-list');
-
-            $manufacturersList.owlCarousel({
-                items : 4,
-                navigation : true,
-                pagination : false
-            });
-
-        });
-    </script>
 {% endif %}

@@ -9,12 +9,14 @@ body {
 
     @import "common";
     @import "media-list";
-    @import "manufacturers-list";
     @import "proposals-list";
+    @import "manufacturers-block";
     @import "actions-block";
     @import "benefits-block";
     @import "news-block";
     @import "contacts-block";
+    @import "categories-block";
+    @import "category";
 
     .header-container {
 
@@ -52,7 +54,7 @@ body {
     }
 
     .main-container {
-      margin-top: $header-container-height;
+      padding-top: $header-container-height;
     }
 
     .block-container {
@@ -65,20 +67,71 @@ body {
         @include block-title;
       }
 
+      .block-title-container {
+
+        display: block;
+        overflow: hidden;
+        max-width: $row-max-width;
+        margin: 0 auto;
+        text-align: center;
+
+        .block-title {
+
+          position: relative;
+          display: inline;
+          padding-left: 45px;
+          padding-right: 45px;
+
+          &:before, &:after {
+
+            content: " ";
+            position: absolute;
+            display: block;
+            top: 50%;
+            margin-top: -1px;
+            height: 1px;
+            width: $row-max-width;
+            background: rgb(220,220,220);
+
+          }
+
+          &:before {
+            right: 100%;
+          }
+
+          &:after {
+            left: 100%;
+          }
+
+        }
+
+      }
+
       .block-description {
         max-width: $row-max-width;
         font-size: 16px;
         text-align: center;
-        margin: 7px auto;
+        margin: 15px auto 0;
+      }
+
+      .block-body {
+        margin-top: 30px;
       }
 
       &.invert-colors {
 
-        color: white;
+        color: rgb(255,255,255);
 
         .block-title {
-          color: white;
+          color: rgb(255,255,255);
           text-shadow: 1px 2px #2E2D2D;
+
+          &:before, &:after {
+
+            background: rgb(255,255,255);
+
+          }
+
         }
 
       }
@@ -92,6 +145,46 @@ body {
 
       .tab-content {
         height: $proposals-block-tab-content-height;
+      }
+
+      .block-body {
+        margin-top: 20px;
+      }
+
+    }
+
+    .range-slider-container {
+
+      .range-slider-fields {
+
+        @extend .clearfix;
+
+        label {
+          float: left;
+          font-size: 12px;
+          line-height: 20px;
+          width: 20%;
+        }
+
+        input {
+          padding: 0 4px;
+          float: left;
+          display: block;
+          width: 80%;
+          font-size: 12px;
+        }
+
+        .field-container {
+
+          float: left;
+          width: 48%;
+
+          &.min {
+            margin-right: 4%;
+          }
+
+        }
+
       }
 
     }

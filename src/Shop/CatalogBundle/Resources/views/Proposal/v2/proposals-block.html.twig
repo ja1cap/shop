@@ -2,9 +2,11 @@
 {% if popular_proposals %}
     <div class="proposals-block block-container" id="proposals-block">
 
-        <h2 class="block-title">
-            {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
-        </h2>
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+            </h2>
+        </div>
 
         {% if shop_settings.proposals_description %}
             <div class="block-description">
@@ -69,7 +71,7 @@
     <script>
         $(function(){
             $('.tabs a').click(function (e) {
-                e.preventDefault()
+                e.preventDefault();
                 $(this).tab('show')
             })
         });

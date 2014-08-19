@@ -33,6 +33,15 @@ class Parameter extends AbstractEntity
      */
     private $type;
 
+    /**
+     * @var integer
+     */
+    private $defaultOptionId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\ParameterOption
+     */
+    private $defaultOption;
 
     /**
      * Get id
@@ -241,15 +250,6 @@ class Parameter extends AbstractEntity
     {
         return $this->values;
     }
-    /**
-     * @var integer
-     */
-    private $defaultOptionId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\ParameterOption
-     */
-    private $defaultOption;
 
     /**
      * Set defaultOptionId

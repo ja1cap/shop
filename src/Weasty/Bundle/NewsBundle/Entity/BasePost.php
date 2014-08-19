@@ -60,6 +60,15 @@ abstract class BasePost extends AbstractEntity
      */
     private $updateDate;
 
+    /**
+     * @return array
+     */
+    public function getRouteParameters()
+    {
+        return [
+            'slug' => $this->getSlug() ?: $this->getId(),
+        ];
+    }
 
     /**
      * Set status
@@ -239,16 +248,6 @@ abstract class BasePost extends AbstractEntity
     {
         $this->setSlug(RUtils::translit()->slugify($this->getTitle()));
         $this->setUpdateDate(new \DateTime());
-    }
-
-    /**
-     * @return array
-     */
-    public function getRouteParameters()
-    {
-        return [
-            'slug' => $this->getSlug() ?: $this->getId(),
-        ];
     }
 
 }

@@ -1,13 +1,18 @@
 {% set media_list_defaults = {
+    'wrapper_class' : '',
     'items' : [],
     'items_per_row' : 3,
+    'centered_items' : true,
     'header_items_per_row' : 0,
     'use_slider' : false,
     'clickable_items' : false,
     'item_route' : null,
+    'render_item_content' : false,
     'set_item_create_date' : false,
     'item_create_date_format' : 'd MMM',
     'item_image_format' : 'medium_rectangle',
+    'use_item_no_image' : false,
+    'item_no_image_url' : '/img/no-image.jpg',
     'header_item_image_format' : 'large_rectangle',
 } %}
 
@@ -18,70 +23,104 @@
 {% endif %}
 
 {% set media_items_length = media_list_options.items|length %}
-{% set media_wrapper_column_class = (media_items_length < media_list_options.items_per_row and media_list_options.header_items_per_row == 0 ? 'centered columns ' ~ word_numbers[(media_items_length * (12 / media_list_options.items_per_row))] : '') %}
+{% set media_wrapper_column_class = (media_list_options.centered_items and media_items_length < media_list_options.items_per_row and media_list_options.header_items_per_row == 0 ? 'centered columns ' ~ word_numbers[(media_items_length * (12 / media_list_options.items_per_row))] : '') %}
 {% set media_item_column_class = (media_items_length < media_list_options.items_per_row and media_list_options.header_items_per_row == 0 ? word_numbers[(12/media_items_length)] : word_numbers[(12/media_list_options.items_per_row)]) %}
 
-<div class="row">
+{% block media_list %}
+    <div class="row">
 
-    <div class="{{ media_wrapper_column_class }}">
+        <div class="{{ media_wrapper_column_class }} {{ media_list_options.wrapper_class }}">
 
-        <div class="media-list {{ media_list_options.use_slider ? 'media-list-slider' : '' }} row" data-items-per-row="{{ media_list_options.items_per_row }}">
-            {% for media_item in media_list_options.items %}
+            <div class="media-list {{ media_list_options.use_slider ? 'media-list-slider' : '' }} row" data-items-per-row="{{ media_list_options.items_per_row }}">
+                {% for media_item in media_list_options.items %}
 
-                {% set _item_url = (media_list_options.clickable_items and media_list_options.item_route ? path(media_list_options.item_route, media_item.route_parameters) : null) %}
-                {% set _item_column_class = (loop.index > media_list_options.header_items_per_row ? media_item_column_class : word_numbers[12 / media_list_options.header_items_per_row]) %}
-                {% set _item_image_format = (loop.index > media_list_options.header_items_per_row or media_list_options.header_items_per_row > 2 ? media_list_options.item_image_format : media_list_options.header_item_image_format) %}
+                    {% block media_item %}
 
-                <div class="media-list-item {{ _item_column_class }} columns {{ media_list_options.clickable_items ? 'clickable-block' : '' }}" {{ _item_url ? ('data-url="' ~ _item_url ~ '"')|raw : '' }}>
+                        {% set _item_url = (media_list_options.clickable_items and media_list_options.item_route ? path(media_list_options.item_route, media_item.route_parameters) : null) %}
+                        {% set _is_header_item = (media_list_options.header_items_per_row > 0 and loop.index <= media_list_options.header_items_per_row) %}
+                        {% set _item_column_class = (_is_header_item ? word_numbers[12 / media_list_options.header_items_per_row] ~ ' header-item' : media_item_column_class) %}
+                        {% set _item_image_format = ((_is_header_item and media_list_options.header_items_per_row <= 2) ? (media_list_options.header_items_per_row == 1 ? 'reference' : media_list_options.header_item_image_format) : media_list_options.item_image_format) %}
+                        {% set _is_first_in_row = (_is_header_item ? ((loop.index % media_list_options.header_items_per_row) == 1) : (((loop.index - media_list_options.header_items_per_row) % media_list_options.items_per_row) == 1)) %}
+                        {% set _is_last_in_row = (_is_header_item ? ((loop.index % media_list_options.header_items_per_row) == 0) : (((loop.index - media_list_options.header_items_per_row) % media_list_options.items_per_row) == 0)) %}
 
-                    <div class="inner-container">
-
-                        {% if media_item.image is defined and media_item.image %}
-                            <div class="image-container">
-                                <img src="{% path media_item.image, _item_image_format %}" alt="{{ media_item.title }}" title="{{ media_item.title }}"/>
-                            </div>
+                        {% set _item_title = null %}
+                        {% if media_item.title is defined and media_item.title %}
+                            {% set _item_title = media_item.title %}
+                        {% elseif media_item.name is defined and media_item.name %}
+                            {% set _item_title = media_item.name %}
                         {% endif %}
 
-                        <div class="media-list-item-body">
+                        <div class="media-list-item {{ _item_column_class }} {{ _is_first_in_row  ? 'first-in-row' : '' }} {{ _is_last_in_row  ? 'last-in-row' : '' }} columns">
 
-                            {% block media_item_title %}
-                                {% if media_item.title is defined and media_item.title %}
-                                    <div class="title">
-                                        {% if _item_url %}
-                                            <a href="{{ _item_url }}">
-                                                {{ media_item.title|nl2br }}
-                                            </a>
-                                        {% else %}
-                                            {{ media_item.title|nl2br }}
+                            {% block media_item_inner_container %}
+                                <div class="inner-container {{ media_list_options.clickable_items ? 'clickable-block' : '' }}" {{ _item_url ? ('data-url="' ~ _item_url ~ '"')|raw : '' }}>
+
+                                    {% block media_item_image %}
+                                        {% if media_item.image is defined and media_item.image %}
+                                            <div class="image-container">
+                                                <img src="{% path media_item.image, _item_image_format %}" alt="{{ _item_title }}" title="{{ _item_title }}"/>
+                                            </div>
+                                        {% elseif media_list_options.use_item_no_image %}
+                                            <div class="image-container">
+                                                <img src="{{ media_list_options.item_no_image_url }}" alt="{{ _item_title }}" title="{{ _item_title }}"/>
+                                            </div>
                                         {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endblock %}
+                                    {% endblock %}
 
-                            {% block media_item_description %}
-                                {% if media_item.description is defined and media_item.description %}
-                                    <div class="description">
-                                        {{ media_item.description|nl2br }}
-                                    </div>
-                                {% endif %}
-                            {% endblock %}
+                                    {% block media_item_body %}
+                                        <div class="media-list-item-body">
 
-                            {% if media_list_options.set_item_create_date and media_item.create_date is defined and media_item.create_date %}
-                                <div class="date">
-                                    {{ media_item.create_date|format_datetime(media_list_options.item_create_date_format) }}
+                                            {% block media_item_title %}
+                                                {% if _item_title %}
+                                                    <div class="title">
+                                                        {% if _item_url %}
+                                                            <a href="{{ _item_url }}">
+                                                                {{ _item_title|nl2br }}
+                                                            </a>
+                                                        {% else %}
+                                                            {{ _item_title|nl2br }}
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endblock %}
+
+                                            {% block media_item_description %}
+                                                {% if media_item.description is defined and media_item.description %}
+                                                    <div class="description">
+                                                        {{ media_item.description|nl2br }}
+                                                    </div>
+                                                {% endif %}
+                                            {% endblock %}
+
+                                            {% block media_item_content %}
+                                                {% if media_list_options.render_item_content and media_item.content is defined and media_item.content %}
+                                                    <div class="content">
+                                                        {{ media_item.content|raw }}
+                                                    </div>
+                                                {% endif %}
+                                            {% endblock %}
+
+                                            {% if media_list_options.set_item_create_date and media_item.create_date is defined and media_item.create_date %}
+                                                <div class="date">
+                                                    {{ media_item.create_date|format_datetime(media_list_options.item_create_date_format) }}
+                                                </div>
+                                            {% endif %}
+
+                                        </div>
+                                    {% endblock %}
+
                                 </div>
-                            {% endif %}
+                            {% endblock %}
 
                         </div>
 
-                    </div>
+                    {% endblock %}
 
-                </div>
+                {% endfor %}
 
-            {% endfor %}
+            </div>
 
         </div>
 
     </div>
-
-</div>
+{% endblock %}

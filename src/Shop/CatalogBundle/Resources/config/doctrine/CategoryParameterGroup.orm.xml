@@ -12,7 +12,6 @@
         <one-to-many target-entity="CategoryParameter" mapped-by="group" field="parameters">
             <cascade>
                 <cascade-persist/>
-                <cascade-remove/>
             </cascade>
             <order-by>
                 <order-by-field name="position" direction="ASC"/>

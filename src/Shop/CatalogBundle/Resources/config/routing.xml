@@ -2,10 +2,6 @@
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="shop_catalog_homepage" pattern="/hello/{name}">
-        <default key="_controller">ShopCatalogBundle:Default:index</default>
-    </route>
-
     <route id="categories" pattern="/adminCatalog/categories">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
     </route>
@@ -40,17 +36,25 @@
     </route>
 
     <route id="category_parameters" pattern="/adminCatalog/categoryParameters/{categoryId}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameters</default>
+        <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameters</default>
     </route>
     <route id="category_parameter" pattern="/adminCatalog/categoryParameter/{categoryId}/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameter</default>
+        <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameter</default>
         <default key="id">null</default>
     </route>
     <route id="delete_category_parameter" pattern="/adminCatalog/deleteCategoryParameter/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameter</default>
+        <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:deleteParameter</default>
     </route>
     <route id="update_category_parameters" pattern="/adminCatalog/updateCategoryParameters/{categoryId}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:updateCategoryParameters</default>
+        <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:updateParameters</default>
+    </route>
+
+    <route id="category_parameter_group" pattern="/adminCatalog/categoryParameterGroup/{categoryId}/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameterGroup</default>
+        <default key="id">null</default>
+    </route>
+    <route id="delete_category_parameter_group" pattern="/adminCatalog/deleteCategoryParameterGroup/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup</default>
     </route>
 
     <route id="category_filters_list" pattern="/adminCatalog/categoryFiltersList/{categoryId}">

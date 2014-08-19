@@ -950,6 +950,120 @@ body {
 
     }
 
+    .filters-form-container {
+
+      margin-bottom: 20px;
+      margin-left: 20px;
+
+      > .title {
+
+        display: block;
+        margin: 0;
+        font-size: 25px;
+        line-height: 25px;
+        padding: 0 0 20px 0;
+
+      }
+
+      &.extraFiltersForm-container {
+
+        margin-left: 0;
+        margin-right: 0;
+
+        > .title {
+          font-size: 16px;
+          padding: 0 0 20px;
+        }
+
+      }
+
+      form {
+
+        &.extraFiltersForm {
+
+          background: #f1f1f1;
+          border-bottom: 5px solid #6BC95E;
+
+          .picker {
+
+            border-color: #ccc;
+            background: white;
+
+          }
+
+
+        }
+
+        &.mainFiltersForm {
+
+          background: #f1f1f1;
+          border-bottom: 5px solid #6BC95E;
+
+          .tiles {
+            margin: 0;
+            padding: 10px 0 0;
+            & > li {
+              width: 48.5%;
+              margin: 0;
+            }
+          }
+
+          .proposal-select {
+
+            padding: 0 0 10px 20px;
+
+            .picker {
+
+              border-color: #ccc;
+              background: white;
+
+              select {
+                font-size: 20px;
+                height: 50px;
+              }
+
+            }
+
+          }
+
+
+        }
+
+        margin: 0;
+        padding: 0;
+
+        .picker {
+
+          width: 100%;
+          margin: 0;
+
+          select {
+            width: 100%;
+          }
+
+        }
+
+        .proposal-select {
+
+          padding: 10px 0 0 20px;
+
+          &:last-child {
+            padding-bottom: 10px;
+          }
+
+          .picker-box {
+
+            margin-right: 20px;
+
+          }
+
+        }
+
+      }
+
+    }
+
+
   }
 
 }

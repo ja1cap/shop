@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CategoryFiltersType extends AbstractType {
 
     /**
-     * @var \Shop\CatalogBundle\Filter\FiltersBuilder
+     * @var \Shop\CatalogBundle\Filter\CategoryFiltersBuilder
      */
     protected $filtersBuilder;
 
@@ -89,7 +89,8 @@ class CategoryFiltersType extends AbstractType {
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
-            ));
+            ))
+        ;
 
     }
 

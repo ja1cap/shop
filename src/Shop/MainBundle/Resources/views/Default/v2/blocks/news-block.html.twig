@@ -2,20 +2,18 @@
 {% if recent_posts %}
 <div class="news-block block-container" id="news-block">
 
-    <h2 class="block-title">
-        Последние новости
-        {#{{ settings.benefits_title|default('НАШИ ПРЕИМУЩЕСТВА')|nl2br }}#}
-    </h2>
-    {#<div class="block-description">#}
-        {#{{ settings.benefits_description|default('За длительное время работы мы выработали приниципы, которых стараемся придерживаться и по сей день.')|nl2br }}#}
-    {#</div>#}
+    <div class="block-title-container">
+        <h2 class="block-title">
+            Последние новости
+        </h2>
+    </div>
 
     <div class="block-body">
 
         {% include 'ShopMainBundle:Default:media-list.html.twig' with {
             'media_list_options' : {
                 'items' : recent_posts,
-                'use_slider' : true,
+                'use_slider' : false,
                 'clickable_items' : true,
                 'item_route' : 'weasty_news_post',
                 'set_item_create_date' : true

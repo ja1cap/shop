@@ -10,6 +10,7 @@ use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 
@@ -57,6 +58,9 @@ class DefaultController extends Controller
 
         }
 
+        /**
+         * @var \Shop\CatalogBundle\Filter\CategoryFiltersBuilder $filtersBuilder
+         */
         $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
         if($categoryFilters){
             $filtersResource = $filtersBuilder->buildFromCategoryFilters($categoryFilters);
@@ -64,7 +68,7 @@ class DefaultController extends Controller
             $filtersResource = $filtersBuilder->buildFromRequest($category, null, $request);
         }
 
-        $proposals = $this->getProposalRepository()->findProposalsByParameters($category->getId(), $filtersResource);
+        $proposals = $this->getProposalRepository()->findProposalsByFilters($category->getId(), $filtersResource);
         $shopCart = $this->buildShopCart($request);
 
         $viewParameters = array(
@@ -74,7 +78,25 @@ class DefaultController extends Controller
             'filtersResource' => $filtersResource,
         );
 
-        $response = $this->render('ShopCatalogBundle:Default:category.html.twig', $viewParameters);
+        switch($request->get('format')){
+            case 'json':
+
+                $filtersHtml = $this->renderView('ShopCatalogBundle:Default:category-filters.html.twig', $viewParameters);
+                $proposalsHtml = $this->renderView('ShopCatalogBundle:Default:category-proposals.html.twig', $viewParameters);
+
+                $response = new JsonResponse(array(
+                    'filtersHtml' => $filtersHtml,
+                    'proposalsHtml' => $proposalsHtml,
+                ));
+
+                break;
+
+            default:
+
+                $response = $this->render('ShopCatalogBundle:Default:category.html.twig', $viewParameters);
+
+        }
+
         $filtersBuilder->setFiltersCookies($category, $request, $response);
 
         return $response;
@@ -115,25 +137,11 @@ class DefaultController extends Controller
         );
         $price = $priceData ? $priceData['priceEntity'] : null;
 
-        $proposalFeatures = array();
-
-        if($price instanceof Price){
-
-            foreach($category->getParameters() as $categoryParameter){
-                if($categoryParameter instanceof CategoryParameter){
-                    $proposalFeatures[$categoryParameter->getParameterId()] = null;
-                }
-            }
-
-            foreach($price->getParameterValues() as $parameterValue){
-                if($parameterValue instanceof ParameterValue){
-                    if(array_key_exists($parameterValue->getParameterId(), $proposalFeatures)){
-                        $proposalFeatures[$parameterValue->getParameterId()] = $parameterValue;
-                    }
-                }
-            }
-
-        }
+        /**
+         * @TODO add twig function for proposal features
+         * @var $proposalFeatures \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
+         */
+        $proposalFeatures = $this->get('shop_catalog.proposal.features_builder')->build($proposal, $price);
 
         $shopCart = $this->buildShopCart($request);
         $shippingCalculatorResult = null;
@@ -176,7 +184,7 @@ class DefaultController extends Controller
             'proposal' => $proposal,
             'price' => $price,
             'priceData' => $priceData,
-            'proposalFeatures' => array_filter($proposalFeatures),
+            'proposalFeatures' => $proposalFeatures,
             'actions' => $actions,
             'shopCart' => $shopCart,
             'filtersResource' => $filtersResource,
@@ -205,7 +213,7 @@ class DefaultController extends Controller
             $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
             $filtersResource = $filtersBuilder->buildFromRequest($additionalCategory, null, $request);
 
-            $additionalCategoryProposals = $this->getProposalRepository()->findProposalsByParameters($additionalCategory->getId(), $filtersResource, 1, 1);
+            $additionalCategoryProposals = $this->getProposalRepository()->findProposalsByFilters($additionalCategory->getId(), $filtersResource, 1, 1);
             if ($additionalCategoryProposals) {
 
                 $additionalCategoriesData[$additionalCategory->getId()] = array(

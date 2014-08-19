@@ -3,12 +3,13 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class ParameterValue
  * @package Shop\CatalogBundle\Entity
  */
-class ParameterValue
+class ParameterValue extends AbstractEntity
 {
     /**
      * @var integer
@@ -29,7 +30,6 @@ class ParameterValue
      * @var integer
      */
     private $optionId;
-
 
     /**
      * Get id
@@ -109,6 +109,7 @@ class ParameterValue
     {
         return $this->optionId;
     }
+
     /**
      * @var integer
      */
@@ -133,7 +134,6 @@ class ParameterValue
      * @var \Shop\CatalogBundle\Entity\ParameterOption
      */
     private $option;
-
 
     /**
      * Set proposalId

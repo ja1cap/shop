@@ -91,6 +91,11 @@ class Category extends AbstractEntity
     private $updateDate;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $filters;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -126,6 +131,16 @@ class Category extends AbstractEntity
     public function createCollectionElement($collection)
     {
         return new CategoryElement($collection, $this);
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParameters()
+    {
+        return [
+            'slug' => $this->getSlug(),
+        ];
     }
 
     /**
@@ -577,11 +592,6 @@ class Category extends AbstractEntity
     {
         return $this->image;
     }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $filters;
 
     /**
      * Add filters

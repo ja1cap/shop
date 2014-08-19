@@ -44,9 +44,7 @@ class CategoryParameterType extends AbstractType {
                 'class' => 'ShopCatalogBundle:Parameter',
                 'choices' => $this->getAvailableParameters(),
                 'label' => 'Базовый параметр',
-            ));
-
-        $builder
+            ))
             ->add('filterGroups', 'choice', array(
                 'choices' => FiltersResource::$filterGroups,
                 'required' => false,
@@ -59,13 +57,26 @@ class CategoryParameterType extends AbstractType {
                 'attr' => array(
                     'placeholder' => 'Поумолчанию название базового параметра',
                 ),
-            ));
+            ))
+        ;
 
+        if(!$this->getCategory()->getParameterGroups()->isEmpty()){
+            $builder
+                ->add('group', 'entity', [
+                    'required' => false,
+                    'label' => 'Группа параметров',
+                    'empty_value' => 'Нет',
+                    'class' => 'ShopCatalogBundle:CategoryParameterGroup',
+                    'choices' => $this->getCategory()->getParameterGroups(),
+                ])
+            ;
+        }
 
         $builder
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
-            ));
+            ))
+        ;
 
     }
 
@@ -76,7 +87,7 @@ class CategoryParameterType extends AbstractType {
      */
     public function getName()
     {
-        return 'category_parameter';
+        return 'shop_catalog_category_parameter';
     }
 
     /**

@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shop\CatalogBundle\Filter\FilterInterface;
+use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
 
@@ -239,7 +239,7 @@ class Price extends AbstractEntity
                  */
                 $categoryParameter = $categoryParameters[$parameterValue->getParameterId()];
 
-                if(in_array(FilterInterface::GROUP_PROPOSAL, $categoryParameter->getFilterGroups())){
+                if(in_array(OptionsFilterInterface::GROUP_PROPOSAL, $categoryParameter->getFilterGroups())){
 
                     if(!isset($parametersData[$parameterValue->getParameterId()])){
 

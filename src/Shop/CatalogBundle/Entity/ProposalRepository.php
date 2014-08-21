@@ -411,6 +411,7 @@ class ProposalRepository extends AbstractRepository {
                 'p.*',
                 'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS price',
                 'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
+                'pp.id AS priceId'
             ))
             ->from('ShopCatalogBundle:Proposal', 'p')
         ;
@@ -465,6 +466,7 @@ class ProposalRepository extends AbstractRepository {
         $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Proposal', 'p', 'proposal');
         $rsm->addScalarResult('price', 'price');
         $rsm->addScalarResult('maxPrice', 'maxPrice');
+        $rsm->addScalarResult('priceId', 'priceId');
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameters($queryParameters);

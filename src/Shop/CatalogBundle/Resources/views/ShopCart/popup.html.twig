@@ -1,0 +1,102 @@
+
+<div id="shopCartPopup" class="shop-cart-popup">
+
+    {#@TODO jQuery ui dialog focus bug fix#}
+    <span class="ui-helper-hidden-accessible"><input type="text"/></span>
+
+    {% if shopCart.priceIds %}
+
+        <div class="shop-cart">
+        {% for categoryData in shopCart.categories %}
+            <div class="shop-cart-category">
+                <a href="{{ path('shop_catalog_category', { 'slug' : categoryData.category.slug }) }}">
+                    {{ categoryData.category.name }}
+                </a>
+            </div>
+            <div class="shop-cart-category-proposals">
+                {% for proposalData in categoryData.proposals %}
+                    <div class="shop-cart-category-proposal">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td class="image-cell">
+                                    <span class="shop-cart-proposal-image">
+                                        <img src="{% path proposalData.proposal.image, 'small_square' %}" alt="{{ proposalData.proposal.name }}" title="{{ proposalData.proposal.name }}">
+                                    </span>
+                                </td>
+                                <td class="information-cell">
+                                    <div class="shop-cart-proposal-name">
+                                        <a href="{{ shop_catalog_proposal_url(proposalData.proposal) }}">
+                                            {{ proposalData.proposal.title }}
+                                        </a>
+                                    </div>
+                                    <div class="shop-cart-proposal-prices">
+                                        {% for priceData in proposalData.prices %}
+                                            <div class="shop-cart-proposal-price">
+                                                <div>
+
+                                                    <span class="price">
+                                                        {{ priceData.value|weasty_price }}
+                                                    </span>
+
+                                                    {% if priceData.amount > 1 %}
+                                                        x
+                                                        {{ priceData.amount }}
+                                                        <div class="price-summary">
+                                                            {{ priceData.summary|weasty_price }}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    {{ priceData.price.description|raw }}
+                                                </div>
+                                                <div class="shop-cart-buttons">
+
+                                                    <a href="{{ path('shop_cart_popup') }}" class="increment-amount-in-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                        +1
+                                                    </a>
+
+                                                    {% if priceData.amount > 1 %}
+                                                        <a href="{{ path('shop_cart_popup') }}" class="decrease-amount-in-cart"  data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                            -1
+                                                        </a>
+                                                    {% endif %}
+
+                                                    <a href="{{ path('shop_cart_popup') }}" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                        Убрать
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        </div>
+
+        <div class="shop-cart-summary">
+            Общая сумма:
+            <span class="summary-value">
+                {{ shopCart.summaryPrice.value|weasty_price }}
+            </span>
+        </div>
+
+    {% endif %}
+
+</div>
+<script>
+    $(function(){
+
+
+
+    });
+</script>

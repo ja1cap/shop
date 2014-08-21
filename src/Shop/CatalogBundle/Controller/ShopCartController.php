@@ -55,6 +55,24 @@ class ShopCartController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function popupAction(Request $request){
+
+        $shopCart = $this->buildShopCart($request);
+
+        return $this->render('ShopCatalogBundle:ShopCart:popup.html.twig', array(
+            'shopCart' => $shopCart,
+        ));
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function orderAction(Request $request){
 
         $customerName = $request->get('customerName');
@@ -257,7 +275,8 @@ class ShopCartController extends Controller
      */
     public function buildShopCart(Request $request)
     {
-        $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
+        $key = 'shopCart';
+        $shopCartStorageData = $request->get($key, json_decode($request->cookies->get($key), true));
         $shopCart = $this->getShopCartFactory()->createShopCart($shopCartStorageData);
         return $shopCart;
     }

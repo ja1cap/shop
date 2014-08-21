@@ -9,7 +9,7 @@
                 </a>
             </div>
             <div class="header-inner">
-                <div class="header-menu">
+                <div class="header-menu pull-left">
                     <ul class="header-menu-list">
                         <li>
                             <a href="{{ path('shop_catalog_categories') }}">
@@ -49,6 +49,13 @@
                         {% endif %}
                     </ul>
                 </div>
+                <div class="header-shop-cart pull-left">
+                    <a href="{{ path('shop_cart_popup') }}" class="open-shop-cart">
+                        Корзина
+                        <span class="amount warning badge"></span>
+                    </a>
+                </div>
+                <div class="clear"></div>
             </div>
             <div class="clear"></div>
         </div>

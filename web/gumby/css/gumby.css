@@ -1849,6 +1849,16 @@ body .template-default .filters-form-container form .proposal-select .picker-box
 */
 /* Information items list
 */
+body { /* Common elements
+*/ /* Header
+*/ /* Blocks
+*/ /* Tabs
+*/ /* Proposals list
+*/ /* Media items list
+*/ /* Information items list
+*/ }
+body .shop-cart-popup { width: 940px; }
+body .header-shop-cart .amount.badge { display: none; }
 body .template-lededev { color: black; /* Common elements
 */ /* Header
 */ /* Blocks
@@ -1903,7 +1913,7 @@ body .template-lededev .proposals-list-wrapper .media-list .media-list-item { ma
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item.last-in-row { margin-right: 0; }
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item .inner-container { padding: 0; overflow: visible; }
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item .image-container { margin: 0 0 10px; }
-body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container { position: absolute; right: -20px; top: -20px; padding: 20px 20px 0px 20px; }
+body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container { position: absolute; right: -20px; top: -20px; max-width: 314px; padding: 20px 20px 0px 20px; }
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container .preview-left-bar { display: none; width: 62px; position: absolute; top: 20px; left: 10px; }
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container .preview-left-bar .images-preview-container { height: 176px; }
 body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container .preview-left-bar .prev, body .template-lededev .proposals-list-wrapper .media-list .media-list-item .preview-container .preview-left-bar .next { margin: 7px 0; display: block; background: #000000; color: #ffffff; padding: 5px; width: 100%; }
@@ -1986,6 +1996,8 @@ body .template-lededev .range-slider-container .range-slider-fields label { floa
 body .template-lededev .range-slider-container .range-slider-fields input { padding: 0 4px; float: left; display: block; width: 80%; font-size: 12px; }
 body .template-lededev .range-slider-container .range-slider-fields .field-container { float: left; width: 48%; }
 body .template-lededev .range-slider-container .range-slider-fields .field-container.min { margin-right: 4%; }
+
+html, body { height: 100%; }
 
 body { background: #f1f1f1; overflow-y: scroll; }
 body a:hover { text-decoration: none; }

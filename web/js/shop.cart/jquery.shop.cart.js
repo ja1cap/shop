@@ -7,6 +7,8 @@ $(function(){
 
         var categories = {};
 
+        cart.popupSelector = '#shopCartPopup';
+
         /**
          * Init cart storage
          */
@@ -23,13 +25,15 @@ $(function(){
 
             }
 
+            cart.updateStorage();
+
         };
 
         /**
          * Update storage
          * @returns {{categories: Object}}
          */
-        cart.updateStorage = function(){
+        cart.updateStorage = function(callback){
 
             var usedCategories = {};
 
@@ -48,14 +52,57 @@ $(function(){
                 categories : categories
             };
 
-//            console.log('Update cart storage');
-//            console.log(data);
-
             $.cookie(storageKey, data, {
                 path: '/'
             });
 
+            if(callback && typeof callback == 'function'){
+                callback(categories);
+            }
+
+            cart.updateProposalPricesAmount();
+
             return data;
+
+        };
+
+        /**
+         * Update proposal prices amount badges
+         * @returns {ShopCart}
+         */
+        cart.updateProposalPricesAmount = function(){
+
+            var $headerShopCart = $('.header-shop-cart');
+            var $headerShopCartAmount = $('.amount', $headerShopCart);
+
+            var amount = cart.getProposalPricesAmount();
+            $headerShopCartAmount.html(amount);
+
+            if(amount == 0){
+                $headerShopCartAmount.hide();
+            } else {
+                $headerShopCartAmount.show();
+            }
+
+            return cart;
+
+        };
+
+        /**
+         * Get shop cart proposal prices total amount
+         * @returns {number}
+         */
+        cart.getProposalPricesAmount = function(){
+
+            var amount = 0;
+
+            $.each(categories, function(categoryId, category){
+                $.each(category.proposalPrices, function(i, proposalPrice){
+                    amount += proposalPrice.amount;
+                });
+            });
+
+            return amount;
 
         };
 
@@ -188,12 +235,30 @@ $(function(){
 
         /**
          * Add proposal price to cart
-         * @param categoryId
-         * @param proposalId
-         * @param priceId
-         * @returns {ShopCart}
          */
-        cart.addProposalPrice = function(categoryId, proposalId, priceId){
+        cart.addProposalPrice = function(categoryId, proposalId, priceId, updateStorageCallback){
+
+            if(!cart.hasProposalPrice(categoryId, priceId)){
+
+                cart.getOrAddCategory(categoryId).proposalPrices.push({
+                    id : priceId,
+                    proposalId : proposalId,
+                    categoryId : categoryId,
+                    amount : 1
+                });
+
+            }
+
+            cart.updateStorage(updateStorageCallback);
+
+            return cart;
+
+        };
+
+        /**
+         * Increment proposal price amount
+         */
+        cart.incrementProposalPriceAmount = function(categoryId, proposalId, priceId, updateStorageCallback){
 
             if(!cart.hasProposalPrice(categoryId, priceId)){
 
@@ -216,19 +281,16 @@ $(function(){
 
             }
 
-            cart.updateStorage();
+            cart.updateStorage(updateStorageCallback);
 
             return cart;
 
         };
 
         /**
-         *
-         * @param categoryId
-         * @param priceId
-         * @returns {ShopCart}
+         * Decrease proposal price amount
          */
-        cart.decreaseProposalPriceAmount = function(categoryId, priceId){
+        cart.decreaseProposalPriceAmount = function(categoryId, priceId, updateStorageCallback){
 
             $.each(cart.getCategory(categoryId).proposalPrices, function(i, proposalPrice){
 
@@ -248,7 +310,7 @@ $(function(){
 
             });
 
-            cart.updateStorage();
+            cart.updateStorage(updateStorageCallback);
 
             return cart;
 
@@ -256,11 +318,8 @@ $(function(){
 
         /**
          * Remove proposal price from cart
-         * @param categoryId
-         * @param priceId
-         * @returns {ShopCart}
          */
-        cart.removeProposalPrice = function(categoryId, priceId){
+        cart.removeProposalPrice = function(categoryId, priceId, updateStorageCallback){
 
             if(cart.hasProposalPrice(categoryId, priceId)){
 
@@ -270,9 +329,9 @@ $(function(){
                     return (price && price.id != priceId);
                 });
 
-                cart.updateStorage();
-
             }
+
+            cart.updateStorage(updateStorageCallback);
 
             return cart;
 
@@ -280,24 +339,139 @@ $(function(){
 
         /**
          * Remove all prices of category in cart
-         * @param categoryId
-         * @returns {ShopCart}
          */
-        cart.removeCategoryPrices = function(categoryId){
+        cart.removeCategoryPrices = function(categoryId, updateStorageCallback){
 
             var category = cart.getCategory(categoryId);
             if(category){
 
                 category.proposalPrices = [];
-                cart.updateStorage();
 
             }
+
+            cart.updateStorage(updateStorageCallback);
             return cart;
 
         };
 
-        cart.refreshCartSummary = function(){
-            location.reload();
+        cart.getPopup = function(){
+
+            return $(cart.popupSelector);
+
+        };
+
+        cart.initPopup = function(){
+
+            var $shopCartPopup = cart.getPopup();
+            $shopCartPopup.dialog({
+                dialogClass: 'shop-cart-popup-container',
+                autoOpen: true,
+                modal: true,
+                resizable: false,
+                draggable: false,
+                width: $shopCartPopup.width(),
+                close: function(){
+
+                    $shopCartPopup
+                        .dialog("destroy")
+                        .remove()
+                    ;
+
+                }
+            });
+
+            return cart;
+
+        };
+
+        cart.openPopup = function(_options){
+
+            var _settings = {
+                popupUrl : null,
+                popupRequestData : {}
+            };
+
+            _settings = $.extend(_settings, _options, true);
+
+            var $body = $('body');
+            var $mainContainer = $('.main-container');
+            var $shopCartPopup = cart.getPopup();
+
+            if($shopCartPopup.length == 0){
+
+                $mainContainer.addLoading();
+
+                $.ajax({
+                    cache: false,
+                    url: _settings.popupUrl,
+                    data: _settings.popupRequestData,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(html){
+
+                        $body.append(html);
+                        $mainContainer.removeLoading();
+
+                        cart.initPopup();
+
+                    }
+                });
+
+            } else {
+
+                $shopCartPopup
+                    .parent()
+                    .addLoading()
+                ;
+
+                $.ajax({
+                    cache: false,
+                    url: _settings.popupUrl,
+                    data: _settings.popupRequestData,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(html){
+
+                        $shopCartPopup.html($(html).html());
+
+                        $shopCartPopup
+                            .parent()
+                            .removeLoading()
+                        ;
+
+                    }
+                });
+
+            }
+
+            return cart;
+
+        };
+
+        cart.refreshCartSummary = function(_options){
+
+            var _settings = {
+                popup : false,
+                popupUrl : null,
+                popupRequestData : {}
+            };
+
+            _settings = $.extend(_settings, _options, true);
+
+            if(_settings.popup){
+
+                cart.openPopup(_settings);
+
+            } else {
+
+                location.reload();
+
+            }
+
+            return cart;
+
         };
 
         cart.initStorage();
@@ -323,8 +497,20 @@ $(function(){
                 $.shopCart.removeCategoryPrices(categoryId);
             }
 
-            $.shopCart.addProposalPrice(categoryId, proposalId, priceId);
-            $.shopCart.refreshCartSummary();
+            $.shopCart.addProposalPrice(categoryId, proposalId, priceId, function(categories){
+
+                var popupUrl = $btn.attr('href');
+                $.shopCart.refreshCartSummary({
+                    popup: popupUrl != '#',
+                    popupUrl: popupUrl,
+                    popupRequestData: {
+                        shopCart : {
+                            categories : categories
+                        }
+                    }
+                });
+
+            });
 
         }
 
@@ -342,10 +528,67 @@ $(function(){
             var categoryId = proposalCartData['categoryId'],
                 priceId = proposalCartData['priceId'];
 
-            $.shopCart.removeProposalPrice(categoryId, priceId);
-            $.shopCart.refreshCartSummary();
+            $.shopCart.removeProposalPrice(categoryId, priceId, function(categories){
+
+                var popupUrl = $btn.attr('href');
+                $.shopCart.refreshCartSummary({
+                    popup: popupUrl != '#',
+                    popupUrl: popupUrl,
+                    popupRequestData: {
+                        shopCart : {
+                            categories : categories
+                        }
+                    }
+                });
+
+            });
 
         }
+
+        return false;
+
+    });
+
+    $(document).on('click', '.increment-amount-in-cart', function(){
+
+        var $btn = $(this);
+
+        var proposalCartData = $btn.data('cart');
+        if(proposalCartData){
+
+            var categoryId = proposalCartData['categoryId'],
+                proposalId = proposalCartData['proposalId'],
+                priceId = proposalCartData['priceId'];
+
+            $.shopCart.incrementProposalPriceAmount(categoryId, proposalId, priceId, function(categories){
+
+                var popupUrl = $btn.attr('href');
+                $.shopCart.refreshCartSummary({
+                    popup: popupUrl != '#',
+                    popupUrl: popupUrl,
+                    popupRequestData: {
+                        shopCart : {
+                            categories : categories
+                        }
+                    }
+                });
+
+            });
+
+        }
+
+        return false;
+
+    });
+
+    $(document).on('click', '.open-shop-cart', function(){
+
+        var $btn = $(this);
+
+        var popupUrl = $btn.attr('href');
+        $.shopCart.openPopup({
+            popupUrl: popupUrl
+        });
 
         return false;
 
@@ -361,8 +604,20 @@ $(function(){
             var categoryId = proposalCartData['categoryId'],
                 priceId = proposalCartData['priceId'];
 
-            $.shopCart.decreaseProposalPriceAmount(categoryId, priceId);
-            $.shopCart.refreshCartSummary();
+            $.shopCart.decreaseProposalPriceAmount(categoryId, priceId, function(categories){
+
+                var popupUrl = $btn.attr('href');
+                $.shopCart.refreshCartSummary({
+                    popup: popupUrl != '#',
+                    popupUrl: popupUrl,
+                    popupRequestData: {
+                        shopCart : {
+                            categories : categories
+                        }
+                    }
+                });
+
+            });
 
         }
 

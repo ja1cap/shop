@@ -159,7 +159,13 @@ $(function(){
     $.fn.catalogCategory = function(categoryUrl){
 
         var $categoryContainer = $(this);
-        return new CatalogCategory(categoryUrl, $categoryContainer);
+        var catalogCategory = $categoryContainer.data('categoryCategory');
+
+        if(!catalogCategory){
+            catalogCategory = new CatalogCategory(categoryUrl, $categoryContainer);
+        }
+
+        return catalogCategory;
 
     };
 

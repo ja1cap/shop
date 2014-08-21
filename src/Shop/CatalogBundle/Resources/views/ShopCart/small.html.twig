@@ -13,7 +13,7 @@
                 {% for proposalData in categoryData.proposals %}
                     <div class="shop-cart-category-proposal">
                         <div class="shop-cart-proposal-name">
-                            <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                            <a href="{{ shop_catalog_proposal_url(proposalData.proposal) }}">
                                 {{ proposalData.proposal.title }}
                             </a>
                         </div>
@@ -35,7 +35,7 @@
                                     {% endif %}
                                     <div class="shop-cart-buttons">
 
-                                        <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                        <a href="#" class="increment-amount-in-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
                                             +1
                                         </a>
 

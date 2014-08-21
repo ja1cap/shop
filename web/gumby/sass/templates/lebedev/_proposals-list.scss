@@ -1,6 +1,7 @@
 @import "settings";
 @import "lebedev-shop-scss/lebedev";
 
+$preview-container-max-width: 314px;
 $preview-container-padding-v-t: 20px;
 $preview-container-padding-v-b: 0px;
 $preview-container-padding-h-l: 20px;
@@ -139,6 +140,7 @@ $preview-container-left-bar-width: 62px;
         right: -20px;
         top: -20px;
 
+        max-width: $preview-container-max-width;
         padding: $preview-container-padding-v-t $preview-container-padding-h-r $preview-container-padding-v-b $preview-container-padding-h-l;
 
         .preview-left-bar {

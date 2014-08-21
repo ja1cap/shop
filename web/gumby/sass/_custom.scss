@@ -3,6 +3,10 @@
 @import "templates/default/default";
 @import "templates/lebedev/lebedev";
 
+html, body {
+  height: 100%;
+}
+
 body {
 
   background: #f1f1f1;

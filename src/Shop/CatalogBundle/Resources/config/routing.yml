@@ -75,13 +75,6 @@ delete_manufacturer:
     pattern: /adminCatalog/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
 
-shop_cart:
-    pattern: /shopCart
-    defaults: { _controller: ShopCatalogBundle:ShopCart:default }
-shop_cart_order:
-    pattern: /shopCart/order
-    defaults: { _controller: ShopCatalogBundle:ShopCart:order }
-
 contractors:
     pattern: /admin/contractors
     defaults: { _controller: ShopCatalogBundle:AdminContractor:contractors }

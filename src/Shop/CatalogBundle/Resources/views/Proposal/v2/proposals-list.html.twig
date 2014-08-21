@@ -65,6 +65,7 @@
 {% block media_item %}
 
     {% set proposal_data = media_item %}
+    {% set proposal = proposal_data.proposal %}
     {% set media_item = proposal_data.proposal %}
 
     {{ parent() }}
@@ -72,8 +73,10 @@
 {% endblock %}
 
 {% block media_item_inner_container %}
+    {% set priceId = proposal_data.priceId %}
+    {% set inShopCart = (shopCart is defined and priceId and priceId not in shopCart.priceIds) %}
     {% set media_item_images = media_item.images %}
-    <div class="preview-container {{ media_item_images|length > 1 ? 'visible-left-bar' : '' }}">
+    <div class="preview-container {{ media_item_images|length > 1 ? 'visible-left-bar' : '' }} {{ inShopCart ? 'in-shop-cart' : '' }}">
         <div class="preview-left-bar">
             <div class="wrap">
                 <div class="prev">
@@ -97,9 +100,13 @@
             {{ parent() }}
         </div>
         <div class="buttons hidden-preview">
-            <a href="#" class="btn btn-primary btn-lg btn-block">
-                Купить
-            </a>
+            {% if shopCart is defined and priceId %}
+                <div class="large primary btn">
+                    <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}}'>
+                        Купить
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
@@ -113,8 +120,8 @@
         {{ proposal_data.price|shop_price }}
     </span>
 
-    {#<div class="hidden-preview">#}
+    <div class="hidden-preview">
         {#{{ parent() }}#}
-    {#</div>#}
+    </div>
 
 {% endblock %}

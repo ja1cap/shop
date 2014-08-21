@@ -10,12 +10,6 @@ $(function(){
                     'class' : 'loading block'
                 });
 
-                if($(this)[0] == $('body')[0]){
-
-                    return false;
-
-                }
-
                 $(this).append(loadingBlock);
 
                 return true;

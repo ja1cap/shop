@@ -2,6 +2,16 @@
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="shop_cart" pattern="/shopCart">
+        <default key="_controller">ShopCatalogBundle:ShopCart:default</default>
+    </route>
+    <route id="shop_cart_order" pattern="/shopCart/order">
+        <default key="_controller">ShopCatalogBundle:ShopCart:order</default>
+    </route>
+    <route id="shop_cart_popup" pattern="/shopCart/popup">
+        <default key="_controller">ShopCatalogBundle:ShopCart:popup</default>
+    </route>
+
     <route id="categories" pattern="/adminCatalog/categories">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
     </route>

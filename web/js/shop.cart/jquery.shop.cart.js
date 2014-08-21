@@ -72,16 +72,16 @@ $(function(){
          */
         cart.updateProposalPricesAmount = function(){
 
-            var $headerShopCart = $('.header-shop-cart');
-            var $headerShopCartAmount = $('.amount', $headerShopCart);
+            var $shopCartBtn = $('.shop-cart-btn');
+            var $shopCartBtnAmount = $('.amount', $shopCartBtn);
 
             var amount = cart.getProposalPricesAmount();
-            $headerShopCartAmount.html(amount);
+            $shopCartBtnAmount.html(amount);
 
             if(amount == 0){
-                $headerShopCartAmount.hide();
+                $shopCartBtn.addClass('empty-cart');
             } else {
-                $headerShopCartAmount.show();
+                $shopCartBtn.removeClass('empty-cart');
             }
 
             return cart;

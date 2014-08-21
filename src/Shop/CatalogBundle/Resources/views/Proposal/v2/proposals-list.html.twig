@@ -79,9 +79,7 @@
     <div class="preview-container {{ media_item_images|length > 1 ? 'visible-left-bar' : '' }} {{ inShopCart ? 'in-shop-cart' : '' }}">
         <div class="preview-left-bar">
             <div class="wrap">
-                <div class="prev">
-                    -
-                </div>
+                <span class="prev"></span>
                 <div class="images-preview-container">
                     <ul class="images-preview">
                         {% for image in media_item_images %}
@@ -91,16 +89,19 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="next">
-                    +
-                </div>
+                <span class="next"></span>
             </div>
         </div>
         <div class="preview-right-bar">
             {{ parent() }}
         </div>
-        <div class="buttons hidden-preview">
+        <div class="ui-buttons hidden-preview">
             {% if shopCart is defined and priceId %}
+                <div class="large secondary btn">
+                    <a href="#" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}}'>
+                        Сравнить
+                    </a>
+                </div>
                 <div class="large primary btn">
                     <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}}'>
                         Купить

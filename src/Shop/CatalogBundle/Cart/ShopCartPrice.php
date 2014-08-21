@@ -69,7 +69,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return \Weasty\Money\Data\\Weasty\Money\Price\Price
+     * @return \Weasty\Money\Price\Price
      */
     public function getItemPrice()
     {
@@ -85,7 +85,7 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return \Weasty\Money\Data\\Weasty\Money\Price\Price
+     * @return \Weasty\Money\Price\Price
      */
     public function getSummaryPrice()
     {

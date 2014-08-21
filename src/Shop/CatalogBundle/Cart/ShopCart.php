@@ -235,6 +235,40 @@ class ShopCart implements \ArrayAccess {
     }
 
     /**
+     * @return int
+     */
+    public function getPricesAmount(){
+
+        $amount = 0;
+
+        /**
+         * @var $summaryCategory ShopCartCategory
+         */
+        foreach($this->getCategories() as $summaryCategory){
+
+            /**
+             * @var $summaryProposal ShopCartProposal
+             */
+            foreach($summaryCategory->getProposals() as $summaryProposal){
+
+                /**
+                 * @var $summaryPrice ShopCartPrice
+                 */
+                foreach($summaryProposal->getPrices() as $summaryPrice){
+
+                    $amount += $summaryPrice->getAmount();
+
+                }
+
+            }
+
+        }
+
+        return $amount;
+
+    }
+
+    /**
      * @param mixed $customerCity
      * @return $this
      */

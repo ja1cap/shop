@@ -3,6 +3,222 @@
 
 body {
 
+  .amount-spinner {
+
+    overflow: hidden;
+    display: block;
+    height: 25px;
+    width: 85px;
+
+    .amount {
+
+      float: left;
+      display: block;
+      width: 35px;
+      text-align: center;
+      line-height: 25px;
+      height: 25px;
+      border-top: 1px solid rgb(202,202,202);
+      border-bottom: 1px solid rgb(202,202,202);
+
+    }
+
+    .minus, .plus {
+
+      position: relative;
+      float: left;
+      display: block;
+      text-align: center;
+      width: 25px;
+      height: 25px;
+      text-indent: -9999px;
+      @include background-image(linear-gradient(rgb(255, 114, 0), rgb(255, 48, 0)));
+
+      &:after {
+
+        content: ' ';
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        width: 25px;
+        height: 25px;
+        background: url("/img/weasty-sprite.png") no-repeat;
+
+      }
+
+    }
+
+    .minus {
+
+      @include border-radius(2px 0 0 2px);
+
+      &:after {
+        background-position: -194px -171px;
+      }
+
+    }
+
+    .plus {
+
+      @include border-radius(0 2px 2px 0);
+
+      &:after {
+        background-position: -237px -171px;
+      }
+
+    }
+
+  }
+
+  .ui-buttons {
+
+    display: block;
+    margin: 0 auto;
+    @extend .clearfix;
+
+    .btn {
+
+      float: left;
+      margin-left: 20px;
+      border: none;
+      height: 40px;
+      line-height: 40px;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: bold;
+      @include border-radius(2px);
+      @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7));
+
+      a {
+        padding: 0 7px;
+        text-align: center;
+      }
+
+      &:first-child {
+        margin-left: 0 !important;
+      }
+
+      &.primary {
+
+        @include background-image(linear-gradient(rgb(255, 114, 0), rgb(255, 48, 0)));
+
+        a, a:hover {
+          color: #ffffff;
+          text-shadow: 1.414px 1.414px 0px black;
+        }
+
+      }
+
+      &.secondary {
+
+        @include background-image(linear-gradient(rgb(255, 246, 0), rgb(255, 204, 0)));
+
+        a, a:hover {
+          color: #000000;
+        }
+
+      }
+
+    }
+  }
+
+  .slider-nav-button {
+    border-radius: 4px;
+    background-color: rgb( 255, 252, 0 );
+    box-shadow: 1.414px 1.414px 0px 0px rgb( 0, 0, 0 );
+    width: 40px;
+    height: 40px;
+  }
+
+  .ui-widget-overlay {
+    background: rgb(0, 0, 0);
+    @include opacity(.7);
+  }
+
+  .ui-dialog {
+
+    padding: 0;
+    border: 1px solid rgb(202,202,202);
+    @include border-radius(5px);
+    @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 5px, 0);
+
+    .ui-dialog-titlebar {
+
+      border: none;
+      border-bottom: 1px solid rgb(202,202,202);
+      background: none;
+      padding: 15px 20px;
+      @include border-radius(5px 5px 0 0);
+
+      .ui-dialog-title {
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        color: rgb(0,0,0);
+        margin: 0;
+      }
+
+      .ui-dialog-titlebar-close {
+        display: block;
+        border: none;
+        padding: 0;
+        outline: none;
+        right: 20px;
+        background: url("/img/weasty-sprite.png") no-repeat -138px -5px;
+      }
+
+    }
+
+    .ui-dialog-content {
+      padding: 20px;
+    }
+
+  }
+
+  .ui-slider {
+
+    cursor: pointer;
+    border: none;
+
+    .ui-slider-handle {
+
+      cursor: move;
+      outline: none;
+      border: none;
+      display: block;
+      width: 15px;
+      height: 15px;
+      background: url("/img/weasty-sprite.png") no-repeat -17px -86px;
+
+    }
+
+    &.ui-slider-horizontal {
+
+      height: 6px;
+      @include background-image(linear-gradient(rgb(160,160,160), rgb(211,211,211)));
+      @include box-shadow(rgba(0, 0, 0, 0.5) 0px 1px 2px 0px inset);
+
+      .ui-slider-range {
+        @include background-image(linear-gradient(rgb(255,204,0), rgb(255,246,0)));
+        @include box-shadow(rgba(0, 0, 0, 0.5) 0px 1px 1px 0px);
+      }
+
+      .ui-slider-handle {
+
+        top: -5px;
+        margin-left: -7px;
+
+        //&:first-of-type {
+        //  margin-left: 0;
+        //}
+
+      }
+
+    }
+
+  }
+
   @import "shop-cart";
 
   .template-lededev {
@@ -57,6 +273,11 @@ body {
 
     .main-container {
       padding-top: $header-container-height;
+
+      & > .loading.block {
+        position: fixed;
+      }
+
     }
 
     .block-container {
@@ -160,6 +381,8 @@ body {
       .range-slider-fields {
 
         @extend .clearfix;
+
+        margin-bottom: 4px;
 
         label {
           float: left;

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="shop.cart.popup.title">
+                <source>shop.cart.popup.title</source>
+                <target>Products purchase</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.summary.price">
+                <source>shop.cart.summary.price</source>
+                <target>{0}Add at least one product to shop cart|{1}Summary price for one product %summary_price%|]1,Inf]Summary price for %count% products %summary_price%</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.price">
+                <source>shop.cart.price</source>
+                <target>Price</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.summary">
+                <source>shop.cart.summary</source>
+                <target>Summary</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.remove.proposal">
+                <source>shop.cart.remove.proposal</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.to_catalog">
+                <source>shop.cart.to_catalog</source>
+                <target>Back to catalog</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.create.order">
+                <source>shop.cart.create.order</source>
+                <target>Create order</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

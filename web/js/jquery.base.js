@@ -2,6 +2,11 @@ $(function(){
 
     var $body = $('body');
 
+    $(document).on('click', '.dialog-close-btn', function(e){
+        e.preventDefault();
+        $(this).closest('.ui-dialog-content').dialog('close');
+    });
+
     $.fn.applyChosen = function(){
 
         var $container = $(this);

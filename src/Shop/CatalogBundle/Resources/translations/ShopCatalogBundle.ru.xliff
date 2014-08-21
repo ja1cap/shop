@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="ShopCatalogBundle.en.xliff">
+        <body>
+            <trans-unit id="shop.cart.popup.title">
+                <source>shop.cart.popup.title</source>
+                <target>Покупка товаров</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.summary.price">
+                <source>shop.cart.summary.price</source>
+                <target>{0}Корзина пуста|{1}Итого %count% товар на сумму %summary_price%|[2,4]Итого %count% товара на сумму %summary_price%|[5,Inf]Итого %count% товаров на сумму %summary_price%</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.price">
+                <source>shop.cart.price</source>
+                <target>Стоимость</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.summary">
+                <source>shop.cart.summary</source>
+                <target>Сумма</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.remove.proposal">
+                <source>shop.cart.remove.proposal</source>
+                <target>Убрать</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.to_catalog">
+                <source>shop.cart.to_catalog</source>
+                <target>Продолжить просмотр</target>
+            </trans-unit>
+            <trans-unit id="shop.cart.create.order">
+                <source>shop.cart.create.order</source>
+                <target>Оформить заказ</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

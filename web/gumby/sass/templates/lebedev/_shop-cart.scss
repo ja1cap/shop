@@ -7,12 +7,187 @@
 
 }
 
-.header-shop-cart {
+.shop-cart-popup-container {
+
+  .shop-cart-popup {
+
+    color: $body-font-color;
+    padding: 0;
+
+    .shop-cart {
+      padding: 0 20px;
+      margin: 0;
+    }
+
+    .shop-cart-summary {
+      padding: 32px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: 1px solid rgb(202,202,202);
+    }
+
+    .ui-buttons {
+
+      padding: 20px 0;
+      text-align: center;
+
+      .btn {
+        width: 200px;
+        display: inline-block;
+        float: none;
+      }
+
+    }
+
+  }
+
+}
+
+.shop-cart {
+
+  .shop-cart-category {
+
+    padding: 20px 0 0;
+
+    a, a:hover {
+      color: rgb(0,0,0);
+      font-weight: bold;
+    }
+
+  }
+
+  .proposal-prices-table {
+
+    border: none;
+    margin: 0;
+
+    tr {
+      border: none;
+    }
+
+    td {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      text-align: left;
+      vertical-align: middle;
+      border: none;
+      border-bottom: 1px solid rgb(202,202,202);
+    }
+
+    .summary-price, .price {
+      font-weight: bold;
+    }
+
+    .image-cell {
+
+      width: 62px;
+      padding-left: 0;
+
+      img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .proposal-image {
+        width: 52px;
+        height: 52px;
+        border: 1px solid rgb(202,202,202);
+      }
+
+    }
+
+    .caption-cell {
+
+      width: 350px;
+
+    }
+
+    .price-cell {
+
+      width: 150px;
+
+    }
+
+    .amount-cell {
+
+      width: 150px;
+
+    }
+
+    .summary-price-cell {
+
+      width: 150px;
+
+    }
+
+    .buttons-cell {
+
+    }
+
+  }
+
+}
+
+.shop-cart-btn {
+
+  display: block;
+  position: relative;
 
   .amount {
 
-    &.badge {
+    top: -15px;
+    right: -15px;
+    position: absolute;
+    display: block;
+    background: rgb(255,243,67);
+    //@include background-image(linear-gradient(rgb(255,246,0), rgb(255,204,0)));
+    padding: 1px 7px;
+    line-height: 19px;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(0,0,0);
+    text-align: center;
+
+  }
+
+  &.empty-cart {
+
+    .amount {
       display: none;
+    }
+
+  }
+
+}
+
+.shop-cart-icon {
+  text-indent: -9999px;
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: url("/img/weasty-sprite.png") no-repeat -9px -26px;
+}
+
+
+.header-container {
+
+  .header-shop-cart {
+
+    @include transition-property(all);
+    @include transition-duration(150ms);
+    @include transition-timing-function(linear);
+    padding: 25px;
+
+  }
+
+  &.affix {
+
+    .header-shop-cart {
+
+      padding: 15px 25px;
+
     }
 
   }

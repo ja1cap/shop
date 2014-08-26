@@ -15,7 +15,7 @@
       </option>
       <option name="outputFromStdout" value="false" />
       <option name="passParentEnvs" value="true" />
-      <option name="program" value="$USER_HOME$/.rvm/gems/ruby-2.1.2/bin/compass" />
+      <option name="program" value="$PROJECT_DIR$/../../lib/gems/1.9.1/gems/compass-0.12.3/bin/compass" />
       <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />

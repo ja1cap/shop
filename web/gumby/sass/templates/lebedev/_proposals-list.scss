@@ -128,6 +128,74 @@ $preview-container-left-bar-width: 62px;
 
     }
 
+    .markers {
+
+      overflow: hidden;
+      position: absolute;
+      left: -4px;
+      top: 4px;
+      width: 45px;
+      z-index: 5;
+
+      .marker {
+
+        position: relative;
+        margin: 0 0 5px;
+        float: left;
+        display: block;
+        width: 40px;
+        height: 35px;
+        background: url("/img/weasty-sprite.png") no-repeat;
+
+        &:after {
+
+          content: " ";
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: url("/img/weasty-sprite.png") no-repeat;
+
+        }
+
+        &.new {
+
+          background-position: -393px -130px;
+
+          &:after {
+            background-position: -83px -169px;
+          }
+
+        }
+
+        &.best {
+
+          background-position: -453px -130px;
+
+          &:after {
+            background-position: -44px -169px;
+          }
+        }
+
+        &.discount {
+
+          text-shadow: 1px 1px 0 black;
+          color: white;
+          font-size: 12px;
+          font-weight: bold;
+          background-position: -453px -130px;
+
+          &:after {
+            display: none;
+          }
+        }
+
+      }
+
+    }
+
   }
 
 }
@@ -180,30 +248,45 @@ $preview-container-left-bar-width: 62px;
           }
 
           .prev, .next {
+
             background: url("/img/weasty-sprite.png") no-repeat;
             cursor: pointer;
             display: block;
             height: 20px;
             width: 20px;
             margin: 0 auto;
+
             &.disabled {
               cursor: default;
             }
+
           }
 
           .prev {
+
             background-position: -278px -37px;
+
             &.disabled {
               background-position: -203px -37px;
             }
+
           }
 
           .next {
+
             background-position: -241px -29px;
+
             &.disabled {
               background-position: -165px -28px;
             }
+
           }
+
+        }
+
+        .preview-right-bar {
+
+          position: relative;
 
         }
 
@@ -242,7 +325,9 @@ $preview-container-left-bar-width: 62px;
             padding-left: ($preview-container-left-bar-width + ($preview-container-padding-h-l/2));
 
             .preview-left-bar {
+
               display: block;
+
             }
 
           }

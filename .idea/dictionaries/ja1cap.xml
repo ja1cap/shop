@@ -3,12 +3,15 @@
     <words>
       <w>ablativus</w>
       <w>accusativus</w>
+      <w>acdc</w>
+      <w>acdp</w>
       <w>actioncondition</w>
       <w>autocomplete</w>
       <w>bxslider</w>
       <w>ckeditor</w>
       <w>clearfix</w>
       <w>clickable</w>
+      <w>concat</w>
       <w>datatables</w>
       <w>dbal</w>
       <w>defs</w>

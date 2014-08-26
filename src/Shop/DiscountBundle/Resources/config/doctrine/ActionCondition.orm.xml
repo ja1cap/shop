@@ -16,7 +16,7 @@
         <field name="discountPriceValue" type="float" nullable="true"/>
         <field name="discountPriceCurrencyNumericCode" type="integer" length="3" nullable="true"/>
 
-        <field name="priority" type="integer" nullable="true" column-definition="int(6) NOT NULL DEFAULT 1"/>
+        <field name="priority" type="integer" column-definition="int(6) NOT NULL DEFAULT 1"/>
         <field name="isComplex" type="boolean"/>
 
         <one-to-many target-entity="ActionConditionCategory" field="categories" mapped-by="condition">

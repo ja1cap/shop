@@ -22,7 +22,7 @@ class PriceCurrencyConverter extends CurrencyConverter {
     {
 
         if(!$price instanceof Price){
-            return null;
+            return parent::convert($price, $sourceCurrency, $destinationCurrency);
         }
 
         $sourceCurrencyAlphabeticCode = $this

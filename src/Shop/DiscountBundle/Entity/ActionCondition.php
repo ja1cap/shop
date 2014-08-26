@@ -2,6 +2,8 @@
 
 namespace Shop\DiscountBundle\Entity;
 
+use Shop\DiscountBundle\Element\ActionConditionElement;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Money\Price\Price;
 use Weasty\Doctrine\Entity\AbstractEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Shop\DiscountBundle\Entity
  */
 class ActionCondition extends AbstractEntity
-    implements ActionConditionInterface
+    implements  ActionConditionInterface,
+                CacheCollectionEntityInterface
 {
 
     /**
@@ -94,11 +97,44 @@ class ActionCondition extends AbstractEntity
      */
     public function __construct()
     {
+        $this->priority = 1;
         $this->gifts = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->discountCategories = new ArrayCollection();
         $this->proposals = new ArrayCollection();
         $this->discountProposals = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return (string)$this->getId();
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new ActionConditionElement($collection, $this);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsPriceDiscount()
+    {
+        return in_array($this->getDiscountType(), [
+            self::DISCOUNT_TYPE_PRICE,
+            self::DISCOUNT_TYPE_GIFT_AND_PRICE,
+            self::DISCOUNT_TYPE_GIFT_OR_PRICE,
+            self::DISCOUNT_TYPE_PERCENT,
+            self::DISCOUNT_TYPE_GIFT_AND_PERCENT,
+            self::DISCOUNT_TYPE_GIFT_OR_PERCENT,
+        ]);
     }
 
     /**

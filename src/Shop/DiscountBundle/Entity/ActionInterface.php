@@ -8,11 +8,24 @@ use Weasty\Doctrine\Entity\EntityInterface;
  */
 interface ActionInterface extends EntityInterface {
 
+    const STATUS_ON = 1;
+    const STATUS_OFF = 2;
+
+    /**
+     * @return int
+     */
+    public function getStatus();
+
     /**
      * @param integer $value
      * @return $this
      */
     public function setPosition($value);
+
+    /**
+     * @return integer
+     */
+    public function getPosition();
 
     /**
      * Add conditions

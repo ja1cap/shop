@@ -2,11 +2,13 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
+use Shop\CatalogBundle\Query\ProposalQueryBuilderFactory;
 use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
@@ -14,6 +16,11 @@ use Weasty\Doctrine\Entity\AbstractRepository;
  * @package Shop\CatalogBundle\Entity
  */
 class ProposalRepository extends AbstractRepository {
+
+    /**
+     * @var \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
+     */
+    protected $cacheCollectionManager;
 
     /**
      * @param $formattedNames
@@ -395,7 +402,10 @@ class ProposalRepository extends AbstractRepository {
      */
     public function findProposalsByFilters($categoryId, FiltersResource $filtersResource, $page = null, $perPage = null){
 
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $useCacheCollection = true;
+
+        $qbFactory = new ProposalQueryBuilderFactory($this->getEntityManager(), $this);
+        $qb = $qbFactory->createQueryBuilder($filtersResource);
 
         $queryParameters = array(
             'price_status' => Price::STATUS_ON,
@@ -404,53 +414,45 @@ class ProposalRepository extends AbstractRepository {
             'category_id' => (int)$categoryId,
         );
 
-
-        //@TODO add action condition ids list
-        $qb
-            ->select(array(
-                'p.*',
-                'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS price',
-                'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
-                'pp.id AS priceId'
-            ))
-            ->from('ShopCatalogBundle:Proposal', 'p')
-        ;
-
-        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
-        $pricesFilterSubQb
-            ->select('DISTINCT pp.id')
-            ->from('ShopCatalogBundle:Price', 'pp')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
-            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('c.id', ':category_id'),
-                $qb->expr()->eq('c.status', ':category_status'),
-                $qb->expr()->eq('pp.status', ':price_status'),
-                $qb->expr()->eq('p.status', ':proposal_status')
-            ))
-        ;
-
-        $this->applyParametersFilters($filtersResource->getParameterFilters(), $pricesFilterSubQb);
-        $this->applyPriceFilter($filtersResource, $qb);
-
-        $this->convertDqlToSql($pricesFilterSubQb);
-        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
+        $select = [
+            ($useCacheCollection ? 'p.id as proposalId' : 'p.*'),
+            'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS price',
+            'MAX((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS maxPrice',
+            'pp.id as priceId',
+            'GROUP_CONCAT(DISTINCT ac.id) as actionConditionIds',
+            'action_p.id IS NOT NULL as hasAction',
+            'discount_p.id IS NOT NULL as hasDiscount',
+        ];
 
         $qb
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('pp.proposalId', 'p.id'),
-                $qb->expr()->in('pp.id', $pricesFilterSubQuerySql)
+            ->select(array_filter($select))
+            ->leftJoin('ShopDiscountBundle:ActionConditionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
+            ->leftJoin('ShopDiscountBundle:ActionConditionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', 'ac', Expr\Join::WITH, $qb->expr()->orX(
+                $qb->expr()->eq('ac.id', 'acp.conditionId'),
+                $qb->expr()->eq('ac.id', 'acc.conditionId')
             ))
-            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
-                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ->leftJoin('ShopCatalogBundle:Proposal', 'action_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('action_p.id', 'p.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->eq('action_p.id', 'acp.proposalId'),
+                    $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
+                )
             ))
-        ;
-
-        $qb
-            ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('p.categoryId', ':category_id'),
-                ($filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdp.conditionId', 'ac.id'),
+                $qb->expr()->eq('acdp.proposalId', 'p.id')
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdc.conditionId', 'ac.id'),
+                $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
+            ))
+            ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('discount_p.id', 'p.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->eq('discount_p.id', 'acdp.proposalId'),
+                    $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
+                )
             ))
             ->groupBy('p.id')
             ->addOrderBy('price')
@@ -463,15 +465,139 @@ class ProposalRepository extends AbstractRepository {
             $sql .= ' LIMIT ' . ($page > 1 ? (int)$page . ',' : '') . $perPage;
         }
 
-        $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Proposal', 'p', 'proposal');
-        $rsm->addScalarResult('price', 'price');
-        $rsm->addScalarResult('maxPrice', 'maxPrice');
-        $rsm->addScalarResult('priceId', 'priceId');
+        if($useCacheCollection){
+            $rsm = new ResultSetMapping();
+            $rsm->addScalarResult('proposalId', 'proposalId', 'integer');
+        } else {
+            $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Proposal', 'p', 'proposal');
+        }
+
+        $rsm->addScalarResult('priceId', 'priceId', 'integer');
+        $rsm->addScalarResult('price', 'price', 'float');
+        $rsm->addScalarResult('maxPrice', 'maxPrice', 'float');
+        $rsm->addScalarResult('actionConditionIds', 'actionConditionIds', 'simple_array');
+        $rsm->addScalarResult('hasAction', 'hasAction', 'boolean');
+        $rsm->addScalarResult('hasDiscount', 'hasDiscount', 'boolean');
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameters($queryParameters);
 
         $result = $query->getResult();
+
+        if($useCacheCollection){
+
+            $proposalCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Proposal');
+
+            foreach($result as $i => $proposalData){
+
+                $proposal = $proposalCollection->get($proposalData['proposalId']);
+                if($proposal){
+                    $result[$i]['proposal'] = $proposal;
+                } else {
+                    unset($result[$i]);
+                    continue;
+                }
+
+            }
+
+        }
+
+//        var_dump($result);
+//        die;
+
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
+
+        return $result;
+
+    }
+
+    /**
+     * @param $categoryId
+     * @param null FiltersResource $filtersResource
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countProposals($categoryId, FiltersResource $filtersResource = null){
+
+        $qbFactory = new ProposalQueryBuilderFactory($this->getEntityManager(), $this);
+        $qb = $qbFactory->createQueryBuilder($filtersResource);
+
+        $queryParameters = array(
+            'price_status' => Price::STATUS_ON,
+            'proposal_status' => Proposal::STATUS_ON,
+            'category_status' => Category::STATUS_ON,
+            'category_id' => (int)$categoryId,
+        );
+
+        //@TODO add action condition ids list
+        $qb
+            ->select(array(
+                'COUNT(DISTINCT p.id) as filtered',
+                'COUNT(DISTINCT new_p.id) as new',
+                'COUNT(DISTINCT best_p.id) as best',
+                'COUNT(DISTINCT action_p.id) as action',
+                'COUNT(DISTINCT ac.id) as actionConditions',
+                'COUNT(DISTINCT discount_p.id) as discount',
+            ))
+            ->leftJoin('ShopCatalogBundle:Proposal', 'new_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('new_p.id', 'p.id'),
+                $qb->expr()->eq('new_p.isNew', 1)
+            ))
+            ->leftJoin('ShopCatalogBundle:Proposal', 'best_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('best_p.id', 'p.id'),
+                $qb->expr()->eq('best_p.isBestseller', 1)
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
+            ->leftJoin('ShopDiscountBundle:ActionConditionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', 'ac', Expr\Join::WITH, $qb->expr()->orX(
+                $qb->expr()->eq('ac.id', 'acp.conditionId'),
+                $qb->expr()->eq('ac.id', 'acc.conditionId')
+            ))
+            ->leftJoin('ShopCatalogBundle:Proposal', 'action_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('action_p.id', 'p.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->eq('action_p.id', 'acp.proposalId'),
+                    $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
+                )
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdp.conditionId', 'ac.id'),
+                $qb->expr()->eq('acdp.proposalId', 'p.id')
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdc.conditionId', 'ac.id'),
+                $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
+            ))
+            ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('discount_p.id', 'p.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->eq('discount_p.id', 'acdp.proposalId'),
+                    $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
+                )
+            ))
+        ;
+
+        $this->convertDqlToSql($qb);
+        $sql = (string)$qb;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('filtered', 'filtered');
+        $rsm->addScalarResult('new', 'new');
+        $rsm->addScalarResult('best', 'best');
+        $rsm->addScalarResult('action', 'action');
+        $rsm->addScalarResult('discount', 'discount');
+        $rsm->addScalarResult('actionConditions', 'actionConditions');
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameters($queryParameters);
+
+        $result = $query->getSingleResult();
 
 //        foreach($queryParameters as $key => $value){
 //            $sql = str_replace(':' . $key, $value, $sql);
@@ -752,7 +878,7 @@ class ProposalRepository extends AbstractRepository {
      * @param FiltersResource $filtersResource
      * @param QueryBuilder $qb
      */
-    protected function applyPriceFilter(FiltersResource $filtersResource, QueryBuilder $qb){
+    public function applyPriceFilter(FiltersResource $filtersResource, QueryBuilder $qb){
 
         $filter = $filtersResource->getPriceRangeFilter();
 
@@ -800,6 +926,22 @@ class ProposalRepository extends AbstractRepository {
 
         }
 
+    }
+
+    /**
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
+     */
+    public function getCacheCollectionManager()
+    {
+        return $this->cacheCollectionManager;
+    }
+
+    /**
+     * @param \Weasty\Doctrine\Cache\Collection\CacheCollectionManager $cacheCollectionManager
+     */
+    public function setCacheCollectionManager($cacheCollectionManager)
+    {
+        $this->cacheCollectionManager = $cacheCollectionManager;
     }
 
 } 

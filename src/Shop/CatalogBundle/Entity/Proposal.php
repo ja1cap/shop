@@ -5,7 +5,9 @@ namespace Shop\CatalogBundle\Entity;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Element\ProposalElement;
 use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -13,7 +15,8 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class Proposal extends AbstractEntity
-    implements ProposalInterface
+    implements  ProposalInterface,
+                CacheCollectionEntityInterface
 {
 
     const STATUS_ON = 1;
@@ -153,13 +156,22 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new ProposalElement($collection, $this);
+    }
+
+    /**
      * @return array
      */
     public function getRouteParameters()
     {
         return [
             'categorySlug' => $this->getCategory()->getSlug(),
-            'slug' => $this->getSeoSlug() ?: $this->getId(),
+            'slug' => $this->getSlug(),
         ];
     }
 
@@ -187,6 +199,14 @@ class Proposal extends AbstractEntity
     public function getName()
     {
         return $this->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return ($this->getSeoSlug() ?: $this->getId());
     }
 
     /**
@@ -675,6 +695,24 @@ class Proposal extends AbstractEntity
      */
     public function getImages(){
         return $this->getMediaImages();
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getImageIds(){
+
+        $ids = [];
+
+        /**
+         * @var \Sonata\MediaBundle\Model\MediaInterface $image
+         */
+        foreach($this->getImages() as $image){
+            $ids[] = $image->getId();
+        }
+
+        return $ids;
+
     }
 
     /**

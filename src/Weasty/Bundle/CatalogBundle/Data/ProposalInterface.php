@@ -14,8 +14,33 @@ interface ProposalInterface extends RoutableInterface {
     public function getId();
 
     /**
+     * @return integer
+     */
+    public function getCategoryId();
+
+    /**
      * @return string
      */
     public function getName();
+
+    /**
+     * @return string
+     */
+    public function getSlug();
+
+    /**
+     * @return int|null
+     */
+    public function getImageId();
+
+    /**
+     * @return \Sonata\MediaBundle\Model\MediaInterface
+     */
+    public function getImage();
+
+    /**
+     * @return \Sonata\MediaBundle\Model\MediaInterface[]
+     */
+    public function getImages();
 
 } 

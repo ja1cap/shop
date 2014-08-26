@@ -66,6 +66,8 @@
 
     {% set proposal_data = media_item %}
     {% set proposal = proposal_data.proposal %}
+    {% set proposal_action_conditions = shop_discount_proposal_action_conditions(proposal, proposal_data.actionConditionIds) %}
+    {% set proposal_discount_price = proposal_action_conditions.getDiscountPrice(proposal_data.price) %}
     {% set media_item = proposal_data.proposal %}
 
     {{ parent() }}
@@ -76,24 +78,47 @@
     {% set priceId = proposal_data.priceId %}
     {% set inShopCart = (shopCart is defined and priceId and priceId not in shopCart.priceIds) %}
     {% set media_item_images = media_item.images %}
-    <div class="preview-container {{ media_item_images|length > 1 ? 'visible-left-bar' : '' }} {{ inShopCart ? 'in-shop-cart' : '' }}">
+    {% set _has_images = (media_item_images and media_item_images|length > 1) %}
+    <div class="preview-container {{ _has_images ? 'visible-left-bar' : '' }} {{ inShopCart ? 'in-shop-cart' : '' }}">
         <div class="preview-left-bar">
-            <div class="wrap">
-                <span class="prev"></span>
-                <div class="images-preview-container">
-                    <ul class="images-preview">
-                        {% for image in media_item_images %}
-                            <li class="image-preview-container {{ media_item.image_id == image.id ? 'main-image' : '' }}" data-image_url="{% path image, _item_image_format %}">
-                                <img src="{% path image, 'tiny_square' %}"/>
-                            </li>
-                        {% endfor %}
-                    </ul>
+            {% if _has_images %}
+                <div class="wrap">
+                    <span class="prev"></span>
+                    <div class="images-preview-container">
+                        <ul class="images-preview">
+                            {% for image in media_item_images %}
+                                <li class="image-preview-container {{ media_item.image_id == image.id ? 'main-image' : '' }}" data-image_url="{% path image, _item_image_format %}">
+                                    <img src="{% path image, 'tiny_square' %}"/>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <span class="next"></span>
                 </div>
-                <span class="next"></span>
-            </div>
+            {% endif %}
         </div>
         <div class="preview-right-bar">
+            <div class="markers">
+                {% if proposal.isNew %}
+                    <div class="marker new"></div>
+                {% endif %}
+                {% if proposal.isBestseller %}
+                    <div class="marker best"></div>
+                {% endif %}
+                {% if proposal_discount_price %}
+                    <div class="marker discount">
+                        -{{ proposal_discount_price.getDiscountPercent }}%
+                    </div>
+                {% endif %}
+            </div>
             {{ parent() }}
+            <div class="hidden-preview">
+                {#{{ dump(proposal.isNew) }}#}
+                {#{{ dump(proposal.isBestSeller) }}#}
+                {#{{ dump(proposal_data.actionConditionIds) }}#}
+                {#{{ dump(proposal_data.hasAction) }}#}
+                {#{{ dump(proposal_data.hasDiscount) }}#}
+            </div>
         </div>
         <div class="ui-buttons hidden-preview">
             {% if shopCart is defined and priceId %}
@@ -118,7 +143,11 @@
         {% if proposal_data.maxPrice > proposal_data.price %}
             от
         {% endif %}
-        {{ proposal_data.price|shop_price }}
+        {% if proposal_discount_price %}
+            {{ proposal_discount_price|shop_price }}
+        {% else %}
+            {{ proposal_data.price|shop_price }}
+        {% endif %}
     </span>
 
     <div class="hidden-preview">

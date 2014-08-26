@@ -6,7 +6,7 @@ use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
-use Shop\CatalogBundle\CollectionElement\CategoryElement;
+use Shop\CatalogBundle\Element\CategoryElement;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;

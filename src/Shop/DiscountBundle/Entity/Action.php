@@ -3,6 +3,8 @@
 namespace Shop\DiscountBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 use Application\Sonata\MediaBundle\Entity\Media;
 
@@ -11,11 +13,9 @@ use Application\Sonata\MediaBundle\Entity\Media;
  * @package Shop\DiscountBundle\Entity
  */
 class Action extends AbstractEntity
-    implements ActionInterface
+    implements  ActionInterface,
+                CacheCollectionEntityInterface
 {
-
-    const STATUS_ON = 1;
-    const STATUS_OFF = 2;
 
     /**
      * @var array
@@ -76,6 +76,23 @@ class Action extends AbstractEntity
     public function __construct()
     {
         $this->conditions = new ArrayCollection();
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new CacheCollectionElement($collection, $this);
+    }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return $this->getTitle();
     }
 
     /**

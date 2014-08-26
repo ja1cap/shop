@@ -4,8 +4,6 @@ namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryFilters;
-use Shop\CatalogBundle\Entity\CategoryParameter;
-use Shop\CatalogBundle\Entity\ParameterValue;
 use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
@@ -69,12 +67,33 @@ class DefaultController extends Controller
         }
 
         $proposals = $this->getProposalRepository()->findProposalsByFilters($category->getId(), $filtersResource);
+
+//        /**
+//         * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder $proposalActionConditionsBuilder
+//         */
+//        $proposalActionConditionsBuilder = $this->get('shop_discount.proposal.action_conditions.builder');
+//
+//        foreach($proposals as $i => $proposalData){
+//
+//            $proposal = $proposalData['proposal'];
+//
+//            $proposalActionConditions = $proposalActionConditionsBuilder->build($proposal, $proposalData['actionConditionIds']);
+//            $discountPrice = $proposalActionConditions->getDiscountPrice($proposalData['price']);
+//            var_dump($discountPrice);
+//            die;
+//            $proposals[$i]['actionConditions'] = $proposalActionConditions;
+//
+//        }
+
         $shopCart = $this->buildShopCart($request);
+
+        $proposalsCount = $this->getProposalRepository()->countProposals($category->getId(), $filtersResource);
 
         $viewParameters = array(
             'shopCart' => $shopCart,
             'category' => $category,
             'proposals' => $proposals,
+            'proposalsCount' => $proposalsCount,
             'filtersResource' => $filtersResource,
         );
 
@@ -252,7 +271,7 @@ class DefaultController extends Controller
      * @return \Shop\CatalogBundle\Entity\ProposalRepository
      */
     protected function getProposalRepository(){
-        return $this->getDoctrine()->getRepository('ShopCatalogBundle:Proposal');
+        return $this->get('shop_catalog.proposal.repository');
     }
 
 }

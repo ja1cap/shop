@@ -1,13 +1,11 @@
 <?php
 namespace Shop\DiscountBundle\Entity;
 
-use Weasty\Doctrine\Entity\EntityInterface;
-
 /**
  * Interface ActionConditionInterface
  * @package Shop\DiscountBundle\Data
  */
-interface ActionConditionInterface extends EntityInterface {
+interface ActionConditionInterface {
 
     const TYPE_COLLECTION = 1;
     const TYPE_SET = 2;
@@ -23,7 +21,22 @@ interface ActionConditionInterface extends EntityInterface {
     /**
      * @return int
      */
+    public function getId();
+
+    /**
+     * @return int
+     */
     public function getType();
+
+    /**
+     * @return integer
+     */
+    public function getPriority();
+
+    /**
+     * @return boolean
+     */
+    public function getIsComplex();
 
     /**
      * @return int
@@ -40,5 +53,38 @@ interface ActionConditionInterface extends EntityInterface {
      * @return \Shop\DiscountBundle\Entity\ActionInterface
      */
     public function getAction();
+
+    /**
+     * @return boolean
+     */
+    public function getIsPriceDiscount();
+
+    /**
+     * Get discountType
+     *
+     * @return integer
+     */
+    public function getDiscountType();
+
+    /**
+     * Get discountPriceValue
+     *
+     * @return float
+     */
+    public function getDiscountPriceValue();
+
+    /**
+     * Get discountPriceCurrencyNumericCode
+     *
+     * @return integer
+     */
+    public function getDiscountPriceCurrencyNumericCode();
+
+    /**
+     * Get discountPercent
+     *
+     * @return float
+     */
+    public function getDiscountPercent();
 
 } 

@@ -8,7 +8,13 @@
         <parameter key="shop_discount.action.entity.class">Shop\DiscountBundle\Entity\Action</parameter>
         <parameter key="shop_discount.action.repository.class">Shop\DiscountBundle\Entity\ActionRepository</parameter>
         <parameter key="shop_discount.action_condition.entity.class">Shop\DiscountBundle\Entity\ActionCondition</parameter>
+        <parameter key="shop_discount.action_condition.entity.alias">ShopDiscountBundle:ActionCondition</parameter>
         <parameter key="shop_discount.action_condition.repository.class">Shop\DiscountBundle\Entity\ActionConditionRepository</parameter>
+        <parameter key="shop_discount.action_condition.collection.class">Weasty\Doctrine\Cache\Collection\CacheCollection</parameter>
+        <parameter key="shop_discount.proposal.discount_price.builder.class">Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceBuilder</parameter>
+        <parameter key="shop_discount.proposal.discount_price.calculator.class">Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator</parameter>
+        <parameter key="shop_discount.proposal.action_conditions.builder.class">Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder</parameter>
+        <parameter key="shop_discount.proposal.extension.class">Shop\DiscountBundle\Twig\ProposalExtension</parameter>
     </parameters>
 
     <services>
@@ -23,6 +29,32 @@
             factory-service="doctrine.orm.entity_manager"
             factory-method="getRepository">
             <argument>%shop_discount.action_condition.entity.class%</argument>
+        </service>
+
+        <service id="shop_discount.action_condition.collection" class="%shop_discount.action_condition.collection.class%"
+                 factory-service="weasty_doctrine.cache.collection.manager"
+                 factory-method="getCollection">
+            <argument>%shop_discount.action_condition.entity.alias%</argument>
+        </service>
+
+        <service id="shop_discount.proposal.discount_price.builder" class="%shop_discount.proposal.discount_price.builder.class%">
+            <argument type="service" id="weasty_money.currency.converter"/>
+        </service>
+
+        <service id="shop_discount.proposal.discount_price.calculator" class="%shop_discount.proposal.discount_price.calculator.class%">
+            <argument type="service" id="weasty_money.currency.converter"/>
+            <argument type="service" id="shop_discount.proposal.discount_price.builder"/>
+        </service>
+
+        <service id="shop_discount.proposal.action_conditions.builder" class="%shop_discount.proposal.action_conditions.builder.class%">
+            <argument type="service" id="shop_discount.action_condition.collection"/>
+            <argument type="service" id="shop_discount.proposal.discount_price.calculator"/>
+        </service>
+
+        <service id="shop_discount.proposal.extension"
+                 class="%shop_discount.proposal.extension.class%">
+            <tag name="twig.extension"/>
+            <argument type="service" id="shop_discount.proposal.action_conditions.builder"/>
         </service>
 
         <service id="shop_discount.action.extension"

@@ -57,6 +57,9 @@
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
             <argument>%shop_catalog.proposal.entity.class%</argument>
+            <call method="setCacheCollectionManager">
+                <argument type="service" id="weasty_doctrine.cache.collection.manager"/>
+            </call>
         </service>
 
         <service id="shop_catalog.proposal.features_builder" class="%shop_catalog.proposal.features_builder.class%"/>

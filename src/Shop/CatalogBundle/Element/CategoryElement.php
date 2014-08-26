@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\CollectionElement;
+namespace Shop\CatalogBundle\Element;
 
 use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;

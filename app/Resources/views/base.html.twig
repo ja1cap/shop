@@ -16,6 +16,8 @@
         <script src="/js/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
         <script src="/js/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
         <script type="text/javascript" src="/js/jquery.cookies.js"></script>
+        <script type="text/javascript" src="/js/extend/extend.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.console.js"></script>
 
         {{ weasty_geonames_city_locator() }}
 
@@ -37,7 +39,16 @@
         <script type="text/javascript" src="/js/jquery.helpers.js"></script>
 
         <script type="text/javascript" src="/js/jquery.clickableBlock.js"></script>
-        <script type="text/javascript" src="/js/shop.cart/jquery.shop.cart.js"></script>
+        <script type="text/javascript" src="/js/storage/base.js"></script>
+
+        {% javascripts
+            '@ShopCatalogBundle/Resources/public/js/base.objects.js'
+            '@ShopCatalogBundle/Resources/public/js/*'
+            output='js/catalog/main.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
         {% block head %}{% endblock %}
     </head>
     <body>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-
     <route id="shop_cart" pattern="/shopCart">
         <default key="_controller">ShopCatalogBundle:ShopCart:default</default>
     </route>
@@ -11,7 +10,6 @@
     <route id="shop_cart_popup" pattern="/shopCart/popup">
         <default key="_controller">ShopCatalogBundle:ShopCart:popup</default>
     </route>
-
     <route id="categories" pattern="/adminCatalog/categories">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
     </route>
@@ -22,18 +20,18 @@
     <route id="delete_category" pattern="/adminCatalog/deleteCategory/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategory</default>
     </route>
-
     <route id="shop_catalog_categories" pattern="/catalog">
         <default key="_controller">ShopCatalogBundle:Default:categories</default>
     </route>
     <route id="shop_catalog_category" pattern="/catalog/{slug}">
         <default key="_controller">ShopCatalogBundle:Default:category</default>
     </route>
-
     <route id="shop_catalog_proposal" pattern="/catalog/{categorySlug}/{slug}">
         <default key="_controller">ShopCatalogBundle:Default:proposal</default>
     </route>
-
+    <route id="catalog_estimator" path="/estimator/{categorySlug}">
+        <default key="_controller">ShopCatalogBundle:Estimator:estimator</default>
+    </route>
     <route id="parameters" pattern="/adminCatalog/parameters">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameters</default>
     </route>
@@ -44,7 +42,6 @@
     <route id="delete_parameter" pattern="/adminCatalog/deleteParameter/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameter</default>
     </route>
-
     <route id="category_parameters" pattern="/adminCatalog/categoryParameters/{categoryId}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameters</default>
     </route>
@@ -58,7 +55,6 @@
     <route id="update_category_parameters" pattern="/adminCatalog/updateCategoryParameters/{categoryId}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:updateParameters</default>
     </route>
-
     <route id="category_parameter_group" pattern="/adminCatalog/categoryParameterGroup/{categoryId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameterGroup</default>
         <default key="id">null</default>
@@ -66,7 +62,6 @@
     <route id="delete_category_parameter_group" pattern="/adminCatalog/deleteCategoryParameterGroup/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup</default>
     </route>
-
     <route id="category_filters_list" pattern="/adminCatalog/categoryFiltersList/{categoryId}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categoryFiltersList</default>
     </route>
@@ -77,7 +72,6 @@
     <route id="delete_category_filters" pattern="/adminCatalog/deleteCategoryFilters/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryFilters</default>
     </route>
-
     <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>
         <default key="id">null</default>
@@ -88,5 +82,4 @@
     <route id="update_parameter_options" pattern="/adminCatalog/updateParameterOptions/{parameterId}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:updateParameterOptions</default>
     </route>
-
 </routes>

@@ -2,7 +2,7 @@
 namespace Weasty\Bundle\CatalogBundle\Twig;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * Class CategoryExtension

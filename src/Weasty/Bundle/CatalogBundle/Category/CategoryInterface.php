@@ -1,11 +1,11 @@
 <?php
-namespace Weasty\Bundle\CatalogBundle\Data;
+namespace Weasty\Bundle\CatalogBundle\Category;
 
 use Weasty\Resource\Routing\RoutableInterface;
 
 /**
  * Interface CategoryInterface
- * @package Weasty\Bundle\CatalogBundle\Data
+ * @package Weasty\Bundle\CatalogBundle\Category
  */
 interface CategoryInterface extends RoutableInterface {
 

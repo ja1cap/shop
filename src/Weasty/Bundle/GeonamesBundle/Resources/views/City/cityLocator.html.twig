@@ -2,6 +2,6 @@
     var weasty_geonames_city_locator_url = '{{ path('weasty_geonames_city_locator') }}';
     var weasty_geonames_city_locator_cookie_name = '{{ constant('\\Weasty\\Bundle\\GeonamesBundle\\Data\\CityLocator::COOKIE_NAME') }}';
 </script>
-{% javascripts '@WeastyGeonamesBundle/Resources/public/js/cityLocator.js' %}
+{% javascripts '@WeastyGeonamesBundle/Resources/public/js/cityLocator.js' output='js/geo/cityLocator.js' filter='yui_js' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}

@@ -2,7 +2,7 @@
 namespace Weasty\Bundle\CatalogBundle\Twig;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 
 /**
  * Class ProposalExtension

@@ -31,6 +31,10 @@ class ActionConditionElement extends CacheCollectionElement
         $data = parent::buildData($collection, $entity);
         if($entity instanceof ActionConditionInterface){
             $data['isPriceDiscount'] = $entity->getIsPriceDiscount();
+            $data['categoryIds'] = $entity->getCategoryIds();
+            $data['discountCategoryIds'] = $entity->getDiscountCategoryIds();
+            $data['proposalIds'] = $entity->getProposalIds();
+            $data['discountProposalIds'] = $entity->getDiscountProposalIds();
         }
         return $data;
     }
@@ -142,6 +146,38 @@ class ActionConditionElement extends CacheCollectionElement
     public function getDiscountPercent()
     {
         return $this->data['discountPercent'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        return $this->data['categoryIds'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscountCategoryIds()
+    {
+        return $this->data['discountCategoryIds'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getProposalIds()
+    {
+        return $this->data['proposalIds'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscountProposalIds()
+    {
+        return $this->data['discountProposalIds'];
     }
 
     /**

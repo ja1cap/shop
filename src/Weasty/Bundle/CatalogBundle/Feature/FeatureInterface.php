@@ -41,6 +41,17 @@ interface FeatureInterface extends \JsonSerializable, \ArrayAccess {
     public function setValue($value);
 
     /**
+     * @param int $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * @return int
+     */
+    public function getWeight();
+
+    /**
      * @return string
      */
     public function __toString();

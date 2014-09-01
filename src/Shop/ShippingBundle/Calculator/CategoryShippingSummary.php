@@ -9,7 +9,7 @@ use Doctrine\Common\Util\Inflector;
 class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess {
 
     /**
-     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
+     * @var \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     protected $category;
 
@@ -39,7 +39,7 @@ class CategoryShippingSummary implements ShippingSummaryInterface, \ArrayAccess 
     }
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     public function getCategory()
     {

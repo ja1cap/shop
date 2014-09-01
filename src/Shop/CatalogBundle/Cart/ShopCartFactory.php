@@ -1,9 +1,10 @@
 <?php
 namespace Shop\CatalogBundle\Cart;
 
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
-use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Weasty\Money\Price\Price;
 
 /**
  * Class ShopCartFactory
@@ -42,12 +43,18 @@ class ShopCartFactory {
     protected $shippingCalculator;
 
     /**
+     * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder
+     */
+    protected $proposalActionConditionsBuilder;
+
+    /**
      * @param $shippingCalculator
      * @param $currencyConverter
      * @param $cityLocator
      * @param $categoryRepository
      * @param $proposalRepository
      * @param $priceRepository
+     * @param $proposalActionConditionsBuilder
      */
     function __construct(
         $shippingCalculator,
@@ -55,7 +62,8 @@ class ShopCartFactory {
         $cityLocator,
         $categoryRepository,
         $proposalRepository,
-        $priceRepository
+        $priceRepository,
+        $proposalActionConditionsBuilder = null
     )
     {
         $this->shippingCalculator = $shippingCalculator;
@@ -64,6 +72,7 @@ class ShopCartFactory {
         $this->categoryRepository = $categoryRepository;
         $this->proposalRepository = $proposalRepository;
         $this->priceRepository = $priceRepository;
+        $this->proposalActionConditionsBuilder = $proposalActionConditionsBuilder;
     }
 
     /**
@@ -122,6 +131,7 @@ class ShopCartFactory {
 
                                 $priceId = (int)$proposalPriceData['id'];
                                 $proposalId = (int)$proposalPriceData['proposalId'];
+                                $actionConditionIds = $proposalPriceData['actionConditionIds'];
 
                                 $shopCartProposal = $shopCartCategory->getProposals()->get($proposalId);
 
@@ -165,12 +175,26 @@ class ShopCartFactory {
                                     continue;
                                 }
 
-                                $shopCartPrice
-                                    ->setAmount($proposalPriceAmount)
-                                    ->getItemPrice()
-                                        ->setValue($this->currencyConverter->convert($shopCartPrice->getPrice()))
-                                        ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
+                                $itemPrice = new Price();
+                                $itemPrice
+                                    ->setValue($this->currencyConverter->convert($shopCartPrice->getPrice()))
+                                    ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
                                 ;
+
+                                $shopCartPrice
+                                    ->setItemPrice($itemPrice)
+                                    ->setAmount($proposalPriceAmount)
+                                ;
+
+                                if($actionConditionIds && $this->proposalActionConditionsBuilder){
+
+                                    $proposalActionConditions = $this->proposalActionConditionsBuilder->build($shopCartProposal->getProposal(), $actionConditionIds);
+                                    $shopCartPrice
+                                        ->setProposalActionConditions($proposalActionConditions)
+                                        ->calculateItemDiscountPrice()
+                                    ;
+
+                                }
 
                             }
 

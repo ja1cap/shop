@@ -1,15 +1,14 @@
 <?php
-namespace Shop\CatalogBundle\Element;
+namespace Shop\CatalogBundle\Proposal;
 
 use Shop\CatalogBundle\Entity\Proposal;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Class ProposalElement
- * @package Shop\CatalogBundle\CollectionElement
+ * @package Shop\CatalogBundle\Proposal
  */
 class ProposalElement extends CacheCollectionElement
     implements ProposalInterface
@@ -141,6 +140,14 @@ class ProposalElement extends CacheCollectionElement
     public function getRouteParameters()
     {
         return $this->data['routeParameters'];
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Category\CategoryInterface
+     */
+    public function getCategory()
+    {
+        // TODO: Implement getCategory() method.
     }
 
 } 

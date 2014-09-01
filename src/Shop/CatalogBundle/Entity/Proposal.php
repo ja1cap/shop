@@ -5,8 +5,8 @@ namespace Shop\CatalogBundle\Entity;
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Shop\CatalogBundle\Element\ProposalElement;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Shop\CatalogBundle\Proposal\ProposalElement;
+use Shop\CatalogBundle\Proposal\ProposalInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 

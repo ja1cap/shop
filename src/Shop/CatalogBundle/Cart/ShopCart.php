@@ -3,7 +3,8 @@ namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Shop\DiscountBundle\Price\DiscountPrice;
+use Shop\DiscountBundle\Price\DiscountPriceInterface;
 use Weasty\Money\Price\Price;
 
 /**
@@ -50,96 +51,101 @@ class ShopCart implements \ArrayAccess {
     }
 
     /**
-     * @param ProposalPriceInterface $proposalPrice
-     * @return ShopCartPrice|null
+     * @return ShopCartPrice[]
      */
-    public function getProposalPrice(ProposalPriceInterface $proposalPrice){
+    protected function getShopCartPrices(){
 
-        /**
-         * @var $shopCartCategory ShopCartCategory
-         */
-        $shopCartCategory = $this->getCategories()->get($proposalPrice->getCategoryId());
-        if(!$shopCartCategory){
-            return null;
-        }
-
-        /**
-         * @var $shopCartProposal ShopCartProposal
-         */
-        $shopCartProposal = $shopCartCategory->getProposals()->get($proposalPrice->getProposalId());
-        if(!$shopCartProposal){
-            return null;
-        }
-
-        return $shopCartProposal->getPrices()->get($proposalPrice->getId());
-
-    }
-
-    /**
-     * @param ProposalPriceInterface $proposalPrice
-     * @param int $amount
-     * @return $this
-     */
-    public function addProposalPrice(ProposalPriceInterface $proposalPrice, $amount = 1){
-
-        /**
-         * @var $shopCartCategory ShopCartCategory
-         */
-        $shopCartCategory = $this->getCategories()->get($proposalPrice->getCategoryId());
-        if(!$shopCartCategory){
-            $shopCartCategory = new ShopCartCategory($proposalPrice->getCategory());
-            $this->getCategories()->set($proposalPrice->getCategoryId(), $shopCartCategory);
-        }
-
-        /**
-         * @var $shopCartProposal ShopCartProposal
-         */
-        $shopCartProposal = $shopCartCategory->getProposals()->get($proposalPrice->getProposalId());
-        if(!$shopCartProposal){
-            $shopCartProposal = new ShopCartProposal($proposalPrice->getProposal());
-            $shopCartCategory->getProposals()->set($proposalPrice->getProposalId(), $shopCartProposal);
-        }
-
-        /**
-         * @var $shopCartPrice ShopCartPrice
-         */
-        $shopCartPrice = new ShopCartPrice($proposalPrice);
-
-        $shopCartPrice
-            ->setAmount($amount)
-            ->getItemPrice()
-                ->setValue($this->currencyConverter->convert($shopCartPrice->getPrice()))
-                ->setCurrency($this->currencyConverter->getCurrencyResource()->getDefaultCurrency())
-        ;
-
-        $shopCartProposal->getPrices()->set($proposalPrice->getId(), $shopCartPrice);
-
-        return $this;
-
-    }
-
-    /**
-     * @return \Weasty\Money\Price\Price
-     */
-    public function getSummaryPrice(){
-
-        $summaryPriceValue = 0;
-        $summaryPriceCurrency = null;
+        $shopCartPrices = array();
 
         /**
          * @var $shopCartCategory ShopCartCategory
          */
         foreach($this->getCategories() as $shopCartCategory){
 
-            $summaryPrice = $shopCartCategory->getSummaryPrice();
-            $summaryPriceValue += $summaryPrice->getValue();
-            $summaryPriceCurrency = $summaryPrice->getCurrency();
+            /**
+             * @var $shopCartProposal ShopCartProposal
+             */
+            foreach($shopCartCategory->getProposals() as $shopCartProposal){
+
+                /**
+                 * @var $shopCartPrice ShopCartPrice
+                 */
+                foreach($shopCartProposal->getPrices() as $shopCartPrice){
+
+                    $shopCartPrices[] = $shopCartPrice;
+
+                }
+
+            }
 
         }
 
-        $summaryPrice = new Price($summaryPriceValue, $summaryPriceCurrency);
+        return $shopCartPrices;
 
-        return $summaryPrice;
+    }
+
+    /**
+     * @return \Weasty\Money\Price\PriceInterface|\Shop\DiscountBundle\Price\DiscountPriceInterface|null
+     */
+    public function getSummaryPrice(){
+
+        $shopCartPrices = $this->getShopCartPrices();
+
+        if(count($shopCartPrices) == 1){
+
+            $shopCartPrice = current($shopCartPrices);
+            if($shopCartPrice instanceof ShopCartPrice){
+
+                return $shopCartPrice->getSummary();
+
+            } else {
+
+                return null;
+
+            }
+
+        } else {
+
+            $summaryPriceValue = 0;
+            $summaryPriceCurrency = null;
+
+            $hasDiscount = false;
+            $discountSummaryOriginalValue = 0;
+
+            /**
+             * @var $shopCartPrice ShopCartPrice
+             */
+            foreach($shopCartPrices as $shopCartPrice){
+
+                $summaryPrice = $shopCartPrice->getSummaryPrice();
+                $summaryPriceValue += $summaryPrice->getValue();
+                $summaryPriceCurrency = $summaryPrice->getCurrency();
+
+                if($summaryPrice instanceof DiscountPriceInterface){
+
+                    $hasDiscount = true;
+                    $discountSummaryOriginalValue += $summaryPrice->getOriginalPrice()->getValue();
+
+                }
+
+            }
+
+            if($hasDiscount){
+
+                $price = new DiscountPrice($summaryPriceValue, $summaryPriceCurrency);
+                $price
+                    ->setOriginalPrice(new Price($summaryPriceValue, $summaryPriceCurrency))
+                ;
+
+            } else {
+
+                $price = new Price($summaryPriceValue, $summaryPriceCurrency);
+
+            }
+
+            return $price;
+
+        }
 
     }
 
@@ -181,16 +187,16 @@ class ShopCart implements \ArrayAccess {
         $proposalIds = array();
 
         /**
-         * @var $summaryCategory ShopCartCategory
+         * @var $shopCartCategory ShopCartCategory
          */
-        foreach($this->getCategories() as $summaryCategory){
+        foreach($this->getCategories() as $shopCartCategory){
 
             /**
-             * @var $summaryProposal ShopCartProposal
+             * @var $shopCartProposal ShopCartProposal
              */
-            foreach($summaryCategory->getProposals() as $summaryProposal){
+            foreach($shopCartCategory->getProposals() as $shopCartProposal){
 
-                $proposalIds[] = $summaryProposal->getProposal()->getId();
+                $proposalIds[] = $shopCartProposal->getProposal()->getId();
 
             }
 
@@ -208,21 +214,21 @@ class ShopCart implements \ArrayAccess {
         $priceIds = array();
 
         /**
-         * @var $summaryCategory ShopCartCategory
+         * @var $shopCartCategory ShopCartCategory
          */
-        foreach($this->getCategories() as $summaryCategory){
+        foreach($this->getCategories() as $shopCartCategory){
 
             /**
-             * @var $summaryProposal ShopCartProposal
+             * @var $shopCartProposal ShopCartProposal
              */
-            foreach($summaryCategory->getProposals() as $summaryProposal){
+            foreach($shopCartCategory->getProposals() as $shopCartProposal){
 
                 /**
-                 * @var $summaryPrice ShopCartPrice
+                 * @var $shopCartPrice ShopCartPrice
                  */
-                foreach($summaryProposal->getPrices() as $summaryPrice){
+                foreach($shopCartProposal->getPrices() as $shopCartPrice){
 
-                    $priceIds[] = $summaryPrice->getPrice()->getId();
+                    $priceIds[] = $shopCartPrice->getPrice()->getId();
 
                 }
 
@@ -242,21 +248,21 @@ class ShopCart implements \ArrayAccess {
         $amount = 0;
 
         /**
-         * @var $summaryCategory ShopCartCategory
+         * @var $shopCartCategory ShopCartCategory
          */
-        foreach($this->getCategories() as $summaryCategory){
+        foreach($this->getCategories() as $shopCartCategory){
 
             /**
-             * @var $summaryProposal ShopCartProposal
+             * @var $shopCartProposal ShopCartProposal
              */
-            foreach($summaryCategory->getProposals() as $summaryProposal){
+            foreach($shopCartCategory->getProposals() as $shopCartProposal){
 
                 /**
-                 * @var $summaryPrice ShopCartPrice
+                 * @var $shopCartPrice ShopCartPrice
                  */
-                foreach($summaryProposal->getPrices() as $summaryPrice){
+                foreach($shopCartProposal->getPrices() as $shopCartPrice){
 
-                    $amount += $summaryPrice->getAmount();
+                    $amount += $shopCartPrice->getAmount();
 
                 }
 

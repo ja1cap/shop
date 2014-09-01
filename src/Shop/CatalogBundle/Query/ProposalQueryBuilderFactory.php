@@ -36,7 +36,6 @@ class ProposalQueryBuilderFactory {
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        //@TODO add action condition ids list
         $qb
             ->from('ShopCatalogBundle:Proposal', 'p')
         ;

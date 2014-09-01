@@ -27,9 +27,11 @@
                             {{ proposal.id }}
                         </td>
                         <td>
-                        <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
-                            {{ proposal.title }}
-                        </span>
+                            <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
+                                <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
+                                    {{ proposal.title }}
+                                </span>
+                            </a>
                             <div>
                                 {% if proposal.price %}
                                     <span style="font-weight: normal; display: block">
@@ -42,11 +44,11 @@
                                 {% endif %}
                             </div>
                             <div>
-                                <div class="small btn default">
-                                    <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-                                        Изменить
-                                    </a>
-                                </div>
+                                {#<div class="small btn default">#}
+                                    {#<a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">#}
+                                        {#Изменить#}
+                                    {#</a>#}
+                                {#</div>#}
                                 <div class="small primary btn">
                                     <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
                                         Цены

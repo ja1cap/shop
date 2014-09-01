@@ -3,7 +3,9 @@ namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\Inflector;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Shop\DiscountBundle\Price\DiscountPrice;
+use Shop\DiscountBundle\Price\DiscountPriceInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 use Weasty\Money\Price\Price;
 
 /**
@@ -13,7 +15,7 @@ use Weasty\Money\Price\Price;
 class ShopCartCategory implements \ArrayAccess {
 
     /**
-     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
+     * @var \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     protected $category;
 
@@ -29,7 +31,7 @@ class ShopCartCategory implements \ArrayAccess {
     }
 
     /**
-     * @return CategoryInterface
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     public function getCategory()
     {
@@ -45,22 +47,62 @@ class ShopCartCategory implements \ArrayAccess {
     }
 
     /**
-     * @return Price
+     * @return \Weasty\Money\Price\PriceInterface|\Shop\DiscountBundle\Price\DiscountPriceInterface|null
      */
     public function getSummaryPrice(){
 
-        $categorySummaryPriceValue = 0;
-        $categorySummaryPriceCurrency = null;
+        if($this->getProposals()->count() == 1){
 
-        $this->getProposals()->map(function(ShopCartProposal $shopCartProposal) use (&$categorySummaryPriceValue, &$categorySummaryPriceCurrency) {
+            $shopCartProposal = $this->getProposals()->current();
+            if($shopCartProposal instanceof ShopCartProposal){
 
-            $summaryPrice = $shopCartProposal->getSummaryPrice();
-            $categorySummaryPriceValue += $summaryPrice->getValue();
-            $categorySummaryPriceCurrency = $summaryPrice->getCurrency();
+                return $shopCartProposal->getSummary();
 
-        });
+            } else {
 
-        return new Price($categorySummaryPriceValue, $categorySummaryPriceCurrency);
+                return null;
+
+            }
+
+        } else {
+
+            $summaryPriceValue = 0;
+            $summaryPriceCurrency = null;
+
+            $hasDiscount = false;
+            $discountSummaryOriginalValue = 0;
+
+            foreach($this->getProposals() as $shopCartProposal){
+
+                $summaryPrice = $shopCartProposal->getSummaryPrice();
+                $summaryPriceValue += $shopCartProposal->getValue();
+                $summaryPriceCurrency = $shopCartProposal->getCurrency();
+
+                if($summaryPrice instanceof DiscountPriceInterface){
+
+                    $hasDiscount = true;
+                    $discountSummaryOriginalValue += $summaryPrice->getOriginalPrice()->getValue();
+
+                }
+
+            }
+
+            if($hasDiscount){
+
+                $price = new DiscountPrice($summaryPriceValue, $summaryPriceCurrency);
+                $price
+                    ->setOriginalPrice(new Price($summaryPriceValue, $summaryPriceCurrency))
+                ;
+
+            } else {
+
+                $price = new Price($summaryPriceValue, $summaryPriceCurrency);
+
+            }
+
+            return $price;
+
+        }
 
     }
 

@@ -7,53 +7,63 @@
     {% if pricesAmount > 0 %}
 
         <div class="shop-cart">
-            {% for categoryData in shopCart.categories %}
+            {% for shopCartCategory in shopCart.categories %}
                 <div class="shop-cart-category">
-                    <a href="{{ path('shop_catalog_category', { 'slug' : categoryData.category.slug }) }}">
-                        {{ categoryData.category.name }}
+                    <a href="{{ path('shop_catalog_category', { 'slug' : shopCartCategory.category.slug }) }}">
+                        {{ shopCartCategory.category.name }}
                     </a>
                 </div>
                 <div class="shop-cart-proposals">
-                    {% for proposalData in categoryData.proposals %}
+                    {% for shopCartProposal in shopCartCategory.proposals %}
                         <div class="shop-cart-proposal">
                             <table class="proposal-prices-table">
                                 <tbody>
-                                    {% for priceData in proposalData.prices %}
+                                    {% for shopCartPrice in shopCartProposal.prices %}
+                                        {% set price = shopCartPrice.itemPrice %}
+                                        {% set discountPrice = shopCartPrice.discountPrice %}
+                                        {% set summaryPrice = shopCartPrice.summaryPrice %}
                                         <tr>
                                             <td class="image-cell">
                                                 <div class="proposal-image">
-                                                    <img src="{% path proposalData.proposal.image, 'tiny_square' %}" alt="{{ proposalData.proposal.name }}" title="{{ proposalData.proposal.name }}">
+                                                    <img src="{% path shopCartProposal.proposal.image, 'tiny_square' %}" alt="{{ shopCartProposal.proposal.name }}" title="{{ shopCartProposal.proposal.name }}">
                                                 </div>
                                             </td>
                                             <td class="caption-cell">
                                                 <div class="proposal-name">
-                                                    <a href="{{ shop_catalog_proposal_url(proposalData.proposal) }}">
-                                                        {{ proposalData.proposal.title }}
+                                                    <a href="{{ shop_catalog_proposal_url(shopCartProposal.proposal) }}">
+                                                        {{ shopCartProposal.proposal.title }}
                                                     </a>
                                                 </div>
                                                 <div class="price-description">
-                                                    {{ priceData.price.description|raw }}
+                                                    {{ shopCartPrice.price.description|raw }}
                                                 </div>
                                             </td>
                                             <td class="price-cell">
                                                 {{ 'shop.cart.price'|trans({}, 'ShopCatalogBundle') }}:
                                                 <div class="price">
-                                                    {{ priceData.value|weasty_price }}
+                                                    {% if discountPrice %}
+                                                        {{ discountPrice|shop_price }}
+                                                        <div class="original-price">
+                                                            {{ discountPrice.originalPrice|shop_price }}
+                                                        </div>
+                                                    {% else %}
+                                                        {{ price|shop_price }}
+                                                    {% endif %}
                                                 </div>
                                             </td>
                                             <td class="amount-cell">
 
                                                 <div class="amount-spinner">
 
-                                                    <a href="{{ path('shop_cart_popup') }}" class="minus {{ priceData.amount == 1 ? 'remove-from-cart' : 'decrease-amount-in-cart' }}"  data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                    <a href="{{ path('shop_cart_popup') }}" class="minus {{ shopCartPrice.amount == 1 ? 'remove-from-cart' : 'decrease-amount-in-cart' }}"  data-cart='{"categoryId":{{ shopCartProposal.proposal.categoryId }},"proposalId":{{ shopCartProposal.proposal.id }},"priceId":{{ shopCartPrice.price.id }}}'>
                                                         -1
                                                     </a>
 
                                                     <div class="amount">
-                                                        {{ priceData.amount }}
+                                                        {{ shopCartPrice.amount }}
                                                     </div>
 
-                                                    <a href="{{ path('shop_cart_popup') }}" class="plus increment-amount-in-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                    <a href="{{ path('shop_cart_popup') }}" class="plus increment-amount-in-cart" data-cart='{"categoryId":{{ shopCartProposal.proposal.categoryId }},"proposalId":{{ shopCartProposal.proposal.id }},"priceId":{{ shopCartPrice.price.id }}}'>
                                                         +1
                                                     </a>
 
@@ -63,15 +73,18 @@
                                             <td class="summary-price-cell">
                                                 {{ 'shop.cart.summary'|trans({}, 'ShopCatalogBundle') }}:
                                                 <div class="summary-price">
-                                                    {% if priceData.amount > 1 %}
-                                                        {{ priceData.summary|weasty_price }}
+                                                    {% if discountPrice %}
+                                                        {{ summaryPrice|shop_price }}
+                                                        <div class="original-price">
+                                                            {{ summaryPrice.originalPrice|shop_price }}
+                                                        </div>
                                                     {% else %}
-                                                        {{ priceData.value|weasty_price }}
+                                                        {{ summaryPrice|shop_price }}
                                                     {% endif %}
                                                 </div>
                                             </td>
                                             <td class="buttons-cell">
-                                                <a href="{{ path('shop_cart_popup') }}" class="remove-from-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ priceData.price.id }}}'>
+                                                <a href="{{ path('shop_cart_popup') }}" class="remove-from-cart" data-cart='{"categoryId":{{ shopCartProposal.proposal.categoryId }},"proposalId":{{ shopCartProposal.proposal.id }},"priceId":{{ shopCartPrice.price.id }}}'>
                                                     {{ 'shop.cart.remove.proposal'|trans({}, 'ShopCatalogBundle') }}
                                                 </a>
                                             </td>
@@ -89,7 +102,7 @@
 
     <div class="shop-cart-summary">
         {{ 'shop.cart.summary.price'|transchoice(pricesAmount, {
-        '%summary_price%' : shopCart.summaryPrice.value|weasty_price
+            '%summary_price%' : shopCart.summaryPrice.value|weasty_price
         }, 'ShopCatalogBundle') }}
     </div>
 

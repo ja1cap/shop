@@ -12,7 +12,8 @@
         <parameter key="shop_catalog.category_parameter.repository.class">Doctrine\ORM\EntityRepository</parameter>
         <parameter key="shop_catalog.proposal.entity.class">Shop\CatalogBundle\Entity\Proposal</parameter>
         <parameter key="shop_catalog.proposal.repository.class">Shop\CatalogBundle\Entity\ProposalRepository</parameter>
-        <parameter key="shop_catalog.proposal.features_builder.class">Shop\CatalogBundle\Proposal\Feature\ProposalFeaturesBuilder</parameter>
+        <parameter key="shop_catalog.proposal.features_builder.class">Shop\CatalogBundle\Proposal\Feature\FeaturesBuilder</parameter>
+        <parameter key="shop_catalog.proposal.estimator.builder.class">Shop\CatalogBundle\Proposal\Estimator\EstimatorBuilder</parameter>
         <parameter key="shop_catalog.price.entity.class">Shop\CatalogBundle\Entity\Price</parameter>
         <parameter key="shop_catalog.price.repository.class">Shop\CatalogBundle\Entity\PriceRepository</parameter>
         <parameter key="shop_catalog.popular_proposal.entity.class">Shop\CatalogBundle\Entity\PopularProposal</parameter>
@@ -64,6 +65,12 @@
 
         <service id="shop_catalog.proposal.features_builder" class="%shop_catalog.proposal.features_builder.class%"/>
 
+        <service id="shop_catalog.proposal.estimator.builder" class="%shop_catalog.proposal.estimator.builder.class%">
+            <argument type="service" id="shop_catalog.category.repository"/>
+            <argument type="service" id="shop_catalog.proposal.repository"/>
+            <argument type="service" id="shop_catalog.price.repository"/>
+        </service>
+
         <service id="shop_catalog.popular_proposal.repository" class="%shop_catalog.popular_proposal.repository.class%"
                  factory-service="doctrine.orm.entity_manager"
                  factory-method="getRepository">
@@ -83,6 +90,7 @@
             <argument type="service" id="shop_catalog.category.repository"/>
             <argument type="service" id="shop_catalog.proposal.repository"/>
             <argument type="service" id="shop_catalog.price.repository"/>
+            <argument type="service" id="shop_discount.proposal.action_conditions.builder"/>
         </service>
 
         <service id="shop_catalog.category.filters.builder" class="Shop\CatalogBundle\Filter\CategoryFiltersBuilder">

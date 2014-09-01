@@ -23,6 +23,11 @@ class Feature implements FeatureInterface {
     public $value;
 
     /**
+     * @var int
+     */
+    public $weight;
+
+    /**
      * @return int
      */
     public function getId()
@@ -74,6 +79,24 @@ class Feature implements FeatureInterface {
     {
         $this->value = $value;
         return $this;
+    }
+
+    /**
+     * @param int $weight
+     * @return $this
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = (int)$weight;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
 
     /**

@@ -37,3 +37,27 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+doctrine:
+    orm:
+      entity_managers:
+        default:
+          auto_mapping: true
+          metadata_cache_driver:
+            type:                 array # Required
+            host:                 ~
+            port:                 ~
+            instance_class:       ~
+            class:                ~
+          query_cache_driver:
+            type:                 array # Required
+            host:                 ~
+            port:                 ~
+            instance_class:       ~
+            class:                ~
+          result_cache_driver:
+            type:                 array # Required
+            host:                 ~
+            port:                 ~
+            instance_class:       ~
+            class:                ~

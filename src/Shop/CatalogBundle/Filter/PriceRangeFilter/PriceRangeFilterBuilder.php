@@ -5,7 +5,7 @@ use Shop\CatalogBundle\Filter\FilterInterface;
 use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
 use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * Class PriceRangeFilterBuilder
@@ -34,7 +34,7 @@ class PriceRangeFilterBuilder {
     }
 
     /**
-     * @param CategoryInterface $category
+     * @param \Weasty\Bundle\CatalogBundle\Category\CategoryInterface $category
      * @param array $value
      * @param FiltersResource $filtersResource
      * @param int $filterType
@@ -69,7 +69,7 @@ class PriceRangeFilterBuilder {
     }
 
     /**
-     * @param CategoryInterface $category
+     * @param \Weasty\Bundle\CatalogBundle\Category\CategoryInterface $category
      * @param $value
      * @param FiltersResource $filtersResource = null
      * @return OptionsFilter
@@ -113,7 +113,7 @@ class PriceRangeFilterBuilder {
     }
 
     /**
-     * @param CategoryInterface $category
+     * @param \Weasty\Bundle\CatalogBundle\Category\CategoryInterface $category
      * @param mixed $value
      * @return SliderFilter
      */

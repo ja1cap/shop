@@ -6,12 +6,14 @@ use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Weasty\Doctrine\Entity\AbstractEntity;
+use Weasty\Bundle\CatalogBundle\Parameter\Option\ParameterOptionInterface;
 
 /**
  * Class ParameterOption
  * @package Shop\CatalogBundle\Entity
  */
 class ParameterOption extends AbstractEntity
+    implements ParameterOptionInterface
 {
     /**
      * @var integer
@@ -38,6 +40,20 @@ class ParameterOption extends AbstractEntity
      */
     private $image;
 
+    /**
+     * @var integer
+     */
+    private $parameterId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Parameter
+     */
+    private $parameter;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $optionValues;
 
     /**
      * Get id
@@ -94,16 +110,6 @@ class ParameterOption extends AbstractEntity
     {
         return $this->position;
     }
-    /**
-     * @var integer
-     */
-    private $parameterId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Parameter
-     */
-    private $parameter;
-
 
     /**
      * Set parameterId
@@ -151,10 +157,6 @@ class ParameterOption extends AbstractEntity
     {
         return $this->parameter;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $optionValues;
 
     /**
      * Constructor

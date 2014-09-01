@@ -9,7 +9,7 @@ use Shop\ShippingBundle\Entity\ShippingMethodCategory;
 use Shop\ShippingBundle\Entity\ShippingMethodCategoryRepository;
 use Shop\ShippingBundle\Entity\ShippingMethodRepository;
 use Shop\ShippingBundle\Entity\ShippingPrice;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 use Weasty\Bundle\GeonamesBundle\Entity\City;
 use Weasty\Money\Currency\Converter\CurrencyConverterInterface;
 use Weasty\Money\Price\PriceInterface;

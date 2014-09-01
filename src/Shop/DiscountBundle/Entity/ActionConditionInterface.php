@@ -87,4 +87,24 @@ interface ActionConditionInterface {
      */
     public function getDiscountPercent();
 
-} 
+    /**
+     * @return array
+     */
+    public function getCategoryIds();
+
+    /**
+     * @return array
+     */
+    public function getDiscountCategoryIds();
+
+    /**
+     * @return array
+     */
+    public function getProposalIds();
+
+    /**
+     * @return array
+     */
+    public function getDiscountProposalIds();
+
+    }

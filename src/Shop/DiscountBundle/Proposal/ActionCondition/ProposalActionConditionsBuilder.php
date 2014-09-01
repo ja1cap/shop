@@ -4,7 +4,7 @@ namespace Shop\DiscountBundle\Proposal\ActionCondition;
 use Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator;
 use Shop\DiscountBundle\Entity\ActionInterface;
 use Shop\DiscountBundle\Entity\ActionConditionInterface;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 
 /**
@@ -45,7 +45,7 @@ class ProposalActionConditionsBuilder {
     }
 
     /**
-     * @param \Weasty\Bundle\CatalogBundle\Data\ProposalInterface $proposal
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
      * @param array $actionConditionIds
      * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
      */
@@ -66,6 +66,23 @@ class ProposalActionConditionsBuilder {
             if(
                 $actionCondition instanceof ActionConditionInterface
                 && $actionCondition->getAction()->getStatus() == ActionInterface::STATUS_ON
+                && (
+                    (
+                        in_array($proposal->getId(), $actionCondition->getDiscountProposalIds())
+                        || (
+                            in_array($proposal->getId(), $actionCondition->getProposalIds())
+                            && !$actionCondition->getDiscountProposalIds()
+                        )
+                    )
+                    || (
+                        in_array($proposal->getCategoryId(), $actionCondition->getDiscountCategoryIds())
+                        || (
+                            in_array($proposal->getCategoryId(), $actionCondition->getCategoryIds())
+                            && !$actionCondition->getDiscountCategoryIds()
+                            && !$actionCondition->getDiscountProposalIds()
+                        )
+                    )
+                )
             ){
                 $actionConditions[] = $actionCondition;
                 $actionConditionsAmount++;

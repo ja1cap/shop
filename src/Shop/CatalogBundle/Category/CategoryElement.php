@@ -1,14 +1,13 @@
 <?php
-namespace Shop\CatalogBundle\Element;
+namespace Shop\CatalogBundle\Category;
 
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Class CategoryElement
- * @package Shop\CatalogBundle\CollectionElement
+ * @package Shop\CatalogBundle\Category
  */
 class CategoryElement extends CacheCollectionElement
     implements CategoryInterface
@@ -48,6 +47,26 @@ class CategoryElement extends CacheCollectionElement
         return [
             'slug' => $this->data['slug'],
         ];
+    }
+
+    /**
+     * Get parameters
+     *
+     * @return \Doctrine\Common\Collections\Collection|array
+     */
+    public function getParameters()
+    {
+        // TODO: Implement getParameters() method.
+    }
+
+    /**
+     * Get parameterGroups
+     *
+     * @return \Doctrine\Common\Collections\Collection|array
+     */
+    public function getParameterGroups()
+    {
+        // TODO: Implement getParameterGroups() method.
     }
 
 } 

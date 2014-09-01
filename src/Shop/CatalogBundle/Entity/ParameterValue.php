@@ -3,6 +3,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -10,6 +11,7 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class ParameterValue extends AbstractEntity
+    implements ParameterValueInterface
 {
     /**
      * @var integer
@@ -17,14 +19,44 @@ class ParameterValue extends AbstractEntity
     private $id;
 
     /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @var integer
+     */
+    private $proposalId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Proposal
+     */
+    private $proposal;
+
+    /**
+     * @var integer
+     */
+    private $priceId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Price
+     */
+    private $price;
+
+    /**
      * @var integer
      */
     private $parameterId;
 
     /**
-     * @var string
+     * @var \Shop\CatalogBundle\Entity\Parameter
      */
-    private $value;
+    private $parameter;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\ParameterOption
+     */
+    private $option;
 
     /**
      * @var integer
@@ -109,31 +141,6 @@ class ParameterValue extends AbstractEntity
     {
         return $this->optionId;
     }
-
-    /**
-     * @var integer
-     */
-    private $proposalId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Price
-     */
-    private $price;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Proposal
-     */
-    private $proposal;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Parameter
-     */
-    private $parameter;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\ParameterOption
-     */
-    private $option;
 
     /**
      * Set proposalId
@@ -252,11 +259,6 @@ class ParameterValue extends AbstractEntity
     {
         return $this->option;
     }
-    /**
-     * @var integer
-     */
-    private $priceId;
-
 
     /**
      * Set priceId

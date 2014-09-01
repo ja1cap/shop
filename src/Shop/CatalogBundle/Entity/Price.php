@@ -4,7 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
-use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 
 /**
  * Class Price
@@ -51,7 +51,7 @@ class Price extends AbstractEntity
     private $updateDate;
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     public function getCategory()
     {

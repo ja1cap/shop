@@ -10,8 +10,8 @@ use Shop\CatalogBundle\Filter\PriceRangeFilter\PriceRangeFilterBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 
 /**
  * Class CategoryFiltersBuilder
@@ -61,7 +61,7 @@ class CategoryFiltersBuilder {
 
     /**
      * @param CategoryInterface $category
-     * @param ProposalInterface $proposal
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
      * @param array $manufacturerIds
      * @param array $parametersFilteredOptionIds
      * @param array $priceRangeSteps
@@ -129,7 +129,7 @@ class CategoryFiltersBuilder {
 
     /**
      * @param CategoryInterface $category
-     * @param ProposalInterface $proposal
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
      * @param Request $request
      * @return mixed|FiltersResource
      */

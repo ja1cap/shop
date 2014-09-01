@@ -4,7 +4,7 @@ namespace Shop\CatalogBundle\Filter\ManufacturerFilter;
 use Shop\CatalogBundle\Filter\FilterInterface;
 use Shop\CatalogBundle\Filter\OptionsFilter\FilterOption;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * Class ManufacturerFilterBuilder
@@ -23,7 +23,7 @@ class ManufacturerFilterBuilder {
     }
 
     /**
-     * @param CategoryInterface $category
+     * @param \Weasty\Bundle\CatalogBundle\Category\CategoryInterface $category
      * @param array $value
      * @return OptionsFilter
      */

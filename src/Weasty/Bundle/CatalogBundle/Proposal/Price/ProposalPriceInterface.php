@@ -1,13 +1,13 @@
 <?php
-namespace Weasty\Bundle\CatalogBundle\Data;
+namespace Weasty\Bundle\CatalogBundle\Proposal\Price;
 
 use Weasty\Money\Price\PriceInterface;
 
 /**
- * Interface PriceInterface
- * @package Weasty\Bundle\CatalogBundle\Data
+ * Interface ProposalPriceInterface
+ * @package Weasty\Bundle\CatalogBundle\Proposal\Price
  */
-interface ProposalPriceInterface extends \Weasty\Money\Price\PriceInterface {
+interface ProposalPriceInterface extends PriceInterface {
 
     /**
      * @return integer
@@ -20,7 +20,7 @@ interface ProposalPriceInterface extends \Weasty\Money\Price\PriceInterface {
     public function getCategoryId();
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
      */
     public function getCategory();
 
@@ -30,7 +30,7 @@ interface ProposalPriceInterface extends \Weasty\Money\Price\PriceInterface {
     public function getProposalId();
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Data\ProposalInterface
+     * @return \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface
      */
     public function getProposal();
 

@@ -1,13 +1,13 @@
 <?php
-namespace Shop\DiscountBundle\Data;
+namespace Shop\DiscountBundle\Price;
 
 use Weasty\Money\Price\Price;
 
 /**
  * Class DiscountPrice
- * @package Shop\DiscountBundle\Data
+ * @package Shop\DiscountBundle\Price
  */
-class DiscountPrice extends Price {
+class DiscountPrice extends Price implements DiscountPriceInterface {
 
     /**
      * @var \Weasty\Money\Price\PriceInterface
@@ -48,7 +48,7 @@ class DiscountPrice extends Price {
     public function getDiscountPercent()
     {
         if($this->discountPercent === null){
-            $this->discountPercent = floatval($this->getOriginalPrice()->getValue() / $this->getValue());
+            $this->discountPercent = round(floatval($this->getOriginalPrice()->getValue() / $this->getValue()));
         }
         return $this->discountPercent;
     }

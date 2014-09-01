@@ -6,10 +6,10 @@ use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use php_rutils\RUtils;
-use Shop\CatalogBundle\Element\CategoryElement;
+use Shop\CatalogBundle\Category\CategoryElement;
+use Shop\CatalogBundle\Category\CategoryInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
 use Weasty\Resource\Utils\WordInflector;
 
 /**
@@ -17,7 +17,8 @@ use Weasty\Resource\Utils\WordInflector;
  * @package Shop\CatalogBundle\Entity
  */
 class Category extends AbstractEntity
-    implements CategoryInterface, CacheCollectionEntityInterface
+    implements  CategoryInterface,
+                CacheCollectionEntityInterface
 {
 
     /**

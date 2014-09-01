@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Twig;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * Class ShopCategoryExtension
@@ -12,7 +12,7 @@ class ShopCategoryExtension extends \Twig_Extension {
 
     /**
      * @TODO refactor
-     * @var \Weasty\Bundle\CatalogBundle\Data\CategoryInterface[]
+     * @var \Weasty\Bundle\CatalogBundle\Category\CategoryInterface[]
      */
     private $categories;
 
@@ -39,7 +39,7 @@ class ShopCategoryExtension extends \Twig_Extension {
     }
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Data\CategoryInterface[]
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface[]
      */
     public  function getCategories(){
 

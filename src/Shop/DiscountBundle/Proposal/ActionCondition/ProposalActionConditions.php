@@ -3,18 +3,13 @@ namespace Shop\DiscountBundle\Proposal\ActionCondition;
 
 use Shop\DiscountBundle\Entity\ActionConditionInterface;
 use Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator;
-use Weasty\Bundle\CatalogBundle\Data\ProposalInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 
 /**
  * Class ProposalActionConditions
  * @package Shop\DiscountBundle\Proposal\ActionCondition
  */
 class ProposalActionConditions {
-
-    /**
-     * @var \Weasty\Bundle\CatalogBundle\Data\ProposalInterface
-     */
-    protected $proposal;
 
     /**
      * @var \Shop\DiscountBundle\Entity\ActionConditionInterface[]
@@ -40,6 +35,11 @@ class ProposalActionConditions {
      * @var \Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator
      */
     protected $discountPriceCalculator;
+
+    /**
+     * @var \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface
+     */
+    protected $proposal;
 
     function __construct(ProposalDiscountPriceCalculator $discountPriceCalculator, ProposalInterface $proposal, $conditions = [])
     {
@@ -140,7 +140,7 @@ class ProposalActionConditions {
 
     /**
      * @param $proposalPrice
-     * @return null|\Shop\DiscountBundle\Data\DiscountPrice
+     * @return null|\Shop\DiscountBundle\Price\DiscountPrice
      */
     public function getDiscountPrice($proposalPrice){
         return $this->discountPriceCalculator->calculate($proposalPrice, $this->getDiscountConditions());

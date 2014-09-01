@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Cart;
 
 use Doctrine\Common\Inflector\Inflector;
-use Weasty\Bundle\CatalogBundle\Data\ProposalPriceInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Weasty\Money\Price\Price;
 use Weasty\Money\Price\PriceInterface;
 
@@ -18,20 +18,29 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     protected $price;
 
     /**
-     * @var \Weasty\Money\Price\Price
+     * @var \Weasty\Money\Price\PriceInterface
      */
     protected $itemPrice;
+
+    /**
+     * @var \Shop\DiscountBundle\Price\DiscountPriceInterface
+     */
+    protected $itemDiscountPrice;
 
     /**
      * @var int|float|null
      */
     protected $amount;
 
+    /**
+     * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions|null
+     */
+    protected $proposalActionConditions;
+
     function __construct(ProposalPriceInterface $price)
     {
         $this->price = $price;
         $this->amount = 0;
-        $this->itemPrice = new Price();
     }
 
     /**
@@ -69,15 +78,70 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return \Weasty\Money\Price\Price
+     * @param \Weasty\Money\Price\PriceInterface $itemPrice
+     * @return $this
+     */
+    public function setItemPrice($itemPrice)
+    {
+
+        $this->itemPrice = $itemPrice;
+        return $this;
+
+    }
+
+    /**
+     * @return \Weasty\Money\Price\PriceInterface
      */
     public function getItemPrice()
     {
+
+        if(!$this->itemPrice){
+
+            $itemPrice = new Price();
+            $itemPrice
+                ->setValue($this->getPrice()->getValue())
+                ->setCurrency($this->getPrice()->getCurrency())
+            ;
+
+            $this->itemPrice = $itemPrice;
+
+        }
+
         return $this->itemPrice;
     }
 
     /**
-     * @return ProposalPriceInterface
+     * @return $this
+     */
+    public function calculateItemDiscountPrice(){
+
+        $itemPrice = $this->getItemPrice();
+
+        if($this->getProposalActionConditions() && $itemPrice instanceof PriceInterface){
+            $this->itemDiscountPrice = $this->getProposalActionConditions()->getDiscountPrice($itemPrice);
+        }
+
+        return $this;
+
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\Price\DiscountPriceInterface
+     */
+    public function getItemDiscountPrice()
+    {
+        return $this->itemDiscountPrice;
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\Price\DiscountPriceInterface
+     */
+    public function getDiscountPrice(){
+        return $this->getItemDiscountPrice();
+    }
+
+    /**
+     * @return \Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface
      */
     public function getPrice()
     {
@@ -85,19 +149,66 @@ class ShopCartPrice implements PriceInterface, \ArrayAccess {
     }
 
     /**
-     * @return \Weasty\Money\Price\Price
+     * @return \Weasty\Money\Price\PriceInterface|\Shop\DiscountBundle\Price\DiscountPriceInterface
      */
     public function getSummaryPrice()
     {
-        return new Price($this->getValue() * $this->getAmount(), $this->getCurrency());
+
+        if($this->getAmount() > 1){
+
+            $price = new Price($this->getItemPrice()->getValue() * $this->getAmount(), $this->getItemPrice()->getCurrency());
+
+            if($this->getProposalActionConditions()){
+
+                $discountPrice = $this->getProposalActionConditions()->getDiscountPrice($this->getItemPrice());
+                if($discountPrice){
+
+                    $discountPrice
+                        ->setValue($discountPrice->getValue() * $this->getAmount())
+                        ->setOriginalPrice($price)
+                    ;
+
+                    $price = $discountPrice;
+
+                }
+
+            }
+
+
+        } else {
+
+            $price = $this->getDiscountPrice() ?: $this->getItemPrice();
+
+        }
+
+        return $price;
+
     }
 
     /**
-     * @return \Weasty\Money\Price\Price
+     * @return \Weasty\Money\Price\PriceInterface
      */
     public function getSummary()
     {
         return $this->getSummaryPrice();
+    }
+
+    /**
+     * @return null|\Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
+     */
+    public function getProposalActionConditions()
+    {
+        return $this->proposalActionConditions;
+    }
+
+    /**
+     * @param null|\Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions $proposalActionConditions
+     * @return $this
+     */
+    public function setProposalActionConditions($proposalActionConditions)
+    {
+        $this->proposalActionConditions = $proposalActionConditions;
+        return $this;
     }
 
     /**

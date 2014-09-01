@@ -1,7 +1,7 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\DiscountPrice;
 
-use Shop\DiscountBundle\Data\DiscountPrice;
+use Shop\DiscountBundle\Price\DiscountPrice;
 use Weasty\Money\Price\Price;
 use Weasty\Money\Price\PriceInterface;
 

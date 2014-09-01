@@ -4,7 +4,7 @@ namespace Weasty\Bundle\CatalogBundle\Form\Type;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * Class CategoryIdType

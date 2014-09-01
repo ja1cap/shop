@@ -10,7 +10,7 @@ use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Weasty\Bundle\CatalogBundle\Data\CategoryInterface;
+use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
  * @TODO create manufacturer proposals page
@@ -38,7 +38,7 @@ class DefaultController extends Controller
     public function categoryAction($slug, Request $request){
 
         $categoryFilters = null;
-        $category = $this->getDoctrine()->getRepository('ShopCatalogBundle:Category')->findOneBy(array(
+        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'slug' => $slug,
         ));
 
@@ -67,23 +67,6 @@ class DefaultController extends Controller
         }
 
         $proposals = $this->getProposalRepository()->findProposalsByFilters($category->getId(), $filtersResource);
-
-//        /**
-//         * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder $proposalActionConditionsBuilder
-//         */
-//        $proposalActionConditionsBuilder = $this->get('shop_discount.proposal.action_conditions.builder');
-//
-//        foreach($proposals as $i => $proposalData){
-//
-//            $proposal = $proposalData['proposal'];
-//
-//            $proposalActionConditions = $proposalActionConditionsBuilder->build($proposal, $proposalData['actionConditionIds']);
-//            $discountPrice = $proposalActionConditions->getDiscountPrice($proposalData['price']);
-//            var_dump($discountPrice);
-//            die;
-//            $proposals[$i]['actionConditions'] = $proposalActionConditions;
-//
-//        }
 
         $shopCart = $this->buildShopCart($request);
 
@@ -263,8 +246,8 @@ class DefaultController extends Controller
      */
     public function buildShopCart(Request $request)
     {
-        $shopCartStorageData = json_decode($request->cookies->get('shopCart'), true);
-        return $this->getShopCartFactory()->createShopCart($shopCartStorageData);
+        $storageData = json_decode($request->cookies->get('shopCart'), true);
+        return $this->getShopCartFactory()->createShopCart($storageData);
     }
 
     /**

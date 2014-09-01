@@ -67,7 +67,7 @@
     {% set proposal_data = media_item %}
     {% set proposal = proposal_data.proposal %}
     {% set proposal_action_conditions = shop_discount_proposal_action_conditions(proposal, proposal_data.actionConditionIds) %}
-    {% set proposal_discount_price = proposal_action_conditions.getDiscountPrice(proposal_data.price) %}
+    {% set proposal_discount_price = (proposal_data.hasDiscount ? proposal_action_conditions.getDiscountPrice(proposal_data.price) : null) %}
     {% set media_item = proposal_data.proposal %}
 
     {{ parent() }}
@@ -105,6 +105,9 @@
                 {% if proposal.isBestseller %}
                     <div class="marker best"></div>
                 {% endif %}
+                {% if proposal_data.hasAction %}
+                    <div class="marker action"></div>
+                {% endif %}
                 {% if proposal_discount_price %}
                     <div class="marker discount">
                         -{{ proposal_discount_price.getDiscountPercent }}%
@@ -112,23 +115,16 @@
                 {% endif %}
             </div>
             {{ parent() }}
-            <div class="hidden-preview">
-                {#{{ dump(proposal.isNew) }}#}
-                {#{{ dump(proposal.isBestSeller) }}#}
-                {#{{ dump(proposal_data.actionConditionIds) }}#}
-                {#{{ dump(proposal_data.hasAction) }}#}
-                {#{{ dump(proposal_data.hasDiscount) }}#}
-            </div>
         </div>
         <div class="ui-buttons hidden-preview">
             {% if shopCart is defined and priceId %}
                 <div class="large secondary btn">
-                    <a href="#" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}}'>
+                    <a href="#" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
                         Сравнить
                     </a>
                 </div>
                 <div class="large primary btn">
-                    <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}}'>
+                    <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
                         Купить
                     </a>
                 </div>
@@ -139,16 +135,19 @@
 
 {% block media_item_description %}
 
-    <span class="price">
+    <div class="price">
         {% if proposal_data.maxPrice > proposal_data.price %}
             от
         {% endif %}
         {% if proposal_discount_price %}
             {{ proposal_discount_price|shop_price }}
+            <div class="original-price">
+                {{ proposal_data.price|shop_price }}
+            </div>
         {% else %}
             {{ proposal_data.price|shop_price }}
         {% endif %}
-    </span>
+    </div>
 
     <div class="hidden-preview">
         {#{{ parent() }}#}

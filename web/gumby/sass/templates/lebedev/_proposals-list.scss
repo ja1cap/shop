@@ -115,6 +115,13 @@ $preview-container-left-bar-width: 62px;
 
     }
 
+    .original-price {
+      font-size: 12px;
+      color: rgb(126,126,126);
+      text-decoration: line-through;
+      font-weight: normal;
+    }
+
     .ui-buttons {
 
       margin: 0 0 20px;
@@ -146,6 +153,13 @@ $preview-container-left-bar-width: 62px;
         width: 40px;
         height: 35px;
         background: url("/img/weasty-sprite.png") no-repeat;
+        text-align: center;
+        padding: 5px 5px 0 0;
+        text-shadow: 1px 1px 0 black;
+        color: white;
+        line-height: 30px;
+        font-size: 12px;
+        font-weight: bold;
 
         &:after {
 
@@ -177,15 +191,22 @@ $preview-container-left-bar-width: 62px;
           &:after {
             background-position: -44px -169px;
           }
+
+        }
+
+        &.action {
+
+          background-position: -272px -130px;
+
+          &:after {
+            background-position: -2px -166px;
+          }
+
         }
 
         &.discount {
 
-          text-shadow: 1px 1px 0 black;
-          color: white;
-          font-size: 12px;
-          font-weight: bold;
-          background-position: -453px -130px;
+          background-position: -334px -130px;
 
           &:after {
             display: none;
@@ -315,7 +336,7 @@ $preview-container-left-bar-width: 62px;
           right: -21px;
           top: -21px;
           display: block;
-          z-index: 3;
+          z-index: 10;
           background: white;
           border: 1px solid rgb( 202, 202, 202 );
           @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 5px, 0);

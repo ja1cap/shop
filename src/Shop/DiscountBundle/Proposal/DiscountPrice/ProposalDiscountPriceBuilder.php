@@ -1,6 +1,6 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\DiscountPrice;
-use Shop\DiscountBundle\Data\DiscountPrice;
+use Shop\DiscountBundle\Price\DiscountPrice;
 use Shop\DiscountBundle\Entity\ActionConditionInterface;
 use Weasty\Money\Price\PriceInterface;
 
@@ -23,7 +23,7 @@ class ProposalDiscountPriceBuilder {
     /**
      * @param $proposalPrice
      * @param $discountCondition
-     * @return null|DiscountPrice
+     * @return null|\Shop\DiscountBundle\Price\DiscountPrice
      */
     public function build($proposalPrice, $discountCondition){
 

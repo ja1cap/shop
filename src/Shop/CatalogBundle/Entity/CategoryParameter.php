@@ -3,6 +3,7 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -10,6 +11,7 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class CategoryParameter extends AbstractEntity
+    implements  CategoryParameterInterface
 {
 
     /**

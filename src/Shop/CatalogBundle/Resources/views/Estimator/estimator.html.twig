@@ -1,0 +1,62 @@
+{% extends 'ShopMainBundle:Default:layout.html.twig' %}
+{% block page_container %}
+    {#{{ dump(estimator) }}#}
+    <div class="row">
+        <div class="twelve columns">
+            {% set proposalFeatures = (estimator.getProposals|first).getFeatures %}
+            {% if proposalFeatures.groups or proposalFeatures.features %}
+                <div class="">
+                    {% if proposalFeatures.groups %}
+                        {% for featureGroup in proposalFeatures.groups if featureGroup.features %}
+                            <h3>
+                                {{ featureGroup.name }}
+                            </h3>
+                            <div class="">
+                                <table>
+                                    <tbody>
+                                    {% for feature in featureGroup.features %}
+                                        <tr>
+                                            <td>
+                                                {{ feature.name }}
+                                            </td>
+                                            {% for estimatedProposal in estimator.getProposals %}
+                                                {% set _feature = estimatedProposal.getFeatures.getGroup(featureGroup.getId).getFeature(feature.id) %}
+                                                <td>
+                                                    {{ feature.value ?: '-'}}
+                                                    {#{{ dump(feature.isBest) }}#}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if proposalFeatures.features %}
+                        <div class="">
+                            <table>
+                                <tbody>
+                                {% for feature in proposalFeatures.features %}
+                                    <tr>
+                                        <td>
+                                            {{ feature.name }}
+                                        </td>
+                                        {% for estimatedProposal in estimator.getProposals %}
+                                            {% set _feature = estimatedProposal.getFeatures.getFeature(feature.id) %}
+                                            <td>
+                                                {{ feature.value ?: '-'}}
+                                                {#{{ dump(feature.isBest) }}#}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

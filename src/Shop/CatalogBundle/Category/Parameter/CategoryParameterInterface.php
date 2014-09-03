@@ -17,4 +17,9 @@ interface CategoryParameterInterface {
      */
     public function getParameterId();
 
+    /**
+     * @return boolean
+     */
+    public function getIsComparable();
+
 } 

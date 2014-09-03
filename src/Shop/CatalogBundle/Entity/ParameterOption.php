@@ -112,6 +112,17 @@ class ParameterOption extends AbstractEntity
     }
 
     /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority()
+    {
+        //@TODO add priority property
+        return $this->getPosition();
+    }
+
+    /**
      * Set parameterId
      *
      * @param integer $parameterId

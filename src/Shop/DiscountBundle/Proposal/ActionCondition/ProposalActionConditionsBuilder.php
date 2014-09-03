@@ -79,7 +79,6 @@ class ProposalActionConditionsBuilder {
                         || (
                             in_array($proposal->getCategoryId(), $actionCondition->getCategoryIds())
                             && !$actionCondition->getDiscountCategoryIds()
-                            && !$actionCondition->getDiscountProposalIds()
                         )
                     )
                 )

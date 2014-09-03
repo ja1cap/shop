@@ -446,7 +446,6 @@ class ProposalRepository extends AbstractRepository {
                     $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
                 )
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->eq('all_acdp.conditionId', 'ac.id'))
             ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('acdp.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
@@ -474,7 +473,6 @@ class ProposalRepository extends AbstractRepository {
                             $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
                         ),
                         $qb->expr()->andX(
-                            $qb->expr()->isNull('all_acdp.id'),
                             $qb->expr()->isNull('acdc.id'),
                             $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
                         )
@@ -598,7 +596,6 @@ class ProposalRepository extends AbstractRepository {
                     $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
                 )
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->eq('all_acdp.conditionId', 'ac.id'))
             ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('acdp.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
@@ -626,7 +623,6 @@ class ProposalRepository extends AbstractRepository {
                             $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
                         ),
                         $qb->expr()->andX(
-                            $qb->expr()->isNull('all_acdp.id'),
                             $qb->expr()->isNull('acdc.id'),
                             $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
                         )

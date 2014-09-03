@@ -106,6 +106,15 @@ class CategoryParameter extends AbstractEntity
     }
 
     /**
+     * @return boolean
+     */
+    public function getIsComparable()
+    {
+        //@TODO add isComparable property
+        return true;
+    }
+
+    /**
      * Set position
      *
      * @param integer $position

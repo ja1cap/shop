@@ -1,13 +1,16 @@
 <?php
 namespace Shop\CatalogBundle\Proposal\Feature;
 
+use Shop\CatalogBundle\Category\CategoryInterface;
 use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
 use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
-use Shop\CatalogBundle\Proposal\ProposalInterface;
 use Weasty\Bundle\CatalogBundle\Feature\Feature;
 use Weasty\Bundle\CatalogBundle\Feature\FeatureGroup;
+use Weasty\Bundle\CatalogBundle\Feature\FeatureInterface;
 use Weasty\Bundle\CatalogBundle\Feature\FeaturesResource;
 use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\Feature\ProposalFeatureValue;
+use Weasty\Bundle\CatalogBundle\Proposal\Feature\ProposalFeatureValueInterface;
 
 /**
  * Class FeaturesBuilder
@@ -24,10 +27,9 @@ class FeaturesBuilder {
 
     /**
      * @param CategoryParameterInterface $categoryParameter
-     * @param ParameterValueInterface|null $parameterValue
      * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface
      */
-    protected function buildFeature(CategoryParameterInterface $categoryParameter, ParameterValueInterface $parameterValue = null){
+    protected function buildFeature(CategoryParameterInterface $categoryParameter){
 
         $feature = $this->createFeature();
 
@@ -36,40 +38,52 @@ class FeaturesBuilder {
             ->setName($categoryParameter->getName())
         ;
 
-        if($parameterValue){
-
-            $feature
-                ->setValue($parameterValue->getOption()->getName())
-                ->setWeight($parameterValue->getOption()->getPosition())
-            ;
-
-        }
-
         return $feature;
 
     }
 
     /**
-     * @param ProposalInterface $proposal
-     * @param ProposalPriceInterface $price
-     * @param bool $includeNotDefinedParameters
+     * @return \Weasty\Bundle\CatalogBundle\Proposal\Feature\ProposalFeatureValueInterface
+     */
+    protected function createFeatureValue(){
+        return new ProposalFeatureValue();
+    }
+
+    /**
+     * @param \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface $feature
+     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param \Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface $parameterValue
+     * @return ProposalFeatureValueInterface
+     */
+    protected function buildFeatureValue(FeatureInterface $feature, ProposalPriceInterface $price, ParameterValueInterface $parameterValue){
+
+        $featureValue = $this->createFeatureValue();
+
+        $featureValue
+            ->setPriceId($price->getId())
+            ->setProposalId($price->getProposalId())
+            ->setValue($parameterValue->getOption()->getName())
+        ;
+
+        $featureValue->setFeature($feature);
+
+        return $featureValue;
+
+    }
+
+    /**
+     * @param CategoryInterface $category
+     * @param ProposalPriceInterface[] $prices
      * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
      */
-    public function build(ProposalInterface $proposal, ProposalPriceInterface $price, $includeNotDefinedParameters = false){
+    public function build(CategoryInterface $category, $prices = []){
 
         $proposalFeaturesResource = new FeaturesResource();
-        $category = $proposal->getCategory();
-        if(!$price instanceof ProposalPriceInterface){
-            return $proposalFeaturesResource;
-        }
 
         /**
-         * @var $parameterValuesIndexedByParameterId \Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface[]
+         * @var \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface[] $features
          */
-        $parameterValuesIndexedByParameterId = [];
-        foreach($price->getParameterValues() as $parameterValue){
-            $parameterValuesIndexedByParameterId[$parameterValue->getParameterId()] = $parameterValue;
-        }
+        $features = [];
 
         /**
          * @var $categoryParameterGroup \Shop\CatalogBundle\Entity\CategoryParameterGroup
@@ -85,17 +99,10 @@ class FeaturesBuilder {
 
             foreach($categoryParameterGroup->getParameters() as $categoryParameter){
 
-                $parameterValue = null;
-                if(isset($parameterValuesIndexedByParameterId[$categoryParameter->getParameterId()])){
-                    $parameterValue = $parameterValuesIndexedByParameterId[$categoryParameter->getParameterId()];
-                }
+                $feature = $this->buildFeature($categoryParameter);
+                $features[$feature->getId()] = $feature;
 
-                if($parameterValue || $includeNotDefinedParameters){
-
-                    $feature = $this->buildFeature($categoryParameter, $parameterValue);
-                    $featureGroup->addFeature($feature);
-
-                }
+                $featureGroup->addFeature($feature);
 
             }
 
@@ -107,15 +114,36 @@ class FeaturesBuilder {
 
         foreach($category->getParameters() as $categoryParameter){
 
-            $parameterValue = null;
-            if(isset($parameterValuesIndexedByParameterId[$categoryParameter->getParameterId()])){
-                $parameterValue = $parameterValuesIndexedByParameterId[$categoryParameter->getParameterId()];
+            if(!$categoryParameter->getGroupId()){
+
+                $feature = $this->buildFeature($categoryParameter);
+                $features[$feature->getId()] = $feature;
+
+                $proposalFeaturesResource->addFeature($feature);
+
             }
 
-            if($parameterValue || $includeNotDefinedParameters){
+        }
 
-                $feature = $this->buildFeature($categoryParameter, $parameterValue);
-                $proposalFeaturesResource->addFeature($feature);
+        foreach($prices as $price){
+
+            if($price instanceof ProposalPriceInterface){
+
+                /**
+                 * @var \Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface $parameterValue
+                 */
+                foreach($price->getParameterValues() as $parameterValue){
+
+                    if(isset($features[$parameterValue->getParameterId()])){
+
+                        $feature = $features[$parameterValue->getParameterId()];
+
+                        $featureValue = $this->buildFeatureValue($feature, $price, $parameterValue);
+                        $feature->addFeatureValue($featureValue->getPriceId(), $featureValue);
+
+                    }
+
+                }
 
             }
 

@@ -35,4 +35,11 @@ interface ParameterOptionInterface {
      */
     public function getPosition();
 
+    /**
+     * Get priority
+     *
+     * @return integer
+     */
+    public function getPriority();
+
 } 

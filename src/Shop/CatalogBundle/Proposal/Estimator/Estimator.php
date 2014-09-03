@@ -13,54 +13,47 @@ class Estimator {
     protected $category;
 
     /**
-     * @var array
-     */
-    protected $parameterBestWeights = [];
-
-    /**
      * @var EstimatedProposal[]
      */
-    protected $proposals;
+    protected $estimatedProposals;
 
     /**
-     * @param int $parameterId
-     * @return int
+     * @var \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
      */
-    public function getParameterBestWeight($parameterId){
-
-        if(isset($this->parameterBestWeights[$parameterId])){
-            return $this->parameterBestWeights[$parameterId];
-        }
-
-        return 0;
-
-    }
-
-    /**
-     * @param int $parameterId
-     * @param int $weight
-     * @return int
-     */
-    public function setParameterBestWeight($parameterId, $weight){
-        return $this->parameterBestWeights[$parameterId] = (int)$weight;
-    }
+    protected $estimatedFeatures;
 
     /**
      * @return EstimatedProposal[]
      */
-    public function getProposals()
+    public function getEstimatedProposals()
     {
-        return $this->proposals;
+        return $this->estimatedProposals;
     }
 
     /**
-     * @param EstimatedProposal[] $proposals
+     * @param $priceId
+     * @param EstimatedProposal $estimatedProposal
      * @return $this
      */
-    public function setProposals($proposals)
-    {
-        $this->proposals = $proposals;
+    public function addEstimatedProposal($priceId, EstimatedProposal $estimatedProposal){
+
+        $this->estimatedProposals[$priceId] = $estimatedProposal;
         return $this;
+
+    }
+
+    /**
+     * @param $priceId
+     * @return null|EstimatedProposal
+     */
+    public function getEstimatedProposal($priceId){
+
+        if(isset($this->estimatedProposals[$priceId])){
+            return $this->estimatedProposals[$priceId];
+        }
+
+        return null;
+
     }
 
     /**
@@ -78,6 +71,24 @@ class Estimator {
     public function setCategory($category)
     {
         $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
+     */
+    public function getEstimatedFeatures()
+    {
+        return $this->estimatedFeatures;
+    }
+
+    /**
+     * @param \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface $estimatedFeatures
+     * @return $this
+     */
+    public function setEstimatedFeatures($estimatedFeatures)
+    {
+        $this->estimatedFeatures = $estimatedFeatures;
         return $this;
     }
 

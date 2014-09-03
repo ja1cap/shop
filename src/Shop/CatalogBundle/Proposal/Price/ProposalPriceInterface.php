@@ -7,7 +7,7 @@ use Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface as BasePro
  * Interface ProposalPriceInterface
  * @package Shop\CatalogBundle\Proposal\Price
  */
-interface ProposalPriceInterface extends BaseProposalPriceInterface{
+interface ProposalPriceInterface extends BaseProposalPriceInterface {
 
     /**
      * Get parameterValues

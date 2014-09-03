@@ -2,8 +2,6 @@
 namespace Shop\CatalogBundle\Proposal\Estimator;
 
 use Shop\CatalogBundle\Category\CategoryInterface;
-use Shop\CatalogBundle\Proposal\ProposalInterface;
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeaturesBuilder;
 
 /**
@@ -52,27 +50,27 @@ class EstimatorBuilder {
             $estimator = new Estimator();
             $estimator->setCategory($category);
 
-            $estimatedFeaturesBuilder->setEstimator($estimator);
-
-            $estimatedProposals = [];
+            $prices = [];
 
             $proposalPricesData = $categoryData['proposalPrices'];
             foreach($proposalPricesData as $proposalPriceData){
 
                 $priceId = $proposalPriceData['priceId'];
                 $price = $this->findPrice($priceId);
+                $prices[$priceId] = $price;
 
                 $proposalId = $proposalPriceData['proposalId'];
                 $proposal = $this->findProposal($proposalId);
 
-                $estimatedFeatures = $estimatedFeaturesBuilder->build($proposal, $price, true);
-                $estimatedProposal = new EstimatedProposal($proposal, $price, $estimatedFeatures);
-
-                $estimatedProposals[$proposal->getId()] = $estimatedProposal;
+                $estimatedProposal = new EstimatedProposal($proposal, $price);
+                $estimator->addEstimatedProposal($priceId, $estimatedProposal);
 
             }
 
-            $estimator->setProposals($estimatedProposals);
+            $estimatedFeaturesBuilder->setEstimator($estimator);
+
+            $estimatedFeatures = $estimatedFeaturesBuilder->build($category, $prices);
+            $estimator->setEstimatedFeatures($estimatedFeatures);
 
         }
 

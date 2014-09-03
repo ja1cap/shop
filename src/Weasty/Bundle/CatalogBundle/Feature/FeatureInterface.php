@@ -30,26 +30,33 @@ interface FeatureInterface extends \JsonSerializable, \ArrayAccess {
     public function setName($name);
 
     /**
+     * @param $key
+     * @param \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface $value
+     * @return $this
+     */
+    public function addFeatureValue($key, $value);
+
+    /**
+     * @param $key
+     * @return $this
+     */
+    public function removeFeatureValue($key);
+
+    /**
+     * @param $key
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface|null
+     */
+    public function getFeatureValue($key);
+
+    /**
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface[]
+     */
+    public function getFeatureValues();
+
+        /**
      * @return mixed
      */
     public function getValue();
-
-    /**
-     * @param mixed $value
-     * @return $this
-     */
-    public function setValue($value);
-
-    /**
-     * @param int $weight
-     * @return $this
-     */
-    public function setWeight($weight);
-
-    /**
-     * @return int
-     */
-    public function getWeight();
 
     /**
      * @return string

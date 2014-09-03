@@ -18,14 +18,9 @@ class Feature implements FeatureInterface {
     public $name;
 
     /**
-     * @var mixed
+     * @var \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface[]
      */
-    public $value;
-
-    /**
-     * @var int
-     */
-    public $weight;
+    public $featureValues = [];
 
     /**
      * @return int
@@ -64,39 +59,71 @@ class Feature implements FeatureInterface {
     }
 
     /**
+     * @param $key
+     * @param \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface $value
+     * @return $this
+     */
+    public function addFeatureValue($key, $value){
+        $this->featureValues[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return $this
+     */
+    public function removeFeatureValue($key){
+        if(isset($this->featureValues[$key])){
+            unset($this->featureValues[$key]);
+        }
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface|null
+     */
+    public function getFeatureValue($key){
+        if(isset($this->featureValues[$key])){
+            return $this->featureValues[$key];
+        }
+        return null;
+    }
+
+    /**
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface[]
+     */
+    public function getFeatureValues(){
+        return $this->featureValues;
+    }
+
+    /**
+     * @return FeatureValueInterface[]
+     */
+    public function getValues(){
+        return $this->featureValues;
+    }
+
+    /**
      * @return mixed
      */
     public function getValue()
     {
-        return $this->value;
-    }
 
-    /**
-     * @param mixed $value
-     * @return $this
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-        return $this;
-    }
+        if(!$this->getFeatureValues()){
+            return null;
+        }
 
-    /**
-     * @param int $weight
-     * @return $this
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = (int)$weight;
-        return $this;
-    }
+        return implode(', ',
+            array_map(
+                function($value){
+                    return (string)$value;
 
-    /**
-     * @return int
-     */
-    public function getWeight()
-    {
-        return $this->weight;
+                },
+                $this->getFeatureValues()
+            )
+        );
+
     }
 
     /**

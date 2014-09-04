@@ -1,0 +1,79 @@
+@import "settings";
+@import "lebedev-shop-scss/lebedev";
+
+.proposals-table {
+
+  border: none;
+  margin: 0;
+
+  tr {
+    border: none;
+  }
+
+  td {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: left;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px solid rgb(202,202,202);
+  }
+
+  .summary-price, .price {
+    font-weight: bold;
+  }
+
+  .original-price {
+    font-size: 12px;
+    color: rgb(126,126,126);
+    text-decoration: line-through;
+    font-weight: normal;
+  }
+
+  .image-cell {
+
+    width: 62px;
+    padding-left: 0;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .proposal-image {
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgb(202,202,202);
+    }
+
+  }
+
+  .caption-cell {
+
+    width: 350px;
+
+  }
+
+  .price-cell {
+
+    width: 150px;
+
+  }
+
+  .amount-cell {
+
+    width: 150px;
+
+  }
+
+  .summary-price-cell {
+
+    width: 150px;
+
+  }
+
+  .buttons-cell {
+
+  }
+
+}

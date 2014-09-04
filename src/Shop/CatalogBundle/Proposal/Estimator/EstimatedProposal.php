@@ -7,17 +7,7 @@ use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
  * Class EstimatorProposal
  * @package Shop\CatalogBundle\Estimator
  */
-class EstimatedProposal {
-
-    /**
-     * @var \Shop\CatalogBundle\Proposal\ProposalInterface
-     */
-    protected $proposal;
-
-    /**
-     * @var \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface
-     */
-    protected $price;
+class EstimatedProposal extends EstimatorProposal {
 
     /**
      * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue
@@ -32,35 +22,12 @@ class EstimatedProposal {
     /**
      * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue[]
      */
-    protected $featureValues;
+    protected $featureValues =[];
 
     /**
      * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
      */
     protected $actionConditions;
-
-    function __construct($proposal, $price)
-    {
-        $this->proposal = $proposal;
-        $this->price = $price;
-        $this->featureValues = [];
-    }
-
-    /**
-     * @return \Shop\CatalogBundle\Proposal\ProposalInterface
-     */
-    public function getProposal()
-    {
-        return $this->proposal;
-    }
-
-    /**
-     * @return \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
 
     /**
      * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue

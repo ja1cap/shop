@@ -1,12 +1,12 @@
 {% set pricesAmount = shopCart.pricesAmount %}
-<div id="shopCartPopup" class="shop-cart-popup" title="{{ 'shop.cart.popup.title'|trans({}, 'ShopCatalogBundle') }}">
+<div id="shopCartPopup" class="shop-cart-popup-container ui-popup-container" title="{{ 'shop.cart.popup.title'|trans({}, 'ShopCatalogBundle') }}">
 
     {#@TODO jQuery ui dialog focus bug fix#}
     <span class="ui-helper-hidden-accessible"><input type="text"/></span>
 
     {% if pricesAmount > 0 %}
 
-        <div class="shop-cart">
+        <div class="shop-cart ui-popup-content">
             {% for shopCartCategory in shopCart.categories %}
                 <div class="shop-cart-category">
                     <a href="{{ path('shop_catalog_category', { 'slug' : shopCartCategory.category.slug }) }}">
@@ -16,7 +16,7 @@
                 <div class="shop-cart-proposals">
                     {% for shopCartProposal in shopCartCategory.proposals %}
                         <div class="shop-cart-proposal">
-                            <table class="proposal-prices-table">
+                            <table class="proposals-table">
                                 <tbody>
                                     {% for shopCartPrice in shopCartProposal.prices %}
                                         {% set price = shopCartPrice.itemPrice %}
@@ -106,7 +106,7 @@
         }, 'ShopCatalogBundle') }}
     </div>
 
-    <div class="ui-buttons hidden-preview">
+    <div class="ui-buttons">
         <div class="large secondary btn">
             <a href="#" class="dialog-close-btn">
                 {{ 'shop.cart.to_catalog'|trans({}, 'ShopCatalogBundle') }}

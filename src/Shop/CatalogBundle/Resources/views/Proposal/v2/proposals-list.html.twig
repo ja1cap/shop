@@ -119,7 +119,7 @@
         <div class="ui-buttons hidden-preview">
             {% if shopCart is defined and priceId %}
                 <div class="large secondary btn">
-                    <a href="#" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
+                    <a href="{{ path('shop_catalog_estimator_popup') }}" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
                         Сравнить
                     </a>
                 </div>

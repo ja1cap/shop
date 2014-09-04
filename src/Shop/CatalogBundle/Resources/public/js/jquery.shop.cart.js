@@ -109,7 +109,7 @@ $(function(){
         cart.updateProposalPricesAmount = function(){
 
             var $shopCartBtn = $('.shop-cart-btn');
-            var $shopCartBtnAmount = $('.amount', $shopCartBtn);
+            var $shopCartBtnAmount = $('.amount-badge', $shopCartBtn);
 
             var amount = cart.getProposalPricesAmount();
             $shopCartBtnAmount.html(amount);
@@ -191,7 +191,7 @@ $(function(){
 
             var $shopCartPopup = cart.getPopup();
             $shopCartPopup.dialog({
-                dialogClass: 'shop-cart-popup-container',
+                dialogClass: 'shop-cart-popup ui-popup',
                 autoOpen: true,
                 modal: true,
                 resizable: false,
@@ -229,6 +229,7 @@ $(function(){
                 $mainContainer.addLoading();
 
                 $.ajax({
+                    type: 'POST',
                     cache: false,
                     url: _settings.popupUrl,
                     data: _settings.popupRequestData,
@@ -242,6 +243,9 @@ $(function(){
 
                         cart.initPopup();
 
+                    },
+                    error: function(){
+                        $mainContainer.removeLoading();
                     }
                 });
 
@@ -253,6 +257,7 @@ $(function(){
                 ;
 
                 $.ajax({
+                    type: 'POST',
                     cache: false,
                     url: _settings.popupUrl,
                     data: _settings.popupRequestData,
@@ -277,7 +282,7 @@ $(function(){
 
         };
 
-        cart.refreshCartSummary = function(_options){
+        cart.refresh = function(_options){
 
             var _settings = {
                 popup : false,
@@ -321,7 +326,7 @@ $(function(){
             $.shopCart.addProposalPrice(proposalPriceData, function(categories){
 
                 var popupUrl = $btn.attr('href');
-                $.shopCart.refreshCartSummary({
+                $.shopCart.refresh({
                     popup: (popupUrl != '#'),
                     popupUrl: popupUrl,
                     popupRequestData: {
@@ -351,7 +356,7 @@ $(function(){
             $.shopCart.removeProposalPrice(proposalPriceData, function(categories){
 
                 var popupUrl = $btn.attr('href');
-                $.shopCart.refreshCartSummary({
+                $.shopCart.refresh({
                     popup: popupUrl != '#',
                     popupUrl: popupUrl,
                     popupRequestData: {
@@ -379,7 +384,7 @@ $(function(){
             $.shopCart.incrementProposalPriceAmount(proposalPriceData, function(categories){
 
                 var popupUrl = $btn.attr('href');
-                $.shopCart.refreshCartSummary({
+                $.shopCart.refresh({
                     popup: (popupUrl != '#'),
                     popupUrl: popupUrl,
                     popupRequestData: {
@@ -407,7 +412,7 @@ $(function(){
             $.shopCart.decrementProposalPriceAmount(proposalPriceData, function(categories){
 
                 var popupUrl = $btn.attr('href');
-                $.shopCart.refreshCartSummary({
+                $.shopCart.refresh({
                     popup: (popupUrl != '#'),
                     popupUrl: popupUrl,
                     popupRequestData: {

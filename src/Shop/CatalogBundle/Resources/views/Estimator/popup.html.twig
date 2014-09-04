@@ -1,0 +1,91 @@
+<div id="comparisonPopup" class="comparison-popup-container ui-popup-container" title="{{ 'shop.comparison.popup.title'|trans({}, 'ShopCatalogBundle') }}">
+
+    {#@TODO jQuery ui dialog focus bug fix#}
+    <span class="ui-helper-hidden-accessible"><input type="text"/></span>
+
+    <div class="ui-popup-content">
+        {% set estimatorCategory = estimatorCategories[category.id] %}
+        <div class="">
+            <div class="">
+                {% if estimatorCategories|length > 1 %}
+                    <ul class="nav nav-tabs">
+                        {% for _estimatorCategory in estimatorCategories %}
+                            {% if _estimatorCategory.getProposalsAmount %}
+                                <li class="{{ (_estimatorCategory.getCategory.getId == category.id ? 'active' : '') }}">
+                                    <a href="{{ path('shop_catalog_estimator_popup', {'categoryId': _estimatorCategory.getCategory.getId}) }}" class="refresh-comparison">
+                                        {{ _estimatorCategory.getCategory.getName }} ({{ _estimatorCategory.getProposalsAmount }})
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="">
+                {% if estimatorCategory %}
+                    <table class="proposals-table">
+                        <tbody>
+                        {% for estimatorProposal in estimatorCategory.getProposals %}
+                            {% set proposal = estimatorProposal.getProposal %}
+                            {% set price = estimatorProposal.getPrice %}
+                            {% set actionConditions = (estimatorProposal.getActionConditionIds ? shop_discount_proposal_action_conditions(proposal, estimatorProposal.getActionConditionIds) : null) %}
+                            {% set discountPrice = (actionConditions ? actionConditions.getDiscountPrice(price) : null) %}
+                            <tr>
+                                <td class="image-cell">
+                                    <div class="proposal-image">
+                                        <img src="{% path proposal.image, 'tiny_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
+                                    </div>
+                                </td>
+                                <td class="caption-cell">
+                                    <div class="proposal-name">
+                                        <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                            {{ proposal.title }}
+                                        </a>
+                                    </div>
+                                    <div class="price-description">
+                                        {{ price.description|raw }}
+                                    </div>
+                                </td>
+                                <td class="price-cell">
+                                    {{ 'shop.cart.price'|trans({}, 'ShopCatalogBundle') }}:
+                                    <div class="price">
+                                        {% if discountPrice is defined and discountPrice %}
+                                            {{ discountPrice|shop_price }}
+                                            <div class="original-price">
+                                                {{ discountPrice.originalPrice|shop_price }}
+                                            </div>
+                                        {% else %}
+                                            {{ price|shop_price }}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="buttons-cell">
+                                    <a href="{{ path('shop_catalog_estimator_popup') }}" class="remove-from-comparison" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                        {{ 'shop.comparison.remove.proposal'|trans({}, 'ShopCatalogBundle') }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-buttons">
+        <div class="large secondary btn">
+            <a href="#" class="dialog-close-btn">
+                {{ 'shop.comparison.to_catalog'|trans({}, 'ShopCatalogBundle') }}
+            </a>
+        </div>
+        {#{% if pricesAmount > 0 %}#}
+            <div class="large secondary btn">
+                <a href="{{ path('shop_catalog_estimator', {'categoryId':category.id}) }}">
+                    {{ 'shop.comparison.to_estimator'|trans({}, 'ShopCatalogBundle') }}
+                </a>
+            </div>
+        {#{% endif %}#}
+    </div>
+
+</div>

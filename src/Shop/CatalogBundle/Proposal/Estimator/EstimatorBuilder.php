@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Proposal\Estimator;
 
 use Shop\CatalogBundle\Category\CategoryInterface;
+use Shop\CatalogBundle\Proposal\Estimator\Data\CategoryEstimationData;
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeature;
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface;
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeaturesBuilder;
@@ -60,9 +61,8 @@ class EstimatorBuilder {
 
         if(isset($storageData['categories']) && is_array($storageData['categories']) && isset($storageData['categories'][$category->getId()])){
 
-            $estimatedFeaturesBuilder = new EstimatedFeaturesBuilder();
-
             $categoryData = $storageData['categories'][$category->getId()];
+            $categoryEstimationData = new CategoryEstimationData($categoryData);
 
             $estimator = new Estimator();
             $estimator->setCategory($category);
@@ -75,8 +75,7 @@ class EstimatorBuilder {
             $rateFeature = $this->buildRateFeature();
             $estimator->setRateFeature($rateFeature);
 
-            $proposalPricesData = $categoryData['proposalPrices'];
-            foreach($proposalPricesData as $proposalPriceData){
+            foreach($categoryEstimationData->getProposalPrices() as $proposalPriceData){
 
                 $priceId = $proposalPriceData['priceId'];
                 $price = $this->findPrice($priceId);
@@ -90,7 +89,10 @@ class EstimatorBuilder {
                 //Proposal action conditions
                 $actionConditionIds = $proposalPriceData['actionConditionIds'];
                 $actionConditions = $this->proposalActionConditionsBuilder->build($proposal, $actionConditionIds);
-                $estimatedProposal->setActionConditions($actionConditions);
+                $estimatedProposal
+                    ->setActionConditionIds($actionConditionIds)
+                    ->setActionConditions($actionConditions)
+                ;
 
                 //Proposal price feature value
                 $priceFeatureValue = $this->buildPriceFeatureValue($price, $actionConditions);
@@ -107,13 +109,81 @@ class EstimatorBuilder {
 
             }
 
-            $estimatedFeaturesBuilder->setEstimator($estimator);
-            $estimatedFeatures = $estimatedFeaturesBuilder->build($category, $prices);
+            $estimatedFeatures = $this->buildEstimatedFeatures($estimator, $prices);
             $estimator->setEstimatedFeatures($estimatedFeatures);
 
         }
 
         return $estimator;
+
+    }
+
+    /**
+     * @param $storageData
+     * @return EstimatorCategory[]
+     */
+    public function buildEstimatorCategories($storageData){
+
+        $estimatorCategories = [];
+
+        $categoriesData = $storageData['categories'];
+        foreach($categoriesData as $categoryData){
+
+            $categoryEstimationData = new CategoryEstimationData($categoryData);
+            $category = $this->findCategory($categoryEstimationData->getCategoryId());
+
+            if($category instanceof CategoryInterface){
+                $estimatorCategory = new EstimatorCategory($category, $categoryEstimationData, $this);
+                $estimatorCategories[$category->getId()] = $estimatorCategory;
+            }
+
+        }
+
+        return $estimatorCategories;
+
+    }
+
+    /**
+     * @param EstimatorCategory $category
+     * @return EstimatorProposal[]
+     */
+    public function buildEstimatorCategoryProposals(EstimatorCategory $category){
+
+        $estimatorProposals = [];
+        $proposalPricesData = $category->getCategoryEstimationData()->getProposalPrices();
+
+        foreach($proposalPricesData as $proposalPriceData){
+
+            $priceId = $proposalPriceData['priceId'];
+            $price = $this->findPrice($priceId);
+            $prices[$priceId] = $price;
+
+            $proposalId = $proposalPriceData['proposalId'];
+            $proposal = $this->findProposal($proposalId);
+            $estimatorProposal = new EstimatorProposal($proposal, $price);
+
+            //Proposal action conditions
+            $actionConditionIds = $proposalPriceData['actionConditionIds'];
+            $estimatorProposal->setActionConditionIds($actionConditionIds);
+
+            $estimatorProposals[$priceId] = $estimatorProposal;
+
+        }
+
+        return $estimatorProposals;
+
+    }
+
+    /**
+     * @param Estimator $estimator
+     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface[] $prices
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
+     */
+    protected function buildEstimatedFeatures(Estimator $estimator, $prices = []){
+
+        $estimatedFeaturesBuilder = new EstimatedFeaturesBuilder();
+        $estimatedFeaturesBuilder->setEstimator($estimator);
+        return $estimatedFeaturesBuilder->build($estimator->getCategory(), $prices);
 
     }
 
@@ -136,7 +206,7 @@ class EstimatorBuilder {
      * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
      * @return EstimatedFeatureValue
      */
-    public function buildRateFeatureValue($price){
+    protected function buildRateFeatureValue($price){
 
         $featureValue = new EstimatedFeatureValue();
         $featureValue

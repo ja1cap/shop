@@ -3,6 +3,117 @@
 
 body {
 
+  li {
+    padding-bottom: 0;
+  }
+
+  a {
+
+    color: $body-font-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: rgb(66, 139, 202);
+    }
+
+  }
+
+  .clickable-block {
+
+    &:hover {
+
+      a {
+
+        text-decoration: underline;
+        color: rgb(66, 139, 202);
+
+      }
+
+    }
+
+  }
+
+  .nav-tabs {
+
+    &>li {
+
+      &>a {
+        color: rgb(198, 0, 42);
+        &:hover {
+          background-color: transparent;
+          text-decoration: underline;
+        }
+      }
+
+      &.active {
+
+        &>a, &>a:hover, &>a:focus {
+          color: rgb(198, 0, 42);
+          text-decoration: none;
+        }
+
+      }
+
+    }
+
+  }
+
+  /* @group Content */
+
+  .fht-table-wrapper,
+  .fht-table-wrapper .fht-thead,
+  .fht-table-wrapper .fht-tfoot,
+  .fht-table-wrapper .fht-fixed-column .fht-tbody,
+  .fht-table-wrapper .fht-fixed-body .fht-tbody,
+  .fht-table-wrapper .fht-tbody {
+    /* appearance */
+    overflow: hidden;
+
+    /* position */
+    position: relative;
+  }
+
+  .fht-table-wrapper .fht-fixed-body .fht-tbody,
+  .fht-table-wrapper .fht-tbody {
+    /* appearance */
+    overflow-x: scroll;
+  }
+
+  .fht-table-wrapper .fht-table .fht-cell {
+    /* appearance */
+    overflow: hidden;
+
+    /* size */
+    height: 1px;
+  }
+
+  .fht-table-wrapper .fht-fixed-column,
+  .fht-table-wrapper .fht-fixed-body {
+    /* position */
+    top: 0;
+    left: 0;
+    position: absolute;
+  }
+
+  .fht-table-wrapper .fht-fixed-column {
+    /* position */
+    z-index: 1;
+  }
+
+  .amount-badge {
+
+    display: inline-block;
+    background: rgb(255,243,67);
+    padding: 1px 7px;
+    line-height: 19px;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(0,0,0);
+    text-align: center;
+
+  }
+
   .amount-spinner {
 
     overflow: hidden;
@@ -176,6 +287,41 @@ body {
 
   }
 
+  .ui-popup-container {
+
+    width: $document-width;
+
+    .ui-popup-content {
+
+      padding: 0 20px;
+      margin: 0;
+
+    }
+
+    .ui-buttons {
+
+      padding: 20px 0px;
+      text-align: center;
+
+      .btn {
+        width: 200px;
+        display: inline-block;
+        float: none;
+      }
+
+    }
+
+  }
+
+  .ui-popup {
+
+    .ui-popup-container {
+      padding: 0;
+      color: $body-font-color;
+    }
+
+  }
+
   .ui-slider {
 
     cursor: pointer;
@@ -219,7 +365,9 @@ body {
 
   }
 
+  @import "proposals-table";
   @import "shop-cart";
+  @import "comparison";
 
   .template-lededev {
 

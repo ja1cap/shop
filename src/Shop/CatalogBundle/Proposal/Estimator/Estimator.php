@@ -23,6 +23,16 @@ class Estimator {
     protected $estimatedFeatures;
 
     /**
+     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
+     */
+    protected $priceFeature;
+
+    /**
+     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
+     */
+    protected $rateFeature;
+
+    /**
      * @return EstimatedProposal[]
      */
     public function getEstimatedProposals()
@@ -90,6 +100,59 @@ class Estimator {
     {
         $this->estimatedFeatures = $estimatedFeatures;
         return $this;
+    }
+
+    /**
+     * @return Feature\EstimatedFeatureInterface
+     */
+    public function getPriceFeature()
+    {
+        return $this->priceFeature;
+    }
+
+    /**
+     * @param Feature\EstimatedFeatureInterface $priceFeature
+     * @return $this
+     */
+    public function setPriceFeature($priceFeature)
+    {
+        $this->priceFeature = $priceFeature;
+        return $this;
+    }
+
+    /**
+     * @return Feature\EstimatedFeatureInterface
+     */
+    public function getRateFeature()
+    {
+        return $this->rateFeature;
+    }
+
+    /**
+     * @param Feature\EstimatedFeatureInterface $rateFeature
+     * @return $this
+     */
+    public function setRateFeature($rateFeature)
+    {
+        $this->rateFeature = $rateFeature;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function updateRateFeatureValues(){
+
+        //@TODO add Feature\EstimatedFeatureInterface::resetValues()
+        foreach($this->getEstimatedProposals() as $estimatedProposal){
+
+            $featureValue = $estimatedProposal->getRateFeatureValue();
+            $this->getRateFeature()->addFeatureValue($featureValue->getPriceId(), $featureValue);
+
+        }
+
+        return $this;
+
     }
 
 } 

@@ -66,8 +66,8 @@
 
     {% set proposal_data = media_item %}
     {% set proposal = proposal_data.proposal %}
-    {% set proposal_action_conditions = shop_discount_proposal_action_conditions(proposal, proposal_data.actionConditionIds) %}
-    {% set proposal_discount_price = (proposal_data.hasDiscount ? proposal_action_conditions.getDiscountPrice(proposal_data.price) : null) %}
+    {% set proposal_action_conditions = (proposal_data.actionConditionIds ? shop_discount_proposal_action_conditions(proposal, proposal_data.actionConditionIds) : null) %}
+    {% set proposal_discount_price = (proposal_data.hasDiscount and proposal_action_conditions ? proposal_action_conditions.getDiscountPrice(proposal_data.price) : null) %}
     {% set media_item = proposal_data.proposal %}
 
     {{ parent() }}

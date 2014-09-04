@@ -19,7 +19,7 @@ class EstimatedFeaturesBuilder extends FeaturesBuilder {
     protected $estimator;
 
     /**
-     * @return \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface
+     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
      */
     protected function createFeature()
     {
@@ -35,7 +35,7 @@ class EstimatedFeaturesBuilder extends FeaturesBuilder {
 
         $feature = parent::buildFeature($categoryParameter);
 
-        if($feature instanceof EstimatedFeature){
+        if($feature instanceof EstimatedFeatureInterface){
             $feature->setIsComparable($categoryParameter->getIsComparable());
         }
 

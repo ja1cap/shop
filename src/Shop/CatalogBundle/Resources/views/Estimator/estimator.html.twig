@@ -16,14 +16,12 @@
                     footer: false,
                     cloneHeadToFoot: false,
                     fixedColumn: true,
-//                        width: $proposalsComparisonTable.width() + 'px',
                     height: $table.outerHeight() + 'px'
                 })
             ;
 
 
             var $fixedBody = $proposalsComparison.find('.fht-fixed-body');
-            //var $head = $fixedBody.find('.fht-thead');
             var $frame = $fixedBody.find('.fht-tbody');
             var $wrap = $frame.parent();
 
@@ -50,24 +48,7 @@
                 mouseDragging: 1,
                 touchDragging: 1,
                 releaseSwing: 1
-            }/*, {
-                move: function(){
-
-                    var $table = $frame.find('table');
-                    $head.css({
-                        'margin-left' : $table.position().left
-                    });
-
-                },
-                moveEnd: function(){
-
-                    var $table = $frame.find('table');
-                    $head.css({
-                        'margin-left' : $table.position().left
-                    });
-
-                }
-            }*/);
+            });
 
         });
     </script>
@@ -97,7 +78,6 @@
                             </td>
                             {% for estimatedProposal in estimatedProposals %}
                                 {% set proposal = estimatedProposal.getProposal %}
-                                {#{% set price = estimatedProposal.getPrice %}#}
                                 <td class="proposal-cell {{ loop.last ? 'last' : '' }}">
                                     {% if proposal.image is defined and proposal.image %}
                                         <div class="image-container">
@@ -111,9 +91,6 @@
                                     <div>
                                         {{ proposal.name }}
                                     </div>
-                                    {#<div>#}
-                                        {#{{ price.description|raw }}#}
-                                    {#</div>#}
                                 </td>
                             {% endfor %}
                         </tr>
@@ -178,12 +155,46 @@
                         </tr>
                         <tr class="feature odd">
                             <td class="feature-info odd">
-                                Рейтинг сравнения
+                                Цена
                             </td>
                             {% for estimatedProposal in estimatedProposals %}
-                                <td class="feature-value-cell {{ loop.last ? 'last' : '' }}">
+                                {% set priceFeatureValue = estimatedProposal.getPriceFeatureValue %}
+                                {% set price = priceFeatureValue.getPrice %}
+                                {% set discountPrice = null %}
+                                {% if price.originalPrice is defined %}
+                                    {% set discountPrice = price %}
+                                {% endif %}
+                                {% set isBest = (priceFeatureValue and priceFeatureValue.getIsBest) %}
+                                {% if isBest %}
+                                    {% do estimatedProposal.incrementRate %}
+                                {% endif %}
+                                <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
                                     <div class="feature-value">
-                                        {{ estimatedProposal.getRate }}
+                                        <div class="price">
+                                            {% if discountPrice %}
+                                                {{ discountPrice|shop_price }}
+                                                <div class="original-price">
+                                                    {{ discountPrice.originalPrice|shop_price }}
+                                                </div>
+                                            {% else %}
+                                                {{ price|shop_price }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="feature even">
+                            <td class="feature-info even">
+                                Рейтинг сравнения
+                            </td>
+                            {% do estimator.updateRateFeatureValues %}
+                            {% for estimatedProposal in estimatedProposals %}
+                                {% set rateFeatureValue = estimatedProposal.getRateFeatureValue %}
+                                {% set isBest = (rateFeatureValue and rateFeatureValue.getIsBest) %}
+                                <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
+                                    <div class="feature-value">
+                                        {{ rateFeatureValue ? rateFeatureValue.getValue : 0 }}
                                     </div>
                                 </td>
                             {% endfor %}

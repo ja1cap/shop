@@ -8,12 +8,19 @@ use Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface;
  * Class EstimatedFeature
  * @package Shop\CatalogBundle\Proposal\Estimator\Feature
  */
-class EstimatedFeature extends Feature {
+class EstimatedFeature extends Feature
+    implements  EstimatedFeatureInterface
+{
 
     /**
      * @var int
      */
-    public $maxPriority;
+    public $priorityOrder;
+
+    /**
+     * @var int
+     */
+    public $bestPriority;
 
     /**
      * @var bool
@@ -28,17 +35,37 @@ class EstimatedFeature extends Feature {
     /**
      * @return int
      */
-    public function getMaxPriority()
+    public function getPriorityOrder()
     {
-        return $this->maxPriority;
+        return $this->priorityOrder;
+    }
+
+    /**
+     * @param int $priorityOrder
+     * @return $this
+     */
+    public function setPriorityOrder($priorityOrder)
+    {
+        $this->priorityOrder = $priorityOrder;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBestPriority()
+    {
+        return $this->bestPriority;
     }
 
     /**
      * @param int $maxPriority
+     * @return $this
      */
-    public function setMaxPriority($maxPriority)
+    public function setBestPriority($maxPriority)
     {
-        $this->maxPriority = $maxPriority;
+        $this->bestPriority = $maxPriority;
+        return $this;
     }
 
     /**
@@ -51,10 +78,12 @@ class EstimatedFeature extends Feature {
 
     /**
      * @param boolean $hasEqualValues
+     * @return $this
      */
     public function setHasEqualValues($hasEqualValues)
     {
         $this->hasEqualValues = $hasEqualValues;
+        return $this;
     }
 
     /**
@@ -67,10 +96,12 @@ class EstimatedFeature extends Feature {
 
     /**
      * @param boolean $isComparable
+     * @return $this
      */
     public function setIsComparable($isComparable)
     {
         $this->isComparable = $isComparable;
+        return $this;
     }
 
     /**
@@ -81,21 +112,38 @@ class EstimatedFeature extends Feature {
     public function addFeatureValue($key, $value)
     {
 
-        if($this->getIsComparable() && $value instanceof EstimatedFeatureValue){
+        if($value instanceof EstimatedFeatureValue){
 
-            if($value->getPriority() > $this->maxPriority){
-                $this->maxPriority = $value->getPriority();
-            }
+            if($this->getIsComparable()){
 
-            if($this->featureValues && $this->hasEqualValues){
+                switch($this->getPriorityOrder()){
+                    case self::PRIORITY_ORDER_DESC:
 
-                $lastValue = end($this->featureValues);
+                        if($this->bestPriority === null || $value->getPriority() < $this->bestPriority){
+                            $this->bestPriority = $value->getPriority();
+                        }
+                        break;
 
-                if($lastValue instanceof FeatureValueInterface){
+                    case self::PRIORITY_ORDER_ASC:
+                    default:
 
-                    if($lastValue->getValue() != $value->getValue()){
+                        if($value->getPriority() > $this->bestPriority){
+                            $this->bestPriority = $value->getPriority();
+                        }
 
-                        $this->hasEqualValues = false;
+                }
+
+                if($this->featureValues && $this->hasEqualValues){
+
+                    $lastValue = end($this->featureValues);
+
+                    if($lastValue instanceof FeatureValueInterface){
+
+                        if($lastValue->getValue() != $value->getValue()){
+
+                            $this->hasEqualValues = false;
+
+                        }
 
                     }
 

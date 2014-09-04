@@ -1,5 +1,6 @@
 <?php
 namespace Shop\CatalogBundle\Proposal\Estimator;
+
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
 
 /**
@@ -19,21 +20,30 @@ class EstimatedProposal {
     protected $price;
 
     /**
+     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue
+     */
+    protected $priceFeatureValue;
+
+    /**
+     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue
+     */
+    protected $rateFeatureValue;
+
+    /**
      * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue[]
      */
     protected $featureValues;
 
     /**
-     * @var int
+     * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
      */
-    protected $rate;
+    protected $actionConditions;
 
     function __construct($proposal, $price)
     {
         $this->proposal = $proposal;
         $this->price = $price;
         $this->featureValues = [];
-        $this->rate = 0;
     }
 
     /**
@@ -50,6 +60,24 @@ class EstimatedProposal {
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue
+     */
+    public function getPriceFeatureValue()
+    {
+        return $this->priceFeatureValue;
+    }
+
+    /**
+     * @param \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue $priceFeatureValue
+     * @return $this
+     */
+    public function setPriceFeatureValue($priceFeatureValue)
+    {
+        $this->priceFeatureValue = $priceFeatureValue;
+        return $this;
     }
 
     /**
@@ -95,8 +123,20 @@ class EstimatedProposal {
      * @return $this
      */
     public function incrementRate(){
-        $this->rate++;
+
+        if($this->getRateFeatureValue()){
+
+            $rate = $this->getRateFeatureValue()->getValue();
+            $rate++;
+            $this->getRateFeatureValue()
+                ->setPriority($rate)
+                ->setValue($rate)
+            ;
+
+        }
+
         return $this;
+
     }
 
     /**
@@ -104,7 +144,51 @@ class EstimatedProposal {
      */
     public function getRate()
     {
-        return $this->rate;
+
+        $rate = 0;
+
+        if($this->getRateFeatureValue()){
+            $rate = $this->getRateFeatureValue()->getValue();
+        }
+
+        return $rate;
+
+    }
+
+    /**
+     * @return EstimatedFeatureValue
+     */
+    public function getRateFeatureValue()
+    {
+        return $this->rateFeatureValue;
+    }
+
+    /**
+     * @param EstimatedFeatureValue $rateFeatureValue
+     * @return $this
+     */
+    public function setRateFeatureValue($rateFeatureValue)
+    {
+        $this->rateFeatureValue = $rateFeatureValue;
+        return $this;
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
+     */
+    public function getActionConditions()
+    {
+        return $this->actionConditions;
+    }
+
+    /**
+     * @param \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions $actionConditions
+     * @return $this
+     */
+    public function setActionConditions($actionConditions)
+    {
+        $this->actionConditions = $actionConditions;
+        return $this;
     }
 
 } 

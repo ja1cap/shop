@@ -24,11 +24,11 @@ class EstimatedFeatureValue extends ProposalFeatureValue {
             return false;
         }
 
-        if(!$feature->getIsComparable() || !$feature->getMaxPriority()){
+        if($feature->getHasEqualValues() || !$feature->getIsComparable() || !$feature->getBestPriority()){
             return false;
         }
 
-        return ($this->getPriority() == $feature->getMaxPriority());
+        return ($this->getPriority() == $feature->getBestPriority());
     }
 
     /**
@@ -41,10 +41,12 @@ class EstimatedFeatureValue extends ProposalFeatureValue {
 
     /**
      * @param int $priority
+     * @return $this
      */
     public function setPriority($priority)
     {
         $this->priority = $priority;
+        return $this;
     }
 
 } 

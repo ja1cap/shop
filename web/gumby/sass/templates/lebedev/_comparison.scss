@@ -1,21 +1,66 @@
 @import "settings";
-@import "lebedev-shop-scss/lebedev";
+@import "lebedev-base";
+
+.header-comparison {
+
+  position: absolute;
+  right: 0;
+  bottom: -30px;
+
+  .comparison-btn {
+
+    @include transition-property(all);
+    @include transition-duration(250ms);
+    @include transition-timing-function(linear);
+
+    position: relative;
+    top: 0;
+    display: block;
+    padding: 0 20px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    @include background-image(linear-gradient(rgb(255, 246, 0), rgb(255, 204, 0)));
+    @include border-radius(0 0 5px 5px);
+
+    &.empty-comparison {
+      top: -30px;
+    }
+
+    &, &:hover {
+      color: #000000;
+    }
+
+    .amount-title {
+      text-decoration: underline;
+    }
+
+  }
+
+}
 
 .comparison-popup-container {
-  //width: 640px;
+
+  width: 640px;
 
   .ui-popup-content {
-    padding-top: 20px
+
+    .categories-nav-container {
+      padding-top: 20px;
+    }
+
   }
 
 }
 
 .proposals-comparison {
 
+  padding: 20px 0;
+
   .scrollbar {
 
     cursor: pointer;
-    margin-top: -26px;
+    margin-top: -25px;
     position: absolute;
     left: 240px;
     width: 700px;
@@ -147,8 +192,44 @@
 
     .comparison-groups-cell, .proposal-cell {
 
-      padding: 0 20px 46px 0;
+      padding: 0 20px 45px 0;
       border-bottom: 1px solid rgb(202, 202, 202);
+
+    }
+
+    .comparison-groups-cell {
+
+      .cell-title {
+
+        font-weight: bold;
+        text-transform: uppercase;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgb(202, 202, 202);
+
+      }
+
+      .current-group {
+
+        .title {
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgb(202, 202, 202);
+
+      }
+
+      .more-groups {
+
+        .title {
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+      }
 
     }
 
@@ -162,7 +243,7 @@
 
       .image-container {
 
-        margin: 10px auto;
+        margin: 0 auto 15px;
         overflow: hidden;
         display: block;
         border: 1px solid rgb( 202, 202, 202 );
@@ -173,6 +254,20 @@
         img {
           width: 218px;
           height: 218px;
+        }
+
+      }
+
+      .title-container {
+        margin: 0 0 10px;
+      }
+
+      .buttons-container {
+
+        margin: 0;
+
+        .remove-from-comparison {
+          font-size: 12px;
         }
 
       }

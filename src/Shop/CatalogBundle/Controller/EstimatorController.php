@@ -48,10 +48,6 @@ class EstimatorController extends Controller
             'id' => $categoryId,
         )) : null;
 
-        if(!$category instanceof CategoryInterface){
-            throw $this->createNotFoundException('Category not found');
-        }
-
         $estimatorCategories = $this->buildEstimatorCategories($request);
 
         return $this->render('ShopCatalogBundle:Estimator:popup.html.twig', [

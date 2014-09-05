@@ -115,29 +115,12 @@ $(function(){
             $shopCartBtnAmount.html(amount);
 
             if(amount == 0){
-                $shopCartBtn.addClass('empty-catalog');
+                $shopCartBtn.addClass('empty-cart');
             } else {
-                $shopCartBtn.removeClass('empty-catalog');
+                $shopCartBtn.removeClass('empty-cart');
             }
 
             return cart;
-
-        };
-
-        /**
-         * Get shop cart proposal prices total amount
-         * @returns {number}
-         */
-        cart.getProposalPricesAmount = function(){
-
-            var amount = 0;
-            var categories = cart.getCategories();
-
-            $.each(categories, function(categoryId, category){
-                amount += category.getProposalPricesAmount();
-            });
-
-            return amount;
 
         };
 
@@ -282,6 +265,23 @@ $(function(){
 
         };
 
+        /**
+         * Close popup
+         * @returns {*}
+         */
+        cart.closePopup = function(){
+
+            var $popup = cart.getPopup();
+            $popup
+                .dialog("destroy")
+                .remove()
+            ;
+
+            return cart;
+
+        };
+
+
         cart.refresh = function(_options){
 
             var _settings = {
@@ -294,7 +294,12 @@ $(function(){
 
             if(_settings.popup){
 
-                cart.openPopup(_settings);
+                var categories = cart.getCategories();
+                if(categories && $.isArray(categories) && categories.length > 0){
+                    cart.openPopup(_settings);
+                } else {
+                    cart.closePopup();
+                }
 
             } else {
 

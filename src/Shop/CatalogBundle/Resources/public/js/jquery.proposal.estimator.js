@@ -4,8 +4,8 @@ $(function () {
 
     var ProposalEstimator = $.Catalog.extend(function () {
 
-        var compare = this;
-        compare.popupSelector = '#comparisonPopup';
+        var estimator = this;
+        estimator.popupSelector = '#comparisonPopup';
 
         /**
          * Create storage
@@ -13,17 +13,45 @@ $(function () {
          * @param callback
          * @returns {$.CookieStorage}
          */
-        compare.createStorage = function (storageKey, callback) {
+        estimator.createStorage = function (storageKey, callback) {
             return new $.CookieStorage(storageKey, callback);
         };
 
-        compare.getPopup = function(){
-            return $(compare.popupSelector);
+        estimator.updateStorage = function(callback){
+            var data = estimator['super'].updateStorage(callback);
+            estimator.updateProposalPricesAmount();
+            return data;
         };
 
-        compare.initPopup = function(){
+        /**
+         * Update proposal prices amount badges
+         * @returns {$.Catalog}
+         */
+        estimator.updateProposalPricesAmount = function(){
 
-            var $popup = compare.getPopup();
+            var $comparisonBtn = $('.comparison-btn');
+            var $comparisonBtnAmount = $('.amount', $comparisonBtn);
+
+            var amount = estimator.getProposalPricesAmount();
+            $comparisonBtnAmount.html(amount);
+
+            if(amount == 0){
+                $comparisonBtn.addClass('empty-comparison');
+            } else {
+                $comparisonBtn.removeClass('empty-comparison');
+            }
+
+            return estimator;
+
+        };
+
+        estimator.getPopup = function(){
+            return $(estimator.popupSelector);
+        };
+
+        estimator.initPopup = function(){
+
+            var $popup = estimator.getPopup();
             $popup.dialog({
                 dialogClass: 'ui-popup',
                 autoOpen: true,
@@ -41,11 +69,11 @@ $(function () {
                 }
             });
 
-            return compare;
+            return estimator;
 
         };
 
-        compare.openPopup = function(_options){
+        estimator.openPopup = function(_options){
 
             var _settings = {
                 popupUrl : null,
@@ -56,7 +84,7 @@ $(function () {
 
             var $body = $('body');
             var $mainContainer = $('.main-container');
-            var $popup = compare.getPopup();
+            var $popup = estimator.getPopup();
 
             if($popup.length == 0){
 
@@ -75,7 +103,7 @@ $(function () {
                         $body.append(html);
                         $mainContainer.removeLoading();
 
-                        compare.initPopup();
+                        estimator.initPopup();
 
                     },
                     error: function(){
@@ -112,11 +140,27 @@ $(function () {
 
             }
 
-            return compare;
+            return estimator;
 
         };
 
-        compare.refresh = function(_options){
+        /**
+         * Close popup
+         * @returns {*}
+         */
+        estimator.closePopup = function(){
+
+            var $popup = estimator.getPopup();
+            $popup
+                .dialog("destroy")
+                .remove()
+            ;
+
+            return estimator;
+
+        };
+
+        estimator.refresh = function(_options){
 
             var _settings = {
                 popup : false,
@@ -128,7 +172,12 @@ $(function () {
 
             if(_settings.popup){
 
-                compare.openPopup(_settings);
+                var categories = estimator.getCategories();
+                if(categories && $.isArray(categories) && categories.length > 0){
+                    estimator.openPopup(_settings);
+                } else {
+                    estimator.closePopup();
+                }
 
             } else {
 
@@ -136,7 +185,7 @@ $(function () {
 
             }
 
-            return compare;
+            return estimator;
 
         };
 
@@ -204,6 +253,7 @@ $(function () {
 
             $.proposalEstimator.removeProposalPrice(proposalPriceData, function(categories){
 
+                console.log(categories);
                 var popupUrl = $btn.attr('href');
                 $.proposalEstimator.refresh({
                     popup: popupUrl != '#',
@@ -219,6 +269,19 @@ $(function () {
             });
 
         }
+
+    });
+
+    $(document).on('click', '.open-comparison', function(e){
+
+        e.preventDefault();
+
+        var $btn = $(this);
+
+        var popupUrl = $btn.attr('href');
+        $.proposalEstimator.openPopup({
+            popupUrl: popupUrl
+        });
 
     });
 

@@ -1,7 +1,7 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 
-{% set estimatedProposals = estimator.getEstimatedProposals %}
-{% set estimatedFeatures = estimator.getEstimatedFeatures %}
+{% set estimatedProposals = (estimator ? estimator.getEstimatedProposals : []) %}
+{% set estimatedFeatures = (estimator ? estimator.getEstimatedFeatures : []) %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -54,154 +54,200 @@
     </script>
 {% endblock %}
 {% block page_container %}
+    <div class="block-container" id="estimator-container">
 
-    <div class="row">
-        <div class="proposals-comparison">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="header-cell"></div>
-                        </th>
-                        {% for estimatedProposal in estimatedProposals %}
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ 'shop.comparison.title'|trans({}, 'ShopCatalogBundle') }}
+            </h2>
+        </div>
+
+        <div class="block-body">
+
+            <div class="row">
+                <div class="proposals-comparison">
+                    <table>
+                        <thead>
+                        <tr>
                             <th>
-                                <div class="header-cell {{ loop.last ? 'last' : '' }}"></div>
+                                <div class="header-cell"></div>
                             </th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="head-row">
-                        <td class="comparison-groups-cell">
-                            {{ estimator.getCategory.getName }} ({{ estimatedProposals|length }})
-                        </td>
-                        {% for estimatedProposal in estimatedProposals %}
-                            {% set proposal = estimatedProposal.getProposal %}
-                            <td class="proposal-cell {{ loop.last ? 'last' : '' }}">
-                                {% if proposal.image is defined and proposal.image %}
-                                    <div class="image-container">
-                                        <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                            {% for estimatedProposal in estimatedProposals %}
+                                <th>
+                                    <div class="header-cell {{ loop.last ? 'last' : '' }}"></div>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="head-row">
+                            <td class="comparison-groups-cell">
+                                <div class="cell-title">
+                                    {{ 'shop.comparison.comparison_groups'|trans({}, 'ShopCatalogBundle') }}
+                                </div>
+                                <div class="current-group">
+                                    <div class="title">
+                                        {{ 'shop.comparison.current_comparison_group'|trans({}, 'ShopCatalogBundle') }}:
                                     </div>
-                                {% else %}
-                                    <div class="image-container">
-                                        <img src="/img/no-image.jpg" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                    <a href="{{ path('shop_catalog_estimator', {'categoryId':category.getId}) }}" class="primary-link active">
+                                        {{ category.getName }} ({{ estimatedProposals|length }})
+                                    </a>
+                                </div>
+                                {% if estimatorCategories|length > 1 %}
+                                    <div class="more-groups">
+                                        <div class="title">
+                                            {{ 'shop.comparison.more_comparison_groups'|trans({}, 'ShopCatalogBundle') }}:
+                                        </div>
+                                        {% for _estimatorCategory in estimatorCategories %}
+                                            {% if _estimatorCategory.getCategory.getId != category.getId and _estimatorCategory.getProposalsAmount %}
+                                                <a href="{{ path('shop_catalog_estimator', {'categoryId': _estimatorCategory.getCategory.getId}) }}" class="primary-link">
+                                                    {{ _estimatorCategory.getCategory.getName }} ({{ _estimatorCategory.getProposalsAmount }})
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 {% endif %}
-                                <div>
-                                    {{ proposal.name }}
-                                </div>
                             </td>
-                        {% endfor %}
-                    </tr>
-                    {% if estimatedFeatures.groups or estimatedFeatures.features %}
-                        {% if estimatedFeatures.groups %}
-                            {% for featureGroup in estimatedFeatures.groups if featureGroup.features %}
-                                <tr class="feature-group-info even">
-                                    <td colspan="{{ (estimatedProposals|length + 1) }}" class="feature-group-title">
-                                        {{ featureGroup.name }}
-                                    </td>
-                                </tr>
-                                {% for feature in featureGroup.features %}
-                                    <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
-                                        <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
-                                            {{ feature.name }}
-                                        </td>
-                                        {% for estimatedProposal in estimatedProposals %}
-                                            {% set estimatedProposalFeatureValue = estimatedProposal.getFeatureValue(feature.id) %}
-                                            {% set isBest = (feature.isComparable and estimatedProposalFeatureValue and estimatedProposalFeatureValue.getIsBest) %}
-                                            {% if isBest %}
-                                                {% do estimatedProposal.incrementRate %}
-                                            {% endif %}
-                                            <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
-                                                <div class="feature-value">
-                                                    {{ estimatedProposalFeatureValue ? estimatedProposalFeatureValue.getValue : '-' }}
-                                                </div>
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endfor %}
+                            {% for estimatedProposal in estimatedProposals %}
+                                {% set proposal = estimatedProposal.getProposal %}
+                                {% set price = estimatedProposal.getPrice %}
+                                <td class="proposal-cell {{ loop.last ? 'last' : '' }}">
+                                    {% if proposal.image is defined and proposal.image %}
+                                        <div class="image-container">
+                                            <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                        </div>
+                                    {% else %}
+                                        <div class="image-container">
+                                            <img src="/img/no-image.jpg" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                        </div>
+                                    {% endif %}
+                                    <div class="title-container">
+                                        {{ proposal.name }}
+                                    </div>
+                                    <div class="buttons-container">
+                                        <a href="#" class="remove-from-comparison primary-link" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                            {{ 'shop.comparison.remove.proposal'|trans({}, 'ShopCatalogBundle') }}
+                                        </a>
+                                    </div>
+                                </td>
                             {% endfor %}
-                        {% endif %}
-                        {% if estimatedFeatures.features %}
+                        </tr>
+                        {% if estimatedProposals %}
+                            {% if (estimatedFeatures.groups is defined and estimatedFeatures.groups) or (estimatedFeatures.features is defined and estimatedFeatures.features) %}
+                                {% if estimatedFeatures.groups %}
+                                    {% for featureGroup in estimatedFeatures.groups if featureGroup.features %}
+                                        <tr class="feature-group-info even">
+                                            <td colspan="{{ (estimatedProposals|length + 1) }}" class="feature-group-title">
+                                                {{ featureGroup.name }}
+                                            </td>
+                                        </tr>
+                                        {% for feature in featureGroup.features %}
+                                            <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
+                                                <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
+                                                    {{ feature.name }}
+                                                </td>
+                                                {% for estimatedProposal in estimatedProposals %}
+                                                    {% set estimatedProposalFeatureValue = estimatedProposal.getFeatureValue(feature.id) %}
+                                                    {% set isBest = (feature.isComparable and estimatedProposalFeatureValue and estimatedProposalFeatureValue.getIsBest) %}
+                                                    {% if isBest %}
+                                                        {% do estimatedProposal.incrementRate %}
+                                                    {% endif %}
+                                                    <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
+                                                        <div class="feature-value">
+                                                            {{ estimatedProposalFeatureValue ? estimatedProposalFeatureValue.getValue : '-' }}
+                                                        </div>
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% if estimatedFeatures.features %}
+                                    <tr class="feature-group-info even">
+                                        <td colspan="{{ (estimatedProposals|length + 1) }}" class="feature-group-title">
+                                            Основные
+                                        </td>
+                                    </tr>
+                                    {% for feature in estimatedFeatures.features %}
+                                        <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
+                                            <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
+                                                {{ feature.name }}
+                                            </td>
+                                            {% for estimatedProposal in estimatedProposals %}
+                                                {% set estimatedProposalFeatureValue = estimatedProposal.getFeatureValue(feature.id) %}
+                                                {% set isBest = (feature.isComparable and estimatedProposalFeatureValue and estimatedProposalFeatureValue.getIsBest) %}
+                                                {% if isBest %}
+                                                    {% do estimatedProposal.incrementRate %}
+                                                {% endif %}
+                                                <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
+                                                    <div class="feature-value">
+                                                        {{ estimatedProposalFeatureValue ? estimatedProposalFeatureValue.getValue : '-' }}
+                                                    </div>
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
                             <tr class="feature-group-info even">
                                 <td colspan="{{ (estimatedProposals|length + 1) }}" class="feature-group-title">
-                                    Основные
+                                    Цена и рейтинг сравнения
                                 </td>
                             </tr>
-                            {% for feature in estimatedFeatures.features %}
-                                <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
-                                    <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
-                                        {{ feature.name }}
+                            <tr class="feature odd">
+                                <td class="feature-info odd">
+                                    Цена
+                                </td>
+                                {% for estimatedProposal in estimatedProposals %}
+                                    {% set priceFeatureValue = estimatedProposal.getPriceFeatureValue %}
+                                    {% set price = priceFeatureValue.getPrice %}
+                                    {% set discountPrice = null %}
+                                    {% if price.originalPrice is defined %}
+                                        {% set discountPrice = price %}
+                                    {% endif %}
+                                    {% set isBest = (priceFeatureValue and priceFeatureValue.getIsBest) %}
+                                    {% if isBest %}
+                                        {% do estimatedProposal.incrementRate %}
+                                    {% endif %}
+                                    <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
+                                        <div class="feature-value">
+                                            <div class="price">
+                                                {% if discountPrice %}
+                                                    {{ discountPrice|shop_price }}
+                                                    <div class="original-price">
+                                                        {{ discountPrice.originalPrice|shop_price }}
+                                                    </div>
+                                                {% else %}
+                                                    {{ price|shop_price }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </td>
-                                    {% for estimatedProposal in estimatedProposals %}
-                                        {% set estimatedProposalFeatureValue = estimatedProposal.getFeatureValue(feature.id) %}
-                                        {% set isBest = (feature.isComparable and estimatedProposalFeatureValue and estimatedProposalFeatureValue.getIsBest) %}
-                                        {% if isBest %}
-                                            {% do estimatedProposal.incrementRate %}
-                                        {% endif %}
-                                        <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
-                                            <div class="feature-value">
-                                                {{ estimatedProposalFeatureValue ? estimatedProposalFeatureValue.getValue : '-' }}
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
+                                {% endfor %}
+                            </tr>
+                            <tr class="feature even">
+                                <td class="feature-info even">
+                                    Рейтинг сравнения
+                                </td>
+                                {% do estimator.updateRateFeatureValues %}
+                                {% for estimatedProposal in estimatedProposals %}
+                                    {% set rateFeatureValue = estimatedProposal.getRateFeatureValue %}
+                                    {% set isBest = (rateFeatureValue and rateFeatureValue.getIsBest) %}
+                                    <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
+                                        <div class="feature-value">
+                                            {{ rateFeatureValue ? rateFeatureValue.getValue : 0 }}
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
                         {% endif %}
-                    {% endif %}
-                    <tr class="feature-group-info even">
-                        <td colspan="{{ (estimatedProposals|length + 1) }}" class="feature-group-title">
-                            Цена и рейтинг сравнения
-                        </td>
-                    </tr>
-                    <tr class="feature odd">
-                        <td class="feature-info odd">
-                            Цена
-                        </td>
-                        {% for estimatedProposal in estimatedProposals %}
-                            {% set priceFeatureValue = estimatedProposal.getPriceFeatureValue %}
-                            {% set price = priceFeatureValue.getPrice %}
-                            {% set discountPrice = null %}
-                            {% if price.originalPrice is defined %}
-                                {% set discountPrice = price %}
-                            {% endif %}
-                            {% set isBest = (priceFeatureValue and priceFeatureValue.getIsBest) %}
-                            {% if isBest %}
-                                {% do estimatedProposal.incrementRate %}
-                            {% endif %}
-                            <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
-                                <div class="feature-value">
-                                    <div class="price">
-                                        {% if discountPrice %}
-                                            {{ discountPrice|shop_price }}
-                                            <div class="original-price">
-                                                {{ discountPrice.originalPrice|shop_price }}
-                                            </div>
-                                        {% else %}
-                                            {{ price|shop_price }}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                    <tr class="feature even">
-                        <td class="feature-info even">
-                            Рейтинг сравнения
-                        </td>
-                        {% do estimator.updateRateFeatureValues %}
-                        {% for estimatedProposal in estimatedProposals %}
-                            {% set rateFeatureValue = estimatedProposal.getRateFeatureValue %}
-                            {% set isBest = (rateFeatureValue and rateFeatureValue.getIsBest) %}
-                            <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
-                                <div class="feature-value">
-                                    {{ rateFeatureValue ? rateFeatureValue.getValue : 0 }}
-                                </div>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
+
     </div>
+
 {% endblock %}

@@ -4,14 +4,15 @@
     <span class="ui-helper-hidden-accessible"><input type="text"/></span>
 
     <div class="ui-popup-content">
-        {% set estimatorCategory = estimatorCategories[category.id] %}
+        {% set estimatorCategory = ((category and estimatorCategories[category.id] is defined) ? estimatorCategories[category.id] : estimatorCategories|first) %}
+        {% set estimatorCategoryProposals = (estimatorCategory ? estimatorCategory.getProposals : null) %}
         <div class="">
-            <div class="">
-                {% if estimatorCategories|length > 1 %}
+            {% if estimatorCategories|length > 1 %}
+                <div class="categories-nav-container">
                     <ul class="nav nav-tabs">
                         {% for _estimatorCategory in estimatorCategories %}
                             {% if _estimatorCategory.getProposalsAmount %}
-                                <li class="{{ (_estimatorCategory.getCategory.getId == category.id ? 'active' : '') }}">
+                                <li class="{{ (_estimatorCategory.getCategory.getId == estimatorCategory.getCategory.getId ? 'active' : '') }}">
                                     <a href="{{ path('shop_catalog_estimator_popup', {'categoryId': _estimatorCategory.getCategory.getId}) }}" class="refresh-comparison">
                                         {{ _estimatorCategory.getCategory.getName }} ({{ _estimatorCategory.getProposalsAmount }})
                                     </a>
@@ -19,10 +20,10 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             <div class="">
-                {% if estimatorCategory %}
+                {% if estimatorCategoryProposals %}
                     <table class="proposals-table">
                         <tbody>
                         {% for estimatorProposal in estimatorCategory.getProposals %}
@@ -79,13 +80,13 @@
                 {{ 'shop.comparison.to_catalog'|trans({}, 'ShopCatalogBundle') }}
             </a>
         </div>
-        {#{% if pricesAmount > 0 %}#}
-            <div class="large secondary btn">
-                <a href="{{ path('shop_catalog_estimator', {'categoryId':category.id}) }}">
+        {% if estimatorCategory and estimatorCategoryProposals %}
+            <div class="large secondary btn {{ estimatorCategoryProposals|length < 2 ? 'disabled' : '' }}">
+                <a href="{{ path('shop_catalog_estimator', {'categoryId':estimatorCategory.getCategory.getId}) }}">
                     {{ 'shop.comparison.to_estimator'|trans({}, 'ShopCatalogBundle') }}
                 </a>
             </div>
-        {#{% endif %}#}
+        {% endif %}
     </div>
 
 </div>

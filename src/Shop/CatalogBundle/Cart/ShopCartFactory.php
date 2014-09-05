@@ -90,7 +90,7 @@ class ShopCartFactory {
 
             $categories = $storageData['categories'];
 
-            foreach($categories as $categoryId => $categoryData){
+            foreach($categories as $categoryData){
 
                 if(isset($categoryData['proposalPrices']) && is_array($categoryData['proposalPrices'])){
 
@@ -99,7 +99,7 @@ class ShopCartFactory {
                         continue;
                     }
 
-                    $categoryId = (int)$categoryId;
+                    $categoryId = (int)$categoryData['id'];
                     $shopCartCategory = $shopCart->getCategories()->get($categoryId);
 
                     if(!$shopCartCategory instanceof ShopCartCategory){

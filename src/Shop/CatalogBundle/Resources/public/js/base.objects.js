@@ -207,6 +207,14 @@ $(function(){
             return category;
         };
 
+        /**
+         * Get category proposal prices amount
+         * @returns {Number}
+         */
+        category.getProposalPricesAmount = function(){
+            return category.data.proposalPrices.length;
+        };
+
         category.toJSON = function () {
 
             var proposalPricesJSON = $.map(category.data.proposalPrices, function(proposalPrice){
@@ -232,7 +240,7 @@ $(function(){
 
         var catalog = this;
         var storage = null;
-        var categories = {};
+        var categories = [];
 
         catalog.constructor = function(storageKey){
             catalog.initStorage(storageKey);
@@ -260,11 +268,11 @@ $(function(){
                 var storageData = storage.getData();
                 if(storageData){
 
-                    if($.isPlainObject(storageData['categories'])){
+                    if($.isArray(storageData['categories'])){
 
                         var categoriesData = storageData['categories'];
 
-                        $.each(categoriesData, function(id, categoryData){
+                        $.each(categoriesData, function(i, categoryData){
 
                             var category = catalog.createCategory(categoryData);
                             if(category instanceof $.Category){
@@ -289,13 +297,13 @@ $(function(){
          */
         catalog.updateStorage = function(callback){
 
-            var usedCategories = {};
+            var usedCategories = [];
 
-            $.each(categories, function(categoryId, category){
+            $.each(categories, function(i, category){
 
                 var isUsed = catalog.checkCategoryUsage(category);
                 if(isUsed){
-                    usedCategories[categoryId] = category;
+                    usedCategories.push(category);
                 }
 
             });
@@ -303,11 +311,11 @@ $(function(){
             categories = usedCategories;
 
             var data = {
-                categories : {}
+                categories : []
             };
 
             $.each(categories, function(i, category){
-                data.categories[i] = category.toJSON();
+                data.categories.push(category.toJSON());
             });
 
             if(storage){
@@ -337,7 +345,7 @@ $(function(){
 
         /**
          * Get catalog categories
-         * @returns {{}}
+         * @returns {[]}
          */
         catalog.getCategories = function(){
             return categories;
@@ -357,7 +365,34 @@ $(function(){
          * @returns {$.Category|null}
          */
         catalog.getCategory = function(categoryId){
-            return categories[categoryId];
+
+            var category = null;
+
+            $.each(categories, function(i, _category){
+                if(_category.data.id == categoryId){
+                    category = _category;
+                    return false;
+                }
+                return true;
+            });
+
+            return category;
+
+        };
+
+        catalog._moveCategoryToEnd = function(categoryId){
+
+            $.each(categories, function(i, _category){
+                if(_category.data.id == categoryId){
+                    categories.splice(i, 1);
+                    categories.push(_category);
+                    return false;
+                }
+                return true;
+            });
+
+            return catalog;
+
         };
 
         /**
@@ -367,7 +402,7 @@ $(function(){
          */
         catalog.addCategory = function(category){
             if(category instanceof $.Category){
-                categories[category.data.id] = category;
+                categories.push(category);
             }
             return catalog;
         };
@@ -404,10 +439,18 @@ $(function(){
          */
         catalog.removeCategory = function(categoryId){
 
-            var category = categories[categoryId];
-            if(category){
-                delete categories[categoryId];
-            }
+            $.each(categories, function(i, _category){
+
+                if(_category.data.id == categoryId){
+
+                    categories.splice(i, 1);
+                    return false;
+
+                }
+
+                return true;
+
+            });
 
             catalog.updateStorage();
 
@@ -437,10 +480,14 @@ $(function(){
          */
         catalog.addProposalPrice = function(proposalPriceData, updateStorageCallback){
 
-            var category = catalog.getOrAddCategory(proposalPriceData['categoryId']);
+            var categoryId = proposalPriceData['categoryId'];
+            var category = catalog.getOrAddCategory(categoryId);
 
             if(category instanceof $.Category){
+
                 category.addProposalPrice(proposalPriceData);
+                catalog._moveCategoryToEnd(categoryId);
+
             }
 
             catalog.updateStorage(updateStorageCallback);
@@ -480,6 +527,23 @@ $(function(){
             catalog.updateStorage(updateStorageCallback);
 
             return catalog;
+
+        };
+
+        /**
+         * Get catalog proposal prices total amount
+         * @returns {number}
+         */
+        catalog.getProposalPricesAmount = function(){
+
+            var amount = 0;
+            var categories = catalog.getCategories();
+
+            $.each(categories, function(i, category){
+                amount += category.getProposalPricesAmount();
+            });
+
+            return amount;
 
         };
 

@@ -59,9 +59,21 @@ class EstimatorBuilder {
 
         $estimator = null;
 
-        if(isset($storageData['categories']) && is_array($storageData['categories']) && isset($storageData['categories'][$category->getId()])){
+        if(isset($storageData['categories']) && is_array($storageData['categories'])){
 
-            $categoryData = $storageData['categories'][$category->getId()];
+            $categoryData = null;
+            foreach($storageData['categories'] as $_categoryData){
+
+                if(isset($_categoryData['id']) && $_categoryData['id'] == $category->getId()){
+                    $categoryData = $_categoryData;
+                    break;
+                }
+
+            }
+
+            if(!$categoryData){
+                return $estimator;
+            }
             $categoryEstimationData = new CategoryEstimationData($categoryData);
 
             $estimator = new Estimator();
@@ -126,7 +138,7 @@ class EstimatorBuilder {
 
         $estimatorCategories = [];
 
-        $categoriesData = $storageData['categories'];
+        $categoriesData = array_reverse($storageData['categories']);
         foreach($categoriesData as $categoryData){
 
             $categoryEstimationData = new CategoryEstimationData($categoryData);

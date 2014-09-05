@@ -30,6 +30,42 @@
                 <source>shop.cart.create.order</source>
                 <target>Create order</target>
             </trans-unit>
+            <trans-unit id="shop.comparison.title">
+                <source>shop.comparison.title</source>
+                <target>Comparison</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.proposals_in_comparison">
+                <source>shop.comparison.proposals_in_comparison</source>
+                <target>Proposals in comparison</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.popup.title">
+                <source>shop.comparison.popup.title</source>
+                <target>Comparison</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.remove.proposal">
+                <source>shop.comparison.remove.proposal</source>
+                <target>Remove from comparison</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.to_catalog">
+                <source>shop.comparison.to_catalog</source>
+                <target>Back to catalog</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.to_estimator">
+                <source>shop.comparison.to_estimator</source>
+                <target>Compare</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.comparison_groups">
+                <source>shop.comparison.comparison_groups</source>
+                <target>Proposal groups</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.current_comparison_group">
+                <source>shop.comparison.current_comparison_group</source>
+                <target>Current group</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.more_comparison_groups">
+                <source>shop.comparison.more_comparison_groups</source>
+                <target>More groups</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

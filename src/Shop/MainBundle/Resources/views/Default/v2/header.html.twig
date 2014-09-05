@@ -50,14 +50,20 @@
                     </ul>
                 </div>
                 <div class="header-shop-cart pull-left">
-                    <a href="{{ path('shop_cart_popup') }}" class="open-shop-cart shop-cart-btn">
-                        <span class="shop-cart-icon">Корзина</span>
+                    <a href="{{ path('shop_cart_popup') }}" class="open-shop-cart shop-cart-btn empty-cart">
+                        <span class="shop-cart-icon"></span>
                         <span class="amount-badge"></span>
                     </a>
                 </div>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
+            <div class="header-comparison">
+                <a href="{{ path('shop_catalog_estimator_popup') }}" class="open-comparison comparison-btn empty-comparison">
+                    <span class="amount-title">{{ 'shop.comparison.proposals_in_comparison'|trans({}, 'ShopCatalogBundle') }}</span>:
+                    <span class="amount">0</span>
+                </a>
+            </div>
         </div>
     </div>
 </div>

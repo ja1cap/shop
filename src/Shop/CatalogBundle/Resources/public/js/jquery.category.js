@@ -1,6 +1,9 @@
 $(function(){
 
     var selectors = {
+        tabsContainer : '#category-tabs-container',
+        tabButton : '.category-tab-btn',
+        tabFilter : '.category-tab-filter',
         resetFiltersBtn : '.reset-filters-btn',
         filtersForm : '#filtersForm',
         filtersContainer : '.category-filters-container',
@@ -20,6 +23,10 @@ $(function(){
         var methods = {
             initElements: function(){
 
+
+                category.$tabsContainer = $(selectors.tabsContainer, $categoryContainer);
+                category.$tabButton = $(selectors.tabButton, $categoryContainer);
+                category.$tabFilter = $(selectors.tabFilter, $categoryContainer);
                 category.$resetFiltersBtn = $(selectors.resetFiltersBtn, $categoryContainer);
                 category.$filtersForm = $(selectors.filtersForm, $categoryContainer);
                 category.$filtersContainer = $(selectors.filtersContainer, $categoryContainer);
@@ -71,9 +78,87 @@ $(function(){
                 }
 
             },
+            updateCategoryTabs : function(){
+
+                var $activeTabButtons = [];
+                var $allTabButton = null;
+
+                category.$tabButton.each(function(){
+
+                    var $tabButton = $(this);
+
+                    if($tabButton.hasClass('all')){
+
+                        $allTabButton = $tabButton;
+
+                    } else {
+
+                        var filterId = $tabButton.data('filter');
+                        var $tabFilter = $('#' + filterId);
+
+                        if($tabFilter.val()){
+                            $activeTabButtons.push($tabButton);
+                        }
+
+                    }
+
+                });
+
+                category.$tabButton.removeClass('active');
+
+                if($activeTabButtons.length == 0){
+
+                    if($allTabButton){
+                        $allTabButton.addClass('active');
+                    }
+
+                } else {
+
+                    if($allTabButton){
+                        $allTabButton.removeClass('active');
+                    }
+
+                    $.each($activeTabButtons, function(i, $tabButton){
+
+                        $tabButton.addClass('active');
+
+                    });
+
+                }
+
+            },
             initFilters: function(){
 
                 methods.initPriceRangeSlider();
+
+                methods.updateCategoryTabs();
+                category.$tabButton.click(function(e){
+
+                    e.preventDefault();
+
+                    var $tabButton = $(this);
+                    var filterId = $tabButton.data('filter');
+
+                    category.$tabFilter.val([]);
+
+                    switch (filterId){
+                        case 'all':
+
+                            category.$tabFilter.eq(0).trigger('change');
+                            break;
+
+                        default :
+
+                            var $tabFilter = $('#' + filterId);
+
+                            $tabFilter
+                                .val(1)
+                                .trigger('change')
+                            ;
+
+                    }
+
+                });
 
                 $(':input', category.$filtersForm).change(function(){
 
@@ -124,10 +209,11 @@ $(function(){
                 beforeSend: function(){
                     category.$proposalsContainer.addLoading();
                 },
-                complete: function(){
-                    category.$proposalsContainer.removeLoading();
-                },
                 success: function(data){
+
+                    category.$tabsContainer
+                        .html(data['tabsHtml'])
+                    ;
 
                     category.$proposalsContainer
                         .html(data['proposalsHtml'])
@@ -141,6 +227,11 @@ $(function(){
                     category.loadPageRequest = null;
 
                     category.init();
+                    category.$proposalsContainer.removeLoading();
+
+                    if($.proposalEstimator){
+                        $.proposalEstimator.markComparisonButtons();
+                    }
 
                 }
             });

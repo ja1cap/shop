@@ -47,7 +47,7 @@ class ProposalQueryBuilderFactory {
             ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
             ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
             ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('c.id', ':category_id'),
+                ($filtersResource->getCategoryId() ? $qb->expr()->eq('c.id', $filtersResource->getCategoryId()) : null),
                 $qb->expr()->eq('c.status', ':category_status'),
                 $qb->expr()->eq('pp.status', ':price_status'),
                 $qb->expr()->eq('p.status', ':proposal_status')
@@ -77,8 +77,8 @@ class ProposalQueryBuilderFactory {
 
         $qb
             ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('p.categoryId', ':category_id'),
-                ($filtersResource && $filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
+                ($filtersResource->getCategoryId() ? $qb->expr()->eq('p.categoryId', $filtersResource->getCategoryId()) : null),
+                ($filtersResource && $filtersResource->getManufacturerFilter() && $filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
             ))
         ;
 

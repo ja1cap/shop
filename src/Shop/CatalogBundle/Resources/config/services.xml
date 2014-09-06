@@ -20,6 +20,7 @@
         <parameter key="shop_catalog.popular_proposal.repository.class">Shop\CatalogBundle\Entity\PopularProposalRepository</parameter>
         <parameter key="shop_catalog.price.currency.converter.class">Shop\CatalogBundle\Currency\PriceCurrencyConverter</parameter>
         <parameter key="shop_catalog.shop_cart.factory.class">Shop\CatalogBundle\Cart\ShopCartFactory</parameter>
+        <parameter key="shop_catalog.filters.builder.class">Shop\CatalogBundle\Filter\FiltersBuilder</parameter>
     </parameters>
 
     <services>
@@ -95,7 +96,7 @@
             <argument type="service" id="shop_discount.proposal.action_conditions.builder"/>
         </service>
 
-        <service id="shop_catalog.category.filters.builder" class="Shop\CatalogBundle\Filter\CategoryFiltersBuilder">
+        <service id="shop_catalog.filters.builder" class="%shop_catalog.filters.builder.class%">
             <argument type="service" id="shop_catalog.proposal.repository"/>
             <argument type="service" id="shop_catalog.category_parameter.repository"/>
             <argument type="service" id="weasty_money.twig.money_extension"/>
@@ -108,6 +109,7 @@
             <argument type="service" id="shop_catalog.proposal.repository"/>
             <argument type="service" id="shop_catalog.popular_proposal.repository"/>
             <argument type="service" id="router"/>
+            <argument type="service" id="shop_catalog.filters.builder"/>
         </service>
 
         <service id="shop_catalog.price.currency.converter"

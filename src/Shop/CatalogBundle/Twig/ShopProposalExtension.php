@@ -25,15 +25,22 @@ class ShopProposalExtension extends \Twig_Extension {
     protected $urlGenerator;
 
     /**
+     * @var \Shop\CatalogBundle\Filter\FiltersBuilder
+     */
+    protected $filtersBuilder;
+
+    /**
      * @param $proposalRepository
      * @param $popularProposalRepository
      * @param $urlGenerator
+     * @param $filtersBuilder
      */
-    function __construct($proposalRepository, $popularProposalRepository, $urlGenerator)
+    function __construct($proposalRepository, $popularProposalRepository, $urlGenerator, $filtersBuilder)
     {
         $this->proposalRepository = $proposalRepository;
         $this->popularProposalRepository = $popularProposalRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->filtersBuilder = $filtersBuilder;
     }
 
     /**
@@ -46,6 +53,8 @@ class ShopProposalExtension extends \Twig_Extension {
             new \Twig_SimpleFunction('shop_catalog_popular_proposals', array($this, 'getPopularProposals')),
             new \Twig_SimpleFunction('shop_catalog_new_proposals', array($this, 'getNewProposals')),
             new \Twig_SimpleFunction('shop_catalog_bestsellers', array($this, 'getBestsellers')),
+            new \Twig_SimpleFunction('shop_catalog_discount_proposals', array($this, 'getDiscountProposals')),
+            new \Twig_SimpleFunction('shop_catalog_action_proposals', array($this, 'getActionProposals')),
         );
     }
 
@@ -88,31 +97,55 @@ class ShopProposalExtension extends \Twig_Extension {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Entity\Proposal[]
+     * @return array
      */
     public function getNewProposals(){
-        return $this->proposalRepository->findBy(
-            array(
-                'isNew' => true,
-            ),
-            array(
-                'updateDate' => 'DESC'
-            )
-        );
+
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+            'isNew' => true,
+        ]);
+
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+
     }
 
     /**
-     * @return \Shop\CatalogBundle\Entity\Proposal[]
+     * @return array
      */
     public function getBestsellers(){
-        return $this->proposalRepository->findBy(
-            array(
-                'isBestseller' => true,
-            ),
-            array(
-                'updateDate' => 'DESC'
-            )
-        );
+
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+            'isBestseller' => true,
+        ]);
+
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getDiscountProposals(){
+
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+            'hasDiscount' => true,
+        ]);
+
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getActionProposals(){
+
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+            'hasAction' => true,
+        ]);
+
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+
     }
 
     /**

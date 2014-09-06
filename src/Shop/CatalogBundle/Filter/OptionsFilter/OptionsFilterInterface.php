@@ -10,13 +10,6 @@ use Shop\CatalogBundle\Filter\FilterInterface;
 interface OptionsFilterInterface extends FilterInterface {
 
     /**
-     * @deprecated
-     * @TODO use getValue() method
-     * @return int[]
-     */
-    public function getFilteredOptionIds();
-
-    /**
      * @return FilterOptionInterface[]
      */
     public function getOptions();

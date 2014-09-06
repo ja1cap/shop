@@ -76,12 +76,11 @@
 
 {% block media_item_inner_container %}
     {% set priceId = proposal_data.priceId %}
-    {% set inShopCart = (shopCart is defined and priceId and priceId not in shopCart.priceIds) %}
     {% set media_item_images = media_item.images %}
     {% set _has_images = (media_item_images and media_item_images|length > 1) %}
-    <div class="preview-container {{ _has_images ? 'visible-left-bar' : '' }} {{ inShopCart ? 'in-shop-cart' : '' }}">
-        <div class="preview-left-bar">
-            {% if _has_images %}
+    <div class="preview-container {{ _has_images ? 'visible-left-bar' : '' }}">
+        {% if _has_images %}
+            <div class="preview-left-bar">
                 <div class="wrap">
                     <span class="prev"></span>
                     <div class="images-preview-container">
@@ -95,8 +94,8 @@
                     </div>
                     <span class="next"></span>
                 </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="preview-right-bar">
             <div class="markers">
                 {% if proposal.isNew %}
@@ -117,15 +116,15 @@
             {{ parent() }}
         </div>
         <div class="ui-buttons hidden-preview">
-            {% if shopCart is defined and priceId %}
+            {% if priceId %}
                 <div class="large secondary btn">
                     <a href="{{ path('shop_catalog_estimator_popup') }}" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
-                        Сравнить
+                        {{ 'shop.comparison.add.proposal'|trans({}, 'ShopCatalogBundle') }}
                     </a>
                 </div>
                 <div class="large primary btn">
                     <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
-                        Купить
+                        {{ 'shop.cart.buy'|trans({}, 'ShopCatalogBundle') }}
                     </a>
                 </div>
             {% endif %}

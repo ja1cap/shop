@@ -1,5 +1,11 @@
-{% set popular_proposals = shop_catalog_popular_proposals() %}
-{% if popular_proposals %}
+
+{% set popularProposals = shop_catalog_popular_proposals() %}
+{% set bestSellers = shop_catalog_bestsellers() %}
+{% set newProposals = shop_catalog_new_proposals() %}
+{% set discountProposals = shop_catalog_discount_proposals() %}
+{% set actionProposals = shop_catalog_action_proposals() %}
+
+{% if popularProposals %}
     <div class="proposals-block block-container" id="proposals-block">
 
         <div class="block-title-container">
@@ -43,16 +49,16 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="new-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
                         </div>
                         <div class="tab-pane fade" id="bestsellers-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
                         </div>
                         <div class="tab-pane fade" id="discount-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
                         </div>
                         <div class="tab-pane fade" id="action-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popular_proposals, 'proposals_slider_items_amount' : 4} %}
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
                         </div>
                     </div>
                 </div>

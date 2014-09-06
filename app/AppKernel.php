@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
             new JJs\Bundle\GeonamesBundle\JJsGeonamesBundle(),
+            new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new Weasty\Bundle\ResourceBundle\WeastyResourceBundle(),
             new Weasty\Bundle\DoctrineBundle\WeastyDoctrineBundle(),
             new Weasty\Bundle\GeonamesBundle\WeastyGeonamesBundle(),

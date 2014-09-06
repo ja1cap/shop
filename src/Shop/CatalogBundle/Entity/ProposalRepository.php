@@ -395,13 +395,12 @@ class ProposalRepository extends AbstractRepository {
     }
 
     /**
-     * @param $categoryId
      * @param FiltersResource $filtersResource
      * @param null $page
      * @param null $perPage
      * @return array
      */
-    public function findProposalsByFilters($categoryId, FiltersResource $filtersResource, $page = null, $perPage = null){
+    public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null){
 
         $useCacheCollection = true;
 
@@ -412,7 +411,6 @@ class ProposalRepository extends AbstractRepository {
             'price_status' => Price::STATUS_ON,
             'proposal_status' => Proposal::STATUS_ON,
             'category_status' => Category::STATUS_ON,
-            'category_id' => (int)$categoryId,
         );
 
         $select = [
@@ -450,9 +448,15 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('acdp.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
             ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('all_acdp.conditionId', 'ac.id')
+            ))
             ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('acdc.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'all_acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('all_acdc.conditionId', 'ac.id')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('discount_p.id', 'p.id'),
@@ -464,6 +468,7 @@ class ProposalRepository extends AbstractRepository {
                         ),
                         $qb->expr()->andX(
                             $qb->expr()->isNull('acdp.id'),
+                            $qb->expr()->isNull('all_acdp.id'),
                             $qb->expr()->eq('discount_p.id', 'acp.proposalId')
                         )
                     ),
@@ -474,6 +479,8 @@ class ProposalRepository extends AbstractRepository {
                         ),
                         $qb->expr()->andX(
                             $qb->expr()->isNull('acdc.id'),
+                            $qb->expr()->isNull('all_acdp.id'),
+                            $qb->expr()->isNull('all_acdc.id'),
                             $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
                         )
                     )
@@ -482,6 +489,20 @@ class ProposalRepository extends AbstractRepository {
             ->groupBy('p.id')
             ->addOrderBy('price')
         ;
+
+        if($filtersResource){
+
+            $qb
+                ->andWhere(
+                    ($filtersResource->getIsNewFilter() && $filtersResource->getIsNewFilter()->getValue() ? $qb->expr()->eq('p.isNew', 1) : null),
+                    ($filtersResource->getIsBestsellerFilter() && $filtersResource->getIsBestsellerFilter()->getValue() ? $qb->expr()->eq('p.isBestseller', 1) : null),
+                    ($filtersResource->getHasActionFilter() && $filtersResource->getHasActionFilter()->getValue() ? $qb->expr()->isNotNull('action_p.id') : null),
+                    ($filtersResource->getHasDiscountFilter() && $filtersResource->getHasDiscountFilter()->getValue() ? $qb->expr()->isNotNull('discount_p.id') : null)
+                )
+            ;
+
+        }
+
 
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
@@ -542,13 +563,12 @@ class ProposalRepository extends AbstractRepository {
     }
 
     /**
-     * @param $categoryId
      * @param null FiltersResource $filtersResource
      * @return mixed
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countProposals($categoryId, FiltersResource $filtersResource = null){
+    public function countProposals(FiltersResource $filtersResource = null){
 
         $qbFactory = new ProposalQueryBuilderFactory($this->getEntityManager(), $this);
         $qb = $qbFactory->createQueryBuilder($filtersResource);
@@ -557,10 +577,9 @@ class ProposalRepository extends AbstractRepository {
             'price_status' => Price::STATUS_ON,
             'proposal_status' => Proposal::STATUS_ON,
             'category_status' => Category::STATUS_ON,
-            'category_id' => (int)$categoryId,
+            'category_id' => (int)$filtersResource->getCategoryId(),
         );
 
-        //@TODO add action condition ids list
         $qb
             ->select(array(
                 'COUNT(DISTINCT p.id) as filtered',
@@ -600,9 +619,15 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('acdp.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
             ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('all_acdp.conditionId', 'ac.id')
+            ))
             ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('acdc.conditionId', 'ac.id'),
                 $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'all_acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('all_acdc.conditionId', 'ac.id')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('discount_p.id', 'p.id'),
@@ -614,6 +639,7 @@ class ProposalRepository extends AbstractRepository {
                         ),
                         $qb->expr()->andX(
                             $qb->expr()->isNull('acdp.id'),
+                            $qb->expr()->isNull('all_acdp.id'),
                             $qb->expr()->eq('discount_p.id', 'acp.proposalId')
                         )
                     ),
@@ -624,6 +650,8 @@ class ProposalRepository extends AbstractRepository {
                         ),
                         $qb->expr()->andX(
                             $qb->expr()->isNull('acdc.id'),
+                            $qb->expr()->isNull('all_acdp.id'),
+                            $qb->expr()->isNull('all_acdc.id'),
                             $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
                         )
                     )
@@ -847,6 +875,21 @@ class ProposalRepository extends AbstractRepository {
             ))
             ->groupBy('po.id')
         ;
+
+        if($filtersResource){
+
+            $qb
+                ->andWhere(
+                    ($filtersResource->getIsNewFilter() && $filtersResource->getIsNewFilter()->getValue() ? $qb->expr()->eq('p.isNew', 1) : null),
+                    ($filtersResource->getIsBestsellerFilter() && $filtersResource->getIsBestsellerFilter()->getValue() ? $qb->expr()->eq('p.isBestseller', 1) : null)
+                    //@TODO
+                    //($filtersResource->getHasActionFilter() && $filtersResource->getHasActionFilter()->getValue() ? $qb->expr()->isNotNull('action_p.id') : null),
+                    //($filtersResource->getHasDiscountFilter() && $filtersResource->getHasDiscountFilter()->getValue() ? $qb->expr()->isNotNull('discount_p.id') : null)
+                )
+            ;
+
+        }
+
 
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;

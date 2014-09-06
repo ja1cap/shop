@@ -260,7 +260,6 @@ simple_things_entity_audit:
     audited_entities:
         - Shop\CatalogBundle\Entity\CustomerOrder
         - Shop\CatalogBundle\Entity\CustomerOrderProposal
-
 weasty_catalog:
   category:
     entity:

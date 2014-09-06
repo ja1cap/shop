@@ -476,6 +476,26 @@ $(function(){
         };
 
         /**
+         * Check if proposal price exists
+         * @param proposalPriceData
+         * @returns {boolean}
+         */
+        catalog.hasProposalPrice = function(proposalPriceData){
+
+            var hasProposalPrice = false;
+
+            var categoryId = proposalPriceData['categoryId'];
+            var category = catalog.getCategory(categoryId);
+
+            if(category instanceof $.Category){
+                hasProposalPrice = (category.getProposalPrice(proposalPriceData['priceId']) != null);
+            }
+
+            return hasProposalPrice;
+
+        };
+
+        /**
          * Add proposal price to catalog
          */
         catalog.addProposalPrice = function(proposalPriceData, updateStorageCallback){

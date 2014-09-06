@@ -2,7 +2,7 @@
 {% set priceRangeFilter = filtersResource.getPriceRangeFilter %}
 {% set manufacturerFilter = filtersResource.getManufacturerFilter %}
 
-{% if parameterFilters or priceRangeFilter %}
+{% if parameterFilters or priceRangeFilter or manufacturerFilter %}
     <div class="filters-form-container">
         <div class="title filters-title">
             Фильтр
@@ -12,6 +12,12 @@
             </a>
         </div>
         <form id="filtersForm" class="filters-form">
+
+            <input type="hidden" class="category-tab-filter" id="isNew" name="isNew" value="{{ filtersResource.getIsNewFilter ? filtersResource.getIsNewFilter.getValue : '' }}">
+            <input type="hidden" class="category-tab-filter" id="isBestseller" name="isBestseller" value="{{ filtersResource.getIsBestsellerFilter ? filtersResource.getIsBestsellerFilter.getValue : '' }}">
+            <input type="hidden" class="category-tab-filter" id="hasAction" name="hasAction" value="{{ filtersResource.getHasActionFilter ? filtersResource.getHasActionFilter.getValue : '' }}">
+            <input type="hidden" class="category-tab-filter" id="hasDiscount" name="hasDiscount" value="{{ filtersResource.getHasDiscountFilter ? filtersResource.getHasDiscountFilter.getValue : '' }}">
+
             {% if priceRangeFilter %}
                 <div class="filter-form-element">
                     <label for="prices">
@@ -80,7 +86,7 @@
                     {% endif %}
                 </div>
             {% endif %}
-            {% if manufacturerFilter.getOptions|length > 1 %}
+            {% if manufacturerFilter and manufacturerFilter.getOptions|length > 1 %}
                 <div class="filter-form-element">
                     <label for="manufacturers">
                         {{ manufacturerFilter.getName }}

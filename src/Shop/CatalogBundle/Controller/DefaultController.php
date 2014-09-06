@@ -57,23 +57,19 @@ class DefaultController extends Controller
         }
 
         /**
-         * @var \Shop\CatalogBundle\Filter\CategoryFiltersBuilder $filtersBuilder
+         * @var \Shop\CatalogBundle\Filter\FiltersBuilder $filtersBuilder
          */
-        $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+        $filtersBuilder = $this->get('shop_catalog.filters.builder');
         if($categoryFilters){
             $filtersResource = $filtersBuilder->buildFromCategoryFilters($categoryFilters);
         } else {
             $filtersResource = $filtersBuilder->buildFromRequest($category, null, $request);
         }
 
-        $proposals = $this->getProposalRepository()->findProposalsByFilters($category->getId(), $filtersResource);
-
-        $shopCart = $this->buildShopCart($request);
-
-        $proposalsCount = $this->getProposalRepository()->countProposals($category->getId(), $filtersResource);
+        $proposals = $this->getProposalRepository()->findProposalsByFilters($filtersResource);
+        $proposalsCount = $this->getProposalRepository()->countProposals($filtersResource);
 
         $viewParameters = array(
-            'shopCart' => $shopCart,
             'category' => $category,
             'proposals' => $proposals,
             'proposalsCount' => $proposalsCount,
@@ -83,10 +79,12 @@ class DefaultController extends Controller
         switch($request->get('format')){
             case 'json':
 
+                $tabsHtml = $this->renderView('ShopCatalogBundle:Default:category-tabs.html.twig', $viewParameters);
                 $filtersHtml = $this->renderView('ShopCatalogBundle:Default:category-filters.html.twig', $viewParameters);
                 $proposalsHtml = $this->renderView('ShopCatalogBundle:Default:category-proposals.html.twig', $viewParameters);
 
                 $response = new JsonResponse(array(
+                    'tabsHtml' => $tabsHtml,
                     'filtersHtml' => $filtersHtml,
                     'proposalsHtml' => $proposalsHtml,
                 ));
@@ -129,7 +127,7 @@ class DefaultController extends Controller
 
         $category = $proposal->getCategory();
 
-        $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+        $filtersBuilder = $this->get('shop_catalog.filters.builder');
         $filtersResource = $filtersBuilder->buildFromRequest($category, $proposal, $request);
 
         $priceData = $this->getProposalRepository()->findProposalPrice(
@@ -212,10 +210,10 @@ class DefaultController extends Controller
          */
         foreach ($category->getAdditionalCategories() as $additionalCategory) {
 
-            $filtersBuilder = $this->get('shop_catalog.category.filters.builder');
+            $filtersBuilder = $this->get('shop_catalog.filters.builder');
             $filtersResource = $filtersBuilder->buildFromRequest($additionalCategory, null, $request);
 
-            $additionalCategoryProposals = $this->getProposalRepository()->findProposalsByFilters($additionalCategory->getId(), $filtersResource, 1, 1);
+            $additionalCategoryProposals = $this->getProposalRepository()->findProposalsByFilters($filtersResource, 1, 1);
             if ($additionalCategoryProposals) {
 
                 $additionalCategoriesData[$additionalCategory->getId()] = array(

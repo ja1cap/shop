@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}{{ title|default(settings.title) }}{% endblock %}</title>
@@ -42,8 +42,16 @@
         <script type="text/javascript" src="/js/storage/base.js"></script>
 
         {% javascripts
+            'bundles/bazingajstranslation/js/translator.min.js'
+            'js/translations/config.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% javascripts
             '@ShopCatalogBundle/Resources/public/js/base.objects.js'
             '@ShopCatalogBundle/Resources/public/js/*'
+            'js/translations/ShopCatalogBundle/*.js'
             output='js/catalog/main.js'
         %}
         <script src="{{ asset_url }}"></script>

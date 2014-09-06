@@ -21,16 +21,6 @@ class OptionsFilter extends AbstractFilter implements OptionsFilterInterface {
     }
 
     /**
-     * @deprecated
-     * @TODO use getValue() method
-     * @return int[]
-     */
-    public function getFilteredOptionIds()
-    {
-        return $this->getValue();
-    }
-
-    /**
      * @return FilterOptionInterface[]
      */
     public function getOptions()

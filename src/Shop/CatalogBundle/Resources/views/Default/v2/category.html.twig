@@ -13,7 +13,6 @@
             var catalogCategory = $('#category-container').catalogCategory(categoryUrl);
 
             catalogCategory.init();
-
         });
     </script>
 {% endblock %}
@@ -29,9 +28,9 @@
 
         <div class="block-body">
 
-            {#<div class="row">#}
-                {#{{ dump(proposalsCount) }}#}
-            {#</div>#}
+            <div class="row">
+                {% include 'ShopCatalogBundle:Default:category-tabs.html.twig' %}
+            </div>
 
             <div class="row">
                 <div class="three columns">

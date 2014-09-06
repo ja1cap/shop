@@ -1,6 +1,92 @@
 @import "settings";
 @import "lebedev-base";
 
+.category-tabs {
+
+  display: block;
+  margin-bottom: 50px;
+
+  .category-tab {
+
+      display: inline-block;
+      margin-right: 10px;
+
+      .category-tab-btn {
+
+        position: relative;
+        display: block;
+        height: 30px;
+        line-height: 28px;
+        padding: 0 10px 0 45px;
+        border: 1px solid rgb(202, 202, 202);
+        @include border-radius(3px);
+
+        text-decoration: underline;
+
+        &:before, &:after {
+          content: " ";
+          display: block;
+          position: absolute;
+          left: -1px;
+          top: -1px;
+          width: 40px;
+          height: 30px;
+          background: url("/img/weasty-sprite.png") no-repeat;
+        }
+
+        &.all {
+          padding: 0 10px;
+          &:before, &:after {
+            display: none;
+          }
+        }
+
+        &.has-discount {
+          &:before {
+            background-position: -206px -135px;
+          }
+          &:after {
+            background-position: -127px -174px;
+          }
+        }
+
+        &.is-new {
+          &:before {
+            background-position: -144px -135px;
+          }
+          &:after {
+            background-position: -83px -174px;
+          }
+        }
+
+        &.is-best {
+          &:before {
+            background-position: -79px -135px;
+          }
+          &:after {
+            background-position: -43px -174px;
+          }
+        }
+
+        &.has-action {
+          &:before {
+            background-position: -13px -135px;
+          }
+          &:after {
+            background-position: -2px -171px;
+          }
+        }
+
+        &.active {
+          text-decoration: none;
+        }
+
+      }
+
+  }
+
+}
+
 .category-proposals-container {
 
   position: relative;

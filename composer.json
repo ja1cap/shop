@@ -43,7 +43,8 @@
         "weasty/doctrine-cache-collection": "dev-master",
         "weasty/doctrine-bundle": "dev-master",
         "weasty/money": "dev-master",
-        "weasty/money-bundle": "dev-master"
+        "weasty/money-bundle": "dev-master",
+        "willdurand/js-translation-bundle": "@stable"
     },
     "scripts": {
         "post-install-cmd": [

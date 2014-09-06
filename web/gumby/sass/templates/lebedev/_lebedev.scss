@@ -232,9 +232,17 @@ body {
         margin-left: 0 !important;
       }
 
+      &.active {
+        @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7) inset);
+      }
+
       &.primary {
 
         @include background-image(linear-gradient(rgb(255, 114, 0), rgb(255, 48, 0)));
+
+        &.active {
+          @include background-image(linear-gradient(rgb(255, 48, 0), rgb(255, 114, 0)));
+        }
 
         a, a:hover {
           color: #ffffff;
@@ -246,6 +254,10 @@ body {
       &.secondary {
 
         @include background-image(linear-gradient(rgb(255, 246, 0), rgb(255, 204, 0)));
+
+        &.active {
+          @include background-image(linear-gradient(rgb(255, 204, 0), rgb(255, 246, 0)));
+        }
 
         a, a:hover {
           color: #000000;
@@ -410,7 +422,7 @@ body {
     color: $body-font-color;
 
     @import "common";
-    @import "media-list";
+    @import "media-items";
     @import "proposals-list";
     @import "manufacturers-block";
     @import "actions-block";

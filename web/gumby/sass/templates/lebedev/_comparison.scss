@@ -53,6 +53,22 @@
 
 }
 
+.btn {
+
+  &.active {
+
+    .compare-btn {
+
+      padding: 5px 7px;
+      line-height: 16px;
+      font-size: 10px;
+
+    }
+
+  }
+
+}
+
 .proposals-comparison {
 
   padding: 20px 0;
@@ -241,6 +257,12 @@
         padding-right: 0;
       }
 
+      .media-item {
+        margin: 0 auto;
+        height: 285px;
+        width: 220px;
+      }
+
       .image-container {
 
         margin: 0 auto 15px;
@@ -264,10 +286,29 @@
 
       .buttons-container {
 
-        margin: 0;
-
         .remove-from-comparison {
           font-size: 12px;
+        }
+
+      }
+
+    }
+
+    .footer-cell {
+      border-top: 1px solid rgb(202, 202, 202);
+      padding-top: 15px;
+    }
+
+    .footer-row {
+
+      .ui-buttons {
+
+        .btn {
+
+          display: inline-block;
+          float: none;
+          width: 48%;
+
         }
 
       }

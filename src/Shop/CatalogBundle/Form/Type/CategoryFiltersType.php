@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CategoryFiltersType extends AbstractType {
 
     /**
-     * @var \Shop\CatalogBundle\Filter\CategoryFiltersBuilder
+     * @var \Shop\CatalogBundle\Filter\FiltersBuilder
      */
     protected $filtersBuilder;
 

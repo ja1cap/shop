@@ -93,16 +93,17 @@
                                         {{ category.getName }} ({{ estimatedProposals|length }})
                                     </a>
                                 </div>
-                                {% if estimatorCategories|length > 1 %}
+                                {% if estimatorCategories|length > 1 or (estimatedProposals is empty and estimatorCategories) %}
                                     <div class="more-groups">
                                         <div class="title">
                                             {{ 'shop.comparison.more_comparison_groups'|trans({}, 'ShopCatalogBundle') }}:
                                         </div>
                                         {% for _estimatorCategory in estimatorCategories %}
                                             {% if _estimatorCategory.getCategory.getId != category.getId and _estimatorCategory.getProposalsAmount %}
-                                                <a href="{{ path('shop_catalog_estimator', {'categoryId': _estimatorCategory.getCategory.getId}) }}" class="primary-link">
-                                                    {{ _estimatorCategory.getCategory.getName }} ({{ _estimatorCategory.getProposalsAmount }})
-                                                </a>
+                                                {% spaceless %}
+                                                    <a href="{{ path('shop_catalog_estimator', {'categoryId': _estimatorCategory.getCategory.getId}) }}" class="primary-link">{{ _estimatorCategory.getCategory.getName }} ({{ _estimatorCategory.getProposalsAmount }})</a>
+                                                {% endspaceless %}
+                                                <br/>
                                             {% endif %}
                                         {% endfor %}
                                     </div>
@@ -112,22 +113,28 @@
                                 {% set proposal = estimatedProposal.getProposal %}
                                 {% set price = estimatedProposal.getPrice %}
                                 <td class="proposal-cell {{ loop.last ? 'last' : '' }}">
-                                    {% if proposal.image is defined and proposal.image %}
-                                        <div class="image-container">
-                                            <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                    <div class="media-item">
+                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal) }}">
+                                            {% if proposal.image is defined and proposal.image %}
+                                                <div class="image-container">
+                                                    <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                                </div>
+                                            {% else %}
+                                                <div class="image-container">
+                                                    <img src="/img/no-image.jpg" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                                </div>
+                                            {% endif %}
+                                            <div class="title-container">
+                                                <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                                    {{ proposal.name }}
+                                                </a>
+                                            </div>
                                         </div>
-                                    {% else %}
-                                        <div class="image-container">
-                                            <img src="/img/no-image.jpg" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
+                                        <div class="buttons-container">
+                                            <a href="#" class="remove-from-comparison primary-link" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
+                                                {{ 'shop.comparison.remove.proposal'|trans({}, 'ShopCatalogBundle') }}
+                                            </a>
                                         </div>
-                                    {% endif %}
-                                    <div class="title-container">
-                                        {{ proposal.name }}
-                                    </div>
-                                    <div class="buttons-container">
-                                        <a href="#" class="remove-from-comparison primary-link" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                            {{ 'shop.comparison.remove.proposal'|trans({}, 'ShopCatalogBundle') }}
-                                        </a>
                                     </div>
                                 </td>
                             {% endfor %}
@@ -236,6 +243,30 @@
                                     <td class="feature-value-cell {{ isBest ? 'best' : ''}} {{ loop.last ? 'last' : '' }}">
                                         <div class="feature-value">
                                             {{ rateFeatureValue ? rateFeatureValue.getValue : 0 }}
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr class="footer-row">
+                                <td class="footer-cell"></td>
+                                {% for estimatedProposal in estimatedProposals %}
+                                    {% set proposal = estimatedProposal.getProposal %}
+                                    {% set price = estimatedProposal.getPrice %}
+                                    {% set actionConditionIds = (estimatedProposal.getActionConditions ? estimatedProposal.getActionConditions.getConditionIds : []) %}
+                                    <td class="footer-cell proposal-cell {{ loop.last ? 'last' : '' }}">
+                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal) }}">
+                                            <div class="title-container">
+                                                <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                                    {{ proposal.name }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="buttons-container ui-buttons">
+                                            <div class="large primary btn">
+                                                <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}, "actionConditionIds":{{ actionConditionIds|json_encode }}}'>
+                                                    {{ 'shop.cart.buy'|trans({}, 'ShopCatalogBundle') }}
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
                                 {% endfor %}

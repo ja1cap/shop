@@ -2,6 +2,10 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" target-language="ru" datatype="plaintext" original="ShopCatalogBundle.en.xliff">
         <body>
+            <trans-unit id="shop.cart.buy">
+                <source>shop.cart.buy</source>
+                <target>Купить</target>
+            </trans-unit>
             <trans-unit id="shop.cart.popup.title">
                 <source>shop.cart.popup.title</source>
                 <target>Покупка товаров</target>
@@ -41,6 +45,10 @@
             <trans-unit id="shop.comparison.popup.title">
                 <source>shop.comparison.popup.title</source>
                 <target>Сравнение товаров</target>
+            </trans-unit>
+            <trans-unit id="shop.comparison.add.proposal">
+                <source>shop.comparison.add.proposal</source>
+                <target>Сравнить</target>
             </trans-unit>
             <trans-unit id="shop.comparison.remove.proposal">
                 <source>shop.comparison.remove.proposal</source>

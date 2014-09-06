@@ -2,6 +2,7 @@
 namespace Shop\CatalogBundle\Proposal\Estimator;
 
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
+use Shop\DiscountBundle\Entity\ActionConditionInterface;
 
 /**
  * Class EstimatorProposal

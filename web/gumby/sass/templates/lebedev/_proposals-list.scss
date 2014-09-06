@@ -1,13 +1,6 @@
 @import "settings";
 @import "lebedev-base";
 
-$preview-container-max-width: 314px;
-$preview-container-padding-v-t: 20px;
-$preview-container-padding-v-b: 0px;
-$preview-container-padding-h-l: 20px;
-$preview-container-padding-h-r: 20px;
-$preview-container-left-bar-width: 62px;
-
 .images-preview {
 
   display: block;
@@ -57,8 +50,6 @@ $preview-container-left-bar-width: 62px;
 
   .proposal, .media-list-item {
 
-    position: relative;
-    display: block;
     background: white;
     text-align: center;
 
@@ -92,7 +83,6 @@ $preview-container-left-bar-width: 62px;
       margin: 7px 0;
       display: block;
       font-size: 14px;
-      color: rgb( 0, 0, 0 );
       line-height: 1.429;
       text-align: center;
     }
@@ -246,13 +236,6 @@ $preview-container-left-bar-width: 62px;
 
       .preview-container {
 
-        position: absolute;
-        right: -20px;
-        top: -20px;
-
-        max-width: $preview-container-max-width;
-        padding: $preview-container-padding-v-t $preview-container-padding-h-r $preview-container-padding-v-b $preview-container-padding-h-l;
-
         .preview-left-bar {
 
           display: none;
@@ -303,60 +286,6 @@ $preview-container-left-bar-width: 62px;
 
           }
 
-        }
-
-        .preview-right-bar {
-
-          position: relative;
-
-        }
-
-        .hidden-preview {
-          display: none;
-        }
-
-      }
-
-      &:hover {
-
-        .inner-container {
-
-          z-index: 4;
-
-          .media-list-item-body {
-
-            margin-bottom: 15px;
-
-          }
-
-        }
-
-        .preview-container {
-
-          right: -21px;
-          top: -21px;
-          display: block;
-          z-index: 10;
-          background: white;
-          border: 1px solid rgb( 202, 202, 202 );
-          @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 5px, 0);
-
-          &.visible-left-bar {
-
-            padding-left: ($preview-container-left-bar-width + ($preview-container-padding-h-l/2));
-
-            .preview-left-bar {
-
-              display: block;
-
-            }
-
-          }
-
-        }
-
-        .hidden-preview {
-          display: block;
         }
 
       }

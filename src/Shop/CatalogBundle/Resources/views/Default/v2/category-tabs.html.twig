@@ -1,0 +1,39 @@
+<div id="category-tabs-container">
+    {% if proposalsCount.discount or proposalsCount.new or proposalsCount.best or proposalsCount.action %}
+        <ul class="category-tabs">
+            <li class="category-tab">
+                <a href="#" class="category-tab-btn all" data-filter="all">
+                    Все товары ({{ proposalsCount.filtered }})
+                </a>
+            </li>
+            {% if proposalsCount.discount %}
+                <li class="category-tab">
+                    <a href="#" class="category-tab-btn has-discount" data-filter="hasDiscount">
+                        Товары со скидкой ({{ proposalsCount.discount }})
+                    </a>
+                </li>
+            {% endif %}
+            {% if proposalsCount.new %}
+                <li class="category-tab">
+                    <a href="#" class="category-tab-btn is-new" data-filter="isNew">
+                        Новинки ({{ proposalsCount.new }})
+                    </a>
+                </li>
+            {% endif %}
+            {% if proposalsCount.best %}
+                <li class="category-tab">
+                    <a href="#" class="category-tab-btn is-best" data-filter="isBestseller">
+                        Хиты продаж ({{ proposalsCount.best }})
+                    </a>
+                </li>
+            {% endif %}
+            {% if proposalsCount.action %}
+                <li class="category-tab">
+                    <a href="#" class="category-tab-btn has-action" data-filter="hasAction">
+                        Товары на акции ({{ proposalsCount.action }})
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</div>

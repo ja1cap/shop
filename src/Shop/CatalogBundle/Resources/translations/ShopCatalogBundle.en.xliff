@@ -42,6 +42,10 @@
                 <source>shop.comparison.popup.title</source>
                 <target>Comparison</target>
             </trans-unit>
+            <trans-unit id="shop.comparison.add.proposal">
+                <source>shop.comparison.add.proposal</source>
+                <target>Compare</target>
+            </trans-unit>
             <trans-unit id="shop.comparison.remove.proposal">
                 <source>shop.comparison.remove.proposal</source>
                 <target>Remove from comparison</target>

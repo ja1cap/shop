@@ -5,7 +5,23 @@ $(function () {
     var ProposalEstimator = $.Catalog.extend(function () {
 
         var estimator = this;
+
         estimator.popupSelector = '#comparisonPopup';
+
+        estimator.comparisonButtonDataAttributename = 'compare';
+
+        estimator.compareButtonClass = 'compare-btn';
+        estimator.compareButtonSelector = '.' + estimator.compareButtonClass;
+        estimator.addToComparisonText = Translator.trans('shop.comparison.add.proposal', {}, 'ShopCatalogBundle');
+
+        estimator.removeFromComparisonButtonSelector = '.remove-from-comparison';
+        estimator.removeFromComparisonText = Translator.trans('shop.comparison.remove.proposal', {}, 'ShopCatalogBundle');
+
+        estimator.inComparisonButtonClass = 'active';
+
+        estimator.comparisonButtonSelector = '.comparison-btn';
+        estimator.comparisonButtonAmountSelector = '.amount';
+        estimator.emptyComparisonButtonClass = 'empty-comparison';
 
         /**
          * Create storage
@@ -29,17 +45,23 @@ $(function () {
          */
         estimator.updateProposalPricesAmount = function(){
 
-            var $comparisonBtn = $('.comparison-btn');
-            var $comparisonBtnAmount = $('.amount', $comparisonBtn);
+            var $comparisonButtons = $(estimator.comparisonButtonSelector);
 
-            var amount = estimator.getProposalPricesAmount();
-            $comparisonBtnAmount.html(amount);
+            $comparisonButtons.each(function(){
 
-            if(amount == 0){
-                $comparisonBtn.addClass('empty-comparison');
-            } else {
-                $comparisonBtn.removeClass('empty-comparison');
-            }
+                var $comparisonBtn = $(this);
+                var $comparisonBtnAmount = $(estimator.comparisonButtonAmountSelector, $comparisonBtn);
+
+                var amount = estimator.getProposalPricesAmount();
+                $comparisonBtnAmount.html(amount);
+
+                if(amount == 0){
+                    $comparisonBtn.addClass(estimator.emptyComparisonButtonClass);
+                } else {
+                    $comparisonBtn.removeClass(estimator.emptyComparisonButtonClass);
+                }
+
+            });
 
             return estimator;
 
@@ -189,100 +211,184 @@ $(function () {
 
         };
 
+        estimator.markComparisonButton = function($btn){
+
+            var $wrapper = $btn.parent();
+
+            if($wrapper.hasClass('btn')){
+
+                var proposalPriceData = $btn.data($.proposalEstimator.comparisonButtonDataAttributename);
+                var inComparison = estimator.hasProposalPrice(proposalPriceData);
+
+                if(inComparison){
+
+                    $wrapper.addClass($.proposalEstimator.inComparisonButtonClass);
+
+                    if($.proposalEstimator.removeFromComparisonText){
+                        $btn.text($.proposalEstimator.removeFromComparisonText);
+                    }
+
+                } else {
+
+                    $wrapper.removeClass($.proposalEstimator.inComparisonButtonClass);
+
+                    if($.proposalEstimator.addToComparisonText){
+                        $btn.text($.proposalEstimator.addToComparisonText);
+                    }
+
+                }
+
+
+            }
+
+        };
+
+        estimator.markComparisonButtons = function(){
+
+            var $buttons = $($.proposalEstimator.compareButtonSelector);
+
+            $buttons.each(function(){
+                var $btn = $(this);
+                estimator.markComparisonButton($btn);
+            });
+
+            return estimator;
+
+        };
+
     });
 
-    $.proposalEstimator = new ProposalEstimator('proposalEstimator');
+    var methods = {
+        init : function(){
 
-    $(document).on('click', '.compare-btn', function (e) {
+            $.proposalEstimator = new ProposalEstimator('proposalEstimator');
 
-        e.preventDefault();
+            $.proposalEstimator.markComparisonButtons();
 
-        var $btn = $(this);
+            $(document).on('click', $.proposalEstimator.compareButtonSelector, methods.$compareProposalPrice);
 
-        var proposalPriceData = $btn.data('compare');
-        if (proposalPriceData) {
+            $(document).on('click', $.proposalEstimator.removeFromComparisonButtonSelector, methods.$removeProposalPrice);
 
-            var categoryId = proposalPriceData.categoryId;
+            $(document).on('click', '.refresh-comparison', methods.$refreshComparison);
 
-            $.proposalEstimator.addProposalPrice(proposalPriceData, function (categories) {
+            $(document).on('click', '.open-comparison', methods.$openComparisonPopup);
 
-                var popupUrl = $btn.attr('href');
-                $.proposalEstimator.refresh({
-                    popup: (popupUrl != '#'),
-                    popupUrl: popupUrl,
-                    popupRequestData: {
-                        categoryId: categoryId,
-                        proposalEstimator : {
-                            categories : categories
+        },
+        $compareProposalPrice : function(e){
+
+            var $btn = $(this);
+            var $wrapper = $btn.parent();
+
+            var inComparison = $wrapper.hasClass($.proposalEstimator.inComparisonButtonClass);
+
+            if(inComparison){
+
+                methods.$removeProposalPrice.apply(this, [e]);;
+
+            } else {
+
+                methods.$addProposalPrice.apply(this, [e]);
+
+            }
+
+        },
+        $addProposalPrice : function(e){
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            var proposalPriceData = $btn.data($.proposalEstimator.comparisonButtonDataAttributename);
+            if (proposalPriceData) {
+
+                var categoryId = proposalPriceData.categoryId;
+
+                $.proposalEstimator.addProposalPrice(proposalPriceData, function (categories) {
+
+                    $.proposalEstimator.markComparisonButton($btn);
+
+                    var popupUrl = $btn.attr('href');
+                    $.proposalEstimator.refresh({
+                        popup: (popupUrl != '#'),
+                        popupUrl: popupUrl,
+                        popupRequestData: {
+                            categoryId: categoryId,
+                            proposalEstimator : {
+                                categories : categories
+                            }
                         }
-                    }
+                    });
+
                 });
 
+            }
+
+        },
+        $removeProposalPrice : function(e){
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            var proposalPriceData = $btn.data($.proposalEstimator.comparisonButtonDataAttributename);
+            if(proposalPriceData){
+
+                var categoryId = proposalPriceData.categoryId;
+
+                $.proposalEstimator.removeProposalPrice(proposalPriceData, function(categories){
+
+                    if($btn.hasClass($.proposalEstimator.compareButtonClass)){
+
+                        $.proposalEstimator.markComparisonButton($btn);
+
+                    } else {
+
+                        var popupUrl = $btn.attr('href');
+                        $.proposalEstimator.refresh({
+                            popup: popupUrl != '#',
+                            popupUrl: popupUrl,
+                            popupRequestData: {
+                                categoryId : categoryId,
+                                proposalEstimator : {
+                                    categories : categories
+                                }
+                            }
+                        });
+
+                    }
+
+                });
+
+            }
+
+        },
+        $refreshComparison : function(e){
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            var popupUrl = $btn.attr('href');
+            $.proposalEstimator.refresh({
+                popup: popupUrl != '#',
+                popupUrl: popupUrl
+            });
+
+        },
+        $openComparisonPopup : function(e){
+
+            e.preventDefault();
+
+            var $btn = $(this);
+
+            var popupUrl = $btn.attr('href');
+            $.proposalEstimator.openPopup({
+                popupUrl: popupUrl
             });
 
         }
+    };
 
-        return false;
-
-    });
-
-    $(document).on('click', '.refresh-comparison', function(e){
-
-        e.preventDefault();
-
-        var $btn = $(this);
-
-        var popupUrl = $btn.attr('href');
-        $.proposalEstimator.refresh({
-            popup: popupUrl != '#',
-            popupUrl: popupUrl
-        });
-
-    });
-
-    $(document).on('click', '.remove-from-comparison', function(e){
-
-        e.preventDefault();
-
-        var $btn = $(this);
-
-        var proposalPriceData = $btn.data('compare');
-        if(proposalPriceData){
-
-            var categoryId = proposalPriceData.categoryId;
-
-            $.proposalEstimator.removeProposalPrice(proposalPriceData, function(categories){
-
-                console.log(categories);
-                var popupUrl = $btn.attr('href');
-                $.proposalEstimator.refresh({
-                    popup: popupUrl != '#',
-                    popupUrl: popupUrl,
-                    popupRequestData: {
-                        categoryId : categoryId,
-                        proposalEstimator : {
-                            categories : categories
-                        }
-                    }
-                });
-
-            });
-
-        }
-
-    });
-
-    $(document).on('click', '.open-comparison', function(e){
-
-        e.preventDefault();
-
-        var $btn = $(this);
-
-        var popupUrl = $btn.attr('href');
-        $.proposalEstimator.openPopup({
-            popupUrl: popupUrl
-        });
-
-    });
+    methods.init();
 
 });

@@ -17,6 +17,7 @@ interface FilterInterface extends \JsonSerializable {
     const TYPE_IMAGE = 3;
     const TYPE_IMAGE_WITH_TEXT = 4;
     const TYPE_SLIDER = 5;
+    const TYPE_CHECKBOX = 6;
 
     /**
      * @return int

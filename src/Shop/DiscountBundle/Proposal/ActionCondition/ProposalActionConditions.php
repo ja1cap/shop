@@ -81,6 +81,15 @@ class ProposalActionConditions {
     }
 
     /**
+     * @return array
+     */
+    public function getConditionIds(){
+        return array_map(function(ActionConditionInterface $actionCondition){
+            return $actionCondition->getId();
+        }, $this->getConditions());
+    }
+
+    /**
      * @return null|ActionConditionInterface
      */
     public function getMainCondition(){

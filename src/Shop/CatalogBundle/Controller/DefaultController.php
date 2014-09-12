@@ -141,7 +141,7 @@ class DefaultController extends Controller
          * @TODO add twig function for proposal features
          * @var $proposalFeatures \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
          */
-        $proposalFeatures = $this->get('shop_catalog.proposal.features_builder')->build($proposal, $price);
+        $proposalFeatures = $this->get('shop_catalog.proposal.features_builder')->build($category, [$price]);
 
         $shopCart = $this->buildShopCart($request);
         $shippingCalculatorResult = null;

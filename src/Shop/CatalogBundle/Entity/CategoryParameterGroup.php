@@ -4,13 +4,18 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupElement;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
+use Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupInterface;
 
 /**
  * Class CategoryParameterGroup
  * @package Shop\CatalogBundle\Entity
  */
 class CategoryParameterGroup extends AbstractEntity
+    implements  CategoryParameterGroupInterface,
+                CacheCollectionEntityInterface
 {
     /**
      * @var integer
@@ -28,7 +33,17 @@ class CategoryParameterGroup extends AbstractEntity
     private $position;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var integer
+     */
+    private $categoryId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Category
+     */
+    private $category;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface[]
      */
     private $parameters;
 
@@ -38,6 +53,15 @@ class CategoryParameterGroup extends AbstractEntity
     public function __construct()
     {
         $this->parameters = new ArrayCollection();
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new CategoryParameterGroupElement($collection, $this);
     }
 
     /**
@@ -122,22 +146,12 @@ class CategoryParameterGroup extends AbstractEntity
     /**
      * Get parameters
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface[]
      */
     public function getParameters()
     {
         return $this->parameters;
     }
-    /**
-     * @var integer
-     */
-    private $categoryId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Category
-     */
-    private $category;
-
 
     /**
      * Set categoryId

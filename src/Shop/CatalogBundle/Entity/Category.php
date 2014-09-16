@@ -62,19 +62,24 @@ class Category extends AbstractEntity
     private $multipleName;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $parameterGroups;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface[]
      */
     private $parameters;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupInterface[]
+     */
+    private $parameterGroups;
 
     /**
      * @var integer|null
      */
     private $imageId;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $proposals;
 
     /**
      * @var Media|null
@@ -393,18 +398,12 @@ class Category extends AbstractEntity
     /**
      * Get parameters
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface[]
      */
     public function getParameters()
     {
         return $this->parameters;
     }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $proposals;
-
 
     /**
      * Add proposals
@@ -547,7 +546,7 @@ class Category extends AbstractEntity
     /**
      * Get parameterGroups
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupInterface[]
      */
     public function getParameterGroups()
     {

@@ -3,6 +3,8 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
+use Shop\CatalogBundle\Proposal\Price\PriceElement;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 
@@ -11,11 +13,9 @@ use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
  * @package Shop\CatalogBundle\Entity
  */
 class Price extends AbstractEntity
-    implements ProposalPriceInterface
+    implements  ProposalPriceInterface,
+                CacheCollectionEntityInterface
 {
-
-    const STATUS_ON = 1;
-    const STATUS_OFF = 2;
 
     /**
      * @var array
@@ -24,6 +24,11 @@ class Price extends AbstractEntity
         self::STATUS_ON => 'Вкл',
         self::STATUS_OFF => 'Выкл',
     );
+
+    /**
+     * @var integer
+     */
+    private $id;
 
     /**
      * @var string
@@ -41,6 +46,11 @@ class Price extends AbstractEntity
     protected $value;
 
     /**
+     * @var integer
+     */
+    private $currencyNumericCode;
+
+    /**
      * @var \DateTime
      */
     private $createDate;
@@ -49,6 +59,71 @@ class Price extends AbstractEntity
      * @var \DateTime
      */
     private $updateDate;
+
+    /**
+     * @var integer
+     */
+    private $proposalId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Proposal
+     */
+    private $proposal;
+
+    /**
+     * @var integer
+     */
+    private $contractorId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Contractor
+     */
+    private $contractor;
+
+    /**
+     * @var integer
+     */
+    private $status;
+
+    /**
+     * @var integer
+     */
+    private $warehouseAmount;
+
+    /**
+     * @var \DateTime
+     */
+    private $warehouseAmountUpdateDate;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $parameterValues;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->parameterValues = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    function __toString()
+    {
+        return (string)$this->getValue();
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new PriceElement($collection, $this);
+    }
 
     /**
      * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
@@ -85,12 +160,6 @@ class Price extends AbstractEntity
     }
 
     /**
-     * @var \Shop\CatalogBundle\Entity\Proposal
-     */
-    private $proposal;
-
-
-    /**
      * Set proposal
      *
      * @param \Shop\CatalogBundle\Entity\Proposal $proposal
@@ -112,11 +181,6 @@ class Price extends AbstractEntity
     {
         return $this->proposal;
     }
-    /**
-     * @var integer
-     */
-    private $id;
-
 
     /**
      * Get id
@@ -127,11 +191,6 @@ class Price extends AbstractEntity
     {
         return $this->id;
     }
-
-    /**
-     * @var integer
-     */
-    private $proposalId;
 
     /**
      * Set proposalId
@@ -154,27 +213,6 @@ class Price extends AbstractEntity
     public function getProposalId()
     {
         return $this->proposalId;
-    }
-
-    /**
-     * @return string
-     */
-    function __toString()
-    {
-        return $this->getValue();
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $parameterValues;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->parameterValues = new ArrayCollection();
     }
 
     /**
@@ -203,7 +241,7 @@ class Price extends AbstractEntity
     /**
      * Get parameterValues
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection|\Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface[]
      */
     public function getParameterValues()
     {
@@ -269,17 +307,6 @@ class Price extends AbstractEntity
     }
 
     /**
-     * @var integer
-     */
-    private $contractorId;
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Contractor
-     */
-    private $contractor;
-
-
-    /**
      * Set contractorId
      *
      * @param integer $contractorId
@@ -331,12 +358,6 @@ class Price extends AbstractEntity
     public function getContractorName(){
         return $this->getContractor() ? $this->getContractor()->getName() : null;
     }
-
-    /**
-     * @var integer
-     */
-    private $currencyNumericCode;
-
 
     /**
      * Set currencyNumericCode
@@ -400,11 +421,6 @@ class Price extends AbstractEntity
     {
         return $this->sku;
     }
-    /**
-     * @var integer
-     */
-    private $status;
-
 
     /**
      * Set status
@@ -428,16 +444,6 @@ class Price extends AbstractEntity
     {
         return $this->status;
     }
-    /**
-     * @var integer
-     */
-    private $warehouseAmount;
-
-    /**
-     * @var \DateTime
-     */
-    private $warehouseAmountUpdateDate;
-
 
     /**
      * Set warehouseAmount

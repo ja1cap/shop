@@ -33,6 +33,11 @@ class ParameterOption extends AbstractEntity
     /**
      * @var integer
      */
+    private $priority;
+
+    /**
+     * @var integer
+     */
     private $imageId;
 
     /**
@@ -112,14 +117,23 @@ class ParameterOption extends AbstractEntity
     }
 
     /**
+     * @param int $priority
+     * @return $this
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+        return $this;
+    }
+
+    /**
      * Get priority
      *
      * @return integer
      */
     public function getPriority()
     {
-        //@TODO add priority property
-        return $this->getPosition();
+        return ($this->priority !== null ? $this->priority : $this->getPosition());
     }
 
     /**

@@ -95,7 +95,7 @@ class FiltersBuilder {
 //        if(true){
         if(!$filtersResource){
 
-            $filtersResource = new FiltersResource();
+            $filtersResource = new FiltersResource($cacheId);
             $filtersResource
                 ->setCategoryId($categoryId)
                 ->setProposalId($proposalId)

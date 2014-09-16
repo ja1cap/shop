@@ -12,14 +12,14 @@ interface CategoryInterface extends BaseCategoryInterface {
     /**
      * Get parameters
      *
-     * @return \Doctrine\Common\Collections\Collection|array
+     * @return \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface[]
      */
     public function getParameters();
 
     /**
      * Get parameterGroups
      *
-     * @return \Doctrine\Common\Collections\Collection|array
+     * @return \Doctrine\Common\Collections\Collection|\Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupInterface[]
      */
     public function getParameterGroups();
 

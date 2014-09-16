@@ -73,10 +73,14 @@ class FeaturesBuilder {
 
     /**
      * @param CategoryInterface $category
-     * @param ProposalPriceInterface[] $prices
+     * @param ProposalPriceInterface[]|ProposalPriceInterface $prices
      * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
      */
     public function build(CategoryInterface $category, $prices = []){
+
+        if($prices instanceof ProposalPriceInterface){
+            $prices = [$prices];
+        }
 
         $proposalFeaturesResource = new FeaturesResource();
 
@@ -86,8 +90,8 @@ class FeaturesBuilder {
         $features = [];
 
         /**
-         * @var $categoryParameterGroup \Shop\CatalogBundle\Entity\CategoryParameterGroup
-         * @var $categoryParameter \Shop\CatalogBundle\Entity\CategoryParameter
+         * @var $categoryParameterGroup \Shop\CatalogBundle\Category\Parameter\CategoryParameterGroupInterface
+         * @var $categoryParameter \Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface
          */
         foreach($category->getParameterGroups() as $categoryParameterGroup){
 

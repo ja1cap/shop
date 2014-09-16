@@ -4,6 +4,9 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Contractor\ContractorElement;
+use Shop\CatalogBundle\Contractor\ContractorInterface;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -11,7 +14,10 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class Contractor extends AbstractEntity
+    implements  ContractorInterface,
+                CacheCollectionEntityInterface
 {
+
     /**
      * @var integer
      */
@@ -21,6 +27,33 @@ class Contractor extends AbstractEntity
      * @var string
      */
     private $name;
+
+    /**
+     * @var integer
+     */
+    private $defaultCurrencyNumericCode;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $currencies;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->currencies = new ArrayCollection();
+    }
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new ContractorElement($collection, $this);
+    }
 
     /**
      * Get id
@@ -53,18 +86,6 @@ class Contractor extends AbstractEntity
     public function getName()
     {
         return $this->name;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $currencies;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->currencies = new ArrayCollection();
     }
 
     /**
@@ -99,11 +120,6 @@ class Contractor extends AbstractEntity
     {
         return $this->currencies;
     }
-    /**
-     * @var integer
-     */
-    private $defaultCurrencyNumericCode;
-
 
     /**
      * Set defaultCurrencyNumericCode

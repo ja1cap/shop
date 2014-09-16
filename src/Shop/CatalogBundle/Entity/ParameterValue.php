@@ -3,7 +3,9 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Parameter\Value\ParameterValueElement;
 use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -11,8 +13,10 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class ParameterValue extends AbstractEntity
-    implements ParameterValueInterface
+    implements  ParameterValueInterface,
+                CacheCollectionEntityInterface
 {
+
     /**
      * @var integer
      */
@@ -62,6 +66,15 @@ class ParameterValue extends AbstractEntity
      * @var integer
      */
     private $optionId;
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new ParameterValueElement($collection, $this);
+    }
 
     /**
      * Get id

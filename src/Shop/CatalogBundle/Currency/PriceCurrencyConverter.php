@@ -1,8 +1,8 @@
 <?php
 namespace Shop\CatalogBundle\Currency;
 
-use Shop\CatalogBundle\Entity\ContractorCurrency;
-use Shop\CatalogBundle\Entity\Price;
+use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Weasty\Bundle\CatalogBundle\Contractor\Currency\ContractorCurrencyInterface;
 use Weasty\Money\Currency\Converter\CurrencyConverter;
 use Weasty\Money\Currency\CurrencyResource;
 
@@ -21,7 +21,7 @@ class PriceCurrencyConverter extends CurrencyConverter {
     public function convert($price, $sourceCurrency = null, $destinationCurrency = null)
     {
 
-        if(!$price instanceof Price){
+        if(!$price instanceof ProposalPriceInterface){
             return parent::convert($price, $sourceCurrency, $destinationCurrency);
         }
 
@@ -49,11 +49,11 @@ class PriceCurrencyConverter extends CurrencyConverter {
 
             if($price->getContractor()){
 
-                $currency = $price->getContractor()->getCurrencies()->filter(function(ContractorCurrency $currency) use ($priceCurrencyNumericCode) {
+                $currency = $price->getContractor()->getCurrencies()->filter(function(ContractorCurrencyInterface $currency) use ($priceCurrencyNumericCode) {
                     return $currency->getNumericCode() == $priceCurrencyNumericCode;
                 })->current();
 
-                if($currency instanceof ContractorCurrency){
+                if($currency instanceof ContractorCurrencyInterface){
                     $exchangedContractorValue = $price->getValue() * $currency->getValue();
                 }
 

@@ -3,7 +3,9 @@
 namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shop\CatalogBundle\Category\Parameter\CategoryParameterElement;
 use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
+use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -11,7 +13,8 @@ use Weasty\Doctrine\Entity\AbstractEntity;
  * @package Shop\CatalogBundle\Entity
  */
 class CategoryParameter extends AbstractEntity
-    implements  CategoryParameterInterface
+    implements  CategoryParameterInterface,
+                CacheCollectionEntityInterface
 {
 
     /**
@@ -48,6 +51,15 @@ class CategoryParameter extends AbstractEntity
      * @var \Shop\CatalogBundle\Entity\Parameter
      */
     private $parameter;
+
+    /**
+     * @param $collection \Weasty\Doctrine\Cache\Collection\CacheCollection
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionElementInterface
+     */
+    public function createCollectionElement($collection)
+    {
+        return new CategoryParameterElement($collection, $this);
+    }
 
     /**
      * Get id

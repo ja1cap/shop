@@ -261,12 +261,10 @@ class ProposalRepository extends AbstractRepository {
     }
 
     /**
-     * @param $categoryId
-     * @param $proposalId
      * @param FiltersResource $filtersResource
      * @return mixed
      */
-    public function findProposalPrice($categoryId, $proposalId, FiltersResource $filtersResource){
+    public function findProposalPrice(FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -321,9 +319,9 @@ class ProposalRepository extends AbstractRepository {
 
         $queryParameters = array(
             'price_status' => Price::STATUS_ON,
-            'proposal_id' => $proposalId,
+            'proposal_id' => $filtersResource->getProposalId(),
             'proposal_status' => Proposal::STATUS_ON,
-            'category_id' => (int)$categoryId,
+            'category_id' => $filtersResource->getCategoryId(),
             'category_status' => Category::STATUS_ON,
         );
 
@@ -337,9 +335,21 @@ class ProposalRepository extends AbstractRepository {
 //        echo("<br/>");
 //        die;
 
-        $result = $query->getResult();
+//        $result = $query->getResult();
+        $result = current($this->findProposalsByFilters($filtersResource, 1, 1));
 
-        return current($result);
+        if($result){
+
+            if(isset($result['priceId']) && $result['priceId']){
+
+                $priceCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Price');
+                $result['price'] = $priceCollection->get($result['priceId']);
+
+            }
+
+        }
+
+        return $result;
 
 
     }
@@ -402,6 +412,7 @@ class ProposalRepository extends AbstractRepository {
      */
     public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null){
 
+        //@TODO cache sql query by FiltersResource::getCacheId()
         $useCacheCollection = true;
 
         $qbFactory = new ProposalQueryBuilderFactory($this->getEntityManager(), $this);

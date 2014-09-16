@@ -8,6 +8,11 @@ namespace Shop\CatalogBundle\Category\Parameter;
 interface CategoryParameterInterface {
 
     /**
+     * @return int
+     */
+    public function getId();
+
+    /**
      * @return string
      */
     public function getName();
@@ -21,5 +26,12 @@ interface CategoryParameterInterface {
      * @return boolean
      */
     public function getIsComparable();
+
+    /**
+     * Get groupId
+     *
+     * @return integer
+     */
+    public function getGroupId();
 
 } 

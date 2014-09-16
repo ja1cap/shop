@@ -13,6 +13,7 @@
         <field name="imageId" column="image_id" type="integer" nullable="true"/>
         <field name="name" type="string" column="name" length="255"/>
         <field name="position" type="integer" column="position"/>
+        <field name="priority" type="integer" column="priority" nullable="true"/>
         <field name="parameterId" type="integer" column="parameterId"/>
         <one-to-many target-entity="ParameterValue" mapped-by="option" field="optionValues"/>
         <many-to-one target-entity="Parameter" field="parameter" inversed-by="options">

@@ -4,8 +4,8 @@ namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\CategoryFilters;
-use Shop\CatalogBundle\Entity\Price;
 use Shop\CatalogBundle\Entity\Proposal;
+use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -130,23 +130,21 @@ class DefaultController extends Controller
         $filtersBuilder = $this->get('shop_catalog.filters.builder');
         $filtersResource = $filtersBuilder->buildFromRequest($category, $proposal, $request);
 
-        $priceData = $this->getProposalRepository()->findProposalPrice(
-            $category->getId(),
-            $proposal->getId(),
-            $filtersResource
-        );
-        $price = $priceData ? $priceData['priceEntity'] : null;
+        $priceData = $this->getProposalRepository()->findProposalPrice($filtersResource);
+        var_dump($priceData);
+        die;
+        $price = $priceData ? $priceData['price'] : null;
 
         /**
          * @TODO add twig function for proposal features
          * @var $proposalFeatures \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
          */
-        $proposalFeatures = $this->get('shop_catalog.proposal.features_builder')->build($category, [$price]);
+        $proposalFeatures = $this->get('shop_catalog.proposal.features_builder')->build($category, $price);
 
         $shopCart = $this->buildShopCart($request);
         $shippingCalculatorResult = null;
 
-        if($price instanceof Price){
+        if($price instanceof ProposalPriceInterface){
 
             $customerCity = null;
             if($request->get('customerCity')){

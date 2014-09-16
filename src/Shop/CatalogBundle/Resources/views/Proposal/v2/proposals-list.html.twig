@@ -135,6 +135,7 @@
 {% block media_item_description %}
 
     <div class="price">
+        {#@TODO check max price based on discount price too#}
         {% if proposal_data.maxPrice > proposal_data.price %}
             от
         {% endif %}

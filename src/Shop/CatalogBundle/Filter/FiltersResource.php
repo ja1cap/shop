@@ -34,6 +34,11 @@ class FiltersResource {
     );
 
     /**
+     * @var mixed
+     */
+    protected $cacheId;
+
+    /**
      * @var int|null
      */
     protected $categoryId;
@@ -77,6 +82,19 @@ class FiltersResource {
      * @var CheckboxFilterInterface
      */
     protected $hasDiscountFilter;
+
+    function __construct($cacheId)
+    {
+        $this->cacheId = $cacheId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCacheId()
+    {
+        return $this->cacheId;
+    }
 
     /**
      * @return int|null

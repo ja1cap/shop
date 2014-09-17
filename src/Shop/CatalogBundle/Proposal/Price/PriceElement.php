@@ -105,7 +105,7 @@ class PriceElement extends CacheCollectionElement
      */
     public function getContractorId()
     {
-        return $this->data['contractorId'];
+        return $this->data['contractorId'] ?: $this->getProposal()->getDefaultContractorId();
     }
 
     /**

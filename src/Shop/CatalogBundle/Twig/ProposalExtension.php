@@ -4,10 +4,10 @@ namespace Shop\CatalogBundle\Twig;
 use Shop\CatalogBundle\Entity\Proposal;
 
 /**
- * Class ShopProposalExtension
+ * Class ProposalExtension
  * @package Shop\CatalogBundle\Twig
  */
-class ShopProposalExtension extends \Twig_Extension {
+class ProposalExtension extends \Twig_Extension {
 
     /**
      * @var \Shop\CatalogBundle\Entity\ProposalRepository
@@ -30,17 +30,24 @@ class ShopProposalExtension extends \Twig_Extension {
     protected $filtersBuilder;
 
     /**
+     * @var \Shop\CatalogBundle\Proposal\Feature\FeaturesBuilder
+     */
+    protected $featuresBuilder;
+
+    /**
      * @param $proposalRepository
      * @param $popularProposalRepository
      * @param $urlGenerator
      * @param $filtersBuilder
+     * @param $featuresBuilder
      */
-    function __construct($proposalRepository, $popularProposalRepository, $urlGenerator, $filtersBuilder)
+    function __construct($proposalRepository, $popularProposalRepository, $urlGenerator, $filtersBuilder, $featuresBuilder)
     {
         $this->proposalRepository = $proposalRepository;
         $this->popularProposalRepository = $popularProposalRepository;
         $this->urlGenerator = $urlGenerator;
         $this->filtersBuilder = $filtersBuilder;
+        $this->featuresBuilder = $featuresBuilder;
     }
 
     /**
@@ -55,7 +62,17 @@ class ShopProposalExtension extends \Twig_Extension {
             new \Twig_SimpleFunction('shop_catalog_bestsellers', array($this, 'getBestsellers')),
             new \Twig_SimpleFunction('shop_catalog_discount_proposals', array($this, 'getDiscountProposals')),
             new \Twig_SimpleFunction('shop_catalog_action_proposals', array($this, 'getActionProposals')),
+            new \Twig_SimpleFunction('shop_catalog_proposal_features', array($this, 'getProposalFeatures')),
         );
+    }
+
+    /**
+     * @param \Shop\CatalogBundle\Category\CategoryInterface $category
+     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface[]|\Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $prices
+     * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
+     */
+    public function getProposalFeatures($category, $prices){
+        return $this->featuresBuilder->build($category, $prices);
     }
 
     /**
@@ -77,6 +94,7 @@ class ShopProposalExtension extends \Twig_Extension {
     }
 
     /**
+     * @TODO remove
      * @return \Shop\CatalogBundle\Entity\Proposal[]
      */
     public function getPopularProposals(){
@@ -105,7 +123,7 @@ class ShopProposalExtension extends \Twig_Extension {
             'isNew' => true,
         ]);
 
-        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8, ['RAND()']);
 
     }
 
@@ -118,7 +136,7 @@ class ShopProposalExtension extends \Twig_Extension {
             'isBestseller' => true,
         ]);
 
-        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8, ['RAND()']);
 
     }
 
@@ -131,7 +149,7 @@ class ShopProposalExtension extends \Twig_Extension {
             'hasDiscount' => true,
         ]);
 
-        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8, ['RAND()']);
 
     }
 
@@ -144,7 +162,7 @@ class ShopProposalExtension extends \Twig_Extension {
             'hasAction' => true,
         ]);
 
-        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8);
+        return $this->proposalRepository->findProposalsByFilters($filtersResource, 1, 8, ['RAND()']);
 
     }
 

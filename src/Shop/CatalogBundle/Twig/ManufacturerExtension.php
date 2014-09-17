@@ -2,10 +2,10 @@
 namespace Shop\CatalogBundle\Twig;
 
 /**
- * Class ShopManufacturerExtension
+ * Class ManufacturerExtension
  * @package Shop\CatalogBundle\Twig
  */
-class ShopManufacturerExtension extends \Twig_Extension {
+class ManufacturerExtension extends \Twig_Extension {
 
     /**
      * @TODO refactor
@@ -43,12 +43,7 @@ class ShopManufacturerExtension extends \Twig_Extension {
 
         if($this->manufacturers === null){
 
-            $this->manufacturers = $this->manufacturerRepository->findBy(
-                array(),
-                array(
-                    'name' => 'ASC',
-                )
-            );
+            $this->manufacturers = $this->manufacturerRepository->getManufacturesWithImages();
 
         }
 

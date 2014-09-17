@@ -5,10 +5,10 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Weasty\Bundle\CatalogBundle\Category\CategoryInterface;
 
 /**
- * Class ShopCategoryExtension
+ * Class CategoryExtension
  * @package Shop\CatalogBundle\Twig
  */
-class ShopCategoryExtension extends \Twig_Extension {
+class CategoryExtension extends \Twig_Extension {
 
     /**
      * @TODO refactor

@@ -1,287 +1,131 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
+
 {% block title %}{{ proposal.seoTitle|default(proposal.title) }}{% endblock %}
 {% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
 {% block keywords %}{{ proposal.seoKeywords }}{% endblock %}
 
+{% set proposal = proposalData.proposal %}
+{% set proposalFeatures = shop_catalog_proposal_features(category, price) %}
+{% set catalogPrice = shop_catalog_price(proposalData) %}
+
 {% block page_container %}
-
-    <div class="proposal-container row well-v">
-
-        <div class="single-proposal single-proposal-{{ proposal.id }}">
-
-            <div class="row">
+    <div class="block-container" id="proposal-container">
+        <div class="block-title-container">
+            <h1 class="block-title">
+                {{ proposal.title|nl2br }}
+            </h1>
+        </div>
+        <div class="block-breadcrumb">
+            {{ catalog.proposal_breadcrumb(proposal) }}
+        </div>
+        <div class="block-body">
+            <div class="row two-columns main-block">
                 <div class="six columns">
-
+                    <div class="images-box">
+                        {% include 'ShopCatalogBundle:Proposal:proposal-images.html.twig' %}
+                    </div>
                 </div>
                 <div class="six columns">
+                    <div class="order-information-box">
 
-                    <div>
-
-                        <div class="proposal-breadcrumb">
-                            <ul>
-                                <li>
-                                    <a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}">{{ category.name|capitalize }}</a>
-                                    <span class="delimiter">/</span>
-                                </li>
-                                <li>
-                                    <h1 class="proposal-title title current">
-                                        {{ proposal.title|nl2br }}
-                                    </h1>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <table class="proposal-header-table">
-                            <tbody>
-                                <tr>
-                                    <td class="image-cell">
-                                        <div class="proposal-image">
-                                            <a href="{% path proposal.image, 'reference' %}" class="fancybox proposal-image" rel="proposalImages">
-                                                <img src="{% path proposal.image, 'medium' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
-                                            </a>
-                                        </div>
-                                        <div style="margin-top: 5px; text-align: center">
-                                            {% if proposal.mediaImages|length > 1 %}
-                                                {% for image in proposal.mediaImages if image.getId != proposal.mainMediaImageId %}
-                                                    <a href="{% path image, 'reference' %}" class="fancybox proposal-image" rel="proposalImages" style="display: none;">
-                                                        <img src="{% path image, 'medium' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
-                                                    </a>
-                                                {% endfor %}
-                                                <a href="#" onclick="var imageUrls = $('.proposal-image').map(function(){ return $(this).attr('href'); }); $.fancybox.open(imageUrls, {openEffect: 'none', closeEffect: 'none', padding: 0, loop : false, helpers: {overlay: {locked: false}}}); return false;">
-                                                    Просмотреть фотографии
-                                                </a>
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                    <td class="price-cell">
-
-                                        {% if price %}
-                                            <div class="order-proposal-form-container">
-
-                                                <div class="proposal-price-container">
-                                                    {% if price %}
-                                                        <div class="price">
-                                                            {% if priceData.maxPrice > priceData.price %}
-                                                                от
-                                                            {% endif %}
-                                                            {{ priceData.price|shop_price }}
-                                                        </div>
-                                                        <div>
-                                                            {% set proposalPriceShippingSummary = priceData.shipping.shippingSummaries|first %}
-                                                            <div>
-                                                                Доставка:
-                                                                {% if proposalPriceShippingSummary.shippingPrice.value %}
-                                                                    {{ proposalPriceShippingSummary.shippingPrice|weasty_price }}
-                                                                {% else %}
-                                                                    бесплатно
-                                                                {% endif %}
-                                                                ({{ priceData.shipping.city.getLocaleName(app.request.locale) }})
-                                                            </div>
-                                                            {#{% if proposalPriceShippingSummary.liftingPrice %}#}
-                                                                {#<div>#}
-                                                                    {#Подъем на этаж:#}
-                                                                    {#{% if proposalPriceShippingSummary.liftingPrice.value %}#}
-                                                                        {#{{ proposalPriceShippingSummary.liftingPrice|weasty_price }}#}
-                                                                    {#{% else %}#}
-                                                                        {#бесплатно#}
-                                                                    {#{% endif %}#}
-                                                                {#</div>#}
-                                                            {#{% endif %}#}
-                                                            {#{% if proposalPriceShippingSummary.assemblyPrice %}#}
-                                                                {#<div>#}
-                                                                    {#Сборка:#}
-                                                                    {#{% if proposalPriceShippingSummary.assemblyPrice.value %}#}
-                                                                        {#{{ proposalPriceShippingSummary.assemblyPrice|weasty_price }}#}
-                                                                    {#{% else %}#}
-                                                                        {#бесплатно#}
-                                                                    {#{% endif %}#}
-                                                                {#</div>#}
-                                                            {#{% endif %}#}
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-
-                                                {% if price.id not in shopCart.priceIds %}
-                                                    <a href="#" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                        Добавить в корзину
-                                                    </a>
-                                                    {% if proposal.categoryId in shopCart.categories|keys and shopCart.categories[proposal.categoryId].proposals|length == 1 %}
-                                                        <a href="#" class="add-to-cart remove-other" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                            Заменить в корзине
-                                                        </a>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <a href="#" class="remove-from-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ price.id }}}'>
-                                                        Убрать из корзины
-                                                    </a>
-                                                {% endif %}
-
-                                                <a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}" class="show-more-proposals">
-                                                    Посмотреть другие модели
-                                                </a>
-
-                                            </div>
-                                        {% endif %}
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="proposal-information-container">
-
-                            {% if filtersResource.getProposalParameterFilters %}
-                                <div class="filters-form-container">
-                                    <form id="filtersForm">
-                                        <ul class="tiles two_up">
-                                            {% for parameterFilter in filtersResource.getProposalParameterFilters %}
-                                                <li>
-                                                    <div class="proposal-select">
-                                                        <label for="parameter_{{ parameterFilter.getParameterId }}">
-                                                            {{ parameterFilter.getName }}
-                                                        </label>
-                                                        <input type="hidden" name="parameters[{{ parameterFilter.getParameterId }}][]" value="-1">
-                                                        <div class="picker-box">
-                                                            <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" multiple="multiple">
-                                                                {#<option value="-1">Не важно</option>#}
-                                                                {% for option in parameterFilter.getOptions %}
-                                                                    <option
-                                                                            value="{{ option.getId }}"
-                                                                            {{ option.getIsSelected ? "selected='selected'" : "" }}
-                                                                            {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
-                                                                            >
-                                                                        {{ option.getName }} ({{ option.getPricesAmount }})
-                                                                    </option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </form>
-                                </div>
-                            {% endif %}
-
-                        </div>
-
-                        {% if actions %}
-                            <div class="large-title">
-                                Акции
-                            </div>
-                            <div class="proposal-actions-container">
-                                <div class="proposal-actions owl-carousel owl-theme">
-                                    {% for actionData in actions %}
-                                        {% set action = actionData.action %}
-                                        <div class="proposal-action">
-                                            <span class="proposal-action-image-container">
-                                                {#<img src="{{ action.thumbImageUrl }}" alt="{{ action.title }}">#}
-                                            </span>
-                                            <div>
-                                                {{ action.name }}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
+                        {% if price %}
+                            <div class="proposal-price-container">
+                                {{ catalog.price(catalogPrice, true) }}
                             </div>
                         {% endif %}
 
-                        {% if proposalFeatures.groups or proposalFeatures.features %}
-                            <div class="">
-                                <div class="large-title">
-                                    Особенности модели
-                                </div>
-                                {% if proposalFeatures.groups %}
-                                    {% for featureGroup in proposalFeatures.groups if featureGroup.features %}
-                                        <h3>
-                                            {{ featureGroup.name }}
-                                        </h3>
-                                        <div class="">
-                                            <table>
-                                                <tbody>
-                                                {% for feature in featureGroup.features %}
-                                                    <tr>
-                                                        <td>
-                                                            {{ feature.name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ feature.value }}
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                                {% if proposalFeatures.features %}
-                                    <div class="">
-                                        <table>
-                                            <tbody>
-                                            {% for feature in proposalFeatures.features %}
-                                                <tr>
-                                                    <td>
-                                                        {{ feature.name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ feature.value }}
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                {% endif %}
+                        {% if proposal.shortDescription %}
+                            <div class="short-description">
+                                {{ proposal.shortDescription|nl2br }}
                             </div>
                         {% endif %}
 
-                        <div class="proposal-description cke-content">
-                            {% if proposal.description|striptags|length == proposal.description|length %}
-                                {{ proposal.description|nl2br }}
-                            {% else %}
-                                {{ proposal.description|raw }}
-                            {% endif %}
+                        <div class="shipping-container">
+                            {% set proposalPriceShippingSummary = proposalData.shipping.shippingSummaries|first %}
+                            <div class="shipping-offer">
+                                {#@TODO add title and alt for img.shipping-offer-icon#}
+                                <img src="/img/icons/shipping-icon.png" class="shipping-offer-icon"/>
+                                {#@TODO open change location popup on .change-location-btn click#}
+                                Доставка <a href="#" class="change-location-btn">{{ proposalData.shipping.city.getLocaleName(app.request.locale) }}</a>,
+                                {% if proposalPriceShippingSummary.shippingPrice.value %}
+                                    {{ proposalPriceShippingSummary.shippingPrice|weasty_price }}
+                                {% else %}
+                                    бесплатно
+                                {% endif %}
+                            </div>
                         </div>
 
-                        {% include "ShopCatalogBundle:Default:proposal-additional-categories.html.twig" %}
+                        {#<a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}" class="show-more-proposals">#}
+                            {#Посмотреть другие модели#}
+                        {#</a>#}
+
+                        {% if filtersResource.getProposalParameterFilters %}
+                            <div class="filters-form-container">
+                                <form id="filtersForm">
+                                    {% for parameterFilter in filtersResource.getProposalParameterFilters %}
+                                        <div class="filter-form-element">
+                                            <label for="parameter_{{ parameterFilter.getParameterId }}">
+                                                {{ parameterFilter.getName }}
+                                            </label>
+                                            <input type="hidden" name="parameters[{{ parameterFilter.getParameterId }}][]" value="-1">
+                                            <div class="picker-box">
+                                                <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" multiple="multiple">
+                                                    {% for option in parameterFilter.getOptions %}
+                                                        <option
+                                                                value="{{ option.getId }}"
+                                                                {{ option.getIsSelected ? "selected='selected'" : "" }}
+                                                                {{ option.getPricesAmount <= 0 ? "disabled='disabled'" : "" }}
+                                                                >
+                                                            {{ option.getName }} ({{ option.getPricesAmount }})
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </form>
+                            </div>
+                        {% endif %}
+
+                        {% if price %}
+                            <div class="ui-buttons">
+                                {{ catalog.compare_button(proposalData) }}
+                                {{ catalog.buy_button(proposalData) }}
+                            </div>
+                        {% endif %}
 
                     </div>
-
                 </div>
             </div>
-
-            <script type="text/javascript">
-
-                $(function(){
-
-                    var $filtersForm = $('#filtersForm, #extraFiltersForm');
-
-                    var proposalUrl = '{{ shop_catalog_proposal_url(proposal) }}';
-
-                    $(':input', $filtersForm).change(function(){
-
-                        document.location = proposalUrl + '?' +$filtersForm.serialize();
-
-                    });
-
-                    $('.proposal-actions').owlCarousel({
-                        autoPlay: 5000,
-                        navigation : true,
-                        pagination : false,
-                        items : 3
-                    });
-
-                    $('.proposal-action-image-container').nailthumb({
-                        method : 'resize'
-                    });
-
-                });
-
-            </script>
-
+            {% if proposalFeatures.groups or proposalFeatures.features or proposal.description %}
+                <div class="row two-columns information-block">
+                    {% if proposalFeatures.groups or proposalFeatures.features %}
+                        <div class="six columns">
+                            {{ catalog.proposal_features(proposalFeatures) }}
+                        </div>
+                    {% endif %}
+                    <div class="six columns">
+                        {#@TODO show some information if description is not defined #}
+                        <div class="large-title">
+                            {{ 'shop.description.title'|trans({}, 'ShopCatalogBundle') }}
+                        </div>
+                        <div class="proposal-description cke-content">
+                            {% if proposal.description and proposal.description|striptags|length == proposal.description|length %}
+                                {{ proposal.description|nl2br }}
+                            {% elseif proposal.description %}
+                                {{ proposal.description|raw }}
+                            {% else %}
+                                <div class="empty-description">
+                                    {{ 'shop.proposal.empty_description'|trans({}, 'ShopCatalogBundle') }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
-
+        {% include "ShopCatalogBundle:Default:category-additional-proposals.html.twig" %}
     </div>
-
 {% endblock %}

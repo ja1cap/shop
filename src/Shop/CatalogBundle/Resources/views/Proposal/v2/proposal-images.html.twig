@@ -1,0 +1,21 @@
+{#@TODO add no image if proposal.image not defined#}
+<div class="proposal-image-container active-image-container">
+    <span class="prev"></span>
+    <a href="{% path proposal.image, 'reference' %}" class="proposal-image fancybox">
+        <img src="{% path proposal.image, 'large_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
+    </a>
+    <span class="next"></span>
+</div>
+{% if proposal.images|length > 1 %}
+    <div class="wrap">
+        <div class="images-container">
+            <ul class="images">
+                {% for image in proposal.images %}
+                    <li class="image {{ image.id == proposal.image.id ? 'main-image' : '' }}" data-image_url="{% path image, 'large_square' %}" data-reference_image_url="{% path image, 'reference' %}">
+                        <img src="{% path image, 'tiny_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

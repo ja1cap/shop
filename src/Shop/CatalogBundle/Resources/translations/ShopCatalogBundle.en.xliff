@@ -2,6 +2,18 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
+            <trans-unit id="shop.catalog">
+                <source>shop.catalog</source>
+                <target>Catalog</target>
+            </trans-unit>
+            <trans-unit id="shop.catalog.best_proposals">
+                <source>shop.catalog.best_proposals</source>
+                <target>Best proposals</target>
+            </trans-unit>
+            <trans-unit id="shop.category.additional_proposals">
+                <source>shop.category.additional_proposals</source>
+                <target>Additional proposals</target>
+            </trans-unit>
             <trans-unit id="shop.cart.popup.title">
                 <source>shop.cart.popup.title</source>
                 <target>Products purchase</target>
@@ -69,6 +81,22 @@
             <trans-unit id="shop.comparison.more_comparison_groups">
                 <source>shop.comparison.more_comparison_groups</source>
                 <target>More groups</target>
+            </trans-unit>
+            <trans-unit id="shop.description.title">
+                <source>shop.description.title</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.empty_description">
+                <source>shop.proposal.empty_description</source>
+                <target>No description</target>
+            </trans-unit>
+            <trans-unit id="shop.features.title">
+                <source>shop.features.title</source>
+                <target>Features</target>
+            </trans-unit>
+            <trans-unit id="shop.features.basic_group_name">
+                <source>shop.features.basic_group_name</source>
+                <target>Basic</target>
             </trans-unit>
         </body>
     </file>

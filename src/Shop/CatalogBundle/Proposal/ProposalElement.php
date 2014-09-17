@@ -25,6 +25,11 @@ class ProposalElement extends CacheCollectionElement
     public $images = [];
 
     /**
+     * @var \Shop\CatalogBundle\Category\CategoryInterface
+     */
+    private $category;
+
+    /**
      * @param CacheCollection $collection
      * @param EntityInterface $entity
      * @return $this
@@ -86,6 +91,27 @@ class ProposalElement extends CacheCollectionElement
     }
 
     /**
+     * @return \Shop\CatalogBundle\Category\CategoryInterface
+     */
+    public function getCategory()
+    {
+        if(!$this->category){
+            $this->category = $this->getCollectionManager()->getCollection('ShopCatalogBundle:Category')->get($this->getCategoryId());
+        }
+        return $this->category;
+    }
+
+    /**
+     * Get defaultContractorId
+     *
+     * @return integer
+     */
+    public function getDefaultContractorId()
+    {
+        return $this->data['defaultContractorId'];
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -140,14 +166,6 @@ class ProposalElement extends CacheCollectionElement
     public function getRouteParameters()
     {
         return $this->data['routeParameters'];
-    }
-
-    /**
-     * @return \Shop\CatalogBundle\Category\CategoryInterface
-     */
-    public function getCategory()
-    {
-        // TODO: Implement getCategory() method.
     }
 
 } 

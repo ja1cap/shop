@@ -408,9 +408,10 @@ class ProposalRepository extends AbstractRepository {
      * @param FiltersResource $filtersResource
      * @param null $page
      * @param null $perPage
+     * @param array $orderBy
      * @return array
      */
-    public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null){
+    public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null, $orderBy = ['price', 'ASC']){
 
         //@TODO cache sql query by FiltersResource::getCacheId()
         $useCacheCollection = true;
@@ -498,8 +499,9 @@ class ProposalRepository extends AbstractRepository {
                 )
             ))
             ->groupBy('p.id')
-            ->addOrderBy('price')
         ;
+
+        call_user_func_array([$qb, 'addOrderBy'], $orderBy);
 
         if($filtersResource){
 
@@ -893,7 +895,7 @@ class ProposalRepository extends AbstractRepository {
                 ->andWhere(
                     ($filtersResource->getIsNewFilter() && $filtersResource->getIsNewFilter()->getValue() ? $qb->expr()->eq('p.isNew', 1) : null),
                     ($filtersResource->getIsBestsellerFilter() && $filtersResource->getIsBestsellerFilter()->getValue() ? $qb->expr()->eq('p.isBestseller', 1) : null)
-                    //@TODO
+                    //@TODO add sub queries
                     //($filtersResource->getHasActionFilter() && $filtersResource->getHasActionFilter()->getValue() ? $qb->expr()->isNotNull('action_p.id') : null),
                     //($filtersResource->getHasDiscountFilter() && $filtersResource->getHasDiscountFilter()->getValue() ? $qb->expr()->isNotNull('discount_p.id') : null)
                 )

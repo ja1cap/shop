@@ -1,73 +1,133 @@
 
-{% set popularProposals = shop_catalog_popular_proposals() %}
 {% set bestSellers = shop_catalog_bestsellers() %}
 {% set newProposals = shop_catalog_new_proposals() %}
 {% set discountProposals = shop_catalog_discount_proposals() %}
 {% set actionProposals = shop_catalog_action_proposals() %}
 
-{% if popularProposals %}
+{% if bestSellers or newProposals or discountProposals or actionProposals %}
     <div class="proposals-block block-container" id="proposals-block">
 
         <div class="block-title-container">
             <h2 class="block-title">
-                {{ shop_settings.proposals_title|default('ЛУЧШИЕ ПРЕДЛОЖЕНИЯ ПО ЛУЧШЕЙ ЦЕНЕ')|nl2br }}
+                {{ 'shop.catalog.best_proposals'|trans({}, 'ShopCatalogBundle') }}
             </h2>
         </div>
-
-        {% if shop_settings.proposals_description %}
-            <div class="block-description">
-                {{ shop_settings.proposals_description|nl2br }}
-            </div>
-        {% endif %}
 
         <div class="block-body">
 
             <div class="row">
 
+                {% set _active_tab = 'new-proposals-tab' %}
+
                 <div class="tabs-container">
                     <ul class="tabs">
-                        <li class="active">
-                            <a href="#new-proposals-tab">
-                                <span>Новинки</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#bestsellers-tab">
-                                <span>Хиты продаж</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#discount-proposals-tab">
-                                <span>Скидки</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#action-proposals-tab">
-                                <span>Акции</span>
-                            </a>
-                        </li>
+                        {% if newProposals %}
+                            <li class="{{ _active_tab == 'new-proposals-tab' ? 'active' : '' }}">
+                                <a href="#new-proposals-tab">
+                                    <span>Новинки</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            {% set _active_tab = 'bestsellers-tab' %}
+                        {% endif %}
+                        {% if bestSellers %}
+                            <li class="{{ _active_tab == 'bestsellers-tab' ? 'active' : '' }}">
+                                <a href="#bestsellers-tab">
+                                    <span>Хиты продаж</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            {% set _active_tab = 'discount-proposals-tab' %}
+                        {% endif %}
+                        {% if discountProposals %}
+                            <li class="{{ _active_tab == 'discount-proposals-tab' ? 'active' : '' }}">
+                                <a href="#discount-proposals-tab">
+                                    <span>Скидки</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            {% set _active_tab = 'action-proposals-tab' %}
+                        {% endif %}
+                        {% if actionProposals %}
+                            <li class="{{ _active_tab == 'action-proposals-tab' ? 'active' : '' }}">
+                                <a href="#action-proposals-tab">
+                                    <span>Акции</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="new-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
+                        {% if newProposals %}
+                        <div class="tab-pane fade {{ _active_tab == 'new-proposals-tab' ? 'in active' : '' }}" id="new-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {
+                                'media_list_options' : {
+                                    'items' : newProposals,
+                                    'items_per_row' : 4,
+                                    'use_slider' : true,
+                                    'clickable_items' : true,
+                                    'item_route' : 'shop_catalog_proposal',
+                                    'item_image_format' : 'small_square',
+                                    'use_item_no_image' : true
+                                }
+                            } %}
                         </div>
-                        <div class="tab-pane fade" id="bestsellers-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
+                        {% endif %}
+                        {% if bestSellers %}
+                        <div class="tab-pane fade {{ _active_tab == 'bestsellers-tab' ? 'in active' : '' }}" id="bestsellers-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {
+                                'media_list_options' : {
+                                    'items' : bestSellers,
+                                    'items_per_row' : 4,
+                                    'use_slider' : true,
+                                    'clickable_items' : true,
+                                    'item_route' : 'shop_catalog_proposal',
+                                    'item_image_format' : 'small_square',
+                                    'use_item_no_image' : true
+                                }
+                            } %}
+
                         </div>
-                        <div class="tab-pane fade" id="discount-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
+                        {% endif %}
+                        {% if discountProposals %}
+                        <div class="tab-pane fade {{ _active_tab == 'discount-proposals-tab' ? 'in active' : '' }}" id="discount-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {
+                                'media_list_options' : {
+                                    'items' : discountProposals,
+                                    'items_per_row' : 4,
+                                    'use_slider' : true,
+                                    'clickable_items' : true,
+                                    'item_route' : 'shop_catalog_proposal',
+                                    'item_image_format' : 'small_square',
+                                    'use_item_no_image' : true
+                                }
+                            } %}
                         </div>
-                        <div class="tab-pane fade" id="action-proposals-tab">
-                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {'proposals_slider_items' : popularProposals, 'proposals_slider_items_amount' : 4} %}
+                        {% endif %}
+                        {% if actionProposals %}
+                        <div class="tab-pane fade {{ _active_tab == 'action-proposals-ta' ? 'in active' : '' }}" id="action-proposals-tab">
+                            {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {
+                                'media_list_options' : {
+                                    'items' : actionProposals,
+                                    'items_per_row' : 4,
+                                    'use_slider' : true,
+                                    'clickable_items' : true,
+                                    'item_route' : 'shop_catalog_proposal',
+                                    'item_image_format' : 'small_square',
+                                    'use_item_no_image' : true
+                                }
+                            } %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
-                <div>
-                    <a href="{{ path('shop_catalog_categories') }}" class="big-button">
-                        Посмотреть все товары
-                    </a>
-                </div>
+                {% if app.request.get('_route') != 'shop_catalog_categories' %}
+                    <div>
+                        <a href="{{ path('shop_catalog_categories') }}" class="big-button">
+                            Посмотреть все товары
+                        </a>
+                    </div>
+                {% endif %}
 
             </div>
 

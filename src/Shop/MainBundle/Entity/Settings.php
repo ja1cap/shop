@@ -1292,7 +1292,8 @@ class Settings extends AbstractEntity
      */
     public function getTemplateVersion()
     {
-        $template_version = isset($_GET['template_version']) ? $_GET['template_version'] : ($this->template_version ?: self::TEMPLATE_VERSION_DEFAULT);
+        //@TODO add versions extension
+        //$template_version = isset($_GET['template_version']) ? $_GET['template_version'] : ($this->template_version ?: self::TEMPLATE_VERSION_DEFAULT);
         $template_version = self::TEMPLATE_VERSION_LEBEDEV;
         return $template_version;
     }

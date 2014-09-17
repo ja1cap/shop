@@ -1,81 +1,25 @@
 {% extends 'ShopMainBundle:Default:media-list.html.twig' %}
 
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
+
 {% block media_list %}
     <div class="proposals-list-wrapper">
         {{ parent() }}
     </div>
-    <script>
-        $(function(){
-
-            var $imagesPreviewContainers = $(".images-preview-container");
-
-            $imagesPreviewContainers.each(function(){
-
-                var $imagesPreviewContainer = $(this);
-                var $imagesPreview = $imagesPreviewContainer.children('.images-preview');
-                var $wrap = $imagesPreviewContainer.parent();
-
-                var $previewContainer = $imagesPreviewContainer.closest('.preview-container'),
-                    $imageContainer = $previewContainer.find('.inner-container').find('.image-container');
-
-                $imagesPreviewContainer.sly({
-                    itemNav: 'basic',
-                    smart: 1,
-                    activateOn: 'click',
-                    mouseDragging: 1,
-                    touchDragging: 1,
-                    releaseSwing: 1,
-                    startAt: $imagesPreview.find('.main-image').index(),
-                    //scrollBar: $wrap.find('.scrollbar'),
-                    scrollBy: 1,
-                    //pagesBar: $wrap.find('.pages'),
-                    //activatePageOn: 'click',
-                    speed: 300,
-                    elasticBounds: 1,
-                    easing: 'easeOutExpo',
-                    dragHandle: 1,
-                    dynamicHandle: 1,
-                    clickBar: 1,
-                    prev: $wrap.find('.prev'),
-                    next: $wrap.find('.next')
-                }, {
-                    active : function(eventName, itemIndex){
-
-                        var $imagePreviewContainer = $imagesPreview.find('.image-preview-container').eq(itemIndex),
-                            $image = $imageContainer.find('img'),
-                            imageUrl = $image.attr('src'),
-                            previewImageUrl = $imagePreviewContainer.data('image_url'),
-                            isActive = (imageUrl == previewImageUrl);
-
-                        if(!isActive){
-
-                            $image.attr('src', previewImageUrl);
-
-                        }
-
-                    }
-                });
-
-            });
-
-        })
-    </script>
 {% endblock %}
 
 {% block media_item %}
 
-    {% set proposal_data = media_item %}
-    {% set proposal = proposal_data.proposal %}
-    {% set proposal_action_conditions = (proposal_data.actionConditionIds ? shop_discount_proposal_action_conditions(proposal, proposal_data.actionConditionIds) : null) %}
-    {% set proposal_discount_price = (proposal_data.hasDiscount and proposal_action_conditions ? proposal_action_conditions.getDiscountPrice(proposal_data.price) : null) %}
-    {% set media_item = proposal_data.proposal %}
+    {% set proposalData = media_item %}
+    {% set proposal = proposalData.proposal %}
+    {% set catalogPrice = shop_catalog_price(proposalData) %}
+    {% set media_item = proposalData.proposal %}
 
     {{ parent() }}
 
 {% endblock %}
 
 {% block media_item_inner_container %}
-    {% set priceId = proposal_data.priceId %}
     {% set media_item_images = media_item.images %}
     {% set _has_images = (media_item_images and media_item_images|length > 1) %}
     <div class="preview-container {{ _has_images ? 'visible-left-bar' : '' }}">
@@ -97,57 +41,19 @@
             </div>
         {% endif %}
         <div class="preview-right-bar">
-            <div class="markers">
-                {% if proposal.isNew %}
-                    <div class="marker new"></div>
-                {% endif %}
-                {% if proposal.isBestseller %}
-                    <div class="marker best"></div>
-                {% endif %}
-                {% if proposal_data.hasAction %}
-                    <div class="marker action"></div>
-                {% endif %}
-                {% if proposal_discount_price %}
-                    <div class="marker discount">
-                        -{{ proposal_discount_price.getDiscountPercent }}%
-                    </div>
-                {% endif %}
-            </div>
+            {{ catalog.proposal_markers(proposalData, catalogPrice) }}
             {{ parent() }}
         </div>
         <div class="ui-buttons hidden-preview">
-            {% if priceId %}
-                <div class="large secondary btn">
-                    <a href="{{ path('shop_catalog_estimator_popup') }}" class="compare-btn" data-compare='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
-                        {{ 'shop.comparison.add.proposal'|trans({}, 'ShopCatalogBundle') }}
-                    </a>
-                </div>
-                <div class="large primary btn">
-                    <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposal.categoryId }},"proposalId":{{ proposal.id }},"priceId":{{ priceId }}, "actionConditionIds":{{ proposal_data.actionConditionIds|json_encode }}}'>
-                        {{ 'shop.cart.buy'|trans({}, 'ShopCatalogBundle') }}
-                    </a>
-                </div>
-            {% endif %}
+            {{ catalog.compare_button(proposalData) }}
+            {{ catalog.buy_button(proposalData) }}
         </div>
     </div>
 {% endblock %}
 
 {% block media_item_description %}
 
-    <div class="price">
-        {#@TODO check max price based on discount price too#}
-        {% if proposal_data.maxPrice > proposal_data.price %}
-            от
-        {% endif %}
-        {% if proposal_discount_price %}
-            {{ proposal_discount_price|shop_price }}
-            <div class="original-price">
-                {{ proposal_data.price|shop_price }}
-            </div>
-        {% else %}
-            {{ proposal_data.price|shop_price }}
-        {% endif %}
-    </div>
+    {{ catalog.price(catalogPrice) }}
 
     <div class="hidden-preview">
         {#{{ parent() }}#}

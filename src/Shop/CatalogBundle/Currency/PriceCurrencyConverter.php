@@ -49,9 +49,13 @@ class PriceCurrencyConverter extends CurrencyConverter {
 
             if($price->getContractor()){
 
-                $currency = $price->getContractor()->getCurrencies()->filter(function(ContractorCurrencyInterface $currency) use ($priceCurrencyNumericCode) {
-                    return $currency->getNumericCode() == $priceCurrencyNumericCode;
-                })->current();
+                $currency = null;
+                foreach($price->getContractor()->getCurrencies() as $_currency){
+                    if($_currency->getNumericCode() == $priceCurrencyNumericCode){
+                        $currency = $_currency;
+                        break;
+                    }
+                }
 
                 if($currency instanceof ContractorCurrencyInterface){
                     $exchangedContractorValue = $price->getValue() * $currency->getValue();

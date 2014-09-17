@@ -48,7 +48,17 @@ class DiscountPrice extends Price implements DiscountPriceInterface {
     public function getDiscountPercent()
     {
         if($this->discountPercent === null){
-            $this->discountPercent = round(floatval($this->getOriginalPrice()->getValue() / $this->getValue()));
+
+            $perPercent = ($this->getOriginalPrice()->getValue() / 100);
+            $diff = ($this->getOriginalPrice()->getValue() - $this->getValue());
+
+            if($diff >= $perPercent){
+                $discountPercent = ($diff / $perPercent);
+                $this->discountPercent = round(floatval($discountPercent));
+            } else {
+                $this->discountPercent = 0;
+            }
+
         }
         return $this->discountPercent;
     }

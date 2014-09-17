@@ -18,6 +18,7 @@ use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 /**
  * Class FiltersBuilder
  * @package Shop\CatalogBundle\Filter
+ * @TODO add FiltersBuilder::resetFilters()
  */
 class FiltersBuilder {
 
@@ -152,12 +153,12 @@ class FiltersBuilder {
     }
 
     /**
+     * @param Request $request
      * @param CategoryInterface $category
      * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
-     * @param Request $request
      * @return mixed|FiltersResource
      */
-    public function buildFromRequest(CategoryInterface $category, ProposalInterface $proposal = null, Request $request){
+    public function buildFromRequest(Request $request, CategoryInterface $category = null, ProposalInterface $proposal = null){
 
         $manufacturer = null;
         $parametersValues = null;
@@ -173,7 +174,10 @@ class FiltersBuilder {
 
             $manufacturer = $request->get('manufacturer', json_decode($request->cookies->get('manufacturer'), true));
             $parametersValues = $this->getParametersFilterValues($request);
-            $priceRange = $this->getPriceRage($request, $category);
+
+            if($category instanceof CategoryInterface){
+                $priceRange = $this->getPriceRage($request, $category);
+            }
 
         }
 

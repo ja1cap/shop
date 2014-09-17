@@ -2,7 +2,6 @@
 namespace Shop\CatalogBundle\Proposal\Estimator;
 
 use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
 
 /**
  * Class EstimatorProposal
@@ -23,7 +22,7 @@ class EstimatedProposal extends EstimatorProposal {
     /**
      * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue[]
      */
-    protected $featureValues =[];
+    protected $featureValues = [];
 
     /**
      * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions

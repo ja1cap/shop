@@ -292,6 +292,47 @@
 
     }
 
+    &.media-list-slider {
+
+      .media-list-item {
+
+        height: 315px;
+
+        &, &.first-in-row, &.last-in-row {
+          margin: 0 7px;
+        }
+
+      }
+
+      .owl-prev, .owl-next {
+        height: $proposals-list-item-image-container-height;
+      }
+
+    }
+
+  }
+
+}
+
+$proposals-block-tab-content-height: 335px;
+.proposals-block {
+
+  text-align: center;
+  padding-bottom: 40px;
+
+  .tab-content {
+    height: $proposals-block-tab-content-height;
+    padding: 0;
+  }
+
+  .block-body {
+
+    margin-top: 20px;
+
+    .big-button {
+      margin-bottom: 10px;
+    }
+
   }
 
 }

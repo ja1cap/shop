@@ -1,4 +1,4 @@
-@import "../../var/settings";
+@import "settings";
 
 $categories-block-item-image-container-height: 224px;
 $categories-block-item-image-container-width: 224px;
@@ -47,6 +47,8 @@ $categories-block-item-image-width: 220px;
 
           text-align: center;
           padding: 0 10px;
+          font-size: 14px;
+          font-weight: normal;
 
         }
 

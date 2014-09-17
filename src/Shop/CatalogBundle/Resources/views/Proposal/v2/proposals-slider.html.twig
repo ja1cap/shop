@@ -1,36 +1,29 @@
-{% if proposals_slider_items_amount is not defined %}
-    {% set proposals_slider_items_amount = 4 %}
-{% endif %}
-<div class="proposals-list owl-carousel owl-theme" data-items-amount="{{ proposals_slider_items_amount }}">
-    {% for proposal in proposals_slider_items %}
+{% extends 'ShopMainBundle:Default:media-list.html.twig' %}
 
-        <div class="proposal {#discount-proposal#} clickable-block">
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
 
-            <div class="inner-container">
+{% block media_list %}
+    <div class="proposals-list-wrapper">
+        {{ parent() }}
+    </div>
+{% endblock %}
 
-                <span class="image-container">
-                    <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}">
-                </span>
+{% block media_item %}
 
-                {% if proposal.discount_percent is defined and proposal.discount_percent %}
-                    {% if proposal.discount_end_date %}
-                        <span class="countdown proposal-countdown" data-date="{{ proposal.discount_end_date|date }}"></span>
-                    {% endif %}
-                    <span class="proposal-discount-percent">
-                        -{{ proposal.discount_percent }}%
-                    </span>
-                {% endif %}
+    {% set proposalData = media_item %}
+    {% set proposal = proposalData.proposal %}
+    {% set catalogPrice = shop_catalog_price(proposalData) %}
+    {% set media_item = proposalData.proposal %}
 
-                <a href="{{ shop_catalog_proposal_url(proposal) }}" class="title clickable-block-link">
-                    {{ proposal.title|nl2br }}
-                </a>
-                <span class="price">
-                    от {{ proposal.price|shop_price }}
-                </span>
+    {{ parent() }}
 
-            </div>
+{% endblock %}
 
-        </div>
+{% block media_item_inner_container %}
+    {{ catalog.proposal_markers(proposalData, catalogPrice) }}
+    {{ parent() }}
+{% endblock %}
 
-    {% endfor %}
-</div>
+{% block media_item_description %}
+    {{ catalog.price(catalogPrice) }}
+{% endblock %}

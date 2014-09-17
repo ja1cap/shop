@@ -19,7 +19,7 @@
         </service>
         <service id="shop_catalog.form.type.category_filters" class="%shop_catalog.form.type.category_filters.class%">
             <tag name="form.type" alias="shop_catalog_category_filters" />
-            <argument type="service" id="shop_catalog.filters.builder"/>
+            <argument type="service" id="shop_catalog.filters_builder"/>
         </service>
     </services>
 

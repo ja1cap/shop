@@ -105,6 +105,10 @@
       clear: both;
     }
 
+    &.last-in-row {
+      margin-right: 0;
+    }
+
     .inner-container {
       padding: 0 7px;
       overflow: hidden;

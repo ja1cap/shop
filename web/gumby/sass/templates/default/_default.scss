@@ -5,6 +5,69 @@ body {
 
   .template-default {
 
+    .large-title {
+
+      font-size: 25px;
+      line-height: 35px;
+
+    }
+
+    .owl-carousel {
+
+      .owl-buttons {
+
+        .owl-prev, .owl-next {
+
+          text-indent: -99999px;
+          height: 90px;
+          width: 45px;
+          bottom: 130px;
+          position: absolute;
+          display: block;
+          background: url("/img/sprite.png") no-repeat;
+
+        }
+
+        .owl-prev {
+          left: -45px;
+          background-position: -484px -325px;
+        }
+
+        .owl-next {
+          right: -45px;
+          background-position: -531px -325px;
+        }
+
+      }
+
+      &.valigin-controls {
+
+        .owl-buttons {
+
+          .owl-prev {
+
+            margin-top: -45px;
+            bottom: auto;
+            top: 50%;
+            background-position: -491px -428px;
+
+          }
+
+          .owl-next {
+
+            margin-top: -45px;
+            bottom: auto;
+            top: 50%;
+            background-position: -530px -428px;
+
+          }
+
+        }
+
+      }
+
+    }
+
     @import "actions-block";
     @import "proposals-list";
 
@@ -1412,6 +1475,194 @@ body {
 
         }
 
+      }
+
+    }
+
+    .proposal-container {
+
+      padding-left: 40px;
+
+      .proposal-header-table {
+
+        border: none;
+        margin: 0 0 10px;
+
+        td {
+
+          font-weight: normal;
+          border: none;
+          vertical-align: middle;
+          padding: 0;
+
+          &.image-cell, &.price-cell {
+            width: 50%;
+          }
+
+          &.image-cell {
+
+            .proposal-image {
+
+              margin: 0;
+
+            }
+
+          }
+
+        }
+
+      }
+
+
+      .proposal-image {
+        margin-right: 20px;
+        img {
+          width: 350px;
+          min-width: 350px;
+          vertical-align: middle;
+
+        }
+      }
+
+      .filters-form-container {
+
+        margin: 0;
+
+        .tiles {
+
+          margin: 0;
+
+          & > li {
+
+            width: 48.5%;
+            margin: 0;
+
+          }
+
+        }
+
+        form {
+
+          border-bottom: 5px solid #6BC95E;
+          background: #f1f1f1;
+
+          .picker {
+
+            border-color: #ccc;
+            background: white;
+
+          }
+
+        }
+
+      }
+
+      .proposal-information-container {
+        margin-bottom: 10px;
+      }
+
+      .order-proposal-form-container {
+
+        //    background-color: #f2f2f2;
+        //    background-color: #f14854;
+        //    border-bottom: 5px solid #6BC95E;
+        //    padding: 15px 20px;
+
+        .add-to-cart, .remove-from-cart, .show-more-proposals {
+
+          line-height: 30px;
+          font-size: 18px;
+          @include border-radius(7px);
+          color: white;
+          background-color: #6BC95E;
+          display: block;
+          margin: 0 20px 20px;
+          padding: 10px 20px;
+          text-align: center;
+
+          &.remove-from-cart {
+            background-color: #f14854;
+          }
+
+          &.show-more-proposals {
+            background-color: #f86916;
+          }
+
+          &.remove-other {
+            background-color: #0e90d2;
+            //        margin-bottom: 10px;
+            //        line-height: 18px;
+            //        font-size: 14px;
+            //        padding-top: 0;
+            //        background-color: transparent;
+            //        color: #34495e;
+            //        text-decoration: underline;
+          }
+
+        }
+
+        margin-bottom: 20px;
+
+        .proposal-price {
+          font-size: 30px;
+          line-height: 36px;
+          margin-bottom: 15px;
+        }
+
+        .proposal-price-container {
+
+          overflow: hidden;
+          padding: 0 20px 15px;
+
+          .price {
+
+            font-size: 30px;
+            line-height: 36px;
+
+          }
+
+          .price-description {
+            font-size: 14px;
+          }
+
+          form {
+
+            float: right;
+
+            .proposal-select {
+
+              .picker {
+                display: block;
+                margin: 0;
+              }
+
+            }
+
+          }
+
+        }
+
+        form {
+          margin: 0;
+        }
+
+        button[type="submit"]{
+          cursor: pointer;
+          text-align: center;
+          color: #fff;
+          width: 100%;
+          font-size: 25px;
+          line-height: 43px;
+          display: block;
+          border: 3px solid white;
+          background: #fd5253;
+          @include border-radius(5px)
+        }
+
+      }
+
+      .proposal-description {
+        margin: 0 0 20px 0;
       }
 
     }

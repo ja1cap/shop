@@ -1,0 +1,51 @@
+{% if proposalFeatures.groups or proposalFeatures.features %}
+    <div class="">
+        <div class="large-title">
+            {{ 'shop.features.title'|trans({}, 'ShopCatalogBundle') }}
+        </div>
+        <table class="features-table">
+            <tbody>
+            {% if proposalFeatures.groups %}
+                {% for featureGroup in proposalFeatures.groups if featureGroup.features %}
+                    <tr class="feature-group-info even">
+                        <td colspan="2" class="feature-group-title">
+                            {{ featureGroup.name }}
+                        </td>
+                    </tr>
+                    {% for feature in featureGroup.features %}
+                        <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
+                            <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
+                                {{ feature.name }}
+                            </td>
+                            <td class="feature-value-cell">
+                                <div class="feature-value">
+                                    {{ feature.value ?: '-'}}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if proposalFeatures.features %}
+                <tr class="feature-group-info even">
+                    <td colspan="2" class="feature-group-title">
+                        {{ 'shop.features.basic_group_name'|trans({}, 'ShopCatalogBundle') }}
+                    </td>
+                </tr>
+                {% for feature in proposalFeatures.features %}
+                    <tr class="feature {{ loop.index is even ? 'even' : 'odd' }}">
+                        <td class="feature-info {{ loop.index is even ? 'even' : 'odd' }}">
+                            {{ feature.name }}
+                        </td>
+                        <td class="feature-value-cell">
+                            <div class="feature-value">
+                                {{ feature.value ?: '-'}}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

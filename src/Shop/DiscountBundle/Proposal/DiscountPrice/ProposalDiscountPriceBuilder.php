@@ -49,11 +49,19 @@ class ProposalDiscountPriceBuilder {
                     $proposalPrice->getCurrency()
                 );
 
-                $discountPrice = new DiscountPrice($discountPriceValue, $proposalPrice->getCurrency());
-                $discountPrice
-                    ->setOriginalPrice($proposalPrice)
-                    ->setDiscountCondition($discountCondition)
-                ;
+                if($discountPriceValue >= $proposalPrice->getValue()){
+
+                    $discountPrice = null;
+
+                } else {
+
+                    $discountPrice = new DiscountPrice($discountPriceValue, $proposalPrice->getCurrency());
+                    $discountPrice
+                        ->setOriginalPrice($proposalPrice)
+                        ->setDiscountCondition($discountCondition)
+                    ;
+
+                }
 
                 break;
             case ActionConditionInterface::DISCOUNT_TYPE_PERCENT:

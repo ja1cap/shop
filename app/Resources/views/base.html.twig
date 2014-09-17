@@ -49,6 +49,13 @@
         {% endjavascripts %}
 
         {% javascripts
+            '@ShopMainBundle/Resources/public/js/*'
+            output='js/main.js'
+        %}
+        <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+        {% javascripts
             '@ShopCatalogBundle/Resources/public/js/base.objects.js'
             '@ShopCatalogBundle/Resources/public/js/*'
             'js/translations/ShopCatalogBundle/*.js'

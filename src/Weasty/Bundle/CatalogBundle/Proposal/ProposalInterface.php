@@ -20,6 +20,18 @@ interface ProposalInterface extends RoutableInterface {
     public function getCategoryId();
 
     /**
+     * @return \Weasty\Bundle\CatalogBundle\Category\CategoryInterface
+     */
+    public function getCategory();
+
+    /**
+     * Get defaultContractorId
+     *
+     * @return integer
+     */
+    public function getDefaultContractorId();
+
+    /**
      * @return string
      */
     public function getName();

@@ -1,4 +1,4 @@
-@import "../../var/settings";
+@import "settings";
 @import "lebedev-base";
 
 body {
@@ -14,7 +14,7 @@ body {
 
     &:hover {
       text-decoration: underline;
-      color: rgb(66, 139, 202);
+      color: $body-link-hover-color;
     }
 
   }
@@ -26,7 +26,7 @@ body {
       a {
 
         text-decoration: underline;
-        color: rgb(66, 139, 202);
+        color: $body-link-hover-color;
 
       }
 
@@ -413,6 +413,125 @@ body {
 
   }
 
+  .owl-carousel {
+
+    .owl-buttons {
+
+      .owl-prev, .owl-next {
+
+        text-indent: -99999px;
+        cursor: pointer;
+        position: absolute;
+        display: block;
+        width: 60px;
+        height: 100%;
+        top: 0;
+
+        &:after {
+          @include border-radius(3px);
+          @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7));
+          background: url("/img/weasty-sprite.png") no-repeat rgb(255, 243, 67);
+          position: absolute;
+          top: 50%;
+          content: ' ';
+          display: block;
+          width: 40px;
+          height: 40px;
+          margin-top: -20px;
+          margin-left: 10px;
+          color: white;
+        }
+
+        &.disabled {
+
+          cursor: default;
+          &:after {
+            @include box-shadow(none);
+            background-color: transparent;
+            border: 1px solid rgb(202, 202, 202);
+          }
+
+        }
+
+      }
+
+      .owl-prev {
+
+        left: -62px;
+
+        &:after {
+          background-position: -503px -12px;
+        }
+
+        &.disabled {
+
+          &:after {
+            background-position: -324px -13px;;
+          }
+
+        }
+
+      }
+
+      .owl-next {
+
+        right: -62px;
+
+        &:after {
+          background-position: -553px -12px;
+        }
+
+        &.disabled {
+
+          &:after {
+            background-position: -374px -13px;
+          }
+
+        }
+
+      }
+
+    }
+
+    &.valigin-controls {
+
+      .owl-buttons {
+
+        .owl-prev {
+
+          margin-top: -45px;
+          bottom: auto;
+          top: 50%;
+          background-position: -491px -428px;
+
+        }
+
+        .owl-next {
+
+          margin-top: -45px;
+          bottom: auto;
+          top: 50%;
+          background-position: -530px -428px;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .large-title {
+
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 35px;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+
+  }
+
+  @import "features-table";
   @import "proposals-table";
   @import "shop-cart";
   @import "comparison";
@@ -431,6 +550,7 @@ body {
     @import "contacts-block";
     @import "categories-block";
     @import "category";
+    @import "proposal";
 
     .header-container {
 
@@ -488,6 +608,55 @@ body {
         max-width: $row-max-width;
         margin: 0 auto;
         @include block-title;
+      }
+
+      .block-breadcrumb {
+
+        max-width: $row-max-width;
+        margin: 15px auto 0;
+
+        nav {
+
+          text-align: center;
+
+          a {
+
+            @extend .primary-link;
+
+            position: relative;
+            margin-right: 20px;
+
+            &:after {
+              content: '>';
+              color: rgb(126,126,126);
+              font-size: 10px;
+              line-height: 18px;
+              position: absolute;
+              top: 0;
+              right: -15px;
+              display: block;
+            }
+
+            &:last-child {
+
+              margin-right: 0;
+
+              &, &:hover {
+                cursor: default;
+                color: rgb(126,126,126);
+                text-decoration: none;
+              }
+
+              &:after {
+                display: none;
+              }
+
+            }
+
+          }
+
+        }
+
       }
 
       .block-title-container {
@@ -557,21 +726,6 @@ body {
 
         }
 
-      }
-
-    }
-
-    $proposals-block-tab-content-height: 320px;
-    .proposals-block {
-
-      text-align: center;
-
-      .tab-content {
-        height: $proposals-block-tab-content-height;
-      }
-
-      .block-body {
-        margin-top: 20px;
       }
 
     }

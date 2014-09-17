@@ -1,0 +1,24 @@
+{% if additionalProposals %}
+    <div class="block-title-container">
+        <div class="block-title">
+            {{ 'shop.category.additional_proposals'|trans({}, 'ShopCatalogBundle') }}
+        </div>
+    </div>
+    <div class="block-body">
+        <div class="row">
+            <div class="twelve columns">
+                {% include 'ShopCatalogBundle:Proposal:proposals-slider.html.twig' with {
+                    'media_list_options' : {
+                        'items' : additionalProposals,
+                        'items_per_row' : 4,
+                        'use_slider' : true,
+                        'clickable_items' : true,
+                        'item_route' : 'shop_catalog_proposal',
+                        'item_image_format' : 'small_square',
+                        'use_item_no_image' : true
+                    }
+                } %}
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="ShopDiscountBundle.en.xliff">
+        <body>
+            <trans-unit id="shop.discount">
+                <source>shop.discount</source>
+                <target>Скидка</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

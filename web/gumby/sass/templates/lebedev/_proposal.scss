@@ -1,0 +1,326 @@
+@import "settings";
+@import "lebedev-base";
+
+#proposal-container {
+
+  .row {
+
+    &.two-columns{
+
+      .six {
+
+        &.columns {
+
+          &:first-child {
+            padding-left: 0 !important;
+            padding-right: 10px;
+          }
+
+          &:last-child {
+            padding-left: 10px;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .main-block {
+    margin-bottom: 60px;
+  }
+
+  .information-block {
+
+    padding-top: 60px;
+    margin-bottom: 60px;
+    border-top: 1px solid #cacaca;
+
+    .proposal-description {
+      padding: 20px 0;
+
+      .empty-description {
+        color: rgb(126,126,126);
+      }
+
+    }
+
+  }
+
+  .images-container {
+
+    ul.images {
+
+      overflow: hidden;
+      margin-bottom: 0;
+
+      li.image {
+
+        cursor: pointer;
+        width: 84px;
+        height: 84px;
+        border: 1px solid transparent;
+        background-color: white;
+        display: block;
+        float: left;
+        margin-bottom: 0;
+
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+
+        img {
+          border: 1px solid rgb(202, 202, 202);
+        }
+
+        &:hover, &.active {
+
+          border-color: $body-link-hover-color;
+
+          img {
+            border-color: $body-link-hover-color;
+          }
+
+        }
+
+        &.active {
+          cursor: default;
+        }
+
+      }
+
+    }
+
+  }
+
+  .active-image-container {
+
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #cacaca;
+    background-color: white;
+    margin-bottom: 10px;
+
+    .prev, .next {
+
+      cursor: pointer;
+      position: absolute;
+      display: block;
+      width: 60px;
+      height: 100%;
+      top: 0;
+
+      &:after {
+        @include border-radius(3px);
+        @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7));
+        background: url("/img/weasty-sprite.png") no-repeat rgb(255, 243, 67);
+        position: absolute;
+        top: 50%;
+        content: ' ';
+        display: block;
+        width: 40px;
+        height: 40px;
+        margin-top: -20px;
+        margin-left: 10px;
+        color: white;
+      }
+
+      &.disabled {
+
+        cursor: default;
+        &:after {
+          @include box-shadow(none);
+          background-color: rgb(0,0,0);
+        }
+
+      }
+
+    }
+
+    .prev {
+
+      left: 0;
+
+      &:after {
+        background-position: -503px -12px;
+      }
+
+      &.disabled {
+
+        &:after {
+          background-position: -323px -53px;;
+        }
+
+      }
+
+    }
+
+    .next {
+
+      right: 0;
+
+      &:after {
+        background-position: -553px -12px;
+      }
+
+      &.disabled {
+
+        &:after {
+          background-position: -372px -53px;
+        }
+
+      }
+
+    }
+
+  }
+
+  .proposal-image-container {
+
+    overflow: hidden;
+    width: 460px;
+    height: 460px;
+
+    .proposal-image {
+
+      display: block;
+      width: 460px;
+      height: 460px;
+
+    }
+
+    img {
+      max-width: 460px;
+      min-width: 460px;
+      vertical-align: middle;
+    }
+
+  }
+
+  .filters-form-container {
+
+    margin: 0;
+
+    form {
+
+      border: 1px solid rgb(202, 202, 202);
+      @include border-radius(5px);
+
+      .filter-form-element {
+
+        padding: 20px;
+
+        & > label {
+          text-transform: uppercase;
+          font-weight: bold;
+          margin-bottom: 15px;
+        }
+
+        &:first-child {
+          border-top: none;
+        }
+
+      }
+
+    }
+
+  }
+
+  .order-information-box {
+
+    .price {
+
+      margin: 0 0 20px;
+      display: block;
+      font-size: 30px;
+      color: rgb( 0, 0, 0 );
+      font-weight: bold;
+
+      .price-comment {
+        font-size: 14px;
+        font-weight: normal;
+      }
+
+      .original-price {
+        color: rgb(126,126,126);
+        text-decoration: line-through;
+      }
+
+      .discount-percent {
+        margin-left: 5px;
+        text-transform: uppercase;
+        color: rgb(198,0,42);
+        font-weight: bold;
+      }
+
+    }
+
+    .short-description {
+      margin-bottom: 20px;
+    }
+
+    .shipping-container {
+
+      margin: 10px 0 20px;
+      padding: 20px 0 0;
+      border-top: 1px solid rgb(202, 202, 202);
+
+      .shipping-offer {
+
+        padding: 10px 0;
+        font-weight: bold;
+
+        .shipping-offer-icon {
+          width: 40px;
+          height: 40px;
+          margin-right: 5px;
+        }
+
+        .change-location-btn {
+          color: $body-link-color;
+          border-bottom: 1px dotted $body-link-color;
+        }
+
+      }
+
+    }
+
+    .ui-buttons {
+
+      .btn {
+
+        height: 60px;
+        width: 220px;
+
+        a {
+          padding: 10px 7px;
+          font-size: 20px;
+        }
+
+        &.active {
+
+          a {
+
+            &.compare-btn {
+              line-height: 40px;
+              font-size: 14px;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .proposal-description {
+    margin: 0 0 20px 0;
+  }
+
+}

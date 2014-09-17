@@ -2,6 +2,18 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
     <file source-language="en" target-language="ru" datatype="plaintext" original="ShopCatalogBundle.en.xliff">
         <body>
+            <trans-unit id="shop.catalog">
+                <source>shop.catalog</source>
+                <target>Каталог</target>
+            </trans-unit>
+            <trans-unit id="shop.catalog.best_proposals">
+                <source>shop.catalog.best_proposals</source>
+                <target>Лучшие предложения</target>
+            </trans-unit>
+            <trans-unit id="shop.category.additional_proposals">
+                <source>shop.category.additional_proposals</source>
+                <target>С этим товаром обычно покупают</target>
+            </trans-unit>
             <trans-unit id="shop.cart.buy">
                 <source>shop.cart.buy</source>
                 <target>Купить</target>
@@ -73,6 +85,22 @@
             <trans-unit id="shop.comparison.more_comparison_groups">
                 <source>shop.comparison.more_comparison_groups</source>
                 <target>Другие группы сравнения</target>
+            </trans-unit>
+            <trans-unit id="shop.description.title">
+                <source>shop.description.title</source>
+                <target>Описание</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.empty_description">
+                <source>shop.proposal.empty_description</source>
+                <target>Описание отсутствует</target>
+            </trans-unit>
+            <trans-unit id="shop.features.title">
+                <source>shop.features.title</source>
+                <target>Характеристики</target>
+            </trans-unit>
+            <trans-unit id="shop.features.basic_group_name">
+                <source>shop.features.basic_group_name</source>
+                <target>Основные</target>
             </trans-unit>
         </body>
     </file>

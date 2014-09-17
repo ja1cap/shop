@@ -120,7 +120,8 @@ $(function(){
                 $mediaList.owlCarousel({
                     items : mediaListItemsPerRow,
                     navigation : true,
-                    pagination : false
+                    pagination : false,
+                    rewindNav : false
                 });
 
             }

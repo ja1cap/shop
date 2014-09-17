@@ -1,0 +1,98 @@
+{% macro price(catalogPrice, showDiscountPercent) %}
+    <div class="price">
+        {#{% if not catalogPrice.isMax %}#}
+        {#<span class="price-prefix">#}
+            {#от#}
+        {#</span>#}
+        {#{% endif %}#}
+        {% if catalogPrice.discountPrice %}
+            {{ catalogPrice.discountPrice|weasty_price }}
+            <div class="price-comment">
+                <span class="original-price">{{ catalogPrice.price|weasty_price }}</span>
+                {% if showDiscountPercent %}
+                    <span class="discount-percent">
+                        {{ 'shop.discount'|trans({}, 'ShopDiscountBundle') }} {{ catalogPrice.discountPrice.getDiscountPercent }}%
+                    </span>
+                {% endif %}
+            </div>
+        {% else %}
+            {{ catalogPrice.price|weasty_price }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro category_breadcrumb_items(category, level) %}
+
+    <a href="{{ path('shop') }}" rel="index {% for i in 1..level %}up {% endfor %}">{{ 'shop.home'|trans({}, 'ShopMainBundle') }}</a>
+    {% set level = (level-1)%}
+
+    <a href="{{ path('shop_catalog_categories') }}" rel="{% for i in 1..level %}up {% endfor %}">{{ 'shop.catalog'|trans({}, 'ShopCatalogBundle') }}</a>
+    {% set level = (level-1)%}
+
+    {% if level %}
+        <a href="{{ path('shop_catalog_category', {'slug' : category.slug}) }}" rel="{% for i in 1..level %}up {% endfor %}">{{ category.name }}</a>
+    {% else %}
+        <a>{{ category.name }}</a>
+    {% endif %}
+
+{% endmacro %}
+
+{% macro category_breadcrumb(category) %}
+    <nav>
+        {{- _self.category_breadcrumb_items(category, 2) -}}
+    </nav>
+{% endmacro %}
+
+{% macro proposal_breadcrumb(proposal) %}
+    <nav>
+        {{- _self.category_breadcrumb_items(proposal.category, 3) -}}
+        <a>
+            {{ proposal.name }}
+        </a>
+    </nav>
+{% endmacro %}
+
+{% macro proposal_markers(proposalData, catalogPrice) %}
+    <div class="markers">
+        {% if proposalData.proposal is defined %}
+            {% if proposalData.proposal.isNew %}
+                <div class="marker new"></div>
+            {% endif %}
+            {% if proposalData.proposal.isBestseller %}
+                <div class="marker best"></div>
+            {% endif %}
+        {% endif %}
+        {% if proposalData.hasAction %}
+            <div class="marker action"></div>
+        {% endif %}
+        {% if catalogPrice is defined and catalogPrice.discountPrice %}
+            <div class="marker discount">
+                -{{ catalogPrice.discountPrice.getDiscountPercent }}%
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro proposal_features(proposalFeatures) %}
+    {% include 'ShopCatalogBundle:Proposal:proposal-features.html.twig' with {'proposalFeatures':proposalFeatures} only %}
+{% endmacro %}
+
+{% macro compare_button(proposalData) %}
+    {% if proposalData.priceId and proposalData.proposal %}
+        <div class="large secondary btn">
+            <a href="{{ path('shop_catalog_estimator_popup') }}" class="compare-btn" data-compare='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ proposalData.priceId }}, "actionConditionIds":{{ proposalData.actionConditionIds|json_encode }}}'>
+                {{ 'shop.comparison.add.proposal'|trans({}, 'ShopCatalogBundle') }}
+            </a>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro buy_button(proposalData) %}
+    {% if proposalData.priceId and proposalData.proposal %}
+        <div class="large primary btn">
+            <a href="{{ path('shop_cart_popup') }}" class="add-to-cart" data-cart='{"categoryId":{{ proposalData.proposal.categoryId }},"proposalId":{{ proposalData.proposal.id }},"priceId":{{ proposalData.priceId }}, "actionConditionIds":{{ proposalData.actionConditionIds|json_encode }}}'>
+                {{ 'shop.cart.buy'|trans({}, 'ShopCatalogBundle') }}
+            </a>
+        </div>
+    {% endif %}
+{% endmacro %}

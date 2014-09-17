@@ -165,6 +165,8 @@ sonata_media:
                 small_square: { width: 220, height: 220, quality: 100 }
                 medium:   { width: 350, quality: 100 }
                 medium_square:   { width: 350, height: 350, quality: 100 }
+                large:   { width: 460, quality: 100 }
+                large_square:   { width: 460, height: 460, quality: 100 }
 
         action_image:
             providers:

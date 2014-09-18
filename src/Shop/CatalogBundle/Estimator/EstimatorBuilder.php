@@ -1,18 +1,18 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator;
+namespace Shop\CatalogBundle\Estimator;
 
 use Shop\CatalogBundle\Category\CategoryInterface;
-use Shop\CatalogBundle\Proposal\Estimator\Data\CategoryEstimationData;
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeature;
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface;
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeaturesBuilder;
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
-use Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue;
+use Shop\CatalogBundle\Estimator\Data\CategoryEstimationData;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeature;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureInterface;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeaturesBuilder;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue;
+use Shop\CatalogBundle\Estimator\Feature\Price\PriceFeatureValue;
 use Weasty\Money\Price\Price;
 
 /**
  * Class EstimatorBuilder
- * @package Shop\CatalogBundle\Proposal\Estimator
+ * @package Shop\CatalogBundle\Estimator
  */
 class EstimatorBuilder {
 
@@ -100,11 +100,8 @@ class EstimatorBuilder {
 
                 //Proposal action conditions
                 $actionConditionIds = $proposalPriceData['actionConditionIds'];
-                $actionConditions = $this->proposalActionConditionsBuilder->build($proposal, $actionConditionIds);
-                $estimatedProposal
-                    ->setActionConditionIds($actionConditionIds)
-                    ->setActionConditions($actionConditions)
-                ;
+                $actionConditions = $this->proposalActionConditionsBuilder->build($proposal, $price, $actionConditionIds);
+                $estimatedProposal->setActionConditions($actionConditions);
 
                 //Proposal price feature value
                 $priceFeatureValue = $this->buildPriceFeatureValue($price, $actionConditions);
@@ -176,7 +173,8 @@ class EstimatorBuilder {
 
             //Proposal action conditions
             $actionConditionIds = $proposalPriceData['actionConditionIds'];
-            $estimatorProposal->setActionConditionIds($actionConditionIds);
+            $actionConditions = $this->proposalActionConditionsBuilder->build($proposal, $price, $actionConditionIds);
+            $estimatorProposal->setActionConditions($actionConditions);
 
             $estimatorProposals[$priceId] = $estimatorProposal;
 

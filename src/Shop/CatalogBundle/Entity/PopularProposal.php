@@ -5,6 +5,7 @@ namespace Shop\CatalogBundle\Entity;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
+ * @TODO remove PopularProposal entity
  * Class PopularProposal
  * @package Shop\CatalogBundle\Entity
  */

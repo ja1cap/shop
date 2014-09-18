@@ -51,6 +51,10 @@ class CategoryParameterType extends AbstractType {
                 'multiple' => true,
                 'label' => 'Группа фильтров',
             ))
+            ->add('isComparable', 'checkbox', array(
+                'required' => false,
+                'label' => 'Участвует в сравнении товаров',
+            ))
             ->add('name', 'text', array(
                 'required' => false,
                 'label' => 'Название параметра в категории',

@@ -1,12 +1,12 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Feature\Price;
+namespace Shop\CatalogBundle\Estimator\Feature\Price;
 
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue;
 
 
 /**
  * Class PriceFeatureValue
- * @package Shop\CatalogBundle\Proposal\Estimator\Feature\Price
+ * @package Shop\CatalogBundle\Estimator\Feature\Price
  */
 class PriceFeatureValue extends EstimatedFeatureValue {
 

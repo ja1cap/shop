@@ -3,7 +3,6 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryFilters;
 use Shop\CatalogBundle\Entity\CategoryParameterGroup;
 use Shop\CatalogBundle\Form\Type\CategoryParameterGroupType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -185,84 +184,6 @@ class AdminCategoryController extends Controller
         }
 
         return $this->redirect($this->generateUrl('categories'));
-
-    }
-
-    /**
-     * @param $categoryId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function categoryFiltersListAction($categoryId){
-
-        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
-            'id' => $categoryId,
-        ));
-
-        if(!$category instanceof Category){
-            return $this->redirect($this->generateUrl('categories'));
-        }
-
-        return $this->render('ShopCatalogBundle:AdminCategory:categoryFiltersList.html.twig', array(
-            'category' => $category,
-        ));
-
-    }
-
-    /**
-     * @param $id
-     * @param $categoryId
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function categoryFiltersAction($id, $categoryId, Request $request){
-
-        $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
-            'id' => $categoryId,
-        ));
-
-        if(!$category instanceof Category){
-            return $this->redirect($this->generateUrl('categories'));
-        }
-
-        $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryFilters')->findOneBy(array(
-            'id' => $id,
-        ));
-
-        if(!$categoryFilters instanceof CategoryFilters){
-            $categoryFilters = new CategoryFilters();
-        }
-
-        $isNew = !$categoryFilters->getId();
-        $form = $this->createForm('shop_catalog_category_filters', $categoryFilters, array(
-            'category' => $category,
-        ));
-
-        $form->handleRequest($request);
-
-        if($request->getMethod() == 'POST' && $form->isValid()){
-
-            $em = $this->getDoctrine()->getManager();
-
-            if($isNew){
-                $category->addFilter($categoryFilters);
-            }
-
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('category_filters_list', array(
-                'categoryId' => $category->getId(),
-            )));
-
-        } else {
-
-            return $this->render('ShopCatalogBundle:AdminCategory:categoryFilters.html.twig', array(
-                'title' => $isNew ? 'Добавление фильтров' : 'Изменение фильтров',
-                'form' => $form->createView(),
-                'category' => $category,
-                'categoryFilters' => $categoryFilters,
-            ));
-
-        }
 
     }
 

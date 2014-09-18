@@ -2,7 +2,7 @@
 namespace Shop\CatalogBundle\Filter;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shop\CatalogBundle\Entity\CategoryFilters;
+use Shop\CatalogBundle\Entity\ProposalCollection;
 use Shop\CatalogBundle\Filter\Checkbox\CheckboxFilter;
 use Shop\CatalogBundle\Filter\ManufacturerFilter\ManufacturerFilterBuilder;
 use Shop\CatalogBundle\Filter\OptionsFilter\FilterOption;
@@ -137,10 +137,10 @@ class FiltersBuilder {
     }
 
     /**
-     * @param CategoryFilters $categoryFilters
+     * @param ProposalCollection $categoryFilters
      * @return FiltersResource
      */
-    public function buildFromCategoryFilters(CategoryFilters $categoryFilters){
+    public function buildFromCategoryFilters(ProposalCollection $categoryFilters){
 
         return $this->build(
             $categoryFilters->getCategory(),

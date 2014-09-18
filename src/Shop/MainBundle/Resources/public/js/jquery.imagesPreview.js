@@ -1,5 +1,6 @@
 $(function(){
 
+    //@TODO create Jquery Plugin
     var $imagesPreviewContainers = $(".images-preview-container");
 
     $imagesPreviewContainers.each(function(){

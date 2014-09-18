@@ -1,12 +1,12 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Feature;
+namespace Shop\CatalogBundle\Estimator\Feature;
 
 use Weasty\Bundle\CatalogBundle\Feature\Feature;
 use Weasty\Bundle\CatalogBundle\Feature\FeatureValueInterface;
 
 /**
  * Class EstimatedFeature
- * @package Shop\CatalogBundle\Proposal\Estimator\Feature
+ * @package Shop\CatalogBundle\Estimator\Feature
  */
 class EstimatedFeature extends Feature
     implements  EstimatedFeatureInterface

@@ -1,6 +1,7 @@
 <?php
 namespace Shop\CatalogBundle\Twig;
 
+use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 use Weasty\Money\Price\PriceInterface;
 use Weasty\Money\Twig\AbstractMoneyExtension;
@@ -11,6 +12,11 @@ use Weasty\Money\Twig\AbstractMoneyExtension;
  */
 class PriceExtension extends AbstractMoneyExtension
 {
+
+    /**
+     * @var \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
+     */
+    protected $cacheCollectionManager;
 
     /**
      * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder
@@ -63,10 +69,18 @@ class PriceExtension extends AbstractMoneyExtension
         ];
 
         $price = null;
+        $priceId = null;
 
-        //Check if price is defined
-        if(isset($proposalPriceData['price'])){
+        //Check if price and priceId are defined
+        if(isset($proposalPriceData['price']) && isset($proposalPriceData['priceId'])){
+
             $price = $proposalPriceData['price'];
+            $priceId = $proposalPriceData['priceId'];
+
+        } else {
+
+            //@TODO throw exception
+
         }
 
         //Return basic result if price is null
@@ -93,13 +107,16 @@ class PriceExtension extends AbstractMoneyExtension
                 $proposal = $proposalPriceData['proposal'];
             }
 
+            $proposalPriceCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Price');
+            $proposalPrice = $proposalPriceCollection->get($priceId);
+
             $actionConditionIds = null;
             if(isset($proposalPriceData['actionConditionIds'])){
                 $actionConditionIds = $proposalPriceData['actionConditionIds'];
             }
 
-            if($proposal instanceof ProposalInterface && $actionConditionIds){
-                $actionConditions = $this->getProposalActionConditionsBuilder()->build($proposal, $actionConditionIds);
+            if($proposal instanceof ProposalInterface && $proposalPrice instanceof ProposalPriceInterface && $actionConditionIds){
+                $actionConditions = $this->getProposalActionConditionsBuilder()->build($proposal, $proposalPrice, $actionConditionIds);
                 $discountPrice = $actionConditions->getDiscountPrice($exchangedPrice);
             }
 
@@ -157,6 +174,22 @@ class PriceExtension extends AbstractMoneyExtension
     public function setProposalActionConditionsBuilder($proposalActionConditionsBuilder)
     {
         $this->proposalActionConditionsBuilder = $proposalActionConditionsBuilder;
+    }
+
+    /**
+     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
+     */
+    public function getCacheCollectionManager()
+    {
+        return $this->cacheCollectionManager;
+    }
+
+    /**
+     * @param \Weasty\Doctrine\Cache\Collection\CacheCollectionManager $cacheCollectionManager
+     */
+    public function setCacheCollectionManager($cacheCollectionManager)
+    {
+        $this->cacheCollectionManager = $cacheCollectionManager;
     }
 
 } 

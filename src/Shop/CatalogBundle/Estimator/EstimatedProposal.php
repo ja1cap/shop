@@ -1,7 +1,7 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator;
+namespace Shop\CatalogBundle\Estimator;
 
-use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
+use Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue;
 
 /**
  * Class EstimatorProposal
@@ -10,27 +10,22 @@ use Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue;
 class EstimatedProposal extends EstimatorProposal {
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue
+     * @var \Shop\CatalogBundle\Estimator\Feature\Price\PriceFeatureValue
      */
     protected $priceFeatureValue;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue
+     * @var \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue
      */
     protected $rateFeatureValue;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue[]
+     * @var \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue[]
      */
     protected $featureValues = [];
 
     /**
-     * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
-     */
-    protected $actionConditions;
-
-    /**
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue
+     * @return \Shop\CatalogBundle\Estimator\Feature\Price\PriceFeatureValue
      */
     public function getPriceFeatureValue()
     {
@@ -38,7 +33,7 @@ class EstimatedProposal extends EstimatorProposal {
     }
 
     /**
-     * @param \Shop\CatalogBundle\Proposal\Estimator\Feature\Price\PriceFeatureValue $priceFeatureValue
+     * @param \Shop\CatalogBundle\Estimator\Feature\Price\PriceFeatureValue $priceFeatureValue
      * @return $this
      */
     public function setPriceFeatureValue($priceFeatureValue)
@@ -69,7 +64,7 @@ class EstimatedProposal extends EstimatorProposal {
 
     /**
      * @param $featureId
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue|null
+     * @return \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue|null
      */
     public function getFeatureValue($featureId){
         if(isset($this->featureValues[$featureId])){
@@ -79,7 +74,7 @@ class EstimatedProposal extends EstimatorProposal {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureValue[]
+     * @return \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureValue[]
      */
     public function getFeatureValues()
     {
@@ -137,24 +132,6 @@ class EstimatedProposal extends EstimatorProposal {
     public function setRateFeatureValue($rateFeatureValue)
     {
         $this->rateFeatureValue = $rateFeatureValue;
-        return $this;
-    }
-
-    /**
-     * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
-     */
-    public function getActionConditions()
-    {
-        return $this->actionConditions;
-    }
-
-    /**
-     * @param \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions $actionConditions
-     * @return $this
-     */
-    public function setActionConditions($actionConditions)
-    {
-        $this->actionConditions = $actionConditions;
         return $this;
     }
 

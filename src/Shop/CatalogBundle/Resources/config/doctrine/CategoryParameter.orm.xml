@@ -8,6 +8,9 @@
             <index columns="categoryId"/>
             <index columns="parameterId"/>
         </indexes>
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preUpdate" method="checkName"/>
+        </lifecycle-callbacks>
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -15,6 +18,7 @@
         <field name="parameterId" type="integer" column="parameterId"/>
         <field name="groupId" type="integer" column="groupId" nullable="true"/>
         <field name="name" type="string" column="name" nullable="true"/>
+        <field name="isComparable" type="boolean" column="isComparable"/>
         <field name="position" type="integer" column="position"/>
         <field name="filterGroups" type="simple_array" column="filterGroups"/>
         <many-to-one target-entity="Category" field="category" inversed-by="parameters">

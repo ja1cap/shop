@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Feature;
+namespace Shop\CatalogBundle\Estimator\Feature;
 
 use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
 use Shop\CatalogBundle\Proposal\Feature\FeaturesBuilder;
@@ -9,17 +9,17 @@ use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
 
 /**
  * Class EstimatedFeaturesBuilder
- * @package Shop\CatalogBundle\Proposal\Estimator\Feature
+ * @package Shop\CatalogBundle\Estimator\Feature
  */
 class EstimatedFeaturesBuilder extends FeaturesBuilder {
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Estimator
+     * @var \Shop\CatalogBundle\Estimator\Estimator
      */
     protected $estimator;
 
     /**
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
+     * @return \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureInterface
      */
     protected function createFeature()
     {
@@ -76,18 +76,15 @@ class EstimatedFeaturesBuilder extends FeaturesBuilder {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Estimator
+     * @return \Shop\CatalogBundle\Estimator\Estimator
      */
     public function getEstimator()
     {
-        if(!$this->estimator){
-            //@TODO throw exception - estimator not defined
-        }
         return $this->estimator;
     }
 
     /**
-     * @param \Shop\CatalogBundle\Proposal\Estimator\Estimator $estimator
+     * @param \Shop\CatalogBundle\Estimator\Estimator $estimator
      * @return $this
      */
     public function setEstimator($estimator)

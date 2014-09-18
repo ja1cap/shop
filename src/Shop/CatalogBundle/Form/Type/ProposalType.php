@@ -29,18 +29,12 @@ class ProposalType extends AbstractType {
                 'choices' => Proposal::$statuses,
                 'label' => 'Статус',
             ))
-            ->add('isNew', 'choice', array(
-                'choices' => array(
-                    'Нет',
-                    'Да',
-                ),
+            ->add('isNew', 'checkbox', array(
+                'required' => false,
                 'label' => 'Новинка',
             ))
-            ->add('isBestseller', 'choice', array(
-                'choices' => array(
-                    'Нет',
-                    'Да',
-                ),
+            ->add('isBestseller', 'checkbox', array(
+                'required' => false,
                 'label' => 'Хит продаж',
             ))
             ->add('manufacturer', 'entity', array(

@@ -29,8 +29,7 @@
                         {% for estimatorProposal in estimatorCategory.getProposals %}
                             {% set proposal = estimatorProposal.getProposal %}
                             {% set price = estimatorProposal.getPrice %}
-                            {% set actionConditions = (estimatorProposal.getActionConditionIds ? shop_discount_proposal_action_conditions(proposal, estimatorProposal.getActionConditionIds) : null) %}
-                            {% set discountPrice = (actionConditions ? actionConditions.getDiscountPrice(price) : null) %}
+                            {% set discountPrice = estimatorProposal.getDiscountPrice %}
                             <tr>
                                 <td class="image-cell">
                                     <div class="proposal-image">

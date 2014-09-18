@@ -89,8 +89,9 @@ class AdminCategoryParameterController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('category_parameters', array(
+            return $this->redirect($this->generateUrl('category_parameter', array(
                 'categoryId' => $category->getId(),
+                'id' => $categoryParameter->getId(),
             )));
 
         } else {

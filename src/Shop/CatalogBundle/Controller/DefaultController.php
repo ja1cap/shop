@@ -3,7 +3,7 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\CategoryFilters;
+use Shop\CatalogBundle\Entity\ProposalCollection;
 use Shop\CatalogBundle\Entity\Proposal;
 use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
@@ -44,11 +44,11 @@ class DefaultController extends Controller
 
         if(!$category instanceof CategoryInterface){
 
-            $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryFilters')->findOneBy(array(
+            $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalCollection')->findOneBy(array(
                 'slug' => $slug,
             ));
 
-            if($categoryFilters instanceof CategoryFilters){
+            if($categoryFilters instanceof ProposalCollection){
                 $category = $categoryFilters->getCategory();
             } else {
                 return $this->redirect($this->generateUrl('shop'));
@@ -132,6 +132,7 @@ class DefaultController extends Controller
          */
         $filtersBuilder = $this->get('shop_catalog.filters_builder');
         $filtersResource = $filtersBuilder->buildFromRequest($request, $category, $proposal);
+        //@TODO add priceId parameter check, if defined get $proposalData by priceId ignoring $filtersResource
 
         $proposalData = $this->getProposalRepository()->findProposalPrice($filtersResource);
         $price = $proposalData ? $proposalData['price'] : null;

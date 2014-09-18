@@ -1,10 +1,10 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Feature;
+namespace Shop\CatalogBundle\Estimator\Feature;
 use Weasty\Bundle\CatalogBundle\Proposal\Feature\ProposalFeatureValue;
 
 /**
  * Class EstimatedFeatureValue
- * @package Shop\CatalogBundle\Proposal\Estimator\Feature
+ * @package Shop\CatalogBundle\Estimator\Feature
  */
 class EstimatedFeatureValue extends ProposalFeatureValue {
 

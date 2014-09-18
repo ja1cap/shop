@@ -8,11 +8,11 @@
         </a>
     </li>
 
-    {#<li class="{{ app.request.get('_route') == 'popular_proposals' ? 'active' : '' }}">#}
-        {#<a href="{{ path('popular_proposals') }}">#}
-            {#Популярные предложения#}
-        {#</a>#}
-    {#</li>#}
+    <li class="{{ app.request.get('_route') == 'proposal_collections' ? 'active' : '' }}">
+        <a href="{{ path('proposal_collections') }}">
+            Коллекции
+        </a>
+    </li>
 
     <li class="{{ app.request.get('_route') == 'manufacturers' ? 'active' : '' }}">
         <a href="{{ path('manufacturers') }}">

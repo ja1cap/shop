@@ -46,10 +46,11 @@ class ProposalActionConditionsBuilder {
 
     /**
      * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface $proposalPrice
      * @param array $actionConditionIds
      * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
      */
-    public function build($proposal, $actionConditionIds = []){
+    public function build($proposal, $proposalPrice, $actionConditionIds = []){
 
         $proposalActionConditions = new ProposalActionConditions($this->discountPriceCalculator, $proposal);
 

@@ -60,7 +60,7 @@ class EstimatorController extends Controller
     /**
      * @param CategoryInterface $category
      * @param Request $request
-     * @return \Shop\CatalogBundle\Proposal\Estimator\Estimator|null
+     * @return \Shop\CatalogBundle\Estimator\Estimator|null
      */
     protected function buildEstimator(CategoryInterface $category, Request $request){
 
@@ -71,7 +71,7 @@ class EstimatorController extends Controller
 
     /**
      * @param Request $request
-     * @return \Shop\CatalogBundle\Proposal\Estimator\EstimatorCategory[]
+     * @return \Shop\CatalogBundle\Estimator\EstimatorCategory[]
      */
     protected function buildEstimatorCategories(Request $request){
 
@@ -81,7 +81,7 @@ class EstimatorController extends Controller
     }
 
     /**
-     * @return \Shop\CatalogBundle\Proposal\Estimator\EstimatorBuilder
+     * @return \Shop\CatalogBundle\Estimator\EstimatorBuilder
      */
     protected function getEstimatorBuilder(){
         return $this->get('shop_catalog.proposal.estimator.builder');

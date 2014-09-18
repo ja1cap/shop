@@ -22,18 +22,7 @@ class ProposalExtension extends \Twig_Extension {
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('shop_discount_proposal_action_conditions', array($this, 'buildProposalActionConditions')),
-        );
-    }
-
-    /**
-     * @param $proposal
-     * @param $actionConditionIds
-     * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions
-     */
-    public function buildProposalActionConditions($proposal, $actionConditionIds){
-        return $this->proposalActionConditionsBuilder->build($proposal, $actionConditionIds);
+        return [];
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator;
+namespace Shop\CatalogBundle\Estimator;
 
 /**
  * Class Estimator
- * @package Shop\CatalogBundle\Proposal\Estimator
+ * @package Shop\CatalogBundle\Estimator
  */
 class Estimator {
 
@@ -23,12 +23,12 @@ class Estimator {
     protected $estimatedFeatures;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
+     * @var \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureInterface
      */
     protected $priceFeature;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Feature\EstimatedFeatureInterface
+     * @var \Shop\CatalogBundle\Estimator\Feature\EstimatedFeatureInterface
      */
     protected $rateFeature;
 

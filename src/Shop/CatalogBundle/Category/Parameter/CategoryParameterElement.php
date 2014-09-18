@@ -25,7 +25,7 @@ class CategoryParameterElement extends CacheCollectionElement
         $data = parent::buildData($collection, $entity);
 
         if($entity instanceof CategoryParameter){
-            $data['isComparable'] = $entity->getIsComparable();
+            $data['name'] = $entity->getName();
         }
 
         return $data;

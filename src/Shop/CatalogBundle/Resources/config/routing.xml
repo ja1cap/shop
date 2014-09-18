@@ -65,15 +65,15 @@
     <route id="delete_category_parameter_group" pattern="/adminCatalog/deleteCategoryParameterGroup/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup</default>
     </route>
-    <route id="category_filters_list" pattern="/adminCatalog/categoryFiltersList/{categoryId}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryFiltersList</default>
+    <route id="proposal_collections" pattern="/adminCatalog/proposalCollections">
+        <default key="_controller">ShopCatalogBundle:AdminProposalCollection:collections</default>
     </route>
-    <route id="category_filters" pattern="/adminCatalog/categoryFilters/{categoryId}/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:categoryFilters</default>
+    <route id="proposal_collection" pattern="/adminCatalog/proposalCollection/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminProposalCollection:collection</default>
         <default key="id">null</default>
     </route>
-    <route id="delete_category_filters" pattern="/adminCatalog/deleteCategoryFilters/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryFilters</default>
+    <route id="delete_proposal_collection" pattern="/adminCatalog/deleteProposalCollection/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminProposalCollection:deleteCollection</default>
     </route>
     <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>

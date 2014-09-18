@@ -97,16 +97,10 @@ class Category extends AbstractEntity
     private $updateDate;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $filters;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->filters = new ArrayCollection();
         $this->parameters = new ArrayCollection();
         $this->parameterGroups = new ArrayCollection();
         $this->proposals = new ArrayCollection();
@@ -591,39 +585,6 @@ class Category extends AbstractEntity
     public function getImage()
     {
         return $this->image;
-    }
-
-    /**
-     * Add filters
-     *
-     * @param \Shop\CatalogBundle\Entity\CategoryFilters $filters
-     * @return Category
-     */
-    public function addFilter(CategoryFilters $filters)
-    {
-        $this->filters[] = $filters;
-        $filters->setCategory($this);
-        return $this;
-    }
-
-    /**
-     * Remove filters
-     *
-     * @param \Shop\CatalogBundle\Entity\CategoryFilters $filters
-     */
-    public function removeFilter(CategoryFilters $filters)
-    {
-        $this->filters->removeElement($filters);
-    }
-
-    /**
-     * Get filters
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getFilters()
-    {
-        return $this->filters;
     }
 
 }

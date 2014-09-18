@@ -188,7 +188,7 @@ class ShopCartFactory {
 
                                 if($actionConditionIds && $this->proposalActionConditionsBuilder){
 
-                                    $proposalActionConditions = $this->proposalActionConditionsBuilder->build($shopCartProposal->getProposal(), $actionConditionIds);
+                                    $proposalActionConditions = $this->proposalActionConditionsBuilder->build($shopCartProposal->getProposal(), $shopCartPrice->getPrice(), $actionConditionIds);
                                     $shopCartPrice
                                         ->setProposalActionConditions($proposalActionConditions)
                                         ->calculateItemDiscountPrice()

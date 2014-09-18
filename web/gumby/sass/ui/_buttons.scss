@@ -2,9 +2,8 @@
 
 // Buttons
 @import "../functions/button-size";
-
 // Button structure
-.btn, .skiplink {
+div.btn, div.skiplink {
   display: inline-block;
   width: auto;
   background: $default-color;
@@ -35,7 +34,7 @@
 }
 
 // Button Shapes & Sizes
-.btn, .skiplink {
+div.btn, div.skiplink {
   &.xlarge {
     @include button-size(xlarge);
   }
@@ -69,7 +68,7 @@
 }
 
 // Button Colors & Styles
-.btn, .skiplink {
+div.btn, div.skiplink {
   @each $shade in $ui-coloring {
     &.#{nth($shade, 1)} {
       background: nth($shade, 2);
@@ -100,23 +99,23 @@
   }
 }
 
-.btn.metro,
-.skiplink.metro,
-.btn.pretty.squared,
+div.btn.metro,
+div.skiplink.metro,
+div.btn.pretty.squared,
 .pretty .btn.squared {
   @include border-radius(0);
 }
 
-.btn.pretty,
-.skiplink.pretty,
-.btn.metro.rounded,
+div.btn.pretty,
+div.skiplink.pretty,
+div.btn.metro.rounded,
 .metro .btn.rounded {
   @include border-radius($button-radius);
 }
 
 
 // Buttons with Gradients
-.btn, .skiplink {
+div.btn, div.skiplink {
   &.pretty {
     @each $grade in $ui-coloring {
       &.#{nth($grade, 1)} {

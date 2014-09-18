@@ -233,6 +233,8 @@ $(function(){
                         $.proposalEstimator.markComparisonButtons();
                     }
 
+                    //@TODO restart images preview plugin
+
                 }
             });
 

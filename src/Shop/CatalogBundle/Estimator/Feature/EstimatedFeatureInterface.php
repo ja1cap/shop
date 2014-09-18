@@ -1,11 +1,11 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Feature;
+namespace Shop\CatalogBundle\Estimator\Feature;
 
 use Weasty\Bundle\CatalogBundle\Feature\FeatureInterface;
 
 /**
  * Interface EstimatedFeatureInterface
- * @package Shop\CatalogBundle\Proposal\Estimator\Feature
+ * @package Shop\CatalogBundle\Estimator\Feature
  */
 interface EstimatedFeatureInterface extends FeatureInterface {
 

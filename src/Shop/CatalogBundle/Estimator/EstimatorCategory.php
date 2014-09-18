@@ -1,14 +1,14 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator;
+namespace Shop\CatalogBundle\Estimator;
 
 /**
  * Class EstimatorCategory
- * @package Shop\CatalogBundle\Proposal\Estimator
+ * @package Shop\CatalogBundle\Estimator
  */
 class EstimatorCategory {
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\Data\CategoryEstimationData
+     * @var \Shop\CatalogBundle\Estimator\Data\CategoryEstimationData
      */
     protected $categoryEstimationData;
 
@@ -18,7 +18,7 @@ class EstimatorCategory {
     protected $category;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Estimator\EstimatorProposal[]
+     * @var \Shop\CatalogBundle\Estimator\EstimatorProposal[]
      */
     protected $proposals;
 

@@ -1,9 +1,9 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Estimator\Data;
+namespace Shop\CatalogBundle\Estimator\Data;
 
 /**
  * Class CategoryEstimationData
- * @package Shop\CatalogBundle\Proposal\Estimator\Data
+ * @package Shop\CatalogBundle\Estimator\Data
  */
 class CategoryEstimationData {
 

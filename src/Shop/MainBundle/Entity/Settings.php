@@ -22,11 +22,15 @@ class Settings extends AbstractEntity
     ];
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $actions_title;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $actions_description;
@@ -87,6 +91,8 @@ class Settings extends AbstractEntity
     private $mailer_password;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $catalog_download_title;
@@ -102,11 +108,15 @@ class Settings extends AbstractEntity
     private $why_us_description;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $proposals_title;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $proposals_description;

@@ -31,12 +31,6 @@
         <field name="createDate" type="datetime" column="createDate" nullable="true"/>
         <field name="updateDate" type="datetime" column="updateDate" nullable="true"/>
 
-        <one-to-many target-entity="CategoryFilters" mapped-by="category" field="filters">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </one-to-many>
-
         <one-to-many target-entity="CategoryParameter" mapped-by="category" field="parameters">
             <cascade>
                 <cascade-all/>

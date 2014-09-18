@@ -19,9 +19,4 @@
             Параметры
         </a>
     </li>
-    <li class="{{ app.request.get('_route') == 'category_filters_list' ? 'active' : '' }}">
-        <a href="{{ path('category_filters_list', {'categoryId' : category.id}) }}">
-            Фильтры
-        </a>
-    </li>
 {% endif %}

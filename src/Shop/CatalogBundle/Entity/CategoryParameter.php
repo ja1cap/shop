@@ -33,6 +33,11 @@ class CategoryParameter extends AbstractEntity
     private $parameterId;
 
     /**
+     * @var bool
+     */
+    private $isComparable;
+
+    /**
      * @var integer
      */
     private $position;
@@ -118,12 +123,21 @@ class CategoryParameter extends AbstractEntity
     }
 
     /**
+     * @param boolean $isComparable
+     * @return $this
+     */
+    public function setIsComparable($isComparable)
+    {
+        $this->isComparable = $isComparable;
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function getIsComparable()
     {
-        //@TODO add isComparable property
-        return true;
+        return $this->isComparable;
     }
 
     /**
@@ -209,9 +223,10 @@ class CategoryParameter extends AbstractEntity
      */
     public function setName($name)
     {
-        $this->name = $name;
 
+        $this->name = $name;
         return $this;
+
     }
 
     /**
@@ -223,6 +238,18 @@ class CategoryParameter extends AbstractEntity
     {
         return $this->name ?: ($this->getParameter() ? $this->getParameter()->getName() : null);
     }
+
+    /**
+     * Check name before entity update
+     */
+    public function checkName(){
+
+        if($this->getParameter() && $this->getParameter()->getName() == $this->name){
+            $this->name = null;
+        }
+
+    }
+
     /**
      * @var integer
      */

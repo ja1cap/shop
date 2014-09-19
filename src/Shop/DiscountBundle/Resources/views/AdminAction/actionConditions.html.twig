@@ -106,13 +106,13 @@
                                     </div>
                                 </div>
                                 <div>
-                                    {% if condition.discountType == constant('DISCOUNT_TYPE_PERCENT', condition) %}
+                                    {% if condition.type == constant('TYPE_DISCOUNT_PERCENT', condition) %}
                                         {{ block('condition_discount_percent') }}
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_PRICE', condition) %}
+                                    {% elseif condition.type == constant('TYPE_DISCOUNT_PRICE', condition) %}
                                         {{ block('condition_discount_price') }}
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_GIFT', condition) %}
+                                    {% elseif condition.type == constant('TYPE_GIFT', condition) %}
                                         {{ block('condition_gifts') }}
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_GIFT_AND_PERCENT', condition) %}
+                                    {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PERCENT', condition) %}
                                         <div>
                                             {{ block('condition_discount_percent') }}
                                         </div>
@@ -120,7 +120,7 @@
                                         <div>
                                             {{ block('condition_gifts') }}
                                         </div>
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_GIFT_OR_PERCENT', condition) %}
+                                    {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PERCENT', condition) %}
                                         <div>
                                             {{ block('condition_discount_percent') }}
                                         </div>
@@ -128,7 +128,7 @@
                                         <div>
                                             {{ block('condition_gifts') }}
                                         </div>
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_GIFT_AND_PRICE', condition) %}
+                                    {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PRICE', condition) %}
                                         <div>
                                             {{ block('condition_discount_price') }}
                                         </div>
@@ -136,7 +136,7 @@
                                         <div>
                                             {{ block('condition_gifts') }}
                                         </div>
-                                    {% elseif condition.discountType == constant('DISCOUNT_TYPE_GIFT_OR_PRICE', condition) %}
+                                    {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PRICE', condition) %}
                                         <div>
                                             {{ block('condition_discount_price') }}
                                         </div>

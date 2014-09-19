@@ -3,8 +3,6 @@ namespace Shop\DiscountBundle\Mapper;
 
 use Doctrine\Common\Collections\Collection;
 use Shop\DiscountBundle\Entity\ActionConditionCategory;
-use Shop\DiscountBundle\Entity\ActionConditionDiscountCategory;
-use Shop\DiscountBundle\Entity\ActionConditionDiscountProposal;
 use Shop\DiscountBundle\Entity\ActionConditionGiftProposal;
 use Shop\DiscountBundle\Entity\ActionConditionProposal;
 use Weasty\Doctrine\Mapper\AbstractEntityMapper;
@@ -95,95 +93,6 @@ class ActionConditionMapper extends AbstractEntityMapper {
             function(ActionConditionProposal $actionConditionProposal) use ($condition, $em) {
                 $condition->removeProposal($actionConditionProposal);
                 $em->remove($actionConditionProposal);
-            }
-        );
-
-        $proposalCollectionMapper->map($data, 'proposal_id');
-
-        return $this;
-
-    }
-
-    /**
-     * @param $categoryIds
-     * @return $this
-     */
-    public function setDiscountCategoryIds($categoryIds){
-
-        $em = $this->getEntityManager();
-
-        /**
-         * @var $condition \Shop\DiscountBundle\Entity\ActionCondition
-         */
-        $condition = $this->getEntity();
-
-        $data = array();
-
-        if(is_array($categoryIds) || $categoryIds instanceof Collection){
-            foreach($categoryIds as $categoryId){
-                if($categoryId){
-                    $data[] = array(
-                        'category_id' => $categoryId,
-                        'condition' => $condition,
-                    );
-                }
-            }
-        }
-
-        $categoryCollectionMapper = new EntityCollectionMapper(
-            $condition->getDiscountCategories(),
-            function(){
-                return new ActionConditionDiscountCategory();
-            },
-            array($condition, 'addDiscountCategory'),
-            function(ActionConditionDiscountCategory $actionConditionDiscountCategory) use ($condition, $em) {
-                $condition->removeDiscountCategory($actionConditionDiscountCategory);
-                $em->remove($actionConditionDiscountCategory);
-            }
-        );
-
-        $categoryCollectionMapper->map($data, 'category_id');
-
-        return $this;
-
-    }
-
-    /**
-     * @param $proposalIds
-     * @return $this
-     */
-    public function setDiscountProposalIds($proposalIds){
-
-        $em = $this->getEntityManager();
-
-        /**
-         * @var $condition \Shop\DiscountBundle\Entity\ActionCondition
-         */
-        $condition = $this->getEntity();
-
-        $data = array();
-
-        if(is_array($proposalIds) || $proposalIds instanceof Collection){
-            foreach($proposalIds as $proposalId){
-                if($proposalId){
-                    $data[] = array(
-                        'proposal_id' => $proposalId,
-                        'condition' => $condition,
-                    );
-                }
-            }
-        }
-
-        $proposalCollection = $condition->getDiscountProposals();
-        $proposalCollectionMapper = new EntityCollectionMapper(
-            $proposalCollection,
-            function(){
-                return new ActionConditionDiscountProposal();
-            },
-            array($condition, 'addDiscountProposal'),
-            function(ActionConditionDiscountProposal $actionConditionDiscountProposal) use ($condition, $em) {
-                $condition->removeDiscountProposal($actionConditionDiscountProposal);
-                $em->remove($actionConditionDiscountProposal);
             }
         );
 

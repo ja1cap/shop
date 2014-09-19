@@ -1,22 +1,21 @@
 <?php
-namespace Shop\DiscountBundle\Entity;
+namespace Shop\DiscountBundle\ActionCondition;
+
+use Shop\DiscountBundle\Action\ActionInterface;
 
 /**
  * Interface ActionConditionInterface
- * @package Shop\DiscountBundle\Data
+ * @package Shop\DiscountBundle\ActionCondition
  */
 interface ActionConditionInterface {
 
-    const TYPE_COLLECTION = 1;
-    const TYPE_SET = 2;
-
-    const DISCOUNT_TYPE_PERCENT = 1;
-    const DISCOUNT_TYPE_PRICE = 2;
-    const DISCOUNT_TYPE_GIFT = 3;
-    const DISCOUNT_TYPE_GIFT_AND_PERCENT = 4;
-    const DISCOUNT_TYPE_GIFT_OR_PERCENT = 5;
-    const DISCOUNT_TYPE_GIFT_AND_PRICE = 6;
-    const DISCOUNT_TYPE_GIFT_OR_PRICE = 7;
+    const TYPE_DISCOUNT_PERCENT = 1;
+    const TYPE_DISCOUNT_PRICE = 2;
+    const TYPE_GIFT = 3;
+    const TYPE_GIFT_AND_DISCOUNT_PERCENT = 4;
+    const TYPE_GIFT_OR_DISCOUNT_PERCENT = 5;
+    const TYPE_GIFT_AND_DISCOUNT_PRICE = 6;
+    const TYPE_GIFT_OR_DISCOUNT_PRICE = 7;
 
     /**
      * @return int
@@ -24,7 +23,9 @@ interface ActionConditionInterface {
     public function getId();
 
     /**
-     * @return int
+     * Get type
+     *
+     * @return integer
      */
     public function getType();
 
@@ -50,7 +51,7 @@ interface ActionConditionInterface {
     public function setAction(ActionInterface $action);
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionInterface
+     * @return \Shop\DiscountBundle\Action\ActionInterface
      */
     public function getAction();
 
@@ -58,13 +59,6 @@ interface ActionConditionInterface {
      * @return boolean
      */
     public function getIsPriceDiscount();
-
-    /**
-     * Get discountType
-     *
-     * @return integer
-     */
-    public function getDiscountType();
 
     /**
      * Get discountPriceValue
@@ -95,16 +89,6 @@ interface ActionConditionInterface {
     /**
      * @return array
      */
-    public function getDiscountCategoryIds();
-
-    /**
-     * @return array
-     */
     public function getProposalIds();
 
-    /**
-     * @return array
-     */
-    public function getDiscountProposalIds();
-
-    }
+}

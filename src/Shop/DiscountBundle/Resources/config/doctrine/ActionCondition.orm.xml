@@ -8,10 +8,8 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="type" type="integer" length="1" column-definition="int(1) NOT NULL DEFAULT 1"/>
-
         <field name="actionId" type="integer"/>
-        <field name="discountType" type="integer" length="1" column-definition="int(1) NOT NULL DEFAULT 0"/>
+        <field name="type" type="integer" length="1" column-definition="int(1) NOT NULL DEFAULT 0"/>
         <field name="discountPercent" type="float" nullable="true"/>
         <field name="discountPriceValue" type="float" nullable="true"/>
         <field name="discountPriceCurrencyNumericCode" type="integer" length="3" nullable="true"/>
@@ -26,21 +24,7 @@
             </cascade>
         </one-to-many>
 
-        <one-to-many target-entity="ActionConditionDiscountCategory" field="discountCategories" mapped-by="condition">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
         <one-to-many target-entity="ActionConditionProposal" field="proposals" mapped-by="condition">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
-        <one-to-many target-entity="ActionConditionDiscountProposal" field="discountProposals" mapped-by="condition">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

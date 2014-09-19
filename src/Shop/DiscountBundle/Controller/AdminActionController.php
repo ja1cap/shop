@@ -2,8 +2,8 @@
 
 namespace Shop\DiscountBundle\Controller;
 
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
-use Shop\DiscountBundle\Entity\ActionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
+use Shop\DiscountBundle\Action\ActionInterface;
 use Shop\DiscountBundle\Form\Type\ActionConditionType;
 use Shop\DiscountBundle\Form\Type\ActionType;
 use Shop\DiscountBundle\Mapper\ActionConditionMapper;

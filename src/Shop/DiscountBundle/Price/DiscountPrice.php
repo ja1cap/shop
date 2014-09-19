@@ -20,7 +20,7 @@ class DiscountPrice extends Price implements DiscountPriceInterface {
     protected $discountPercent;
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionConditionInterface
+     * @var \Shop\DiscountBundle\ActionCondition\ActionConditionInterface
      */
     protected $discountCondition;
 
@@ -75,7 +75,7 @@ class DiscountPrice extends Price implements DiscountPriceInterface {
     }
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionConditionInterface
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface
      */
     public function getDiscountCondition()
     {
@@ -83,7 +83,7 @@ class DiscountPrice extends Price implements DiscountPriceInterface {
     }
 
     /**
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface $discountCondition
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $discountCondition
      * @return $this
      */
     public function setDiscountCondition($discountCondition)

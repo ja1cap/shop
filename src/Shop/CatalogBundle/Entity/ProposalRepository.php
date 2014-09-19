@@ -9,7 +9,7 @@ use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
 use Shop\CatalogBundle\Query\ProposalQueryBuilderFactory;
-use Shop\DiscountBundle\Entity\ActionInterface;
+use Shop\DiscountBundle\Action\ActionInterface;
 use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**

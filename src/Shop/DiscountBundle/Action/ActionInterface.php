@@ -1,10 +1,11 @@
 <?php
-namespace Shop\DiscountBundle\Entity;
+namespace Shop\DiscountBundle\Action;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Interface ActionInterface
- * @package Shop\DiscountBundle\Entity
+ * @package Shop\DiscountBundle\Action
  */
 interface ActionInterface extends EntityInterface {
 
@@ -30,7 +31,7 @@ interface ActionInterface extends EntityInterface {
     /**
      * Add conditions
      *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface $condition
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $condition
      * @return $this
      */
     public function addCondition(ActionConditionInterface $condition);
@@ -38,7 +39,7 @@ interface ActionInterface extends EntityInterface {
     /**
      * Get conditions
      *
-     * @return \Doctrine\Common\Collections\Collection|\Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @return \Doctrine\Common\Collections\Collection|\Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     public function getConditions();
 

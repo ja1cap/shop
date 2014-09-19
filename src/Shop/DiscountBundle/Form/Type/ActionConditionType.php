@@ -1,7 +1,7 @@
 <?php
 namespace Shop\DiscountBundle\Form\Type;
 
-use Shop\DiscountBundle\Data\ActionConditionResource;
+use Shop\DiscountBundle\ActionCondition\ActionConditionData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -19,10 +19,6 @@ class ActionConditionType extends AbstractType {
     {
 
         $builder
-            ->add('type', 'choice', array(
-                'choices' => ActionConditionResource::$types,
-                'label' => 'Объедининие',
-            ))
             ->add('categoryIds', 'weasty_doctrine_entity_type', array(
                 'required' => false,
                 'multiple' => true,
@@ -49,36 +45,8 @@ class ActionConditionType extends AbstractType {
                 'allow_add' => true,
                 'allow_delete' => true,
             ))
-            ->add('discountCategoryIds', 'weasty_doctrine_entity_type', array(
-                'required' => false,
-                'multiple' => true,
-                'map_as_id' => true,
-                'label' => 'Категории, на которые растространяется акция (По умолчанию: все участвующие)',
-                'help' => 'Выберите категории для которых будут действовать условия акции (скидка, акционная цена, подарок)',
-                'class' => 'ShopCatalogBundle:Category',
-            ))
-            ->add('discountProposalIds', 'weasty_admin_browser_type', array(
-                'required' => false,
-                'label' => 'Товары, на которые растространяется акция (По умолчанию: все участвующие)',
-                'help' => 'Выберите товары и услуги для которых будут действовать условия акции (скидка, акционная цена, подарок)',
-                'browser_path' => 'proposals_browser',
-                //'type' => 'shop_discount_action_condition_proposal',
-                //'prototype_type' => 'shop_discount_action_condition_proposal',
-                'item_value_element_class' => 'item-value-element',
-                'options' => array(
-                    'map_as_id' => true,
-                    'class' => 'ShopCatalogBundle:Proposal',
-                ),
-                'prototype_options' => array(
-                    'attr' => array(
-                        'class' => 'item-value-element',
-                    ),
-                ),
-                'allow_add' => true,
-                'allow_delete' => true,
-            ))
-            ->add('discountType', 'choice', array(
-                'choices' => ActionConditionResource::$discountTypes,
+            ->add('type', 'choice', array(
+                'choices' => ActionConditionData::getTypes(),
                 'label' => 'Тип акции',
             ))
             ->add('discountPercent', 'text', array(
@@ -113,11 +81,8 @@ class ActionConditionType extends AbstractType {
                 'required' => false,
                 'label' => 'Приоритет',
             ))
-            ->add('isComplex', 'choice', array(
-                'choices' => array(
-                    'Нет',
-                    'Да',
-                ),
+            ->add('isComplex', 'checkbox', array(
+                'required' => false,
                 'label' => 'Применяется с другими акциями в комплексе',
             ))
         ;

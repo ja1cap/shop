@@ -2,7 +2,10 @@
 
 namespace Shop\DiscountBundle\Entity;
 
-use Shop\DiscountBundle\Element\ActionConditionElement;
+use Shop\DiscountBundle\Action\ActionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionData;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionElement;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Money\Price\Price;
 use Weasty\Doctrine\Entity\AbstractEntity;
@@ -12,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Class ActionCondition
  * @package Shop\DiscountBundle\Entity
  */
-class ActionCondition extends AbstractEntity
+abstract class ActionCondition extends AbstractEntity
     implements  ActionConditionInterface,
                 CacheCollectionEntityInterface
 {
@@ -20,12 +23,17 @@ class ActionCondition extends AbstractEntity
     /**
      * @var integer
      */
-    private $actionId;
+    private $id;
 
     /**
      * @var integer
      */
-    private $id;
+    private $type;
+
+    /**
+     * @var integer
+     */
+    private $actionId;
 
     /**
      * @var \Shop\DiscountBundle\Entity\Action
@@ -48,16 +56,6 @@ class ActionCondition extends AbstractEntity
     private $gifts;
 
     /**
-     * @var integer
-     */
-    private $type;
-
-    /**
-     * @var integer
-     */
-    private $discountType;
-
-    /**
      * @var float
      */
     private $discountPercent;
@@ -71,16 +69,6 @@ class ActionCondition extends AbstractEntity
      * @var integer
      */
     private $discountPriceCurrencyNumericCode;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $discountCategories;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $discountProposals;
 
     /**
      * @var integer
@@ -100,9 +88,7 @@ class ActionCondition extends AbstractEntity
         $this->priority = 1;
         $this->gifts = new ArrayCollection();
         $this->categories = new ArrayCollection();
-        $this->discountCategories = new ArrayCollection();
         $this->proposals = new ArrayCollection();
-        $this->discountProposals = new ArrayCollection();
     }
 
     /**
@@ -127,14 +113,7 @@ class ActionCondition extends AbstractEntity
      */
     public function getIsPriceDiscount()
     {
-        return in_array($this->getDiscountType(), [
-            self::DISCOUNT_TYPE_PRICE,
-            self::DISCOUNT_TYPE_GIFT_AND_PRICE,
-            self::DISCOUNT_TYPE_GIFT_OR_PRICE,
-            self::DISCOUNT_TYPE_PERCENT,
-            self::DISCOUNT_TYPE_GIFT_AND_PERCENT,
-            self::DISCOUNT_TYPE_GIFT_OR_PERCENT,
-        ]);
+        return in_array($this->getType(), ActionConditionData::getDiscountTypes());
     }
 
     /**
@@ -173,7 +152,7 @@ class ActionCondition extends AbstractEntity
     /**
      * Set action
      *
-     * @param \Shop\DiscountBundle\Entity\ActionInterface $action
+     * @param \Shop\DiscountBundle\Action\ActionInterface $action
      * @return ActionCondition
      */
     public function setAction(ActionInterface $action = null)
@@ -191,29 +170,6 @@ class ActionCondition extends AbstractEntity
     public function getAction()
     {
         return $this->action;
-    }
-
-    /**
-     * Set type
-     *
-     * @param integer $type
-     * @return ActionCondition
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return integer 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
@@ -263,26 +219,26 @@ class ActionCondition extends AbstractEntity
     }
 
     /**
-     * Set discountType
+     * Set type
      *
      * @param integer $discountType
      * @return ActionCondition
      */
-    public function setDiscountType($discountType)
+    public function setType($discountType)
     {
-        $this->discountType = $discountType;
+        $this->type = $discountType;
 
         return $this;
     }
 
     /**
-     * Get discountType
+     * Get type
      *
      * @return integer
      */
-    public function getDiscountType()
+    public function getType()
     {
-        return $this->discountType;
+        return $this->type;
     }
 
     /**
@@ -475,91 +431,6 @@ class ActionCondition extends AbstractEntity
             return $actionConditionProposal->getProposalId();
         })->toArray();
     }
-
-    /**
-     * Add discountCategories
-     *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountCategory $discountCategories
-     * @return ActionCondition
-     */
-    public function addDiscountCategory(ActionConditionDiscountCategory $discountCategories)
-    {
-        $this->discountCategories[] = $discountCategories;
-
-        return $this;
-    }
-
-    /**
-     * Remove discountCategories
-     *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountCategory $discountCategories
-     */
-    public function removeDiscountCategory(ActionConditionDiscountCategory $discountCategories)
-    {
-        $this->discountCategories->removeElement($discountCategories);
-    }
-
-    /**
-     * Get discountCategories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDiscountCategories()
-    {
-        return $this->discountCategories;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDiscountCategoryIds(){
-        return $this->getDiscountCategories()->map(function(ActionConditionDiscountCategory $actionConditionDiscountCategory){
-            return $actionConditionDiscountCategory->getCategoryId();
-        })->toArray();
-    }
-
-    /**
-     * Add discountProposals
-     *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountProposal $discountProposal
-     * @return ActionCondition
-     */
-    public function addDiscountProposal(ActionConditionDiscountProposal $discountProposal)
-    {
-        $this->discountProposals[] = $discountProposal;
-        $discountProposal->setCondition($this);
-        return $this;
-    }
-
-    /**
-     * Remove discountProposals
-     *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionDiscountProposal $discountProposal
-     */
-    public function removeDiscountProposal(ActionConditionDiscountProposal $discountProposal)
-    {
-        $this->discountProposals->removeElement($discountProposal);
-    }
-
-    /**
-     * Get discountProposals
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDiscountProposals()
-    {
-        return $this->discountProposals;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDiscountProposalIds(){
-        return $this->getDiscountProposals()->map(function(ActionConditionDiscountProposal $actionConditionDiscountProposal){
-            return $actionConditionDiscountProposal->getProposalId();
-        })->toArray();
-    }
-
 
     /**
      * Add gifts

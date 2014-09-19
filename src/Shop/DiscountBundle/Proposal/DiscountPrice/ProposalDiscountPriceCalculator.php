@@ -29,7 +29,7 @@ class ProposalDiscountPriceCalculator {
 
     /**
      * @param $proposalPrice
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface[] $discountConditions
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[] $discountConditions
      * @return null|DiscountPrice
      */
     public function calculate($proposalPrice, array $discountConditions = []){

@@ -24,7 +24,6 @@ class ActionConditionCategory extends AbstractEntity
      */
     private $categoryId;
 
-
     /**
      * Get id
      *

@@ -1,7 +1,7 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\DiscountPrice;
 use Shop\DiscountBundle\Price\DiscountPrice;
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Weasty\Money\Price\PriceInterface;
 
 /**
@@ -38,10 +38,10 @@ class ProposalDiscountPriceBuilder {
             return null;
         }
 
-        switch($discountCondition->getDiscountType()){
-            case ActionConditionInterface::DISCOUNT_TYPE_PRICE:
-            case ActionConditionInterface::DISCOUNT_TYPE_GIFT_AND_PRICE:
-            case ActionConditionInterface::DISCOUNT_TYPE_GIFT_OR_PRICE:
+        switch($discountCondition->getType()){
+            case ActionConditionInterface::TYPE_DISCOUNT_PRICE:
+            case ActionConditionInterface::TYPE_GIFT_AND_DISCOUNT_PRICE:
+            case ActionConditionInterface::TYPE_GIFT_OR_DISCOUNT_PRICE:
 
                 $discountPriceValue = $this->currencyConverter->convert(
                     $discountCondition->getDiscountPriceValue(),
@@ -64,9 +64,9 @@ class ProposalDiscountPriceBuilder {
                 }
 
                 break;
-            case ActionConditionInterface::DISCOUNT_TYPE_PERCENT:
-            case ActionConditionInterface::DISCOUNT_TYPE_GIFT_AND_PERCENT:
-            case ActionConditionInterface::DISCOUNT_TYPE_GIFT_OR_PERCENT:
+            case ActionConditionInterface::TYPE_DISCOUNT_PERCENT:
+            case ActionConditionInterface::TYPE_GIFT_AND_DISCOUNT_PERCENT:
+            case ActionConditionInterface::TYPE_GIFT_OR_DISCOUNT_PERCENT:
 
                 $discountPriceValue = ($proposalPrice->getValue() - (($proposalPrice->getValue() / 100) * $discountCondition->getDiscountPercent()));
 

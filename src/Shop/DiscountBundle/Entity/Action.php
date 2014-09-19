@@ -3,6 +3,8 @@
 namespace Shop\DiscountBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Shop\DiscountBundle\Action\ActionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
@@ -237,7 +239,7 @@ class Action extends AbstractEntity
     /**
      * Add conditions
      *
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface $condition
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $condition
      * @return Action
      */
     public function addCondition(ActionConditionInterface $condition)

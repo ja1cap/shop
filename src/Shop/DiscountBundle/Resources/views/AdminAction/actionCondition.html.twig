@@ -17,47 +17,47 @@
             };
 
             var $gifts = $(selectors.gifts);
-            var $discountType = $(selectors.discountType);
+            var $type = $(selectors.discountType);
             var $discountPercent = $(selectors.discountPercent);
             var $discountPrice = $(selectors.discountPrice);
             var $discountCategories = $(selectors.discountCategories);
             var $discountProposals = $(selectors.discountProposals);
 
             var methods = {
-                changeDiscountType : function(discountType){
+                changeDiscountType : function(type){
                     discountType = parseInt(discountType);
                     switch (discountType){
-                        case {{ constant('DISCOUNT_TYPE_PERCENT', actionCondition) }}:
+                        case {{ constant('TYPE_DISCOUNT_PERCENT', actionCondition) }}:
                             this.showDiscountPercent();
                             this.showDiscountCategories();
                             this.showDiscountProposals();
                             this.hideDiscountPrice();
                             this.hideGifts();
                             break;
-                        case {{ constant('DISCOUNT_TYPE_PRICE', actionCondition) }}:
+                        case {{ constant('TYPE_DISCOUNT_PRICE', actionCondition) }}:
                             this.showDiscountPrice();
                             this.hideDiscountPercent();
                             this.hideGifts();
                             this.showDiscountCategories();
                             this.showDiscountProposals();
                             break;
-                        case {{ constant('DISCOUNT_TYPE_GIFT', actionCondition) }}:
+                        case {{ constant('TYPE_GIFT', actionCondition) }}:
                             this.showGifts();
                             this.hideDiscountPrice();
                             this.hideDiscountPercent();
                             this.hideDiscountCategories();
                             this.hideDiscountProposals();
                             break;
-                        case {{ constant('DISCOUNT_TYPE_GIFT_AND_PERCENT', actionCondition) }}:
-                        case {{ constant('DISCOUNT_TYPE_GIFT_OR_PERCENT', actionCondition) }}:
+                        case {{ constant('TYPE_GIFT_AND_DISCOUNT_PERCENT', actionCondition) }}:
+                        case {{ constant('TYPE_GIFT_OR_DISCOUNT_PERCENT', actionCondition) }}:
                             this.showGifts();
                             this.showDiscountCategories();
                             this.showDiscountProposals();
                             this.showDiscountPercent();
                             this.hideDiscountPrice();
                             break;
-                        case {{ constant('DISCOUNT_TYPE_GIFT_AND_PRICE', actionCondition) }}:
-                        case {{ constant('DISCOUNT_TYPE_GIFT_OR_PRICE', actionCondition) }}:
+                        case {{ constant('TYPE_GIFT_AND_DISCOUNT_PRICE', actionCondition) }}:
+                        case {{ constant('TYPE_GIFT_OR_DISCOUNT_PRICE', actionCondition) }}:
                             this.showGifts();
                             this.showDiscountCategories();
                             this.showDiscountProposals();

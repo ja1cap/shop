@@ -2,8 +2,9 @@
 namespace Shop\DiscountBundle\Proposal\ActionCondition;
 
 use Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator;
-use Shop\DiscountBundle\Entity\ActionInterface;
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
+use Shop\DiscountBundle\Action\ActionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
+use Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface;
 use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 
@@ -30,8 +31,8 @@ class ProposalActionConditionsBuilder {
     }
 
     /**
-     * @param ActionConditionInterface $a
-     * @param ActionConditionInterface $b
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $a
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $b
      * @return int
      */
     public function compareConditions(ActionConditionInterface $a, ActionConditionInterface $b){
@@ -54,7 +55,7 @@ class ProposalActionConditionsBuilder {
 
         $proposalActionConditions = new ProposalActionConditions($this->discountPriceCalculator, $proposal);
 
-        if(!$actionConditionIds || !$proposal instanceof ProposalInterface){
+        if(!$actionConditionIds || !$proposal instanceof ProposalInterface || !$proposalPrice instanceof ProposalPriceInterface){
             return $proposalActionConditions;
         }
 
@@ -68,20 +69,9 @@ class ProposalActionConditionsBuilder {
                 $actionCondition instanceof ActionConditionInterface
                 && $actionCondition->getAction()->getStatus() == ActionInterface::STATUS_ON
                 && (
-                    (
-                        in_array($proposal->getId(), $actionCondition->getDiscountProposalIds())
-                        || (
-                            in_array($proposal->getId(), $actionCondition->getProposalIds())
-                            && !$actionCondition->getDiscountProposalIds()
-                        )
-                    )
-                    || (
-                        in_array($proposal->getCategoryId(), $actionCondition->getDiscountCategoryIds())
-                        || (
-                            in_array($proposal->getCategoryId(), $actionCondition->getCategoryIds())
-                            && !$actionCondition->getDiscountCategoryIds()
-                        )
-                    )
+                    in_array($proposal->getId(), $actionCondition->getProposalIds())
+                    ||
+                    in_array($proposal->getCategoryId(), $actionCondition->getCategoryIds())
                 )
             ){
                 $actionConditions[] = $actionCondition;

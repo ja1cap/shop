@@ -1,23 +1,22 @@
 <?php
-namespace Shop\DiscountBundle\Element;
+namespace Shop\DiscountBundle\ActionCondition;
 
 use Shop\DiscountBundle\Entity\ActionCondition;
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
-use Shop\DiscountBundle\Entity\ActionInterface;
+use Shop\DiscountBundle\Action\ActionInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Class ActionConditionElement
- * @package Shop\DiscountBundle\CollectionElement
+ * @package Shop\DiscountBundle\ActionCondition
  */
 class ActionConditionElement extends CacheCollectionElement
     implements ActionConditionInterface
 {
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionInterface
+     * @var \Shop\DiscountBundle\Action\ActionInterface
      */
     protected $action;
 
@@ -32,9 +31,7 @@ class ActionConditionElement extends CacheCollectionElement
         if($entity instanceof ActionConditionInterface){
             $data['isPriceDiscount'] = $entity->getIsPriceDiscount();
             $data['categoryIds'] = $entity->getCategoryIds();
-            $data['discountCategoryIds'] = $entity->getDiscountCategoryIds();
             $data['proposalIds'] = $entity->getProposalIds();
-            $data['discountProposalIds'] = $entity->getDiscountProposalIds();
         }
         return $data;
     }
@@ -45,14 +42,6 @@ class ActionConditionElement extends CacheCollectionElement
     public function getId()
     {
         return $this->getIdentifier();
-    }
-
-    /**
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->data['type'];
     }
 
     /**
@@ -80,7 +69,7 @@ class ActionConditionElement extends CacheCollectionElement
     }
 
     /**
-     * @param ActionInterface $action
+     * @param \Shop\DiscountBundle\Action\ActionInterface $action
      * @return $this
      */
     public function setAction(ActionInterface $action)
@@ -90,7 +79,7 @@ class ActionConditionElement extends CacheCollectionElement
     }
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionInterface
+     * @return \Shop\DiscountBundle\Action\ActionInterface
      */
     public function getAction()
     {
@@ -109,13 +98,13 @@ class ActionConditionElement extends CacheCollectionElement
     }
 
     /**
-     * Get discountType
+     * Get type
      *
      * @return integer
      */
-    public function getDiscountType()
+    public function getType()
     {
-        return $this->data['discountType'];
+        return $this->data['type'];
     }
 
     /**
@@ -159,25 +148,9 @@ class ActionConditionElement extends CacheCollectionElement
     /**
      * @return array
      */
-    public function getDiscountCategoryIds()
-    {
-        return $this->data['discountCategoryIds'];
-    }
-
-    /**
-     * @return array
-     */
     public function getProposalIds()
     {
         return $this->data['proposalIds'];
-    }
-
-    /**
-     * @return array
-     */
-    public function getDiscountProposalIds()
-    {
-        return $this->data['discountProposalIds'];
     }
 
     /**

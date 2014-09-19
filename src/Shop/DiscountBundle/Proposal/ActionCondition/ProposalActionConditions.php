@@ -1,7 +1,7 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\ActionCondition;
 
-use Shop\DiscountBundle\Entity\ActionConditionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator;
 use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 
@@ -12,22 +12,22 @@ use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 class ProposalActionConditions {
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @var \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     protected $conditions;
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionConditionInterface
+     * @var \Shop\DiscountBundle\ActionCondition\ActionConditionInterface
      */
     protected $mainCondition;
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @var \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     protected $complexConditions;
 
     /**
-     * @var \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @var \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     protected $singleConditions;
 
@@ -59,7 +59,7 @@ class ProposalActionConditions {
     }
 
     /**
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface[] $conditions
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[] $conditions
      * @param boolean $resetConditionGroups
      * @return $this
      */
@@ -73,7 +73,7 @@ class ProposalActionConditions {
     }
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     public function getConditions()
     {
@@ -90,7 +90,7 @@ class ProposalActionConditions {
     }
 
     /**
-     * @return null|ActionConditionInterface
+     * @return null|\Shop\DiscountBundle\ActionCondition\ActionConditionInterface
      */
     public function getMainCondition(){
 
@@ -106,7 +106,7 @@ class ProposalActionConditions {
     }
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     public function getSingleConditions()
     {
@@ -119,7 +119,7 @@ class ProposalActionConditions {
     }
 
     /**
-     * @return \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     public function getComplexConditions()
     {
@@ -132,8 +132,8 @@ class ProposalActionConditions {
     }
 
     /**
-     * @param \Shop\DiscountBundle\Entity\ActionConditionInterface[] $conditions
-     * @return \Shop\DiscountBundle\Entity\ActionConditionInterface[]
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[] $conditions
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
      */
     public function getDiscountConditions($conditions = [])
     {

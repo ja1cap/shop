@@ -3,7 +3,7 @@ namespace Shop\CatalogBundle\Estimator\Feature;
 
 use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
 use Shop\CatalogBundle\Proposal\Feature\FeaturesBuilder;
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Weasty\Bundle\CatalogBundle\Feature\FeatureInterface;
 use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
 
@@ -53,7 +53,7 @@ class EstimatedFeaturesBuilder extends FeaturesBuilder {
 
     /**
      * @param \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface $feature
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface $price
      * @param \Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface $parameterValue
      * @return \Weasty\Bundle\CatalogBundle\Proposal\Feature\ProposalFeatureValueInterface
      */

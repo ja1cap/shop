@@ -1,0 +1,54 @@
+{% import "ShopDiscountBundle:AdminActionCondition:condition-macros.html.twig" as _condition %}
+{% set actionProposals = action.actionProposals %}
+{% if actionProposals|length > 0 %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Категория</th>
+            <th>Товар</th>
+            <th>Описание</th>
+            <th>Приоритет</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for actionProposal in actionProposals %}
+            <tr>
+                <td>{{ actionProposal.id }}</td>
+                <td>
+                    {{ actionProposal.proposal.category.name }}
+                </td>
+                <td>
+                    {{ actionProposal.proposal.name }}
+                </td>
+                <td>
+                    {{ _condition.condition_type(actionProposal) }}
+                    <div class="well-v-small" style="max-width: 450px;">
+                        {{ _condition.condition_short_description(actionProposal) }}
+                    </div>
+                    {{ _condition.condition_complex(actionProposal) }}
+                </td>
+                <td>{{ actionProposal.priority }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{{ path('shop_discount_admin_action_proposal', {'actionId' : action.id, 'id' : actionProposal.id }) }}" class="btn btn-default">
+                            Изменить
+                        </a>
+                        <a href="{{ path('shop_discount_admin_delete_action_condition', {'actionId' : action.id, 'id' : actionProposal.id }) }}" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                            Удалить
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="well">
+        Ни один товар не выбран -
+        <a href="{{ path('shop_discount_admin_action_proposal', {'actionId' : action.id}) }}" class="primary-link">
+            выбрать товар
+        </a>
+    </div>
+{% endif %}

@@ -1,11 +1,11 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Price;
+namespace Shop\CatalogBundle\Price;
 
 use Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface as BaseProposalPriceInterface;
 
 /**
  * Interface ProposalPriceInterface
- * @package Shop\CatalogBundle\Proposal\Price
+ * @package Shop\CatalogBundle\Price
  */
 interface ProposalPriceInterface extends BaseProposalPriceInterface {
 

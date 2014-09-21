@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <mapped-superclass name="Shop\DiscountBundle\Entity\AbstractActionCondition">
+
+        <field name="actionId" type="integer"/>
+
+        <field name="type" type="integer" length="1"/>
+
+        <field name="discountPercent" type="float" nullable="true"/>
+        <field name="discountPriceValue" type="float" nullable="true"/>
+        <field name="discountPriceCurrencyNumericCode" type="integer" length="3" nullable="true"/>
+
+        <field name="priority" type="integer" column-definition="int(6) NOT NULL DEFAULT 1"/>
+        <field name="isComplex" type="boolean"/>
+
+    </mapped-superclass>
+</doctrine-mapping>

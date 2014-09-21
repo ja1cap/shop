@@ -12,9 +12,20 @@
         <field name="position" type="integer"/>
 
         <field name="imageId" type="integer" nullable="true" column="image_id"/>
+        <field name="basicConditionId" type="integer" nullable="true" column="basicConditionId"/>
         <field name="title" type="string" column="title" length="255"/>
         <field name="description" type="text" column="description" nullable="true"/>
         <field name="content" type="text" column="content" nullable="true"/>
+
+        <one-to-one field="basicCondition" target-entity="BasicActionCondition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="basicConditionId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
 
         <one-to-many target-entity="ActionCondition" field="conditions" mapped-by="action">
             <cascade>
@@ -23,6 +34,7 @@
             </cascade>
             <order-by>
                 <order-by-field name="priority" direction="DESC"/>
+                <order-by-field name="id" direction="DESC"/>
             </order-by>
         </one-to-many>
 

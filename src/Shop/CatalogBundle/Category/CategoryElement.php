@@ -49,8 +49,6 @@ class CategoryElement extends CacheCollectionElement
         if($entity instanceof Category){
 
             $categoryParameterCollection = $collection->getCollectionManager()->getCollection('ShopCatalogBundle:CategoryParameter');
-            $categoryParameterGroupCollection = $collection->getCollectionManager()->getCollection('ShopCatalogBundle:CategoryParameterGroup');
-
             foreach($entity->getParameters() as $categoryParameter){
 
                 $categoryParameterElement = $categoryParameterCollection->saveElement($categoryParameter);
@@ -63,6 +61,7 @@ class CategoryElement extends CacheCollectionElement
 
             }
 
+            $categoryParameterGroupCollection = $collection->getCollectionManager()->getCollection('ShopCatalogBundle:CategoryParameterGroup');
             foreach($entity->getParameterGroups() as $categoryParameterGroup){
 
                 $categoryParameterGroupElement = $categoryParameterGroupCollection->saveElement($categoryParameterGroup);

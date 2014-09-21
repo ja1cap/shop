@@ -1,16 +1,21 @@
 <?php
 namespace Shop\DiscountBundle\Action;
+
 use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
-use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Interface ActionInterface
  * @package Shop\DiscountBundle\Action
  */
-interface ActionInterface extends EntityInterface {
+interface ActionInterface {
 
     const STATUS_ON = 1;
     const STATUS_OFF = 2;
+
+    /**
+     * @return int
+     */
+    public function getId();
 
     /**
      * @return int
@@ -29,6 +34,13 @@ interface ActionInterface extends EntityInterface {
     public function getPosition();
 
     /**
+     * Get basicCondition
+     *
+     * @return \Shop\DiscountBundle\Entity\BasicActionCondition
+     */
+    public function getBasicCondition();
+
+    /**
      * Add conditions
      *
      * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $condition
@@ -43,4 +55,26 @@ interface ActionInterface extends EntityInterface {
      */
     public function getConditions();
 
-} 
+    /**
+     * @return \Shop\DiscountBundle\Category\ActionCategoryInterface[]
+     */
+    public function getActionCategories();
+
+    /**
+     * Get \Shop\CatalogBundle\Entity\Category ids
+     * @return array
+     */
+    public function getCategoryIds();
+
+    /**
+     * @return \Shop\DiscountBundle\Proposal\ActionProposalInterface[]
+     */
+    public function getActionProposals();
+
+    /**
+     * Get \Shop\CatalogBundle\Entity\Proposal ids
+     * @return array
+     */
+    public function getProposalIds();
+
+}

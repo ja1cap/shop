@@ -62,6 +62,14 @@
         </many-to-one>
 
         <many-to-many target-entity="Category" field="additionalCategories">
+            <join-table name="CategoryAdditionalCategory">
+                <join-columns>
+                    <join-column name="categoryId" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="additionalCategoryId" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
             <order-by>
                 <order-by-field name="name" direction="ASC"/>
             </order-by>

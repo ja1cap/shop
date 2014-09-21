@@ -186,7 +186,7 @@ class EstimatorBuilder {
 
     /**
      * @param Estimator $estimator
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface[] $prices
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface[] $prices
      * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
      */
     protected function buildEstimatedFeatures(Estimator $estimator, $prices = []){
@@ -213,7 +213,7 @@ class EstimatorBuilder {
     }
 
     /**
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface $price
      * @return EstimatedFeatureValue
      */
     protected function buildRateFeatureValue($price){
@@ -245,7 +245,7 @@ class EstimatorBuilder {
     }
 
     /**
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface $price
      * @param \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditions $actionConditions
      * @return PriceFeatureValue
      */
@@ -305,7 +305,7 @@ class EstimatorBuilder {
 
     /**
      * @param $priceId
-     * @return \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface
+     * @return \Shop\CatalogBundle\Price\ProposalPriceInterface
      */
     protected function findPrice($priceId){
         return $this->priceRepository->findOneBy(array(

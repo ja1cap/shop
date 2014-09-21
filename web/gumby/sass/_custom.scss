@@ -428,11 +428,18 @@ body {
   }
 
   .well-v-small {
-    padding: 10px 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .well-v-default {
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
   .well-v {
-    padding: 40px 0;
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 
   .breadcrumb {
@@ -455,7 +462,7 @@ body {
   }
 
   button {
-    font-family: "Ubuntu";
+    margin: 0;
   }
 
   form {
@@ -1139,6 +1146,323 @@ body {
 
   }
 
+  .admin-container {
+
+    .row {
+      max-width: 1170px;
+    }
+
+    background: white;
+    padding-bottom: 20px;
+
+    .header-container {
+
+      margin-bottom: 20px;
+      position: relative;
+      color: white;
+      background: #4a4d50;
+      @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px);
+
+      .header {
+
+        height: 70px;
+
+        .header-logo {
+
+          float: left;
+          overflow: hidden;
+
+          .image-wrapper {
+            top: -2px;
+            position: relative;
+            float: left;
+            &, img {
+              height: 55px;
+            }
+          }
+
+          .title {
+
+            color: white;
+            float: left;
+            display: block;
+            margin: 0 20px;
+            font-size: 20px;
+            line-height: 70px;
+
+          }
+
+        }
+
+        .user-container {
+          float: right;
+          padding: 0 10px;
+          color: white;
+          line-height: 70px;
+          a {
+            color: white;
+            line-height: 70px;
+            text-decoration: underline;
+          }
+        }
+
+      }
+
+    }
+
+    .dashboard {
+
+      .tiles {
+
+        li {
+
+          padding-bottom: 2%;
+
+          & > a {
+
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            line-height: 160px;
+            background: #3085d6;
+            display: block;
+
+          }
+
+        }
+
+      }
+
+    }
+
+    .login-form-container {
+
+      form {
+
+        input[type='submit']{
+          width: 100%;
+        }
+
+      }
+
+    }
+
+    form {
+
+      label {
+        display: inline;
+        font-size: 16px;
+        margin-bottom: 5px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 50px;
+        border: 1px solid #CCCCCC;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      select {
+        min-width: 100px;
+        display: block;
+        height: 28px;
+        margin-top: 2px;
+        margin-bottom: 10px;
+      }
+
+      .chosen-container {
+        margin-bottom: 10px;
+      }
+
+      input[type="file"] {
+        display: block;
+      }
+
+      input[type="text"], input[type="password"], input[type="email"] {
+
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #CCCCCC;
+
+        &[type="checkbox"] {
+          width: auto;
+        }
+
+      }
+
+      button, input {
+
+        &[type="submit"] {
+
+          cursor: pointer;
+          display: block;
+          border: none;
+          padding: 10px;
+          margin: 10px 0;
+          width: 200px;
+          color: white;
+          font-size: 20px;
+          background: #3085d6;
+          outline: none;
+
+        }
+
+      }
+
+    }
+
+    .tabs.vertical {
+
+      & > .tab-content {
+        padding-top: 0px;
+      }
+
+      & > .tab-nav.navigation-menu > li {
+
+        padding: 0;
+        margin: 0;
+
+        &.active {
+          position: static;
+          a {
+            border: none;
+            background: #3085d6;
+            color: white;
+          }
+        }
+
+        a {
+          background: white;
+          line-height: 50px;
+          height: 50px;
+          font-size: 16px;
+          border: none;
+          text-shadow: none;
+          @include border-radius(0px);
+        }
+      }
+
+    }
+
+  }
+
+  .row-fluid {
+    width: 100%;
+    @include pie-clearfix;
+  }
+
+  $proposal-image-side : 284px;
+
+  .proposal-breadcrumb {
+
+    ul {
+
+      overflow: hidden;
+      margin-bottom: 15px;
+
+      li {
+
+        position: relative;
+        padding: 0 15px 0 0;
+        margin: 0;
+        float: left;
+
+        a {
+          line-height: 30px;
+          color: #34495e;
+          font-size: 25px;
+        }
+
+        .delimiter {
+          display: block;
+          position: absolute;
+          right: 5px;
+          top: 0;
+          color: #CCCCCC;
+          padding: 3px 0 0;
+        }
+
+        .current {
+
+          padding: 0;
+          display: block;
+          line-height: 30px;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .ui-sortable {
+
+    width: 100%;
+    display: block;
+    margin: 0 0 10px;
+    border-bottom: 1px solid #cccccc;
+
+    li {
+
+      line-height: 28px;
+      overflow: hidden;
+      background: white;
+      cursor: move;
+      margin: 0;
+      padding: 5px 10px;
+      display: block;
+      border: 1px solid #cccccc;
+      border-bottom: none;
+
+      .buttons {
+        float: right;
+      }
+
+      &.ui-sortable-helper {
+        border-bottom: 1px solid #cccccc;
+      }
+
+      &.ui-state-highlight {
+
+        min-height: 42px;
+        background: #fbdca0;
+
+      }
+
+    }
+
+  }
+
+  .proposal-actions-container {
+
+    //  border: 1px solid #6BC95E;
+    //  @include border-radius(7px);
+    margin: 10px 0;
+
+    .proposal-actions {
+
+      .proposal-action {
+
+        margin: 10px;
+
+        .proposal-action-image-container {
+
+          display: block;
+          width: 215px;
+          height: 330px;
+          background: #f1f1f1;
+
+        }
+
+      }
+
+    }
+
+  }
+
 }
 
 .proposal-body {
@@ -1350,319 +1674,6 @@ body {
           }
 
         }
-
-      }
-
-    }
-
-  }
-
-}
-
-
-.admin-container {
-
-  background: white;
-  padding-bottom: 20px;
-
-  .header-container {
-
-    margin-bottom: 20px;
-    position: relative;
-    color: white;
-    background: #4a4d50;
-    @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px);
-
-    .header {
-
-      height: 70px;
-
-      .header-logo {
-
-        float: left;
-        overflow: hidden;
-
-        .image-wrapper {
-          top: -2px;
-          position: relative;
-          float: left;
-          &, img {
-            height: 55px;
-          }
-        }
-
-        .title {
-
-          color: white;
-          float: left;
-          display: block;
-          margin: 0 20px;
-          font-size: 20px;
-          line-height: 70px;
-
-        }
-
-      }
-
-      .user-container {
-        float: right;
-        padding: 0 10px;
-        color: white;
-        line-height: 70px;
-        a {
-          color: white;
-          line-height: 70px;
-          text-decoration: underline;
-        }
-      }
-
-    }
-
-  }
-
-  .dashboard {
-
-    .tiles {
-
-      li {
-
-        padding-bottom: 2%;
-
-        & > a {
-
-          text-align: center;
-          color: white;
-          font-size: 20px;
-          line-height: 160px;
-          background: #3085d6;
-          display: block;
-
-        }
-
-      }
-
-    }
-
-  }
-
-  .login-form-container {
-
-    form {
-
-      input[type='submit']{
-        width: 100%;
-      }
-
-    }
-
-  }
-
-  form {
-
-    label {
-      display: inline;
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-
-    textarea {
-      width: 100%;
-      height: 50px;
-      border: 1px solid #CCCCCC;
-      padding: 5px;
-      margin-bottom: 10px;
-    }
-
-    select {
-      display: block;
-      height: 28px;
-      margin-top: 2px;
-      margin-bottom: 10px;
-    }
-
-    .chosen-container {
-      margin-bottom: 10px;
-    }
-
-    input[type="file"] {
-      display: block;
-    }
-
-    input[type="text"], input[type="password"], input[type="email"] {
-
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 10px;
-      border: 1px solid #CCCCCC;
-
-      &[type="checkbox"] {
-        width: auto;
-      }
-
-    }
-
-    button, input {
-
-      &[type="submit"] {
-
-        cursor: pointer;
-        display: block;
-        border: none;
-        padding: 10px;
-        margin: 10px 0;
-        width: 200px;
-        color: white;
-        font-size: 20px;
-        background: #3085d6;
-        outline: none;
-
-      }
-
-    }
-
-  }
-
-  .tabs.vertical {
-
-    .tab-content {
-      padding-top: 0px;
-    }
-
-    .tab-nav.navigation-menu > li {
-
-      padding: 0;
-      margin: 0;
-
-      &.active {
-        position: static;
-        a {
-          border: none;
-          background: #3085d6;
-          color: white;
-        }
-      }
-
-      a {
-        background: white;
-        line-height: 50px;
-        height: 50px;
-        font-size: 16px;
-        border: none;
-        text-shadow: none;
-        @include border-radius(0px);
-      }
-    }
-
-  }
-
-}
-
-.row-fluid {
-  width: 100%;
-  @include pie-clearfix;
-}
-
-$proposal-image-side : 284px;
-
-.proposal-breadcrumb {
-
-  ul {
-
-    overflow: hidden;
-    margin-bottom: 15px;
-
-    li {
-
-      position: relative;
-      padding: 0 15px 0 0;
-      margin: 0;
-      float: left;
-
-      a {
-        line-height: 30px;
-        color: #34495e;
-        font-size: 25px;
-      }
-
-      .delimiter {
-        display: block;
-        position: absolute;
-        right: 5px;
-        top: 0;
-        color: #CCCCCC;
-        padding: 3px 0 0;
-      }
-
-      .current {
-
-        padding: 0;
-        display: block;
-        line-height: 30px;
-
-      }
-
-    }
-
-  }
-
-}
-
-.ui-sortable {
-
-  width: 100%;
-  display: block;
-  margin: 0 0 10px;
-  border-bottom: 1px solid #cccccc;
-
-  li {
-
-    line-height: 28px;
-    overflow: hidden;
-    background: white;
-    cursor: move;
-    margin: 0;
-    padding: 5px 10px;
-    display: block;
-    border: 1px solid #cccccc;
-    border-bottom: none;
-
-    .buttons {
-      float: right;
-    }
-
-    &.ui-sortable-helper {
-      border-bottom: 1px solid #cccccc;
-    }
-
-    &.ui-state-highlight {
-
-      min-height: 42px;
-      background: #fbdca0;
-
-    }
-
-  }
-
-}
-
-.proposal-actions-container {
-
-//  border: 1px solid #6BC95E;
-//  @include border-radius(7px);
-  margin: 10px 0;
-
-  .proposal-actions {
-
-    .proposal-action {
-
-      margin: 10px;
-
-      .proposal-action-image-container {
-
-        display: block;
-        width: 215px;
-        height: 330px;
-        background: #f1f1f1;
 
       }
 

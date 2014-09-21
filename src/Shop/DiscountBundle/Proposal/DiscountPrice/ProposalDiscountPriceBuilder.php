@@ -34,7 +34,15 @@ class ProposalDiscountPriceBuilder {
             return null;
         }
 
-        if(!$discountCondition->getIsPriceDiscount()){
+        if($discountCondition->getType() == ActionConditionInterface::TYPE_INHERIT){
+            $discountCondition = $discountCondition->getAction()->getBasicCondition();
+        }
+
+        if(!$discountCondition){
+            return null;
+        }
+
+        if(!$discountCondition->getIsDiscountCondition()){
             return null;
         }
 

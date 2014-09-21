@@ -1,9 +1,6 @@
 <?php
 namespace Shop\CatalogBundle\Twig;
 
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
-use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
-use Weasty\Money\Price\PriceInterface;
 use Weasty\Money\Twig\AbstractMoneyExtension;
 
 /**
@@ -14,14 +11,9 @@ class PriceExtension extends AbstractMoneyExtension
 {
 
     /**
-     * @var \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
+     * @var \Shop\CatalogBundle\Price\Catalog\CatalogPriceBuilder
      */
-    protected $cacheCollectionManager;
-
-    /**
-     * @var \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder
-     */
-    protected $proposalActionConditionsBuilder;
+    protected $catalogPriceBuilder;
 
     /**
      * Returns a list of filters to add to the existing list.
@@ -57,100 +49,6 @@ class PriceExtension extends AbstractMoneyExtension
     }
 
     /**
-     * @param $proposalPriceData
-     * @return array
-     */
-    public function buildCatalogPrice($proposalPriceData){
-
-        $result = [
-            'isMax' => false,
-            'price' => null,
-            'discountPrice' => null,
-        ];
-
-        $price = null;
-        $priceId = null;
-
-        //Check if price and priceId are defined
-        if(isset($proposalPriceData['price']) && isset($proposalPriceData['priceId'])){
-
-            $price = $proposalPriceData['price'];
-            $priceId = $proposalPriceData['priceId'];
-
-        } else {
-
-            //@TODO throw exception
-
-        }
-
-        //Return basic result if price is null
-        if($price === null){
-            return $result;
-        }
-
-        //Exchange price if it is instance of PriceInterface
-        if($price instanceof PriceInterface){
-            $exchangedPrice = $this->getCurrencyConverter()->convert($price);
-        } else {
-            $exchangedPrice = floatval((string)$price);
-        }
-
-        $result['price'] = $exchangedPrice;
-
-        //Build discount price
-        $discountPrice = null;
-        $hasDiscount = (!isset($proposalPriceData['hasDiscount']) || (isset($proposalPriceData['hasDiscount']) && $proposalPriceData['hasDiscount']));
-        if($hasDiscount && $this->getProposalActionConditionsBuilder()){
-
-            $proposal = null;
-            if(isset($proposalPriceData['proposal'])){
-                $proposal = $proposalPriceData['proposal'];
-            }
-
-            $proposalPriceCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Price');
-            $proposalPrice = $proposalPriceCollection->get($priceId);
-
-            $actionConditionIds = null;
-            if(isset($proposalPriceData['actionConditionIds'])){
-                $actionConditionIds = $proposalPriceData['actionConditionIds'];
-            }
-
-            if($proposal instanceof ProposalInterface && $proposalPrice instanceof ProposalPriceInterface && $actionConditionIds){
-                $actionConditions = $this->getProposalActionConditionsBuilder()->build($proposal, $proposalPrice, $actionConditionIds);
-                $discountPrice = $actionConditions->getDiscountPrice($exchangedPrice);
-            }
-
-            $result['discountPrice'] = $discountPrice;
-
-        }
-
-        //Check if max price
-        $isMax = false;
-        if(isset($proposalPriceData['maxPrice'])){
-
-            $maxPrice = $proposalPriceData['maxPrice'];
-            if($maxPrice !== null){
-
-                if($discountPrice){
-
-                    $isMax = ($discountPrice->getValue() >= $maxPrice);
-
-                } else {
-
-                    $isMax = ($exchangedPrice >= $maxPrice);
-
-                }
-
-            }
-
-        }
-        $result['isMax'] = $isMax;
-
-        return $result;
-
-    }
-
-    /**
      * Returns the name of the extension.
      *
      * @return string The extension name
@@ -161,35 +59,19 @@ class PriceExtension extends AbstractMoneyExtension
     }
 
     /**
-     * @return \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder
+     * @param $proposalPriceData
+     * @return array
      */
-    public function getProposalActionConditionsBuilder()
-    {
-        return $this->proposalActionConditionsBuilder;
+    public function buildCatalogPrice($proposalPriceData){
+        return $this->catalogPriceBuilder->build($proposalPriceData);
     }
 
     /**
-     * @param \Shop\DiscountBundle\Proposal\ActionCondition\ProposalActionConditionsBuilder $proposalActionConditionsBuilder
+     * @param \Shop\CatalogBundle\Price\Catalog\CatalogPriceBuilder $catalogPriceBuilder
      */
-    public function setProposalActionConditionsBuilder($proposalActionConditionsBuilder)
+    public function setCatalogPriceBuilder($catalogPriceBuilder)
     {
-        $this->proposalActionConditionsBuilder = $proposalActionConditionsBuilder;
-    }
-
-    /**
-     * @return \Weasty\Doctrine\Cache\Collection\CacheCollectionManager
-     */
-    public function getCacheCollectionManager()
-    {
-        return $this->cacheCollectionManager;
-    }
-
-    /**
-     * @param \Weasty\Doctrine\Cache\Collection\CacheCollectionManager $cacheCollectionManager
-     */
-    public function setCacheCollectionManager($cacheCollectionManager)
-    {
-        $this->cacheCollectionManager = $cacheCollectionManager;
+        $this->catalogPriceBuilder = $catalogPriceBuilder;
     }
 
 } 

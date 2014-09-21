@@ -231,11 +231,15 @@
 
   .order-information-box {
 
+    .proposal-price-container {
+      margin: 0 0 15px;
+    }
+
     .price {
 
-      margin: 0 0 20px;
       display: block;
       font-size: 30px;
+      line-height: 32px;
       color: rgb( 0, 0, 0 );
       font-weight: bold;
 
@@ -256,6 +260,12 @@
         font-weight: bold;
       }
 
+    }
+
+    .action-short-description {
+      color: rgb(198,0,42);
+      text-transform: uppercase;
+      font-weight: bold;
     }
 
     .short-description {

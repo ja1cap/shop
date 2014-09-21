@@ -2,20 +2,24 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Shop\DiscountBundle\Entity\ActionConditionProposal">
+    <entity name="Shop\DiscountBundle\Entity\BasicActionCondition">
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="conditionId" type="integer" column="conditionId"/>
-        <field name="proposalId" type="integer" column="proposalId"/>
-
-        <many-to-one target-entity="ActionCondition" field="condition" inversed-by="proposals">
+        <one-to-one field="action" target-entity="Action" inversed-by="basicCondition">
             <join-columns>
-                <join-column name="conditionId" referenced-column-name="id" on-delete="CASCADE"/>
+                <join-column name="actionId" referenced-column-name="id"/>
             </join-columns>
-        </many-to-one>
+        </one-to-one>
+
+        <one-to-many target-entity="BasicActionConditionGift" field="gifts" mapped-by="condition">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
 
     </entity>
 </doctrine-mapping>

@@ -3,10 +3,10 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
-use Shop\CatalogBundle\Proposal\Price\PriceElement;
+use Shop\CatalogBundle\Price\PriceElement;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 
 /**
  * Class Price

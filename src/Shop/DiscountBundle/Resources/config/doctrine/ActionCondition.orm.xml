@@ -2,36 +2,19 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Shop\DiscountBundle\Entity\ActionCondition" repository-class="Shop\DiscountBundle\Entity\ActionConditionRepository">
+    <entity name="Shop\DiscountBundle\Entity\ActionCondition" repository-class="Shop\DiscountBundle\Entity\ActionConditionRepository" inheritance-type="JOINED">
+
+        <discriminator-column name="conditionType"/>
+        <discriminator-map>
+            <discriminator-mapping value="1" class="ActionCategory"/>
+            <discriminator-mapping value="2" class="ActionProposal"/>
+        </discriminator-map>
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="actionId" type="integer"/>
-        <field name="type" type="integer" length="1" column-definition="int(1) NOT NULL DEFAULT 0"/>
-        <field name="discountPercent" type="float" nullable="true"/>
-        <field name="discountPriceValue" type="float" nullable="true"/>
-        <field name="discountPriceCurrencyNumericCode" type="integer" length="3" nullable="true"/>
-
-        <field name="priority" type="integer" column-definition="int(6) NOT NULL DEFAULT 1"/>
-        <field name="isComplex" type="boolean"/>
-
-        <one-to-many target-entity="ActionConditionCategory" field="categories" mapped-by="condition">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
-        <one-to-many target-entity="ActionConditionProposal" field="proposals" mapped-by="condition">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-many>
-
-        <one-to-many target-entity="ActionConditionGiftProposal" field="gifts" mapped-by="condition">
+        <one-to-many target-entity="ActionConditionGift" field="gifts" mapped-by="condition">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>

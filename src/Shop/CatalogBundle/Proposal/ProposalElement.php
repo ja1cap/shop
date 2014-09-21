@@ -50,7 +50,7 @@ class ProposalElement extends CacheCollectionElement
             $data['routeParameters'] = $entity->getRouteParameters();
 
             /**
-             * @var \Sonata\MediaBundle\Model\MediaInterface[]
+             * @var \Sonata\MediaBundle\Model\MediaInterface[] $images
              */
             $images = $entity->getImages();
             foreach($images as $image){

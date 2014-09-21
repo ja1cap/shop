@@ -99,6 +99,12 @@ class ProposalActionConditions {
             reset($this->conditions);
             $this->mainCondition = current($this->conditions);
 
+            if($this->mainCondition && $this->mainCondition->getType() == ActionConditionInterface::TYPE_INHERIT){
+
+                $this->mainCondition = ($this->mainCondition->getParentCondition() ?: $this->mainCondition);
+
+            }
+
         }
 
         return $this->mainCondition;
@@ -132,27 +138,124 @@ class ProposalActionConditions {
     }
 
     /**
-     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[] $conditions
-     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
+     * @param ActionConditionInterface $condition
+     * @return bool
      */
-    public function getDiscountConditions($conditions = [])
-    {
+    public function isGiftCondition(ActionConditionInterface $condition = null){
 
-        if(!$conditions){
-            $conditions = $this->conditions;
+        if(!$condition){
+            return false;
         }
 
-        return array_filter($conditions, function(ActionConditionInterface $condition){
-            return $condition->getIsPriceDiscount();
-        });
+        if($condition->getType() == $condition::TYPE_INHERIT){
+
+            $parentCondition = $condition->getParentCondition();
+            $result = ($parentCondition ? $parentCondition->getIsGiftCondition() : false);
+
+        } else {
+
+            $result = $condition->getIsGiftCondition();
+
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
+     */
+    public function getGiftConditions()
+    {
+        return array_filter($this->conditions, [$this, 'isGiftCondition']);
+    }
+
+    /**
+     * @return null|ActionConditionInterface
+     */
+    public function getGiftCondition(){
+
+        $giftCondition = null;
+
+        if($this->isGiftCondition($this->getMainCondition())){
+            $giftCondition = $this->getMainCondition();
+        }
+
+        return $giftCondition;
+
+    }
+
+    /**
+     * @param null $giftCondition
+     * @return null|\Shop\CatalogBundle\Proposal\ProposalInterface[]
+     */
+    public function getGifts($giftCondition = null){
+
+        $giftCondition = $giftCondition ?: $this->getGiftCondition();
+        $giftProposals = $giftCondition && $giftCondition->getIsGiftCondition() ? $giftCondition->getGiftProposals() : null;
+
+        return $giftProposals;
+
+    }
+
+    /**
+     * @param ActionConditionInterface $condition
+     * @return bool
+     */
+    public function isDiscountCondition(ActionConditionInterface $condition = null){
+
+        if(!$condition){
+            return false;
+        }
+
+        if($condition->getType() == $condition::TYPE_INHERIT){
+
+            $parentCondition = $condition->getParentCondition();
+            $result = ($parentCondition ? $parentCondition->getIsDiscountCondition() : false);
+
+        } else {
+
+            $result = $condition->getIsDiscountCondition();
+
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[]
+     */
+    public function getDiscountConditions()
+    {
+        return array_filter($this->conditions, [$this, 'isDiscountCondition']);
+    }
+
+    /**
+     * @return null|ActionConditionInterface
+     */
+    public function getDiscountCondition(){
+
+        $discountCondition = null;
+
+        if($this->isDiscountCondition($this->getMainCondition())){
+            $discountCondition = $this->getMainCondition();
+        }
+
+        return $discountCondition;
+
     }
 
     /**
      * @param $proposalPrice
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $discountCondition
      * @return null|\Shop\DiscountBundle\Price\DiscountPrice
      */
-    public function getDiscountPrice($proposalPrice){
-        return $this->discountPriceCalculator->calculate($proposalPrice, $this->getDiscountConditions());
+    public function getDiscountPrice($proposalPrice, $discountCondition = null){
+
+        $discountCondition = $discountCondition ?: $this->getDiscountCondition();
+        return $discountCondition ? $this->discountPriceCalculator->calculate($proposalPrice, $discountCondition) : null;
+
     }
 
 } 

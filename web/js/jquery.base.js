@@ -15,7 +15,8 @@ $(function(){
         chosenOptions.placeholder_text_single = "Выберите значение";
         chosenOptions.no_result_text = "Значений не найдено";
 
-        $('select[multiple="multiple"], .chosen-select', $container).chosen(chosenOptions);
+        //$('select[multiple="multiple"], .chosen-select', $container).chosen(chosenOptions);
+        $('select', $container).chosen(chosenOptions);
 
     };
 

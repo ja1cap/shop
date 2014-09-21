@@ -1,0 +1,98 @@
+{% macro condition_discount_percent(condition) %}
+    Скидка {{ condition.discountPercent }}%
+{% endmacro %}
+
+{% macro condition_discount_price(condition) %}
+    Цена по акции {{ condition.discountPrice|weasty_price }}
+{% endmacro %}
+
+{% macro condition_gifts(condition) %}
+    {% set giftsAmount = condition.giftProposalIds|length %}
+    {% if giftsAmount > 0 %}
+        {% if giftsAmount == 1 %}
+            {#{% set proposal = condition.giftProposals|first %}#}
+            Подарок по акции
+            {#{{ proposal.name }}({{ proposal.category.name }})#}
+            {#{% elseif(giftsAmount <= 3) %}#}
+            {#Один из подарков - {{ condition.giftProposals|join(', ') }}#}
+        {% else %}
+            Один из {{ giftsAmount }} подарков по акции
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro condition_type(condition) %}
+    {% if condition.type == constant('TYPE_INHERIT', condition) %}
+        <span class="label label-default">Базовые условия</span>
+    {% else %}
+        <span class="label label-info">Специальные условия</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro condition_complex(condition) %}
+    {% if condition.isComplex %}
+        <div>
+            <span class="label label-primary">Применяется в комплексе с другими акциями</span>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro condition_short_description(condition) %}
+    {% if condition.type != constant('TYPE_INHERIT', condition) %}
+        <div class="action-short-description">
+            {% if condition.type == constant('TYPE_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+            {% elseif condition.type == constant('TYPE_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT', condition) %}
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+                +
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+                или
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+                +
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+                или
+                {{ _self.condition_gifts(condition) }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro condition_description(condition) %}
+    {% if condition.type != constant('TYPE_INHERIT', condition) %}
+        <div class="action-description">
+            {% if condition.type == constant('TYPE_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+            {% elseif condition.type == constant('TYPE_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT', condition) %}
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+                +
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PERCENT', condition) %}
+                {{ _self.condition_discount_percent(condition) }}
+                или
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_AND_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+                +
+                {{ _self.condition_gifts(condition) }}
+            {% elseif condition.type == constant('TYPE_GIFT_OR_DISCOUNT_PRICE', condition) %}
+                {{ _self.condition_discount_price(condition) }}
+                или
+                {{ _self.condition_gifts(condition) }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

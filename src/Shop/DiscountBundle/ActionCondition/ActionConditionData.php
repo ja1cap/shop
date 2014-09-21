@@ -11,6 +11,7 @@ class ActionConditionData {
      * @var array
      */
     private static $types = [
+        ActionConditionInterface::TYPE_INHERIT => 'Базовые условия акции',
         ActionConditionInterface::TYPE_DISCOUNT_PERCENT => 'Скидка в процентах',
         ActionConditionInterface::TYPE_DISCOUNT_PRICE => 'Акционная цена',
         ActionConditionInterface::TYPE_GIFT => 'Подарок',
@@ -30,6 +31,19 @@ class ActionConditionData {
     /**
      * @return array
      */
+    public static function getGiftTypes(){
+        return [
+            ActionConditionInterface::TYPE_GIFT,
+            ActionConditionInterface::TYPE_GIFT_AND_DISCOUNT_PRICE,
+            ActionConditionInterface::TYPE_GIFT_OR_DISCOUNT_PRICE,
+            ActionConditionInterface::TYPE_GIFT_AND_DISCOUNT_PERCENT,
+            ActionConditionInterface::TYPE_GIFT_OR_DISCOUNT_PERCENT,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public static function getDiscountTypes(){
         return [
             ActionConditionInterface::TYPE_DISCOUNT_PRICE,
@@ -41,4 +55,4 @@ class ActionConditionData {
         ];
     }
 
-} 
+}

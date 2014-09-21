@@ -1,6 +1,7 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\DiscountPrice;
 
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Shop\DiscountBundle\Price\DiscountPrice;
 use Weasty\Money\Price\Price;
 use Weasty\Money\Price\PriceInterface;
@@ -29,14 +30,12 @@ class ProposalDiscountPriceCalculator {
 
     /**
      * @param $proposalPrice
-     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface[] $discountConditions
+     * @param \Shop\DiscountBundle\ActionCondition\ActionConditionInterface $discountCondition
      * @return null|DiscountPrice
      */
-    public function calculate($proposalPrice, array $discountConditions = []){
+    public function calculate($proposalPrice, ActionConditionInterface $discountCondition = null){
 
-        $discountConditionsAmount = count($discountConditions);
-
-        if($discountConditionsAmount == 0){
+        if(!$discountCondition){
             return null;
         }
 
@@ -44,32 +43,9 @@ class ProposalDiscountPriceCalculator {
             $proposalPrice = new Price($proposalPrice, $this->currencyConverter->getCurrencyResource()->getDefaultCurrency());
         }
 
-        /**
-         * @var DiscountPrice|null $minDiscountPrice
-         */
-        $minDiscountPrice = null;
+        $discountPrice = $this->discountPriceBuilder->build($proposalPrice, $discountCondition);
 
-        foreach($discountConditions as $discountCondition){
-
-            $discountPrice = $this->discountPriceBuilder->build($proposalPrice, $discountCondition);
-
-            if(!$discountPrice instanceof DiscountPrice){
-                continue;
-            }
-
-            if($minDiscountPrice && $minDiscountPrice->getValue() > $discountPrice->getValue()){
-
-                $minDiscountPrice = $discountPrice;
-
-            } else {
-
-                $minDiscountPrice = $discountPrice;
-
-            }
-
-        }
-
-        return $minDiscountPrice;
+        return $discountPrice;
 
     }
 

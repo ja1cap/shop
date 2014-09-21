@@ -3,10 +3,8 @@
 {% block title %}Акции{% endblock %}
 
 {% block page_container %}
-    {{ form(form) }}
-    <hr/>
-    <div class="medium primary btn">
-        <a href="{{ path('shop_discount_admin_action') }}">
+    <div>
+        <a href="{{ path('shop_discount_admin_action') }}" class="btn btn-default">
             Добавить акцию
         </a>
     </div>
@@ -18,43 +16,21 @@
                     <input type="hidden" name="actions[{{ action.id }}][id]" value="{{ action.id }}">
                     <input type="hidden" class="action_position" name="actions[{{ action.id }}][position]" value="{{ action.position }}">
                     <div class="row">
-                        <div class="{{ word_numbers[1] }} columns">
-                            {{ action.id }}
-                        </div>
-                        <div class="{{ word_numbers[2] }} columns">
-                            <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}">
-                                {{ action.title }}
-                            </a>
-                            <div>
-                                <span class="{% if action.status == constant('STATUS_OFF', action) %}danger{% else %}success{% endif %} label">
-                                    {{ action.textStatus }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="{{ word_numbers[6] }} columns">
-                            {{ action.description|nl2br }}
-                            {#{% set categoryNames = action.categoryNames %}#}
-                            {#{% if categoryNames %}#}
-                            {#<div class="primary alert">#}
-                            {#<b>Категории:</b> {{ categoryNames|join(', ') }}#}
-                            {#</div>#}
-                            {#{% endif %}#}
-                            {#{% if action.minOrderSummary or action.maxOrderSummary %}#}
-                            {#<div class="success alert">#}
-                            {#<b>Сумма заказа:</b>#}
-                            {#{% if action.minOrderSummary %}#}
-                            {#от {{ action.minOrderSummary|weasty_price }}#}
-                            {#{% endif %}#}
-                            {#{% if action.maxOrderSummary %}#}
-                            {#до {{ action.maxOrderSummary|weasty_price }}#}
-                            {#{% endif %}#}
-                            {#</div>#}
-                            {#{% endif %}#}
-                        </div>
                         <div class="{{ word_numbers[3] }} columns">
-                            <div class="medium btn danger">
-                                <a href="{{ path('shop_discount_admin_delete_action', {'id' : action.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                    Удалить
+                            <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}" class="primary-link">{{ action.title }}</a>
+                        </div>
+                        <div class="{{ word_numbers[1] }} columns">
+                            <span class="{% if action.status == constant('STATUS_OFF', action) %}label-danger{% else %}label-success{% endif %} label">
+                                {{ action.textStatus }}
+                            </span>
+                        </div>
+                        <div class="{{ word_numbers[7] }} columns">
+                            {{ action.description|nl2br }}
+                        </div>
+                        <div class="{{ word_numbers[1] }} columns">
+                            <div class="center-block">
+                                <a href="{{ path('shop_discount_admin_delete_action', {'id' : action.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-xs">
+                                    <span class="glyphicon glyphicon-trash"></span> Удалить
                                 </a>
                             </div>
                         </div>

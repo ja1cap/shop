@@ -11,6 +11,7 @@ use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
 class ProposalExtension extends \Twig_Extension {
 
     /**
+     * @TODO use cache collection instead of entity repository
      * @var ObjectRepository
      */
     protected $proposalRepository;

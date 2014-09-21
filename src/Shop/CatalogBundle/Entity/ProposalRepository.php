@@ -10,6 +10,8 @@ use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
 use Shop\CatalogBundle\Query\ProposalQueryBuilderFactory;
 use Shop\DiscountBundle\Action\ActionInterface;
+use Shop\DiscountBundle\ActionCondition\ActionConditionData;
+use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
 use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
@@ -437,17 +439,22 @@ class ProposalRepository extends AbstractRepository {
 
         $qb
             ->select(array_filter($select))
-            ->leftJoin('ShopDiscountBundle:ActionConditionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
-            ->leftJoin('ShopDiscountBundle:ActionConditionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
+            ->leftJoin('ShopDiscountBundle:ActionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', '_ac', Expr\Join::WITH, $qb->expr()->orX(
+                $qb->expr()->eq('_ac.id', 'acp.id'),
+                $qb->expr()->eq('_ac.id', 'acc.id')
+            ))
             ->leftJoin('ShopDiscountBundle:Action', 'a', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('a.status', ActionInterface::STATUS_ON)
+                $qb->expr()->eq('a.status', ActionInterface::STATUS_ON),
+                $qb->expr()->eq('a.id', '_ac.actionId')
             ))
             ->leftJoin('ShopDiscountBundle:ActionCondition', 'ac', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('ac.actionId', 'a.id'),
-                $qb->expr()->orX(
-                    $qb->expr()->eq('ac.id', 'acp.conditionId'),
-                    $qb->expr()->eq('ac.id', 'acc.conditionId')
-                )
+                $qb->expr()->eq('ac.id', '_ac.id')
+            ))
+            ->leftJoin('ShopDiscountBundle:BasicActionCondition', 'bac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('bac.actionId', 'ac.actionId')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'action_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('action_p.id', 'p.id'),
@@ -456,45 +463,38 @@ class ProposalRepository extends AbstractRepository {
                     $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
                 )
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('acdp.conditionId', 'ac.id'),
+            ->leftJoin('ShopDiscountBundle:BasicActionCondition', 'dbac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('dbac.actionId', 'ac.actionId'),
+                $qb->expr()->in('dbac.type', ActionConditionData::getDiscountTypes())
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', 'dac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ac.id', 'dac.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->in('dac.type', ActionConditionData::getDiscountTypes()),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('dac.type', ActionConditionInterface::TYPE_INHERIT),
+                        $qb->expr()->eq('dac.actionId', 'dbac.actionId')
+                    )
+                )
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdp.id', 'dac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('all_acdp.conditionId', 'ac.id')
-            ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('acdc.conditionId', 'ac.id'),
+            ->leftJoin('ShopDiscountBundle:ActionCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdc.id', 'dac.id'),
                 $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
-            ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'all_acdc', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('all_acdc.conditionId', 'ac.id')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('discount_p.id', 'p.id'),
                 $qb->expr()->orX(
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->isNotNull('acdp.id'),
-                            $qb->expr()->eq('discount_p.id', 'acdp.proposalId')
-                        ),
-                        $qb->expr()->andX(
-                            $qb->expr()->isNull('acdp.id'),
-                            $qb->expr()->isNull('all_acdp.id'),
-                            $qb->expr()->eq('discount_p.id', 'acp.proposalId')
-                        )
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('acdp.id'),
+                        $qb->expr()->eq('discount_p.id', 'acdp.proposalId')
                     ),
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->isNotNull('acdc.id'),
-                            $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
-                        ),
-                        $qb->expr()->andX(
-                            $qb->expr()->isNull('acdc.id'),
-                            $qb->expr()->isNull('all_acdp.id'),
-                            $qb->expr()->isNull('all_acdc.id'),
-                            $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
-                        )
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('acdc.id'),
+                        $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
                     )
                 )
             ))
@@ -609,17 +609,22 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->eq('best_p.id', 'p.id'),
                 $qb->expr()->eq('best_p.isBestseller', 1)
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
-            ->leftJoin('ShopDiscountBundle:ActionConditionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionProposal', 'acp', Expr\Join::WITH, $qb->expr()->eq('acp.proposalId', 'p.id'))
+            ->leftJoin('ShopDiscountBundle:ActionCategory', 'acc', Expr\Join::WITH, $qb->expr()->eq('acc.categoryId', 'p.categoryId'))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', '_ac', Expr\Join::WITH, $qb->expr()->orX(
+                $qb->expr()->eq('_ac.id', 'acp.id'),
+                $qb->expr()->eq('_ac.id', 'acc.id')
+            ))
             ->leftJoin('ShopDiscountBundle:Action', 'a', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('a.status', ActionInterface::STATUS_ON)
+                $qb->expr()->eq('a.status', ActionInterface::STATUS_ON),
+                $qb->expr()->eq('a.id', '_ac.actionId')
             ))
             ->leftJoin('ShopDiscountBundle:ActionCondition', 'ac', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('ac.actionId', 'a.id'),
-                $qb->expr()->orX(
-                    $qb->expr()->eq('ac.id', 'acp.conditionId'),
-                    $qb->expr()->eq('ac.id', 'acc.conditionId')
-                )
+                $qb->expr()->eq('ac.id', '_ac.id')
+            ))
+            ->leftJoin('ShopDiscountBundle:BasicActionCondition', 'bac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('bac.actionId', 'ac.actionId')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'action_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('action_p.id', 'p.id'),
@@ -628,45 +633,38 @@ class ProposalRepository extends AbstractRepository {
                     $qb->expr()->eq('action_p.categoryId', 'acc.categoryId')
                 )
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('acdp.conditionId', 'ac.id'),
+            ->leftJoin('ShopDiscountBundle:BasicActionCondition', 'dbac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('dbac.actionId', 'ac.actionId'),
+                $qb->expr()->in('dbac.type', ActionConditionData::getDiscountTypes())
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionCondition', 'dac', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ac.id', 'dac.id'),
+                $qb->expr()->orX(
+                    $qb->expr()->in('dac.type', ActionConditionData::getDiscountTypes()),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('dac.type', ActionConditionInterface::TYPE_INHERIT),
+                        $qb->expr()->eq('dac.actionId', 'dbac.actionId')
+                    )
+                )
+            ))
+            ->leftJoin('ShopDiscountBundle:ActionProposal', 'acdp', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdp.id', 'dac.id'),
                 $qb->expr()->eq('acdp.proposalId', 'p.id')
             ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountProposal', 'all_acdp', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('all_acdp.conditionId', 'ac.id')
-            ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('acdc.conditionId', 'ac.id'),
+            ->leftJoin('ShopDiscountBundle:ActionCategory', 'acdc', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('acdc.id', 'dac.id'),
                 $qb->expr()->eq('acdc.categoryId', 'p.categoryId')
-            ))
-            ->leftJoin('ShopDiscountBundle:ActionConditionDiscountCategory', 'all_acdc', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('all_acdc.conditionId', 'ac.id')
             ))
             ->leftJoin('ShopCatalogBundle:Proposal', 'discount_p', Expr\Join::WITH, $qb->expr()->andX(
                 $qb->expr()->eq('discount_p.id', 'p.id'),
                 $qb->expr()->orX(
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->isNotNull('acdp.id'),
-                            $qb->expr()->eq('discount_p.id', 'acdp.proposalId')
-                        ),
-                        $qb->expr()->andX(
-                            $qb->expr()->isNull('acdp.id'),
-                            $qb->expr()->isNull('all_acdp.id'),
-                            $qb->expr()->eq('discount_p.id', 'acp.proposalId')
-                        )
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('acdp.id'),
+                        $qb->expr()->eq('discount_p.id', 'acdp.proposalId')
                     ),
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->isNotNull('acdc.id'),
-                            $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
-                        ),
-                        $qb->expr()->andX(
-                            $qb->expr()->isNull('acdc.id'),
-                            $qb->expr()->isNull('all_acdp.id'),
-                            $qb->expr()->isNull('all_acdc.id'),
-                            $qb->expr()->eq('discount_p.categoryId', 'acc.categoryId')
-                        )
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('acdc.id'),
+                        $qb->expr()->eq('discount_p.categoryId', 'acdc.categoryId')
                     )
                 )
             ))

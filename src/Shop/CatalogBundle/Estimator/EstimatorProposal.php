@@ -13,7 +13,7 @@ class EstimatorProposal {
     protected $proposal;
 
     /**
-     * @var \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface
+     * @var \Shop\CatalogBundle\Price\ProposalPriceInterface
      */
     protected $price;
 
@@ -38,7 +38,7 @@ class EstimatorProposal {
     }
 
     /**
-     * @return \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface
+     * @return \Shop\CatalogBundle\Price\ProposalPriceInterface
      */
     public function getPrice()
     {

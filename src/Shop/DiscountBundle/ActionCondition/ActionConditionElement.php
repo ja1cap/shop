@@ -1,8 +1,8 @@
 <?php
 namespace Shop\DiscountBundle\ActionCondition;
 
-use Shop\DiscountBundle\Entity\ActionCondition;
 use Shop\DiscountBundle\Action\ActionInterface;
+use Shop\DiscountBundle\Gift\ActionConditionGiftInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollection;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Entity\EntityInterface;
@@ -11,9 +11,19 @@ use Weasty\Doctrine\Entity\EntityInterface;
  * Class ActionConditionElement
  * @package Shop\DiscountBundle\ActionCondition
  */
-class ActionConditionElement extends CacheCollectionElement
+abstract class ActionConditionElement extends CacheCollectionElement
     implements ActionConditionInterface
 {
+
+    /**
+     * @var array
+     */
+    public $giftIds;
+
+    /**
+     * @var \Shop\DiscountBundle\Gift\ActionConditionGiftInterface[]
+     */
+    private $gifts;
 
     /**
      * @var \Shop\DiscountBundle\Action\ActionInterface
@@ -27,13 +37,31 @@ class ActionConditionElement extends CacheCollectionElement
      */
     protected function buildData(CacheCollection $collection, EntityInterface $entity)
     {
+
         $data = parent::buildData($collection, $entity);
+
         if($entity instanceof ActionConditionInterface){
-            $data['isPriceDiscount'] = $entity->getIsPriceDiscount();
-            $data['categoryIds'] = $entity->getCategoryIds();
-            $data['proposalIds'] = $entity->getProposalIds();
+
+            $data['isGiftCondition'] = $entity->getIsGiftCondition();
+            $data['isDiscountCondition'] = $entity->getIsDiscountCondition();
+
+            $giftCollection = $collection->getCollectionManager()->getCollection('ShopDiscountBundle:AbstractActionConditionGift');
+            foreach($entity->getGifts() as $gift){
+
+                $giftElement = $giftCollection->saveElement($gift);
+                if(!$giftElement){
+                    continue;
+                }
+
+                $this->giftIds[] = $gift->getId();
+                $this->gifts[] = $giftElement;
+
+            }
+
         }
+
         return $data;
+
     }
 
     /**
@@ -42,6 +70,24 @@ class ActionConditionElement extends CacheCollectionElement
     public function getId()
     {
         return $this->getIdentifier();
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->data['type'];
+    }
+
+    /**
+     * @return ActionConditionInterface
+     */
+    public function getParentCondition()
+    {
+        return ($this->getType() == self::TYPE_INHERIT && $this->getAction() ? $this->getAction()->getBasicCondition() : null);
     }
 
     /**
@@ -92,19 +138,17 @@ class ActionConditionElement extends CacheCollectionElement
     /**
      * @return boolean
      */
-    public function getIsPriceDiscount()
+    public function getIsGiftCondition()
     {
-        return $this->data['isPriceDiscount'];
+        return $this->data['isGiftCondition'];
     }
 
     /**
-     * Get type
-     *
-     * @return integer
+     * @return boolean
      */
-    public function getType()
+    public function getIsDiscountCondition()
     {
-        return $this->data['type'];
+        return $this->data['isDiscountCondition'];
     }
 
     /**
@@ -138,23 +182,59 @@ class ActionConditionElement extends CacheCollectionElement
     }
 
     /**
-     * @return array
+     * @return \Doctrine\Common\Collections\Collection|\Shop\DiscountBundle\Entity\AbstractActionConditionGift[]
      */
-    public function getCategoryIds()
+    public function getGifts()
     {
-        return $this->data['categoryIds'];
+
+        if(!$this->gifts && $this->giftIds){
+
+            $giftCollection = $this->getCollectionManager()->getCollection('ShopDiscountBundle:AbstractActionConditionGift');
+
+            foreach($this->giftIds as $giftId){
+
+                $gift = $giftCollection->get($giftId);
+
+                if($gift instanceof ActionConditionGiftInterface){
+                    $this->gifts[] = $gift;
+                }
+
+            }
+
+        }
+
+        return $this->gifts;
+
     }
 
     /**
-     * @return array
+     * Get gift proposals
+     * @return \Shop\CatalogBundle\Proposal\ProposalInterface[]
      */
-    public function getProposalIds()
+    public function getGiftProposals()
     {
-        return $this->data['proposalIds'];
+        $proposals = [];
+        foreach ($this->getGifts() as $gift) {
+            $proposals[] = $gift->getProposal();
+        }
+        return $proposals;
     }
 
     /**
-     * @return ActionCondition
+     * Get \Shop\CatalogBundle\Proposal\ProposalInterface ids
+     * @return array
+     */
+    public function getGiftProposalIds()
+    {
+        $proposalIds = [];
+        foreach ($this->getGifts() as $gift) {
+            $proposalIds[] = $gift->getProposalId();
+        }
+        return $proposalIds;
+    }
+
+    /**
+     * @return ActionConditionInterface
      * @throws \Weasty\Doctrine\Cache\Collection\Exception\CacheCollectionException
      */
     public function getEntity()

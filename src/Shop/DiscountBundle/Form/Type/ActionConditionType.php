@@ -9,7 +9,20 @@ use Symfony\Component\Form\FormBuilderInterface;
  * Class ActionConditionType
  * @package Shop\DiscountBundle\Form\Type
  */
-class ActionConditionType extends AbstractType {
+abstract class ActionConditionType extends AbstractType {
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    protected function buildConditionForm(FormBuilderInterface $builder, array $options){}
+
+    /**
+     * @return array
+     */
+    protected function getConditionTypeChoices(){
+        return ActionConditionData::getTypes();
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -18,35 +31,11 @@ class ActionConditionType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
+        $this->buildConditionForm($builder, $options);
+
         $builder
-            ->add('categoryIds', 'weasty_doctrine_entity_type', array(
-                'required' => false,
-                'multiple' => true,
-                'map_as_id' => true,
-                'class' => 'ShopCatalogBundle:Category',
-                'label' => 'Участвующие категории',
-                'help' => 'Выберите категории, для которых при заказе товаров или услуг клиенту будет показываться акция',
-            ))
-            ->add('proposalIds', 'weasty_admin_browser_type', array(
-                'required' => false,
-                'label' => 'Участвующие товары',
-                'help' => 'Выберите товары и услуги при заказе которых клиенту будет показываться акция',
-                'browser_path' => 'proposals_browser',
-                'item_value_element_class' => 'item-value-element',
-                'options' => array(
-                    'map_as_id' => true,
-                    'class' => 'ShopCatalogBundle:Proposal',
-                ),
-                'prototype_options' => array(
-                    'attr' => array(
-                        'class' => 'item-value-element',
-                    ),
-                ),
-                'allow_add' => true,
-                'allow_delete' => true,
-            ))
             ->add('type', 'choice', array(
-                'choices' => ActionConditionData::getTypes(),
+                'choices' => $this->getConditionTypeChoices(),
                 'label' => 'Тип акции',
             ))
             ->add('discountPercent', 'text', array(
@@ -60,13 +49,12 @@ class ActionConditionType extends AbstractType {
                 ),
                 'currency_form_type' => 'weasty_money_currency_numeric',
             ))
-            ->add('giftProposalIds', 'weasty_admin_browser_type', array(
+            ->add('giftProposals', 'weasty_admin_browser_type', array(
                 'required' => false,
                 'label' => 'Возможные подарки',
                 'browser_path' => 'proposals_browser',
                 'item_value_element_class' => 'item-value-element',
                 'options' => array(
-                    'map_as_id' => true,
                     'class' => 'ShopCatalogBundle:Proposal',
                 ),
                 'prototype_options' => array(
@@ -95,14 +83,4 @@ class ActionConditionType extends AbstractType {
 
     }
 
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName()
-    {
-        return 'shop_discount_action_condition';
-    }
-
-} 
+}

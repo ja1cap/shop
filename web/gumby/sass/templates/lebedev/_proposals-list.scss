@@ -93,6 +93,14 @@
       margin-bottom: 5px;
     }
 
+    .action-short-description {
+      padding-top: 10px;
+      border-top: 1px solid rgb(202, 202, 202);
+      color: rgb(198,0,42);
+      text-align: center;
+      font-weight: bold;
+    }
+
     .price {
 
       margin: 7px 0;
@@ -247,6 +255,7 @@
 
           .images-preview-container {
 
+            overflow: hidden;
             max-height: 176px;
 
           }

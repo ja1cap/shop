@@ -1,6 +1,7 @@
 {% extends 'ShopMainBundle:Default:media-list.html.twig' %}
 
-{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as _catalog %}
+{% import "ShopDiscountBundle:AdminActionCondition:condition-macros.html.twig" as _action %}
 
 {% block media_list %}
     <div class="proposals-list-wrapper">
@@ -41,22 +42,24 @@
             </div>
         {% endif %}
         <div class="preview-right-bar">
-            {{ catalog.proposal_markers(proposalData, catalogPrice) }}
+            {{ _catalog.proposal_markers(proposalData, catalogPrice) }}
             {{ parent() }}
         </div>
         <div class="ui-buttons hidden-preview">
-            {{ catalog.compare_button(proposalData) }}
-            {{ catalog.buy_button(proposalData) }}
+            {{ _catalog.compare_button(proposalData) }}
+            {{ _catalog.buy_button(proposalData) }}
         </div>
     </div>
 {% endblock %}
 
 {% block media_item_description %}
 
-    {{ catalog.price(catalogPrice) }}
+    {{ _catalog.price(catalogPrice) }}
 
     <div class="hidden-preview">
-        {#{{ parent() }}#}
+        {% if catalogPrice.hasAction > 0 %}
+            {{ _action.condition_short_description(catalogPrice.actionCondition) }}
+        {% endif %}
     </div>
 
 {% endblock %}

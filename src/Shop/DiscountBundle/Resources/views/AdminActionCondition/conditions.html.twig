@@ -1,0 +1,146 @@
+{% extends "ShopDiscountBundle:AdminAction:actionLayout.html.twig" %}
+
+{% import "ShopDiscountBundle:AdminActionCondition:condition-macros.html.twig" as _condition %}
+
+{% block page_content %}
+
+    {% set actionCategoriesAmount = action.actionCategories|length %}
+    {% set actionProposalsAmount = action.actionProposals|length %}
+
+    {% set basicCondition = action.basicCondition %}
+    <h5>
+        Базовые условия акции
+        {% if basicCondition %}
+            <a href="{{ path('shop_discount_admin_action_basic_condition', {'actionId':action.id}) }}" class="btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-pencil"></span>
+                Изменить
+            </a>
+        {% endif %}
+    </h5>
+    {% if not basicCondition or (basicCondition and basicCondition.type == constant('TYPE_INHERIT', basicCondition)) %}
+        <div class="alert alert-warning">
+            Базовые условия акции не установлены -
+            <a href="{{ path('shop_discount_admin_action_basic_condition', {'actionId':action.id}) }}" class="primary-link">добавить базовые условия</a>
+        </div>
+    {% else %}
+        <div class="well">
+            {{ _condition.condition_description(basicCondition) }}
+        </div>
+    {% endif %}
+
+    <ul class="nav nav-pills">
+        {% set active_tab = 'categories' %}
+        {% if app.request.get('_route') == 'shop_discount_admin_action_categories' %}
+            {% set active_tab = 'categories' %}
+        {% elseif app.request.get('_route') == 'shop_discount_admin_action_proposals' %}
+            {% set active_tab = 'proposals' %}
+        {% endif %}
+        <li class="{{ active_tab == 'categories' ? 'active' : ''}}">
+            <a href="{{ path('shop_discount_admin_action_categories', {'actionId' : action.id}) }}">
+                Категории
+                <span class="badge">{{ actionCategoriesAmount }}</span>
+            </a>
+        </li>
+        <li class="{{ active_tab == 'proposals' ? 'active' : ''}}">
+            <a href="{{ path('shop_discount_admin_action_proposals', {'actionId' : action.id}) }}">
+                Товары
+                <span class="badge">{{ actionProposalsAmount }}</span>
+            </a>
+        </li>
+    </ul>
+    <div class="btn-group well-v-default">
+        <a href="{{ path('shop_discount_admin_action_category', {'actionId' : action.id}) }}" class="btn btn-default" id="add-categories">
+            Добавить категорию
+        </a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Добавить товар <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="{{ path('shop_discount_admin_action_proposal', {'actionId' : action.id}) }}">
+                        Один
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('shop_discount_admin_action_proposal', {'actionId' : action.id}) }}" id="add-proposals">
+                        Несколько
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="conditions-container" style="position: relative">
+        {% block conditions_table %}
+            {% if active_tab == 'categories' %}
+                {% include "ShopDiscountBundle:AdminActionCategory:categories-table.html.twig" %}
+            {% elseif active_tab == 'proposals' %}
+                {% include "ShopDiscountBundle:AdminActionProposal:proposals-table.html.twig" %}
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <script>
+
+        var $conditionsContainer = $("#conditions-container");
+
+        var addProposals = function(proposals){
+
+            $conditionsContainer.addLoading();
+
+            var proposalIds = [];
+            $.each(proposals, function(key, proposal){
+                proposalIds.push(proposal.id);
+            });
+
+            $.ajax({
+                url: '{{ path('shop_discount_admin_action_add_proposals', {'actionId' : action.id}) }}',
+                data: {
+                    proposalIds : proposalIds
+                },
+                error: function(){
+                    $conditionsContainer.removeLoading();
+                },
+                success: function(response){
+                    if(response == 'OK'){
+                        window.location.reload();
+                    } else {
+                        $conditionsContainer.removeLoading();
+                    }
+                }
+            })
+
+        };
+
+        $(function(){
+
+            var openBrowser = function(url){
+
+                var popupWindowWidth = 960;
+                window.open(
+                        url,
+                        'Выбор',
+                        [
+                            'left=' + (window.outerWidth - popupWindowWidth) / 2,
+                            'top=' + (window.outerHeight * .15),
+                            'width=' + popupWindowWidth,
+                            'height=' + (window.outerHeight * .7),
+                            'menubar=no',
+                            'location=no',
+                            'resizable=yes',
+                            'scrollbars=yes',
+                            'status=yes'
+                        ].join(',')
+                );
+
+            };
+
+            $('#add-proposals').click(function(e){
+                e.preventDefault();
+                var url = '{{ path('proposals_browser', {'addFunctionName' : 'addProposals'}) }}';
+                openBrowser(url);
+            });
+
+        });
+    </script>
+{% endblock %}

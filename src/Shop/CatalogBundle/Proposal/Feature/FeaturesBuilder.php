@@ -3,7 +3,7 @@ namespace Shop\CatalogBundle\Proposal\Feature;
 
 use Shop\CatalogBundle\Category\CategoryInterface;
 use Shop\CatalogBundle\Category\Parameter\CategoryParameterInterface;
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Weasty\Bundle\CatalogBundle\Feature\Feature;
 use Weasty\Bundle\CatalogBundle\Feature\FeatureGroup;
 use Weasty\Bundle\CatalogBundle\Feature\FeatureInterface;
@@ -51,7 +51,7 @@ class FeaturesBuilder {
 
     /**
      * @param \Weasty\Bundle\CatalogBundle\Feature\FeatureInterface $feature
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface $price
      * @param \Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface $parameterValue
      * @return ProposalFeatureValueInterface
      */

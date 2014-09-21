@@ -5,6 +5,8 @@ namespace Shop\DiscountBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shop\DiscountBundle\Action\ActionInterface;
 use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
+use Shop\DiscountBundle\Category\ActionCategoryInterface;
+use Shop\DiscountBundle\Proposal\ActionProposalInterface;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionElement;
 use Weasty\Doctrine\Cache\Collection\CacheCollectionEntityInterface;
 use Weasty\Doctrine\Entity\AbstractEntity;
@@ -18,6 +20,11 @@ class Action extends AbstractEntity
     implements  ActionInterface,
                 CacheCollectionEntityInterface
 {
+
+    /**
+     * @var integer
+     */
+    private $id;
 
     /**
      * @var array
@@ -55,7 +62,12 @@ class Action extends AbstractEntity
     /**
      * @var integer
      */
-    private $id;
+    private $basicConditionId;
+
+    /**
+     * @var \Shop\DiscountBundle\Entity\BasicActionCondition
+     */
+    private $basicCondition;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -229,7 +241,7 @@ class Action extends AbstractEntity
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -267,6 +279,72 @@ class Action extends AbstractEntity
     public function getConditions()
     {
         return $this->conditions;
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\Category\ActionCategoryInterface[]
+     */
+    public function getActionCategories()
+    {
+
+        $actionCategories = [];
+
+        foreach($this->getConditions() as $condition){
+
+            if($condition instanceof ActionCategoryInterface){
+                $actionCategories[] = $condition;
+            }
+
+        }
+
+        return $actionCategories;
+
+    }
+
+    /**
+     * Get \Shop\CatalogBundle\Entity\Category ids
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        $ids = [];
+        foreach($this->getActionCategories() as $actionCategory){
+            $ids[] = $actionCategory->getCategoryId();
+        }
+        return $ids;
+    }
+
+    /**
+     * @return \Shop\DiscountBundle\Proposal\ActionProposalInterface[]
+     */
+    public function getActionProposals()
+    {
+
+        $actionProposals = [];
+
+        foreach($this->getConditions() as $condition){
+
+            if($condition instanceof ActionProposalInterface){
+                $actionProposals[] = $condition;
+            }
+
+        }
+
+        return $actionProposals;
+
+    }
+
+    /**
+     * Get \Shop\CatalogBundle\Entity\Proposal ids
+     * @return array
+     */
+    public function getProposalIds()
+    {
+        $ids = [];
+        foreach($this->getActionProposals() as $actionProposal){
+            $ids[] = $actionProposal->getProposalId();
+        }
+        return $ids;
     }
 
     /**
@@ -313,5 +391,56 @@ class Action extends AbstractEntity
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set basicConditionId
+     *
+     * @param integer $basicConditionId
+     * @return Action
+     */
+    public function setBasicConditionId($basicConditionId)
+    {
+        $this->basicConditionId = $basicConditionId;
+
+        return $this;
+    }
+
+    /**
+     * Get basicConditionId
+     *
+     * @return integer 
+     */
+    public function getBasicConditionId()
+    {
+        return $this->basicConditionId;
+    }
+
+    /**
+     * Set basicCondition
+     *
+     * @param \Shop\DiscountBundle\Entity\BasicActionCondition $basicCondition
+     * @return Action
+     */
+    public function setBasicCondition(BasicActionCondition $basicCondition = null)
+    {
+        $this->basicCondition = $basicCondition;
+        if($basicCondition){
+            $basicCondition->setAction($this);
+            $this->basicConditionId = $basicCondition->getId();
+        } else {
+            $this->basicConditionId = null;
+        }
+        return $this;
+    }
+
+    /**
+     * Get basicCondition
+     *
+     * @return \Shop\DiscountBundle\Entity\BasicActionCondition 
+     */
+    public function getBasicCondition()
+    {
+        return $this->basicCondition;
     }
 }

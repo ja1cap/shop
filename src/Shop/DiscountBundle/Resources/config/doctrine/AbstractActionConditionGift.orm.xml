@@ -2,7 +2,13 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Shop\DiscountBundle\Entity\ActionConditionGiftProposal">
+    <entity name="Shop\DiscountBundle\Entity\AbstractActionConditionGift" inheritance-type="JOINED">
+
+        <discriminator-column name="type"/>
+        <discriminator-map>
+            <discriminator-mapping value="1" class="ActionConditionGift"/>
+            <discriminator-mapping value="2" class="BasicActionConditionGift"/>
+        </discriminator-map>
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
@@ -11,9 +17,9 @@
         <field name="conditionId" type="integer" column="conditionId"/>
         <field name="proposalId" type="integer" column="proposalId"/>
 
-        <many-to-one target-entity="ActionCondition" field="condition" inversed-by="gifts">
+        <many-to-one target-entity="Shop\CatalogBundle\Entity\Proposal" field="proposal">
             <join-columns>
-                <join-column name="conditionId" referenced-column-name="id" on-delete="CASCADE"/>
+                <join-column name="proposalId" referenced-column-name="id"/>
             </join-columns>
         </many-to-one>
 

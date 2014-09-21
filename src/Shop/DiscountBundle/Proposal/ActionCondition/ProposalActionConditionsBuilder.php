@@ -1,6 +1,8 @@
 <?php
 namespace Shop\DiscountBundle\Proposal\ActionCondition;
 
+use Shop\DiscountBundle\Category\ActionCategoryInterface;
+use Shop\DiscountBundle\Proposal\ActionProposalInterface;
 use Shop\DiscountBundle\Proposal\DiscountPrice\ProposalDiscountPriceCalculator;
 use Shop\DiscountBundle\Action\ActionInterface;
 use Shop\DiscountBundle\ActionCondition\ActionConditionInterface;
@@ -64,16 +66,27 @@ class ProposalActionConditionsBuilder {
 
         foreach($actionConditionIds as $actionConditionId){
 
+            $isValid = false;
             $actionCondition = $this->actionConditionCollection->get($actionConditionId);
+
             if(
                 $actionCondition instanceof ActionConditionInterface
                 && $actionCondition->getAction()->getStatus() == ActionInterface::STATUS_ON
-                && (
-                    in_array($proposal->getId(), $actionCondition->getProposalIds())
-                    ||
-                    in_array($proposal->getCategoryId(), $actionCondition->getCategoryIds())
-                )
             ){
+
+                if($actionCondition instanceof ActionCategoryInterface){
+
+                    $isValid = ($proposal->getCategoryId() == $actionCondition->getCategoryId());
+
+                } elseif($actionCondition instanceof ActionProposalInterface){
+
+                    $isValid = ($proposal->getId() == $actionCondition->getProposalId());
+
+                }
+
+            }
+
+            if($isValid){
                 $actionConditions[] = $actionCondition;
                 $actionConditionsAmount++;
             }

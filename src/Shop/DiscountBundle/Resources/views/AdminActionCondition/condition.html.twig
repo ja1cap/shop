@@ -8,29 +8,23 @@
 
             var selectors = {
                 elementContainer: '.form-element-container',
-                gifts: '#' + formId + '_giftProposalIds',
-                discountType: '#' + formId + '_discountType',
+                gifts: '#' + formId + '_giftProposals',
+                type: '#' + formId + '_type',
                 discountPercent: '#' + formId + '_discountPercent',
-                discountPrice: '#' + formId + '_discountPrice',
-                discountCategories: '#' + formId + '_discountCategories',
-                discountProposals: '#' + formId + '_discountProposals'
+                discountPrice: '#' + formId + '_discountPrice'
             };
 
             var $gifts = $(selectors.gifts);
-            var $type = $(selectors.discountType);
+            var $type = $(selectors.type);
             var $discountPercent = $(selectors.discountPercent);
             var $discountPrice = $(selectors.discountPrice);
-            var $discountCategories = $(selectors.discountCategories);
-            var $discountProposals = $(selectors.discountProposals);
 
             var methods = {
                 changeDiscountType : function(type){
-                    discountType = parseInt(discountType);
-                    switch (discountType){
+                    type = parseInt(type);
+                    switch (type){
                         case {{ constant('TYPE_DISCOUNT_PERCENT', actionCondition) }}:
                             this.showDiscountPercent();
-                            this.showDiscountCategories();
-                            this.showDiscountProposals();
                             this.hideDiscountPrice();
                             this.hideGifts();
                             break;
@@ -38,45 +32,29 @@
                             this.showDiscountPrice();
                             this.hideDiscountPercent();
                             this.hideGifts();
-                            this.showDiscountCategories();
-                            this.showDiscountProposals();
                             break;
                         case {{ constant('TYPE_GIFT', actionCondition) }}:
                             this.showGifts();
                             this.hideDiscountPrice();
                             this.hideDiscountPercent();
-                            this.hideDiscountCategories();
-                            this.hideDiscountProposals();
                             break;
                         case {{ constant('TYPE_GIFT_AND_DISCOUNT_PERCENT', actionCondition) }}:
                         case {{ constant('TYPE_GIFT_OR_DISCOUNT_PERCENT', actionCondition) }}:
                             this.showGifts();
-                            this.showDiscountCategories();
-                            this.showDiscountProposals();
                             this.showDiscountPercent();
                             this.hideDiscountPrice();
                             break;
                         case {{ constant('TYPE_GIFT_AND_DISCOUNT_PRICE', actionCondition) }}:
                         case {{ constant('TYPE_GIFT_OR_DISCOUNT_PRICE', actionCondition) }}:
                             this.showGifts();
-                            this.showDiscountCategories();
-                            this.showDiscountProposals();
                             this.showDiscountPrice();
                             this.hideDiscountPercent();
                             break;
+                        default:
+                            this.hideGifts();
+                            this.hideDiscountPrice();
+                            this.hideDiscountPercent();
                     }
-                },
-                showDiscountCategories : function(){
-                    $discountCategories.closest(selectors.elementContainer).show();
-                },
-                hideDiscountCategories : function(){
-                    $discountCategories.closest(selectors.elementContainer).hide();
-                },
-                showDiscountProposals : function(){
-                    $discountProposals.closest(selectors.elementContainer).show();
-                },
-                hideDiscountProposals : function(){
-                    $discountProposals.closest(selectors.elementContainer).hide();
                 },
                 showGifts : function(){
                     $gifts.closest(selectors.elementContainer).show();
@@ -98,8 +76,8 @@
                 }
             };
 
-            methods.changeDiscountType($discountType.val());
-            $discountType.change(function(){
+            methods.changeDiscountType($type.val());
+            $type.change(function(){
                 methods.changeDiscountType($(this).val());
             });
 

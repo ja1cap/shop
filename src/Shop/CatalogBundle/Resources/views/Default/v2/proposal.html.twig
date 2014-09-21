@@ -1,6 +1,7 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 
-{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as _catalog %}
+{% import "ShopDiscountBundle:AdminActionCondition:condition-macros.html.twig" as _action %}
 
 {% block title %}{{ proposal.seoTitle|default(proposal.title) }}{% endblock %}
 {% block description %}{{ proposal.seoDescription|default(proposal.shortDescription) }}{% endblock %}
@@ -18,7 +19,7 @@
             </h1>
         </div>
         <div class="block-breadcrumb">
-            {{ catalog.proposal_breadcrumb(proposal) }}
+            {{ _catalog.proposal_breadcrumb(proposal) }}
         </div>
         <div class="block-body">
             <div class="row two-columns main-block">
@@ -30,10 +31,18 @@
                 <div class="six columns">
                     <div class="order-information-box">
 
-                        {% if price %}
+                        {% if catalogPrice %}
                             <div class="proposal-price-container">
-                                {{ catalog.price(catalogPrice, true) }}
+                                {{ _catalog.price(catalogPrice) }}
+                                {% if catalogPrice.hasAction > 0 %}
+                                    {{ _action.condition_short_description(catalogPrice.actionCondition) }}
+                                {% endif %}
                             </div>
+                            {#<div>#}
+                                {#{% if catalogPrice.hasAction > 0 %}#}
+                                    {#{{ _action.condition_description(catalogPrice.actionCondition) }}#}
+                                {#{% endif %}#}
+                            {#</div>#}
                         {% endif %}
 
                         {% if proposal.shortDescription %}
@@ -91,8 +100,8 @@
 
                         {% if price %}
                             <div class="ui-buttons">
-                                {{ catalog.compare_button(proposalData) }}
-                                {{ catalog.buy_button(proposalData) }}
+                                {{ _catalog.compare_button(proposalData) }}
+                                {{ _catalog.buy_button(proposalData) }}
                             </div>
                         {% endif %}
 
@@ -103,7 +112,7 @@
                 <div class="row two-columns information-block">
                     {% if proposalFeatures.groups or proposalFeatures.features %}
                         <div class="six columns">
-                            {{ catalog.proposal_features(proposalFeatures) }}
+                            {{ _catalog.proposal_features(proposalFeatures) }}
                         </div>
                     {% endif %}
                     <div class="six columns">

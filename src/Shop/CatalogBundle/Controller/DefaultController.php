@@ -5,7 +5,7 @@ namespace Shop\CatalogBundle\Controller;
 use Shop\CatalogBundle\Entity\Category;
 use Shop\CatalogBundle\Entity\ProposalCollection;
 use Shop\CatalogBundle\Entity\Proposal;
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;

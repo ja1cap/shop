@@ -1,5 +1,5 @@
 <?php
-namespace Shop\CatalogBundle\Proposal\Price;
+namespace Shop\CatalogBundle\Price;
 
 use Shop\CatalogBundle\Entity\Price;
 use Weasty\Bundle\CatalogBundle\Parameter\Value\ParameterValueInterface;
@@ -9,7 +9,7 @@ use Weasty\Doctrine\Entity\EntityInterface;
 
 /**
  * Class PriceElement
- * @package Shop\CatalogBundle\Proposal\Price
+ * @package Shop\CatalogBundle\Price
  */
 class PriceElement extends CacheCollectionElement
     implements ProposalPriceInterface

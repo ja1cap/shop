@@ -1,7 +1,7 @@
 <?php
 namespace Shop\CatalogBundle\Currency;
 
-use Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Weasty\Bundle\CatalogBundle\Contractor\Currency\ContractorCurrencyInterface;
 use Weasty\Money\Currency\Converter\CurrencyConverter;
 use Weasty\Money\Currency\CurrencyResource;

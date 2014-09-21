@@ -15,11 +15,6 @@ class ProposalExtension extends \Twig_Extension {
     protected $proposalRepository;
 
     /**
-     * @var \Shop\CatalogBundle\Entity\PopularProposalRepository
-     */
-    protected $popularProposalRepository;
-
-    /**
      * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
     protected $urlGenerator;
@@ -36,15 +31,13 @@ class ProposalExtension extends \Twig_Extension {
 
     /**
      * @param $proposalRepository
-     * @param $popularProposalRepository
      * @param $urlGenerator
      * @param $filtersBuilder
      * @param $featuresBuilder
      */
-    function __construct($proposalRepository, $popularProposalRepository, $urlGenerator, $filtersBuilder, $featuresBuilder)
+    function __construct($proposalRepository, $urlGenerator, $filtersBuilder, $featuresBuilder)
     {
         $this->proposalRepository = $proposalRepository;
-        $this->popularProposalRepository = $popularProposalRepository;
         $this->urlGenerator = $urlGenerator;
         $this->filtersBuilder = $filtersBuilder;
         $this->featuresBuilder = $featuresBuilder;
@@ -57,7 +50,6 @@ class ProposalExtension extends \Twig_Extension {
     {
         return array(
             new \Twig_SimpleFunction('shop_catalog_proposal_url', array($this, 'getProposalUrl')),
-            new \Twig_SimpleFunction('shop_catalog_popular_proposals', array($this, 'getPopularProposals')),
             new \Twig_SimpleFunction('shop_catalog_new_proposals', array($this, 'getNewProposals')),
             new \Twig_SimpleFunction('shop_catalog_bestsellers', array($this, 'getBestsellers')),
             new \Twig_SimpleFunction('shop_catalog_discount_proposals', array($this, 'getDiscountProposals')),
@@ -68,7 +60,7 @@ class ProposalExtension extends \Twig_Extension {
 
     /**
      * @param \Shop\CatalogBundle\Category\CategoryInterface $category
-     * @param \Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface[]|\Shop\CatalogBundle\Proposal\Price\ProposalPriceInterface $prices
+     * @param \Shop\CatalogBundle\Price\ProposalPriceInterface[]|\Shop\CatalogBundle\Price\ProposalPriceInterface $prices
      * @return \Weasty\Bundle\CatalogBundle\Feature\FeaturesResourceInterface
      */
     public function getProposalFeatures($category, $prices){
@@ -91,27 +83,6 @@ class ProposalExtension extends \Twig_Extension {
 
         return $url;
 
-    }
-
-    /**
-     * @TODO remove
-     * @return \Shop\CatalogBundle\Entity\Proposal[]
-     */
-    public function getPopularProposals(){
-        $proposals = array_filter(
-            array_map(
-                function($popularProposal){
-                    $proposal = $popularProposal['proposal'];
-                    if($proposal instanceof Proposal && $proposal->getStatus() == Proposal::STATUS_ON){
-                        return $proposal;
-                    }
-                    return null;
-                },
-                $this->popularProposalRepository->findProposals()
-            )
-        );
-
-        return $proposals;
     }
 
     /**

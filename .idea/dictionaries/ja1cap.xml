@@ -13,6 +13,7 @@
       <w>clickable</w>
       <w>concat</w>
       <w>datatables</w>
+      <w>dbac</w>
       <w>dbal</w>
       <w>defs</w>
       <w>dropdown</w>
@@ -22,6 +23,7 @@
       <w>geoname</w>
       <w>geonames</w>
       <w>github</w>
+      <w>glyphicon</w>
       <w>infieldlabel</w>
       <w>inflector</w>
       <w>kondor</w>

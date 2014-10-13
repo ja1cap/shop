@@ -2,7 +2,7 @@
 
 {% set _title = block('title') %}
 {% if not _title %}
-    {% block title %}{{ (title is defined ? title : nulll)|default('Система управления магазином') }}{% endblock %}
+    {% block title %}{{ (title is defined and title ? title : page_title())|default('Система управления магазином') }}{% endblock %}
 {% endif %}
 
 {% set _page_header = block('page_header') %}
@@ -31,11 +31,13 @@
                             {% if _breadcrumbs %}
                                 <ul class="breadcrumb">
                                     {% for breadcrumb in _breadcrumbs %}
-                                        <li>
-                                            <a href="{{ path(breadcrumb.routeName, breadcrumb.routeParameters) }}">
-                                                {{ breadcrumb.title|trans(breadcrumb.titleParameters, breadcrumb.translationDomain) }}
-                                            </a>
-                                        </li>
+                                        {% if breadcrumb.title %}
+                                            <li>
+                                                <a href="{{ path(breadcrumb.routeName, breadcrumb.routeParameters) }}">
+                                                    {{ breadcrumb.title }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             {% endif %}

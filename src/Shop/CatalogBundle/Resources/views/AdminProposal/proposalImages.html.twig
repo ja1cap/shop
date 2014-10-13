@@ -11,7 +11,7 @@
             <div class="isotope-item">
                 <div class="thumbnail">
                     <a href="{% path image, 'reference' %}" rel="proposalImages" class="fancybox">
-                        <img src="{% path image, 'small_square' %}">
+                        {% thumbnail image, 'small_square' %}
                     </a>
                     <div class="caption">
                         <div class="btn-group-vertical block">

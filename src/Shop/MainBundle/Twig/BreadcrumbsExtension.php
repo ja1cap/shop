@@ -1,16 +1,39 @@
 <?php
 namespace Shop\MainBundle\Twig;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Cache\ArrayCache;
 
 /**
  * Class BreadcrumbsExtension
  * @package Shop\MainBundle\Twig
  */
-class BreadcrumbsExtension extends \Twig_Extension {
+class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInterface {
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
 
     /**
      * @var \Symfony\Component\Routing\Router
      */
     protected $router;
+
+    /**
+     * @var \Symfony\Component\Translation\TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * @var \Doctrine\Common\Cache\Cache
+     */
+    protected $cache;
 
     /**
      * @return array
@@ -19,6 +42,7 @@ class BreadcrumbsExtension extends \Twig_Extension {
     {
         return [
             new \Twig_SimpleFunction('page_breadcrumbs', [$this, 'getRouteBreadCrumbs'], ['needs_context' => true]),
+            new \Twig_SimpleFunction('page_title', [$this, 'getRouteTitle'], ['needs_context' => true]),
         ];
     }
 
@@ -29,14 +53,8 @@ class BreadcrumbsExtension extends \Twig_Extension {
      */
     public function getRouteBreadCrumbs($context, $routeName = null){
 
-        /**
-         * @var $app \Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables
-         */
-        $app = $context['app'];
-        $request = $app->getRequest();
-
         if(!$routeName){
-            $routeName = $request->get('_route');
+            $routeName = $this->getRequest()->get('_route');
         }
 
         $breadcrumbs = [];
@@ -46,17 +64,12 @@ class BreadcrumbsExtension extends \Twig_Extension {
 
         do {
 
-            $breadcrumb = $this->buildRouteBreadCrumb($currentRouteName, $context, $request);
+            $breadcrumb = $this->buildRouteBreadCrumb($currentRouteName, $context);
 
             if($breadcrumb){
 
                 $breadcrumbs[$currentRouteName] = $breadcrumb;
-
-                /**
-                 * @var $route \Symfony\Component\Routing\Route
-                 */
-                $route = $breadcrumb['route'];
-                $parentRouteName = $route->getOption('parent');
+                $parentRouteName = $breadcrumb['parent'];
 
                 if($parentRouteName){
                     $currentRouteName = $parentRouteName;
@@ -79,12 +92,37 @@ class BreadcrumbsExtension extends \Twig_Extension {
     }
 
     /**
+     * @param $context
+     * @param $routeName
+     * @return null
+     */
+    public function getRouteTitle($context, $routeName){
+
+        if(!$routeName){
+            $routeName = $this->getRequest()->get('_route');
+        }
+
+        $breadcrumb = $this->buildRouteBreadCrumb($routeName, $context);
+
+        if($breadcrumb){
+            return $breadcrumb['title'];
+        }
+
+        return null;
+
+    }
+
+    /**
      * @param $routeName
      * @param $context
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return array|null
      */
-    protected function buildRouteBreadCrumb($routeName, $context, $request){
+    protected function buildRouteBreadCrumb($routeName, $context){
+
+        $breadcrumb = $this->getCache()->fetch($routeName);
+        if($breadcrumb){
+            return $breadcrumb;
+        }
 
         $collection = $this->getRouter()->getRouteCollection();
         $route = $routeName ? $collection->get($routeName) : null;
@@ -94,6 +132,64 @@ class BreadcrumbsExtension extends \Twig_Extension {
             $title = $route->getOption('title');
             if(!$title){
                 return null;
+            }
+
+            $resources = [];
+            $resourceKey = $route->getOption('resourceKey');
+
+            if($resourceKey){
+
+                if(strpos($resourceKey, '||') !== false){
+
+                    $resourceKeys = explode('||', $resourceKey);
+                    foreach($resourceKeys as $_resourceKey){
+
+                        if(isset($context[$_resourceKey])){
+                            $_resource = $context[$_resourceKey];
+                            $resources[$_resourceKey] = $_resource;
+                        }
+
+                    }
+
+                } elseif(isset($context[$resourceKey])){
+
+                    $resources[$resourceKey] = $context[$resourceKey];
+
+                }
+
+            }
+
+            $resources = array_filter($resources);
+
+            $routeParameters = [];
+            $pathVariables = $route->compile()->getPathVariables();
+
+            if($pathVariables){
+
+                foreach($pathVariables as $pathVariable){
+
+                    $pathVariableValue = null;
+                    $resourcePathVariable = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $pathVariable));
+
+                    foreach($resources as $_resource){
+                        if(isset($_resource[$resourcePathVariable])){
+                            $pathVariableValue = $_resource[$resourcePathVariable];
+                            break;
+                        }
+                    }
+
+                    if(!$pathVariableValue){
+                        $pathVariableValue = $this->getRequest()->get($pathVariable);
+                    }
+
+                    if(!$pathVariableValue && !$route->hasDefault($pathVariable)){
+                        return null;
+                    }
+
+                    $routeParameters[$pathVariable] = $pathVariableValue;
+
+                }
+
             }
 
             $translationDomain = $route->getOption('translationDomain');
@@ -108,77 +204,54 @@ class BreadcrumbsExtension extends \Twig_Extension {
                     $translationDomain = $controllerParts[0] . $controllerParts[1];
                 }
 
-                $route->setOption('translationDomain', $translationDomain);
-
             }
 
-            $resource = null;
-            $resourceKey = $route->getOption('resourceKey');
-            if($resourceKey && isset($context[$resourceKey])){
+            $titles = explode('||', $title);
 
-                $resource = $context[$resourceKey];
+            foreach($titles as $_title){
 
-            }
+                $_titleParameters = [];
 
-            $routeParameters = [];
-            $pathVariables = $route->compile()->getPathVariables();
+                if($resources){
 
-            if($pathVariables){
+                    preg_match_all("/%(.*)%/", $_title, $matches);
+                    $_titleVars = isset($matches[1]) ? $matches[1] : null;
 
-                foreach($pathVariables as $pathVariable){
+                    if($_titleVars && is_array($_titleVars)){
 
-                    $resourcePathVariable = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $pathVariable));
+                        foreach($_titleVars as $_titleVar){
 
-                    if(isset($resource[$resourcePathVariable])){
+                            $_formattedTitleVar = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $_titleVar));
 
-                        $pathVariableValue = $resource[$resourcePathVariable];
+                            foreach($resources as $_resourceKey => $_resource){
+                                if(isset($_resource[$_formattedTitleVar])){
+                                    $_titleParameters['%' . $_titleVar . '%'] = $_resource[$_formattedTitleVar];
+                                    break;
+                                }
+                            }
 
-                    } else {
-
-                        $pathVariableValue = $request->get($pathVariable);
-
-                    }
-
-                    if(!$pathVariableValue && !$route->getDefault($pathVariable)){
-                        return null;
-                    }
-
-                    $routeParameters[$pathVariable] = $pathVariableValue;
-
-                }
-
-            }
-
-            $titleParameters = [];
-            if($resource){
-
-                preg_match_all("/%(.*)%/", $title, $matches);
-                $titleVars = isset($matches[1]) ? $matches[1] : null;
-
-                if($titleVars && is_array($titleVars)){
-
-                    foreach($titleVars as $titleVar){
-
-                        $titleVar = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $titleVar));
-                        if(isset($resource[$titleVar])){
-                            $titleParameters['%' . $titleVar . '%'] = $resource[$titleVar];
                         }
 
                     }
 
+
+                }
+
+                $title = $this->getTranslator()->trans($_title, $_titleParameters, $translationDomain);
+                if($title){
+                    break;
                 }
 
             }
 
             $breadcrumb = array(
                 'title' => $title,
-                'titleParameters' => $titleParameters,
-                'translationDomain' => $route->getOption('translationDomain'),
-                'resourceKey' => $route->getOption('resourceKey'),
                 'routeName' => $routeName,
                 'routeParameters' => $routeParameters,
-                'route' => $route,
+                'parent' => $route->getOption('parent'),
             );
+
+            $this->getCache()->save($routeName, $breadcrumb);
 
             return $breadcrumb;
 
@@ -195,15 +268,55 @@ class BreadcrumbsExtension extends \Twig_Extension {
      */
     public function getRouter()
     {
+        if(!$this->router){
+            $this->router = $this->container->get('router');
+        }
         return $this->router;
     }
 
     /**
-     * @param \Symfony\Component\Routing\Router $router
+     * @return \Symfony\Component\Translation\TranslatorInterface
      */
-    public function setRouter($router)
+    public function getTranslator()
     {
-        $this->router = $router;
+        if(!$this->translator){
+            $this->translator = $this->container->get('translator');
+        }
+        return $this->translator;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        if(!$this->request){
+            $this->request = $this->container->get('request');
+        }
+        return $this->request;
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     *
+     * @api
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return \Doctrine\Common\Cache\Cache
+     */
+    public function getCache()
+    {
+        if(!$this->cache){
+            $this->cache = new ArrayCache();
+        }
+        return $this->cache;
     }
 
     /**

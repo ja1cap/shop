@@ -111,7 +111,7 @@ class AdminProposalController extends Controller
         } else {
 
             return $this->render('ShopCatalogBundle:AdminProposal:proposal.html.twig', array(
-                'title' => $isNew ? 'Добавление товара' : $proposal->getName(),
+                'title' => $isNew ? 'Добавление товара' : null,
                 'form' => $form->createView(),
                 'category' => $category,
                 'proposal' => $proposal,
@@ -172,7 +172,6 @@ class AdminProposalController extends Controller
         }
 
         return $this->render('ShopCatalogBundle:AdminProposal:proposalPrices.html.twig', array(
-            'title' => 'Цены',
             'category' => $proposal->getCategory(),
             'proposal' => $proposal,
         ));
@@ -341,7 +340,6 @@ class AdminProposalController extends Controller
         }
 
         return $this->render('ShopCatalogBundle:AdminProposal:proposalImages.html.twig', array(
-            'title' => 'Фотографии',
             'category' => $proposal->getCategory(),
             'proposal' => $proposal,
         ));

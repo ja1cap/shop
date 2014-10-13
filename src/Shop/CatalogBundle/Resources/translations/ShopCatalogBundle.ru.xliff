@@ -22,6 +22,22 @@
                 <source>shop.categories</source>
                 <target>Категории</target>
             </trans-unit>
+            <trans-unit id="shop.price_lists">
+                <source>shop.price_lists</source>
+                <target>Прайс-листы</target>
+            </trans-unit>
+            <trans-unit id="shop.price_list.add">
+                <source>shop.price_list.add</source>
+                <target>Добавление прайс-листа</target>
+            </trans-unit>
+            <trans-unit id="shop.price_list.create">
+                <source>shop.price_list.create</source>
+                <target>Создание прайс-листа</target>
+            </trans-unit>
+            <trans-unit id="shop.price_list.settings%name%">
+                <source>shop.price_list.settings%name%</source>
+                <target>Настройка</target>
+            </trans-unit>
             <trans-unit id="shop.category">
                 <source>shop.category</source>
                 <target>Категория</target>
@@ -33,6 +49,34 @@
             <trans-unit id="shop.proposals">
                 <source>shop.proposals</source>
                 <target>Товары</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal">
+                <source>shop.proposal</source>
+                <target>Товары</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.add">
+                <source>shop.proposal.add</source>
+                <target>Добавление товара</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.seo">
+                <source>shop.proposal.seo</source>
+                <target>SEO</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.prices">
+                <source>shop.proposal.prices</source>
+                <target>Цены</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.price">
+                <source>shop.proposal.price</source>
+                <target>Цена</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.images">
+                <source>shop.proposal.images</source>
+                <target>Фотографии</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.image">
+                <source>shop.proposal.image</source>
+                <target>Фотография</target>
             </trans-unit>
             <trans-unit id="shop.manufacturers">
                 <source>shop.manufacturers</source>

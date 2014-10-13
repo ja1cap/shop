@@ -4,11 +4,6 @@
     </a>
 </li>
 {% if proposal.id %}
-    <li class="{{ app.request.get('_route') == 'proposal_seo' ? 'active' : '' }}">
-        <a href="{{ path('proposal_seo', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-            SEO
-        </a>
-    </li>
     <li class="{{ app.request.get('_route') == 'proposal_prices' ? 'active' : '' }}">
         <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
             Цены
@@ -17,6 +12,11 @@
     <li class="{{ app.request.get('_route') == 'proposal_images' ? 'active' : '' }}">
         <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
             Фотографии
+        </a>
+    </li>
+    <li class="{{ app.request.get('_route') == 'proposal_seo' ? 'active' : '' }}">
+        <a href="{{ path('proposal_seo', {'categoryId' : category.id, 'id' : proposal.id}) }}">
+            SEO
         </a>
     </li>
 {% endif %}

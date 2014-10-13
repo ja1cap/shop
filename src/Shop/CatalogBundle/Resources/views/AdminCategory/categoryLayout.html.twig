@@ -1,7 +1,5 @@
 {% extends "ShopAdminBundle::layout.html.twig" %}
 
-{% block title %}{{ title|default(category.name)|default(parent()) }}{% endblock %}
-
 {% block page_menu %}
     {{ include('ShopCatalogBundle:AdminCategory:categoryMenuListItems.html.twig') }}
 {% endblock %}

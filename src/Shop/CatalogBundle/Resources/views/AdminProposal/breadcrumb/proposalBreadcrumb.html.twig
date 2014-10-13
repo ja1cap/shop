@@ -1,9 +1,0 @@
-{% extends 'ShopCatalogBundle:AdminProposal:breadcrumb/proposalsBreadcrumb.html.twig' %}
-{% block breadcrumb_items %}
-    {{ parent() }}
-    <li>
-        <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-            {{ proposal.name|default(title) }}
-        </a>
-    </li>
-{% endblock %}

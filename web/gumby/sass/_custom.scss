@@ -1182,9 +1182,16 @@ body {
     font-family: "Helvetica Neue", "Arial", sans-serif;
     background: white;
     border-bottom: 1px solid #a3c3db;
+    min-width: $admin-container-width;
+    width: 100%;
 
     .row {
       max-width: $admin-container-width;
+    }
+
+    .admin-main-row {
+      width: $admin-container-width;
+      position: relative;
     }
 
     .isotope-container {
@@ -1290,15 +1297,10 @@ body {
 
     }
 
-    .admin-main-row {
-      position: relative;
-    }
-
     .admin-menu-container {
 
       float: left;
       min-height: 1px;
-      padding: 0 1px;
       width: $admin-menu-container-width;
 
       &:before {
@@ -1319,6 +1321,7 @@ body {
 
       .admin-menu-content {
 
+        padding: 0 1px;
         position: relative;
         z-index: 2;
 
@@ -1341,8 +1344,7 @@ body {
             }
 
             a {
-
-
+              padding-left: 30px;
             }
 
             &.active {
@@ -1461,6 +1463,10 @@ body {
       border-bottom: 1px solid #a3c3db;
       position: relative;
       background: rgb(249,249,249);
+
+      .header-main-row {
+        width: $admin-container-width;
+      }
 
       .header {
 

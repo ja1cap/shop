@@ -4300,8 +4300,9 @@ body .hit-container .order-proposal-container .order-proposal-form-container { -
 body .hit-container .order-proposal-container .order-proposal-form-container .order-proposal-title { text-align: center; color: white; font-size: 14px; line-height: 16px; margin-bottom: 30px; }
 body .hit-container .order-proposal-container .order-proposal-form-container .submit-btn { cursor: pointer; padding: 14px 0 25px; display: block; text-align: center; border: none; outline: none; font-size: 20px; color: white; position: absolute; bottom: -87px; left: 0; width: 284px; height: 70px; background: url("/img/sprite.png") no-repeat -112px -1325px; }
 body .hit-container .order-proposal-container .order-proposal-form-container .submit-btn:hover { background: url("/img/sprite.png") no-repeat -790px -1325px; }
-body .admin-container { font-family: "Helvetica Neue", "Arial", sans-serif; background: white; border-bottom: 1px solid #a3c3db; }
+body .admin-container { font-family: "Helvetica Neue", "Arial", sans-serif; background: white; border-bottom: 1px solid #a3c3db; min-width: 1170px; width: 100%; }
 body .admin-container .row { max-width: 1170px; }
+body .admin-container .admin-main-row { width: 1170px; position: relative; }
 body .admin-container .isotope-container .isotope-item { width: 24%; float: left; }
 body .admin-container .primary-note { margin-top: -70px; position: absolute; right: 20px; width: 370px; top: 50%; height: 140px; overflow: visible; }
 body .admin-container .primary-note:before { top: -9px; padding-top: 9px; padding-bottom: 9px; position: absolute; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; content: ''; box-shadow: 0 0 15px rgba(0, 0, 0, 0.15), 0 0 1px 1px rgba(0, 0, 0, 0.1); border-radius: 4px; background-color: #feed6f; }
@@ -4310,13 +4311,13 @@ body .admin-container .primary-note .label-container-inner { left: 0; right: 0; 
 body .admin-container .primary-note .node-label { display: table-cell; vertical-align: middle; width: 100%; position: static; font-size: 17px; line-height: 20px; color: #9c5720; overflow: visible; max-width: 258px; text-align: left; }
 body .admin-container .primary-note .icon-box { position: absolute; margin-top: -40px; left: 11px; width: 80px; top: 50%; height: 80px; }
 body .admin-container .primary-note .icon-drag { position: absolute; left: 0; top: 0; width: 80px; height: 80px; background: url("/img/packed-1.png") -350px -2357px no-repeat; }
-body .admin-container .admin-main-row { position: relative; }
-body .admin-container .admin-menu-container { float: left; min-height: 1px; padding: 0 1px; width: 250px; }
+body .admin-container .admin-menu-container { float: left; min-height: 1px; width: 250px; }
 body .admin-container .admin-menu-container:before { content: ' '; display: block; background: #ddeefb; border-left: 1px solid #bad0df; border-right: 1px solid #bad0df; box-shadow: 0 1px 0 #e4f1fc inset; position: absolute; height: 100%; left: 0; top: 0; width: 248px; }
-body .admin-container .admin-menu-container .admin-menu-content { position: relative; z-index: 2; }
+body .admin-container .admin-menu-container .admin-menu-content { padding: 0 1px; position: relative; z-index: 2; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu { padding: 0; margin: 0; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu li { padding: 9px 10px 10px 20px; position: relative; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu li, body .admin-container .admin-menu-container .admin-menu-content .admin-menu li > a { display: block; font-size: 17px; color: #465d6f; }
+body .admin-container .admin-menu-container .admin-menu-content .admin-menu li a { padding-left: 30px; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu li.active { background-color: #cae8fb; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu li.active:before { background-color: #b1dbf9; top: -1px; left: 0; }
 body .admin-container .admin-menu-container .admin-menu-content .admin-menu li.active:after { background-color: #b1dbf9; left: 0; }
@@ -4333,6 +4334,7 @@ body .admin-container .admin-main-container .page-header h1, body .admin-contain
 body .admin-container .admin-main-container .page-menu { margin-bottom: 20px; }
 body .admin-container .admin-main-container .page-buttons { margin-bottom: 20px; }
 body .admin-container .header-container { border-bottom: 1px solid #a3c3db; position: relative; background: #f9f9f9; }
+body .admin-container .header-container .header-main-row { width: 1170px; }
 body .admin-container .header-container .header { color: #777; height: 70px; }
 body .admin-container .header-container .header .header-logo { float: left; overflow: hidden; }
 body .admin-container .header-container .header .header-logo .image-wrapper { top: 7px; position: relative; float: left; }

@@ -23,6 +23,7 @@ require_once __DIR__.'/../app/AppCache.php';
 
 $topLevelDomain = pathinfo(parse_url($_SERVER['SERVER_NAME'], PHP_URL_HOST), PATHINFO_EXTENSION);
 $env = ($topLevelDomain == 'local' ? 'prod' : 'dev');
+//$env = 'prod';
 $kernel = new AppKernel($env, ($env == 'dev'));
 $kernel->loadClassCache();
 $kernel = new AppCache($kernel);

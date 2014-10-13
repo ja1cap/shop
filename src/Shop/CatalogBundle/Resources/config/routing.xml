@@ -24,7 +24,7 @@
         <default key="id">null</default>
         <option key="title">%name%</option>
         <option key="parent">admin_catalog_categories</option>
-        <option key="resourceKey">category</option>
+        <option key="resourceKey">category||proposal||price</option>
     </route>
     <route id="delete_category" pattern="/adminCatalog/deleteCategory/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategory</default>

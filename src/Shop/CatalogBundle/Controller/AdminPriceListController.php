@@ -125,7 +125,6 @@ class AdminPriceListController extends Controller
         } else {
 
             return $this->render('ShopCatalogBundle:AdminPriceList:priceList.html.twig', array(
-                'title' => 'Создание прайс-листа',
                 'form' => $form->createView(),
             ));
 
@@ -353,7 +352,6 @@ class AdminPriceListController extends Controller
                 'manufacturers' => $manufacturers,
                 'priceList' => $priceList,
                 'priceListCurrentColumnsAliases' => $priceListCurrentColumnsAliases,
-                'title' => $priceList->getName(),
             ));
 
         }

@@ -5,6 +5,7 @@ proposals:
     options:
         title: shop.proposals
         parent: category
+        resourceKey: category||proposal||price
 
 proposals_browser:
     pattern: /adminCatalog/proposalsBrowser/{categoryId}
@@ -13,10 +14,18 @@ proposals_browser:
 proposal:
     pattern: /adminCatalog/proposal/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, id: null }
+    options:
+        title: %name%||shop.proposal.add
+        parent: proposals
+        resourceKey: proposal
 
 proposal_seo:
     pattern: /adminCatalog/proposalSeo/{categoryId}/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposal, _form_type: weasty_admin_seo_type }
+    options:
+        title: shop.proposal.seo
+        parent: proposal
+        resourceKey: proposal
 
 delete_proposal:
     pattern: /adminCatalog/deleteProposal/{id}
@@ -38,29 +47,45 @@ delete_popular_proposal:
     pattern: /adminCatalog/deletePopularProposal/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPopularProposal:deleteProposal }
 
-proposal_price:
-    pattern: /adminCatalog/proposalPrice/{proposalId}/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }
-
 proposal_prices:
     pattern: /adminCatalog/proposalPrices/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrices }
+    options:
+        title: shop.proposal.prices
+        resourceKey: proposal
+        parent: proposal
+
+proposal_price:
+    pattern: /adminCatalog/proposalPrice/{proposalId}/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalPrice, id: null }
+    options:
+        title: shop.proposal.price
+        resourceKey: proposalPrice
+        parent: proposal_prices
 
 delete_proposal_price:
     pattern: /adminCatalog/deleteProposalPrice/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalPrice }
 
+proposal_images:
+    pattern: /adminCatalog/proposalImages/{id}
+    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImages }
+    options:
+        title: shop.proposal.images
+        resourceKey: proposal
+        parent: proposal
+
 proposal_image:
     pattern: /adminCatalog/proposalImages/{proposalId}/image/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImage, id: null }
+    options:
+        title: shop.proposal.image
+        resourceKey: image
+        parent: proposal_images
 
 proposal_set_main_image:
     pattern: /adminCatalog/proposalImages/{proposalId}/setMainImage/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalSetMainImage }
-
-proposal_images:
-    pattern: /adminCatalog/proposalImages/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminProposal:proposalImages }
 
 delete_proposal_image:
     pattern: /adminCatalog/proposalImages/{proposalId}/deleteImage/{id}
@@ -108,18 +133,33 @@ delete_contractor_currency:
 admin_catalog_price_lists:
     pattern: /adminCatalog/priceLists
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }
+    options:
+        title: shop.price_lists
+        parent: admin_catalog
 
 admin_catalog_price_list:
     pattern: /adminCatalog/priceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList, id: null }
+    options:
+        title: %name%||shop.price_list.add
+        resourceKey: priceList
+        parent: admin_catalog_price_lists
 
 admin_catalog_price_list_create:
     pattern: /adminCatalog/createPriceList
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:createPriceList }
+    options:
+        title: shop.price_list.create
+        resourceKey: priceList
+        parent: admin_catalog_price_lists
 
 admin_catalog_price_list_aliases:
     pattern: /adminCatalog/priceListAliases/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListAliases }
+    options:
+        title: shop.price_list.settings%name%
+        resourceKey: priceList
+        parent: admin_catalog_price_list
 
 admin_catalog_price_list_download:
     pattern: /adminCatalog/downloadPriceList/{id}

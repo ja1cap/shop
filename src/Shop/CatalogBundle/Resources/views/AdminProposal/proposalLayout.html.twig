@@ -1,11 +1,5 @@
 {% extends "ShopAdminBundle::layout.html.twig" %}
 
-{% block title %}{{ title|default(proposal.name)|default(parent()) }}{% endblock %}
-
-{% block page_breadcrumb %}
-    {{ include('ShopCatalogBundle:AdminProposal:breadcrumb/proposalBreadcrumb.html.twig') }}
-{% endblock %}
-
 {% block page_menu %}
     {{ include('ShopCatalogBundle:AdminProposal:proposalMenuListItems.html.twig') }}
 {% endblock %}

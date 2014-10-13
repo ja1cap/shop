@@ -62,7 +62,7 @@ class AdminManufacturerController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('manufacturer', ['id' => $entity->getId()]));
+            return $this->redirect($this->generateUrl('admin_catalog_manufacturer', ['id' => $entity->getId()]));
 
         } else {
 
@@ -95,7 +95,7 @@ class AdminManufacturerController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('manufacturers'));
+        return $this->redirect($this->generateUrl('admin_catalog_manufacturers'));
 
     }
 

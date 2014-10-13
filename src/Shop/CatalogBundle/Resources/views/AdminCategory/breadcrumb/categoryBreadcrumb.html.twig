@@ -1,12 +1,12 @@
-<div class="breadcrumb">
-    <ul>
+<div>
+    <ul class="breadcrumb">
         {% block breadcrumb_items %}
-            <li class="medium btn default">
-                <a href="{{ path('categories') }}">
+            <li>
+                <a href="{{ path('admin_catalog_categories') }}">
                     Каталог
                 </a>
             </li>
-            <li class="medium btn default">
+            <li>
                 <a href="{{ path('category', {'id' : category.id}) }}">
                     {{ category.name|default((title is defined ? title : null))|capitalize }}
                 </a>

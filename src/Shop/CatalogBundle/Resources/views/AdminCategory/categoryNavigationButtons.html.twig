@@ -1,10 +1,6 @@
-<div class="medium default btn icon-left entypo icon-archive">
-    <a href="{{ path('proposals', {'categoryId' : category.id}) }}">
-        Товары
-    </a>
-</div>
-<div class="medium default btn icon-left entypo icon-menu">
-    <a href="{{ path('category_parameters', {'categoryId' : category.id}) }}">
-        Параметры
-    </a>
-</div>
+<a href="{{ path('proposals', {'categoryId' : category.id}) }}" class="btn btn-default">
+    Товары
+</a>
+<a href="{{ path('category_parameters', {'categoryId' : category.id}) }}" class="btn btn-default">
+    Параметры
+</a>

@@ -6,6 +6,46 @@
                 <source>shop.catalog</source>
                 <target>Каталог</target>
             </trans-unit>
+            <trans-unit id="shop.catalog.parameters">
+                <source>shop.catalog.parameters</source>
+                <target>Параметры товаров</target>
+            </trans-unit>
+            <trans-unit id="shop.catalog.parameter%name%">
+                <source>shop.catalog.parameter%name%</source>
+                <target>Параметр %name%</target>
+            </trans-unit>
+            <trans-unit id="shop.catalog.parameter.option">
+                <source>shop.catalog.parameter.option</source>
+                <target>Значение параметра</target>
+            </trans-unit>
+            <trans-unit id="shop.categories">
+                <source>shop.categories</source>
+                <target>Категории</target>
+            </trans-unit>
+            <trans-unit id="shop.category">
+                <source>shop.category</source>
+                <target>Категория</target>
+            </trans-unit>
+            <trans-unit id="shop.category.parameters">
+                <source>shop.category.parameters</source>
+                <target>Параметры категории</target>
+            </trans-unit>
+            <trans-unit id="shop.proposals">
+                <source>shop.proposals</source>
+                <target>Товары</target>
+            </trans-unit>
+            <trans-unit id="shop.manufacturers">
+                <source>shop.manufacturers</source>
+                <target>Производители</target>
+            </trans-unit>
+            <trans-unit id="shop.manufacturer">
+                <source>shop.manufacturer</source>
+                <target>Производитель</target>
+            </trans-unit>
+            <trans-unit id="shop.manufacturer_name">
+                <source>shop.manufacturer%name%</source>
+                <target>Производитель %name%</target>
+            </trans-unit>
             <trans-unit id="shop.catalog.best_proposals">
                 <source>shop.catalog.best_proposals</source>
                 <target>Лучшие предложения</target>

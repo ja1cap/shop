@@ -55,6 +55,14 @@
             <argument type="service" id="shop_main.contacts.resource"/>
         </service>
 
+        <service id="breadcrumbs.extension"
+                 class="Shop\MainBundle\Twig\BreadcrumbsExtension">
+            <tag name="twig.extension"/>
+            <call method="setRouter">
+                <argument type="service" id="router"/>
+            </call>
+        </service>
+
     </services>
 
 </container>

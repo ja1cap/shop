@@ -12,11 +12,11 @@ $body-font-family: "Roboto";
   text-transform: uppercase;
   line-height: 3;
   text-align: center;
-  text-shadow: 1.414px 1.414px 0px rgb( 0, 0, 0 );
+  text-shadow: 1.414px 1.414px 0 rgb( 0, 0, 0 );
 
   @include background-image(linear-gradient(rgb(255,48,0), rgb(255,114,0)));
   @include border-radius(4px);
-  @include box-shadow(1.414px 1.414px 2px 0px rgb( 0, 0, 0 ));
+  @include box-shadow(1.414px 1.414px 2px 0 rgb( 0, 0, 0 ));
 
   display: inline-block;
   height: 60px;
@@ -296,10 +296,10 @@ $block-container-padding: 50px 0;
         display: block;
         border: 1px dotted rgb( 0, 118, 181 );
         position: absolute;
-        left: 0px;
+        left: 0;
         bottom: -3px;
         width: 100%;
-        height: 0px;
+        height: 0;
 
       }
 
@@ -316,7 +316,7 @@ $block-container-padding: 50px 0;
       background-image: -webkit-linear-gradient( 90deg, rgb(145,220,0) 0%, rgb(28,169,0) 100%);
       background-image: -ms-linear-gradient( 90deg, rgb(145,220,0) 0%, rgb(28,169,0) 100%);
       color: rgb( 255, 255, 255 );
-      @include box-shadow(inset 1.414px 1.414px 2px 0px rgba(0, 0, 0, 0.6));
+      @include box-shadow(inset 1.414px 1.414px 2px 0 rgba(0, 0, 0, 0.6));
 
       span {
 

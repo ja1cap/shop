@@ -98,7 +98,7 @@ class AdminCategoryController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('categories'));
+        return $this->redirect($this->generateUrl('admin_catalog_categories'));
 
     }
 
@@ -115,7 +115,7 @@ class AdminCategoryController extends Controller
         ));
 
         if(!$category instanceof Category){
-            return $this->redirect($this->generateUrl('categories'));
+            return $this->redirect($this->generateUrl('admin_catalog_categories'));
         }
 
         $categoryParameterGroupRepository = $this->getDoctrine()->getRepository('ShopCatalogBundle:CategoryParameterGroup');
@@ -183,7 +183,7 @@ class AdminCategoryController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('categories'));
+        return $this->redirect($this->generateUrl('admin_catalog_categories'));
 
     }
 

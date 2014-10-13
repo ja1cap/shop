@@ -1,10 +1,15 @@
-{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
+{% extends "ShopAdminBundle::layout.html.twig" %}
+{#{% block title %}{{ ('Просмотр - ' ~ priceList.name)|default(title) }}{% endblock %}#}
+
+{% block page_breadcrumb %}
+    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+{% endblock %}
 
 {% block page_content %}
 
-    <div class="large btn primary" style="margin-bottom: 20px">
-        <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">
-            Скачать прайс-лист
+    <div class="page-menu">
+        <a href="{{ path('admin_catalog_price_list_download', {'id' : priceList.id}) }}" class="btn btn-primary btn-lg">
+            <span class="glyphicon glyphicon-download"></span> Скачать прайс-лист
         </a>
     </div>
 

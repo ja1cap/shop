@@ -1,3 +1,4 @@
+@import "compass";
 @import "var/settings";
 
 //@import "templates/default/default";
@@ -92,9 +93,7 @@ body {
       font-style: italic;
       font-family: Georgia, Times, "Times New Roman", serif;
       padding: 2px 0;
-      border-style: solid;
-      border-color: #ccc;
-      border-width: 0;
+      border: 0 solid #ccc;
     }
 
     .cke_contents_ltr blockquote
@@ -119,7 +118,7 @@ body {
     ol,ul,dl
     {
       /* IE7: reset rtl list margin. (#7334) */
-      *margin-right: 0px;
+      *margin-right: 0;
       /* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
       padding: 0 40px;
     }
@@ -132,7 +131,7 @@ body {
 
     hr
     {
-      border: 0px;
+      border: 0;
       border-top: 1px solid #ccc;
     }
 
@@ -252,47 +251,6 @@ body {
 
   }
 
-  table {
-
-    &.dataTable {
-
-      thead {
-
-        td, th {
-
-          border-top: none;
-          border-bottom: none;
-
-        }
-
-      }
-
-      tbody {
-
-        tr {
-
-          &:last-child {
-
-            td {
-
-              border-bottom: 1px solid #e5e5e5;
-
-            }
-
-          }
-
-        }
-
-      }
-
-      &.no-footer {
-        border-bottom: none;
-      }
-
-    }
-
-  }
-
   .tiles {
 
     overflow: visible;
@@ -395,6 +353,72 @@ body {
     max-width: $row-max-width;
   }
 
+  .dataTables_wrapper {
+
+    .proposals-table_filter {
+      width: 50%;
+      float: right;
+    }
+
+    table {
+
+      &.dataTable {
+
+        margin-top: 0 !important;
+        margin-bottom: 20px !important;
+
+        thead {
+
+          td, th {
+
+            padding-left: 8px;
+            padding-right: 8px;
+            border-top: none;
+
+          }
+
+        }
+
+        tbody {
+
+          tr {
+
+            &:last-child {
+
+              td {
+
+                border-bottom: 1px solid #e5e5e5;
+
+              }
+
+            }
+
+          }
+
+        }
+
+        &.no-footer {
+          border-bottom: none;
+        }
+
+      }
+
+    }
+
+    .dataTables_paginate {
+      text-align: center;
+      float: none;
+      margin: 5px 0 0;
+    }
+
+    .dataTables_info {
+      text-align: center;
+      padding: 0;
+    }
+
+  }
+
+
   h1.title {
     display: block;
     margin: 0;
@@ -443,22 +467,23 @@ body {
   }
 
   .breadcrumb {
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #CCCCCC;
-    ul {
-      overflow: hidden;
-      li {
-        float: left;
-        &:last-child {
-          @extend .pill-right;
-          background: white;
-          a {
-            cursor: default;
-          }
-        }
+
+    background: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+
+      &, & > a, & > a:hover {
+        color: #465d6f;
       }
+
     }
+
+    > li + li {
+      color: #465d6f;
+    }
+
   }
 
   button {
@@ -466,15 +491,6 @@ body {
   }
 
   form {
-
-    textarea.maxlength {
-      margin-bottom: 0;
-    }
-
-    .maxlength-feedback {
-      display: block;
-      margin: 0 0 10px;
-    }
 
     select[multiple="multiple"] {
       width: 100%;
@@ -539,6 +555,16 @@ body {
 
   .clear {
     clear: both;
+  }
+
+  .table-vmiddle {
+    tbody {
+      tr {
+        td {
+          vertical-align: middle;
+        }
+      }
+    }
   }
 
   .image-wrapper {
@@ -799,7 +825,7 @@ body {
         .number {
 
           font-size: 18px;
-          padding: 2px 0px 10px 4px;
+          padding: 2px 0 10px 4px;
           letter-spacing: 10px;
           display: block;
           width: 41px;
@@ -820,7 +846,7 @@ body {
           display: block;
           position: absolute;
           top: 37px;
-          left: 0px;
+          left: 0;
           width: 39px;
           height: 1px;
           background: #000000;
@@ -864,7 +890,7 @@ body {
         .number {
 
           font-size: 51px;
-          padding: 23px 0px 40px 15px;
+          padding: 23px 0 40px 15px;
           letter-spacing: 24px;
           display: block;
           width: 134px;
@@ -1063,7 +1089,7 @@ body {
           .number {
 
             font-size: 26px;
-            padding: 6px 0px 14px 5px;
+            padding: 6px 0 14px 5px;
             letter-spacing: 12px;
             display: block;
             width: 53px;
@@ -1084,7 +1110,7 @@ body {
             display: block;
             position: absolute;
             top: 49px;
-            left: 0px;
+            left: 0;
             width: 51px;
             height: 1px;
             background: #000000;
@@ -1129,7 +1155,7 @@ body {
           color: white;
           position: absolute;
           bottom: -87px;
-          left: 0px;
+          left: 0;
           width: 284px;
           height: 70px;
           background: url("/img/sprite.png") no-repeat -112px -1325px;
@@ -1146,25 +1172,299 @@ body {
 
   }
 
+  $admin-container-width: 1170px;
+  $admin-container-gutter-width: 20px;
+  $admin-menu-container-width: 250px;
+  $admin-main-container-width: ($admin-container-width - $admin-menu-container-width - $admin-container-gutter-width);
+
   .admin-container {
 
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    background: white;
+    border-bottom: 1px solid #a3c3db;
+
     .row {
-      max-width: 1170px;
+      max-width: $admin-container-width;
     }
 
-    background: white;
-    padding-bottom: 20px;
+    .isotope-container {
+
+      @extend .clearfix;
+
+      .isotope-item {
+        width: 24%; float: left;
+      }
+
+    }
+
+    .primary-note {
+
+      margin-top: -70px;
+      position: absolute;
+      right: 20px;
+      width: 370px;
+      top: 50%;
+      height: 140px;
+      overflow: visible;
+
+      &:before {
+
+        top: -9px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        content: '';
+        box-shadow: 0 0 15px rgba(0,0,0,0.15), 0 0 1px 1px rgba(0,0,0,0.1);
+        border-radius: 4px;
+        background-color: #feed6f;
+
+      }
+
+      .label-container-outer {
+
+        left: 102px;
+        right: 10px;
+        top: 0;
+        bottom: 0;
+        cursor: default;
+        overflow: hidden;
+        position: absolute;
+
+      }
+
+      .label-container-inner {
+
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: table;
+        position: static;
+        height: 100%;
+        width: 100%;
+        overflow: visible;
+
+      }
+
+      .node-label {
+
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        position: static;
+        font-size: 17px;
+        line-height: 20px;
+        color: #9c5720;
+        overflow: visible;
+        max-width: 258px;
+        text-align: left;
+
+      }
+
+      .icon-box {
+
+        position: absolute;
+        margin-top: -40px;
+        left: 11px;
+        width: 80px;
+        top: 50%;
+        height: 80px;
+
+      }
+
+      .icon-drag {
+
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80px;
+        height: 80px;
+        background: url('/img/packed-1.png') -350px -2357px no-repeat;
+
+      }
+
+    }
+
+    .admin-main-row {
+      position: relative;
+    }
+
+    .admin-menu-container {
+
+      float: left;
+      min-height: 1px;
+      padding: 0 1px;
+      width: $admin-menu-container-width;
+
+      &:before {
+
+        content: ' ';
+        display: block;
+        background: #ddeefb;
+        border-left: 1px solid #bad0df;
+        border-right: 1px solid #bad0df;
+        box-shadow: 0 1px 0 #e4f1fc inset;
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        width: $admin-menu-container-width - 2;
+
+      }
+
+      .admin-menu-content {
+
+        position: relative;
+        z-index: 2;
+
+        .admin-menu {
+
+          padding: 0;
+          margin: 0;
+
+          li {
+
+            padding: 9px 10px 10px 20px;
+            position: relative;
+
+            &, & > a {
+
+              display: block;
+              font-size: 17px;
+              color: #465d6f;
+
+            }
+
+            a {
+
+
+            }
+
+            &.active {
+
+              background-color: #cae8fb;
+
+              &:before {
+                background-color: #b1dbf9;
+                top: -1px;
+                left: 0;
+              }
+
+              &:after {
+                background-color: #b1dbf9;
+                left: 0;
+              }
+
+              &, & > a {
+                color: #007aff;
+              }
+
+            }
+
+            &:before {
+              content: '';
+              position: absolute;
+              top: 0;
+              height: 1px;
+              right: 0;
+              left: 20px;
+              background-color: #e4f2fc;
+            }
+
+            &:after {
+              content: '';
+              position: absolute;
+              height: 1px;
+              right: 0;
+              left: 20px;
+              bottom: 0;
+              background-color: #cde3f1;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    .admin-main-container {
+
+      float: left;
+      margin-left: $admin-container-gutter-width;
+      padding: 20px 0 10px;
+      width: $admin-main-container-width;
+
+      .nav-tabs {
+
+        &>li {
+
+          &>a {
+
+            text-decoration: none;
+            cursor: pointer;
+            color: #465d6f;
+
+            &:hover {
+              text-decoration: none;
+            }
+
+          }
+
+          &.active {
+
+            &>a {
+
+              cursor: default;
+              text-decoration: none;
+              &, &:hover, &:focus {
+                color: #465d6f;
+                text-decoration: none;
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+
+      .page-header {
+
+        h1, h2, h3, h4, h5, h6 {
+          padding: 0;
+        }
+
+        margin-bottom: 20px;
+
+      }
+
+      .page-menu {
+        margin-bottom: 20px;
+      }
+
+      .page-buttons {
+        margin-bottom: 20px;
+      }
+
+    }
 
     .header-container {
 
-      margin-bottom: 20px;
+      border-bottom: 1px solid #a3c3db;
       position: relative;
-      color: white;
-      background: #4a4d50;
-      @include single-box-shadow(rgba(0, 0, 0, 0.25), 0, 0, 10px);
+      background: rgb(249,249,249);
 
       .header {
 
+        color: #777;
         height: 70px;
 
         .header-logo {
@@ -1173,7 +1473,7 @@ body {
           overflow: hidden;
 
           .image-wrapper {
-            top: -2px;
+            top: 7px;
             position: relative;
             float: left;
             &, img {
@@ -1183,10 +1483,15 @@ body {
 
           .title {
 
-            color: white;
+            .glyphicon {
+              margin-right: 5px;
+              top: 5px;
+              font-size: 25px;
+            }
+
             float: left;
             display: block;
-            margin: 0 20px;
+            margin: 0 10px;
             font-size: 20px;
             line-height: 70px;
 
@@ -1197,10 +1502,8 @@ body {
         .user-container {
           float: right;
           padding: 0 10px;
-          color: white;
           line-height: 70px;
           a {
-            color: white;
             line-height: 70px;
             text-decoration: underline;
           }
@@ -1237,6 +1540,9 @@ body {
 
     .login-form-container {
 
+      margin-top: 50px;
+      margin-bottom: 50px;
+
       form {
 
         input[type='submit']{
@@ -1249,9 +1555,12 @@ body {
 
     form {
 
+      input[type="radio"], input[type="checkbox"] {
+        margin: 4px 4px 10px 0;
+      }
+
       label {
-        display: inline;
-        font-size: 16px;
+        display: inline-block;
         margin-bottom: 5px;
       }
 
@@ -1260,6 +1569,19 @@ body {
         height: 50px;
         border: 1px solid #CCCCCC;
         padding: 5px;
+        margin-bottom: 10px;
+      }
+
+      textarea.maxlength {
+        margin-bottom: 0;
+      }
+
+      .maxlength-feedback {
+        display: block;
+        margin: 0 0 10px;
+      }
+
+      .cke {
         margin-bottom: 10px;
       }
 
@@ -1296,15 +1618,25 @@ body {
 
         &[type="submit"] {
 
+          min-width: 150px;
           cursor: pointer;
-          display: block;
-          border: none;
-          padding: 10px;
-          margin: 10px 0;
-          width: 200px;
-          color: white;
-          font-size: 20px;
-          background: #3085d6;
+          display: inline-block;
+          margin: 10px 0 0;
+          font-weight: 400;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          padding: 10px 16px;
+          font-size: 18px;
+          line-height: 1.42857143;
+          border-radius: 6px;
+          color: #fff;
+          background: #428bca;
+          border: 1px solid #357ebd;
           outline: none;
 
         }
@@ -1316,7 +1648,7 @@ body {
     .tabs.vertical {
 
       & > .tab-content {
-        padding-top: 0px;
+        padding-top: 0;
       }
 
       & > .tab-nav.navigation-menu > li {
@@ -1340,7 +1672,7 @@ body {
           font-size: 16px;
           border: none;
           text-shadow: none;
-          @include border-radius(0px);
+          @include border-radius(0);
         }
       }
 
@@ -1405,14 +1737,19 @@ body {
     margin: 0 0 10px;
     border-bottom: 1px solid #cccccc;
 
+    .handle {
+      top: 2px;
+      cursor: move;
+      margin-right: 5px;
+    }
+
     li {
 
-      line-height: 28px;
+      width: 100%;
       overflow: hidden;
       background: white;
-      cursor: move;
       margin: 0;
-      padding: 5px 10px;
+      padding: 10px;
       display: block;
       border: 1px solid #cccccc;
       border-bottom: none;
@@ -1427,8 +1764,8 @@ body {
 
       &.ui-state-highlight {
 
-        min-height: 42px;
-        background: #fbdca0;
+        min-height: 51px;
+        background: #ddeefb;
 
       }
 
@@ -1594,7 +1931,7 @@ body {
       color: white;
       position: absolute;
       bottom: -100px;
-      left: 0px;
+      left: 0;
       width: 100%;
       border: 3px solid white;
       background: #fd5253;
@@ -1664,7 +2001,7 @@ body {
           color: white;
           position: absolute;
           bottom: -125px;
-          left: 0px;
+          left: 0;
           width: 415px;
           height: 112px;
           background: url("/img/sprite.png") no-repeat -105px -967px;

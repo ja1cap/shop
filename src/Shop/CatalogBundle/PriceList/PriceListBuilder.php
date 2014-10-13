@@ -146,14 +146,21 @@ class PriceListBuilder {
                     switch($aliasEntityMap['entity']){
                         case 'proposal':
 
-                            $value = $proposal[$property];
+                            if(isset($proposal[$property])){
+                                $value = $proposal[$property];
+                            }
+
                             break;
 
                         case 'price':
 
-                            switch($aliasEntityMap[$property]){
-                                default:
-                                    $value = $price[$property];
+                            if(isset($aliasEntityMap[$property])){
+
+                                switch($aliasEntityMap[$property]){
+                                    default:
+                                        $value = $price[$property];
+                                }
+
                             }
 
                             break;

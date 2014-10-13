@@ -10,12 +10,21 @@
     <route id="shop_cart_popup" pattern="/shopCart/popup">
         <default key="_controller">ShopCatalogBundle:ShopCart:popup</default>
     </route>
-    <route id="categories" pattern="/adminCatalog/categories">
+    <route id="admin_catalog" pattern="/adminCatalog">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
+        <option key="title">shop.catalog</option>
+    </route>
+    <route id="admin_catalog_categories" pattern="/adminCatalog/categories">
+        <default key="_controller">ShopCatalogBundle:AdminCategory:categories</default>
+        <option key="title">shop.categories</option>
+        <option key="parent">admin_catalog</option>
     </route>
     <route id="category" pattern="/adminCatalog/category/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:category</default>
         <default key="id">null</default>
+        <option key="title">%name%</option>
+        <option key="parent">admin_catalog_categories</option>
+        <option key="resourceKey">category</option>
     </route>
     <route id="delete_category" pattern="/adminCatalog/deleteCategory/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategory</default>
@@ -37,16 +46,36 @@
     </route>
     <route id="parameters" pattern="/adminCatalog/parameters">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameters</default>
+        <option key="title">shop.catalog.parameters</option>
+        <option key="parent">admin_catalog</option>
     </route>
     <route id="parameter" pattern="/adminCatalog/parameter/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:parameter</default>
         <default key="id">null</default>
+        <option key="title">shop.catalog.parameter%name%</option>
+        <option key="resourceKey">parameter</option>
+        <option key="parent">parameters</option>
     </route>
     <route id="delete_parameter" pattern="/adminCatalog/deleteParameter/{id}">
         <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameter</default>
     </route>
+    <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>
+        <default key="id">null</default>
+        <option key="title">shop.catalog.parameter.option</option>
+        <option key="resourceKey">parameterOption</option>
+        <option key="parent">parameter</option>
+    </route>
+    <route id="delete_parameter_option" pattern="/adminCatalog/deleteParameterOption/{id}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameterOption</default>
+    </route>
+    <route id="update_parameter_options" pattern="/adminCatalog/updateParameterOptions/{parameterId}">
+        <default key="_controller">ShopCatalogBundle:AdminParameter:updateParameterOptions</default>
+    </route>
     <route id="category_parameters" pattern="/adminCatalog/categoryParameters/{categoryId}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameters</default>
+        <option key="title">shop.category.parameters</option>
+        <option key="parent">category</option>
     </route>
     <route id="category_parameter" pattern="/adminCatalog/categoryParameter/{categoryId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameter</default>
@@ -74,15 +103,5 @@
     </route>
     <route id="delete_proposal_collection" pattern="/adminCatalog/deleteProposalCollection/{id}">
         <default key="_controller">ShopCatalogBundle:AdminProposalCollection:deleteCollection</default>
-    </route>
-    <route id="parameter_option" pattern="/adminCatalog/parameterOption/{parameterId}/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminParameter:parameterOption</default>
-        <default key="id">null</default>
-    </route>
-    <route id="delete_parameter_option" pattern="/adminCatalog/deleteParameterOption/{id}">
-        <default key="_controller">ShopCatalogBundle:AdminParameter:deleteParameterOption</default>
-    </route>
-    <route id="update_parameter_options" pattern="/adminCatalog/updateParameterOptions/{parameterId}">
-        <default key="_controller">ShopCatalogBundle:AdminParameter:updateParameterOptions</default>
     </route>
 </routes>

@@ -2,10 +2,6 @@
 
 {% block title %}{{ title|default(category.name)|default(parent()) }}{% endblock %}
 
-{% block page_breadcrumb %}
-    {{ include('ShopCatalogBundle:AdminCategory:breadcrumb/categoryBreadcrumb.html.twig') }}
-{% endblock %}
-
 {% block page_menu %}
     {{ include('ShopCatalogBundle:AdminCategory:categoryMenuListItems.html.twig') }}
 {% endblock %}

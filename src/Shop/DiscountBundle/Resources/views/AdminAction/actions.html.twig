@@ -2,7 +2,7 @@
 
 {% block title %}Акции{% endblock %}
 
-{% block page_container %}
+{% block page_content %}
     <div>
         <a href="{{ path('shop_discount_admin_action') }}" class="btn btn-default">
             Добавить акцию
@@ -10,13 +10,14 @@
     </div>
     {% if actions %}
         <form id="actions_form" style="margin: 10px 0">
-            <ul id="actions">
+            <ul id="actions" class="ui-sortable">
                 {% for action in actions %}
                 <li class="action">
                     <input type="hidden" name="actions[{{ action.id }}][id]" value="{{ action.id }}">
                     <input type="hidden" class="action_position" name="actions[{{ action.id }}][position]" value="{{ action.position }}">
                     <div class="row">
                         <div class="{{ word_numbers[3] }} columns">
+                            <span class="glyphicon glyphicon-move handle"></span>
                             <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}" class="primary-link">{{ action.title }}</a>
                         </div>
                         <div class="{{ word_numbers[1] }} columns">
@@ -24,12 +25,15 @@
                                 {{ action.textStatus }}
                             </span>
                         </div>
-                        <div class="{{ word_numbers[7] }} columns">
+                        <div class="{{ word_numbers[5] }} columns">
                             {{ action.description|nl2br }}
                         </div>
-                        <div class="{{ word_numbers[1] }} columns">
-                            <div class="center-block">
-                                <a href="{{ path('shop_discount_admin_delete_action', {'id' : action.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-xs">
+                        <div class="{{ word_numbers[3] }} columns">
+                            <div class="center-block btn-group">
+                                <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span> Изменить
+                                </a>
+                                <a href="{{ path('shop_discount_admin_delete_action', {'id' : action.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-sm">
                                     <span class="glyphicon glyphicon-trash"></span> Удалить
                                 </a>
                             </div>
@@ -43,7 +47,7 @@
 
     <style>
         #actions li {
-            min-height: 60px;
+            min-height: 51px;
         }
     </style>
     <script>
@@ -54,12 +58,10 @@
                 $actions_form = $('#actions_form');
 
             $actions.sortable({
-//                    axis: 'y',
                 placeholder: 'ui-state-highlight',
-//                    containment: 'parent',
                 revert: 50,
                 tolerance: 'pointer',
-                cursor: 'move',
+                handle: '.handle',
                 stop : function(){
 
                     $actions.find('.action').each(function(){
@@ -76,10 +78,11 @@
                         data : $actions_form.serialize()
                     });
 
+                },
+                start: function(e, ui){
+                    ui.placeholder.height(ui.item.height());
                 }
             });
-
-            $actions.disableSelection();
 
         });
     </script>

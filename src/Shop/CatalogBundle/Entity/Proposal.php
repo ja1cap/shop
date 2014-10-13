@@ -598,6 +598,13 @@ class Proposal extends AbstractEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function getTextStatus(){
+        return self::$statuses[$this->getStatus()];
+    }
+
+    /**
      * Add mediaImages
      *
      * @param \Application\Sonata\MediaBundle\Entity\Media $mediaImages

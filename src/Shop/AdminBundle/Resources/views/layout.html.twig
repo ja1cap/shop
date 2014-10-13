@@ -1,46 +1,66 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Система управления сайтом{% endblock %}
+{% set _title = block('title') %}
+{% if not _title %}
+    {% block title %}{{ (title is defined ? title : nulll)|default('Система управления магазином') }}{% endblock %}
+{% endif %}
 
+{% set _page_header = block('page_header') %}
 {% set _page_breadcrumb = block('page_breadcrumb') %}
 {% set _page_menu = block('page_menu') %}
 {% set _page_content = block('page_content') %}
-{% block stylesheets %}
-    <link rel="stylesheet" type="txt/css" href="/bundles/weastyresource/DataTables/media/css/jquery.dataTables.min.css">
-{% endblock %}
-{% block javascripts %}
-    <script src="/bundles/weastyresource/DataTables/media/js/jquery.dataTables.min.js"></script>
-{% endblock %}
+
 {% block body %}
     <div class="admin-container">
         {{ include("ShopAdminBundle::header.html.twig") }}
         {% block content %}
-            <div class="row">
-                {% block page_container %}
-                    {% if _page_breadcrumb %}
-                        {{ _page_breadcrumb|raw }}
-                    {% endif %}
-                    {% if _page_menu %}
-                        <section class="vertical tabs">
-                            <ul class="tab-nav three columns">
-                                {{ _page_menu|raw }}
-                            </ul>
-                            <div class="tab-content nine columns active">
-                                {% if _page_content %}
-                                    {{ _page_content|raw }}
-                                {% else %}
-                                    {{ form(form) }}
+            <div class="row admin-main-row">
+                <div class="admin-menu-container">
+                    <div class="admin-menu-content">
+                        <ul class="admin-menu">
+                            {{ include("ShopAdminBundle:Default:menuItems.html.twig") }}
+                        </ul>
+                    </div>
+                </div>
+                <div class="admin-main-container">
+                    {% block page_container %}
+                        {% if _page_breadcrumb %}
+                            {{ _page_breadcrumb|raw }}
+                        {% else %}
+                            {% set _breadcrumbs = page_breadcrumbs() %}
+                            {% if _breadcrumbs %}
+                                <ul class="breadcrumb">
+                                    {% for breadcrumb in _breadcrumbs %}
+                                        <li>
+                                            <a href="{{ path(breadcrumb.routeName, breadcrumb.routeParameters) }}">
+                                                {{ breadcrumb.title|trans(breadcrumb.titleParameters, breadcrumb.translationDomain) }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                        {% if _page_header or _title %}
+                            <div class="page-header">
+                                {% if _page_header %}
+                                    {{ _page_header|raw }}
+                                {% elseif _title %}
+                                    <h3>{{ _title }}</h3>
                                 {% endif %}
                             </div>
-                        </section>
-                    {% else %}
+                        {% endif %}
+                        {% if _page_menu and _page_menu|length %}
+                            <ul class="nav nav-tabs page-menu">
+                                {{ _page_menu|raw }}
+                            </ul>
+                        {% endif %}
                         {% if _page_content %}
                             {{ _page_content|raw }}
                         {% else %}
                             {{ form(form) }}
                         {% endif %}
-                    {% endif %}
-                {% endblock %}
+                    {% endblock %}
+                </div>
             </div>
         {% endblock %}
     </div>
@@ -67,4 +87,22 @@
         });
     </script>
 
+{% endblock %}
+
+{% block stylesheets %}
+    {#<link rel="stylesheet" type="txt/css" href="/bundles/weastyresource/DataTables/media/css/jquery.dataTables.min.css">#}
+    {#<link rel="stylesheet" type="txt/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">#}
+    <link rel="stylesheet" type="txt/css" href="/dataTables/dataTables.bootstrap.css">
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="/js/isotope/isotope.pkgd.min.js"></script>
+
+    {#<script src="/bundles/weastyresource/DataTables/media/js/jquery.dataTables.min.js"></script>#}
+    <script src="/dataTables/jquery.dataTables.min.js"></script>
+    <script src="/dataTables/dataTables.bootstrap.js"></script>
+    <script src="/dataTables/jquery.dataTables.config.js"></script>
+
+    {{ parent() }}
 {% endblock %}

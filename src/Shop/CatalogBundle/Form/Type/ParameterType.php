@@ -39,7 +39,7 @@ class ParameterType extends AbstractType {
             ))
             ->add('type', 'choice', array(
                 'choices' => FiltersResource::$filterTypes,
-                'label' => 'Тип елемента',
+                'label' => 'Тип элемента',
             ))
 //            ->add('isPriceParameter', 'choice', array(
 //                'choices' => array(
@@ -56,7 +56,7 @@ class ParameterType extends AbstractType {
                 'required' => false,
                 'choices' => $this->parameter->getOptions(),
                 'class' => 'ShopCatalogBundle:ParameterOption',
-                'label' => 'Опция поумолчанию',
+                'label' => 'Значение поумолчанию',
             ));
 
         }

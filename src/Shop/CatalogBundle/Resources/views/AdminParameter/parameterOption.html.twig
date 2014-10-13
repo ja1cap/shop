@@ -1,1 +1,3 @@
-{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
+{% extends "ShopAdminBundle::layout.html.twig" %}
+
+{% block title %}{{ parameterOption and parameterOption.id ? parameterOption.name : 'Добавление значения параметра' }}{% endblock %}

@@ -1,94 +1,86 @@
 {% extends "ShopCatalogBundle:AdminCategory:categoryLayout.html.twig" %}
 
+{% block title %}Товары{% endblock %}
+
 {% block page_content %}
 
-    <div class="medium secondary btn">
-        <a href="{{ path('proposal', {'categoryId' : category.id}) }}">
+    <div class="page-buttons">
+        <a href="{{ path('proposal', {'categoryId' : category.id}) }}" class="btn btn-default">
             Добавить товар
         </a>
     </div>
 
     {% set proposals = category.proposals %}
 
-    {% if proposals %}
-        <div style="margin: 10px 0">
-            <table class="proposals-table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th style="width: 40%">Наименование</th>
-                    <th>Описание</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for proposal in proposals %}
-                    <tr>
-                        <td>
-                            {{ proposal.id }}
-                        </td>
-                        <td>
-                            <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">
-                                <span class="{% if proposal.status == constant('STATUS_OFF', proposal) %}danger label{% endif %}">
-                                    {{ proposal.title }}
-                                </span>
+    <table id="proposals-table" class="table table-striped table-vmiddle">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Наименование</th>
+            <th>Статус</th>
+            <th>Цена</th>
+            {#<th>Описание</th>#}
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for proposal in proposals %}
+            <tr>
+                <td>
+                    {{ proposal.id }}
+                </td>
+                <td>
+                    <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}" class="primary-link">
+                        {{ proposal.title }}
+                    </a>
+                </td>
+                <td>
+                    <span class="{{  proposal.status == constant('STATUS_OFF', proposal) ? 'label-danger' : 'label-success' }} label">{{ proposal.textStatus }}</span>
+                </td>
+                <td>
+                    {% if proposal.price %}
+                        от {{ proposal.price|shop_price }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                {#<td>#}
+                {#{{ proposal.short_description }}#}
+                {#</td>#}
+                <td>
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}" class="btn btn-default">
+                                Цены
                             </a>
-                            <div>
-                                {% if proposal.price %}
-                                    <span style="font-weight: normal; display: block">
-                                от {{ proposal.price|shop_price }}
-                            </span>
-                                {% else %}
-                                    <span class="warning label">
-                                Цена не установлена
-                            </span>
-                                {% endif %}
-                            </div>
-                            <div>
-                                {#<div class="small btn default">#}
-                                    {#<a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}">#}
-                                        {#Изменить#}
-                                    {#</a>#}
-                                {#</div>#}
-                                <div class="small primary btn">
-                                    <a href="{{ path('proposal_prices', {'id' : proposal.id}) }}">
-                                        Цены
-                                    </a>
-                                </div>
-                                <div class="small primary btn">
-                                    <a href="{{ path('proposal_images', {'id' : proposal.id}) }}">
-                                        Фотографии
-                                    </a>
-                                </div>
-                                <div class="small btn danger">
-                                    <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                        Удалить
-                                    </a>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            {{ proposal.short_description }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <script>
-            $(function(){
+                            <a href="{{ path('proposal_images', {'id' : proposal.id}) }}" class="btn btn-default">
+                                Фотографии
+                            </a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ path('proposal', {'categoryId' : category.id, 'id' : proposal.id}) }}" class="btn btn-default">
+                                Изменить
+                            </a>
+                            <a href="{{ path('delete_proposal', {'id' : proposal.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $(function(){
 
-                $('.proposals-table').dataTable({
-                    "aaSorting": [],
-                    "stateSave": true,
-                    "columnDefs": [
-                        { "orderable": false, "targets": 2 }
-                    ],
-                    "language": {
-                        "url" : '//cdn.datatables.net/plug-ins/28e7751dbec/i18n/Russian.json'
-                    }
-                });
-
+            $('#proposals-table').dataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": 3 }
+                ]
             });
-        </script>
-    {% endif %}
+
+        });
+    </script>
+
 {% endblock %}

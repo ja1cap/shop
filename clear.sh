@@ -16,4 +16,6 @@ sudo rm -rf app/cache/${ENV}
 sudo php app/console cache:clear -e ${ENV}
 sudo chmod 0777 -R app/cache/
 
+sudo chmod 0777 -R web/uploads/
+
 sudo service apache2 restart

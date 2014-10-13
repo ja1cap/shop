@@ -1,9 +1,9 @@
-<li class="{{ app.request.get('_route') == 'shop_discount_admin_action' ? 'active' : '' }}">
-    <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}">
-        Информация
-    </a>
-</li>
 {% if action.id %}
+    <li class="{{ app.request.get('_route') == 'shop_discount_admin_action' ? 'active' : '' }}">
+        <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}">
+            Информация
+        </a>
+    </li>
     <li class="{{ app.request.get('_route') == 'shop_discount_admin_action_conditions' ? 'active' : '' }}">
         <a href="{{ path('shop_discount_admin_action_conditions', {'actionId' : action.id }) }}">
             Условия

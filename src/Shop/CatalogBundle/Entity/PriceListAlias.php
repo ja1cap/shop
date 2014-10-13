@@ -72,6 +72,7 @@ class PriceListAlias extends AbstractEntity
             'entity' => 'price',
             'property' => 'value',
         ),
+        //@TODO get currency alphabetic code
         PriceListAlias::ALIAS_CURRENCY => array(
             'entity' => 'price',
             'property' => 'currency',

@@ -16,7 +16,8 @@ $(function(){
         chosenOptions.no_result_text = "Значений не найдено";
 
         //$('select[multiple="multiple"], .chosen-select', $container).chosen(chosenOptions);
-        $('select', $container).chosen(chosenOptions);
+        //@TODO fix bug with validation [required="required"]
+        $('select:not([required="required"])', $container).chosen(chosenOptions);
 
     };
 

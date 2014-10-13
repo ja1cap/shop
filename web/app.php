@@ -11,7 +11,8 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 if(extension_loaded('apc')){
 
-    $apcLoader = new ApcClassLoader('vsematrasy', $loader);
+    $namespacePrefix = pathinfo(parse_url($_SERVER['SERVER_NAME'], PHP_URL_HOST), PATHINFO_FILENAME);
+    $apcLoader = new ApcClassLoader($namespacePrefix, $loader);
     $loader->unregister();
     $apcLoader->register(true);
 
@@ -20,8 +21,9 @@ if(extension_loaded('apc')){
 //require_once __DIR__.'/../app/AppKernel.php';
 require_once __DIR__.'/../app/AppCache.php';
 
-$kernel = new AppKernel('prod', false);
-//$kernel = new AppKernel('dev', true);
+$topLevelDomain = pathinfo(parse_url($_SERVER['SERVER_NAME'], PHP_URL_HOST), PATHINFO_EXTENSION);
+$env = ($topLevelDomain == 'local' ? 'prod' : 'dev');
+$kernel = new AppKernel($env, ($env == 'dev'));
 $kernel->loadClassCache();
 $kernel = new AppCache($kernel);
 

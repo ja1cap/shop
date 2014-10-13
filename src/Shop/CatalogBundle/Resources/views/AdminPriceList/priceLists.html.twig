@@ -4,104 +4,115 @@
 
 {% block page_content %}
 
-    <div class="medium primary btn">
-        <a href="{{ path('price_list') }}">
-            Добавить прайс-лист
-        </a>
-    </div>
+    <div class="page-menu">
 
-    <div class="medium primary btn">
-        <a href="{{ path('create_price_list') }}">
-            Создать прайс-лист
-        </a>
-    </div>
-
-    {% if priceLists %}
-        <div style="margin: 10px 0;">
-            <table class="price-lists-table">
-                <thead>
-                <tr>
-                    <th>
-                        ID
-                    </th>
-                    <th style="width: 40%">
-                        Название
-                    </th>
-                    <th style="width: 25%">
-                        Статус
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for priceList in priceLists %}
-                    <tr>
-                        <td>
-                            {{ priceList.id }}
-                        </td>
-                        <td>
-                            <a href="{{ path('download_price_list', {'id' : priceList.id}) }}">
-                                {{ priceList.name }}
-                            </a>
-                            {% if priceList.contractor %}
-                                <div>
-                                    ({{ priceList.contractor.name }})
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ priceList.textStatus }}
-                            {% if priceList.updateDate %}
-                                <div>
-                                    {{ priceList.updateDate|date("d.m.Y в H:i:s") }}
-                                </div>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="medium btn default icon-left entypo icon-pencil" style="width: 100%">
-                                <a href="{{ path('price_list', {'id' : priceList.id}) }}">
-                                    Изменить
-                                </a>
-                            </div>
-                            <div class="medium btn warning icon-left entypo icon-cog" style="width: 100%">
-                                <a href="{{ path('price_list_aliases', {'id' : priceList.id}) }}">
-                                    Настроить
-                                </a>
-                            </div>
-                            {#@TODO add price list parse comfirm popup#}
-                            <div class="medium btn default icon-left entypo icon-arrows-ccw" style="width: 100%">
-                                <a href="{{ path('parse_price_list', {'id' : priceList.id}) }}">
-                                    Обработать
-                                </a>
-                            </div>
-                            <div class="medium btn danger icon-left entypo icon-trash" style="width: 100%">
-                                <a href="{{ path('delete_price_list', {'id' : priceList.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                    Удалить
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="btn-group">
+            <a href="{{ path('admin_catalog_price_list') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-upload"></span> Загрузить прайс-лист
+            </a>
+            <a href="{{ path('admin_catalog_price_list_create') }}" class="btn btn-default">
+                Создать прайс-лист
+            </a>
         </div>
-        <script>
-            $(function(){
 
-                $('.price-lists-table').dataTable({
-                    "aaSorting": [],
-                    "stateSave": true,
-                    "columnDefs": [
-                        { "orderable": false, "targets": 3 }
-                    ],
-                    "language": {
-                        "url" : '//cdn.datatables.net/plug-ins/28e7751dbec/i18n/Russian.json'
-                    }
-                });
+    </div>
 
+    <table id="price-lists-table" class="table table-striped table-vmiddle">
+        <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Название
+            </th>
+            <th>
+                Статус
+            </th>
+            <th>
+                Обновлен
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for priceList in priceLists %}
+            <tr>
+                <td>
+                    {{ priceList.id }}
+                </td>
+                <td>
+                    <a href="{{ path('admin_catalog_price_list', {'id' : priceList.id}) }}" class="primary-link">
+                        {{ priceList.name }}
+                    </a>
+                    {% if priceList.contractor %}
+                        <div>
+                            ({{ priceList.contractor.name }})
+                        </div>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ priceList.textStatus }}
+                </td>
+                <td data-order="{{ priceList.updateDate ? priceList.updateDate|date('U') : '-' }}">
+                    {% if priceList.updateDate %}
+                        {{ priceList.updateDate|date("d.m.Y в H:i:s") }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            Действия
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{{ path('admin_catalog_price_list', {'id' : priceList.id}) }}">
+                                    <span class="glyphicon glyphicon-pencil"></span> Изменить
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_catalog_price_list_aliases', {'id' : priceList.id}) }}">
+                                    <span class="glyphicon glyphicon-cog"></span> Настроить
+                                </a>
+                            </li>
+                            <li>
+                                {#@TODO add price list parse comfirm popup#}
+                                <a href="{{ path('admin_catalog_price_list_parse', {'id' : priceList.id}) }}">
+                                    <span class="glyphicon glyphicon-refresh"></span> Обработать
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_catalog_price_list_download', {'id' : priceList.id}) }}">
+                                    <span class="glyphicon glyphicon-download"></span> Скачать
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{{ path('admin_catalog_price_list_delete', {'id' : priceList.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                    <span class="glyphicon glyphicon-trash"></span> Удалить
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $(function(){
+
+            $('#price-lists-table').dataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }
+                ]
             });
-        </script>
-    {% endif %}
+
+        });
+    </script>
 
 {% endblock %}

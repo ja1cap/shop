@@ -9,8 +9,8 @@
     </li>
 {% endif %}
 {% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
-    <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
-        <a href="{{ path('categories') }}" class="">
+    <li class="{{ 'admin_catalog' in app.request.get('_route') ? 'active' : '' }}">
+        <a href="{{ path('admin_catalog_categories') }}" class="">
             Каталог
         </a>
     </li>

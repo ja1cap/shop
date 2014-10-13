@@ -1,13 +1,25 @@
 {% extends "ShopAdminBundle::layout.html.twig" %}
 
-{% block body %}
+{% block title %}Рабочий стол{% endblock %}
 
-    <div class="admin-container">
-        {{ include("ShopAdminBundle::header.html.twig") }}
-        <div class="row dashboard">
-            <ul class="four_up tiles">
-                {{ include("ShopAdminBundle:Default:menuItems.html.twig") }}
-            </ul>
+{% block page_header %}
+
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="primary-note" style="">
+        <div class="icon-box">
+            <div class="icon-drag"></div>
+        </div>
+        <div class="label-container-outer">
+            <div class="label-container-inner">
+                <div class="node-label">
+                    Добро пожаловать!
+                    <br/>
+                    Здесь будет отображаться самая важная информация и часто используемые инструменты.
+                </div>
+            </div>
         </div>
     </div>
 

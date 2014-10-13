@@ -68,7 +68,7 @@ class AdminPriceListController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('price_lists'));
+            return $this->redirect($this->generateUrl('admin_catalog_price_lists'));
 
         } else {
 
@@ -82,6 +82,11 @@ class AdminPriceListController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
     public function createPriceListAction(Request $request){
 
         $builder = new PriceListBuilder($this->getDoctrine()->getManager());
@@ -103,7 +108,7 @@ class AdminPriceListController extends Controller
             $fileName = $priceList->getFileName();
             $path = $priceList->getUploadDirPath() . DIRECTORY_SEPARATOR . $fileName;
             $objWriter->save($path);
-            chmod($path, 0777);
+            chmod($path, 0755);
 
             $em = $this->getDoctrine()->getManager();
 
@@ -112,6 +117,7 @@ class AdminPriceListController extends Controller
 
             $objWriter = new \PHPExcel_Writer_HTML($objPHPExcel);
             return $this->render('ShopCatalogBundle:AdminPriceList:viewPriceList.html.twig', array(
+                'title' => $priceList->getName(),
                 'priceList' => $priceList,
                 'priceListSheetData' => $objWriter->generateSheetData(),
             ));
@@ -134,7 +140,7 @@ class AdminPriceListController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Exception
      */
-    public function priceListsAliasesAction($id, Request $request){
+    public function priceListAliasesAction($id, Request $request){
 
         $priceList = $this->getPriceListRepository()->findOneBy(array(
             'id' => (int)$id,
@@ -208,7 +214,7 @@ class AdminPriceListController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('price_lists'));
+            return $this->redirect($this->generateUrl('admin_catalog_price_lists'));
 
         } else {
 
@@ -380,7 +386,7 @@ class AdminPriceListController extends Controller
 
         $em->flush();
 
-        return $this->redirect($this->generateUrl('price_lists'));
+        return $this->redirect($this->generateUrl('admin_catalog_price_lists'));
 
     }
 
@@ -431,7 +437,7 @@ class AdminPriceListController extends Controller
 
         }
 
-        return $this->redirect($this->generateUrl('price_lists'));
+        return $this->redirect($this->generateUrl('admin_catalog_price_lists'));
 
     }
 

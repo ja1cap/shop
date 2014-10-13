@@ -147,6 +147,7 @@ class AdminParameterController extends Controller
                 'title' => $isNew ? 'Добавление опции' : 'Изменение опции',
                 'form' => $form->createView(),
                 'parameter' => $parameter,
+                'parameterOption' => $parameterOption,
             ));
 
         }

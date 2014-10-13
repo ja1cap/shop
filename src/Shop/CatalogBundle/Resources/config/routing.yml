@@ -2,6 +2,9 @@
 proposals:
     pattern: /adminCatalog/proposals/{categoryId}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:proposals }
+    options:
+        title: shop.proposals
+        parent: category
 
 proposals_browser:
     pattern: /adminCatalog/proposalsBrowser/{categoryId}
@@ -63,15 +66,22 @@ delete_proposal_image:
     pattern: /adminCatalog/proposalImages/{proposalId}/deleteImage/{id}
     defaults: { _controller: ShopCatalogBundle:AdminProposal:deleteProposalImage }
 
-manufacturers:
+admin_catalog_manufacturers:
     pattern: /adminCatalog/manufacturers
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturers }
+    options:
+        title: shop.manufacturers
+        parent: admin_catalog
 
-manufacturer:
+admin_catalog_manufacturer:
     pattern: /adminCatalog/manufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:manufacturer, id: null }
+    options:
+        title: shop.manufacturer%name%
+        resourceKey: manufacturer
+        parent: admin_catalog_manufacturers
 
-delete_manufacturer:
+admin_catalog_manufacturer_delete:
     pattern: /adminCatalog/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
 
@@ -95,30 +105,30 @@ delete_contractor_currency:
     pattern: /admin/contractor/{contractorId}/deleteCurrency/{id}
     defaults: { _controller: ShopCatalogBundle:AdminContractor:deleteContractorCurrency }
 
-price_lists:
+admin_catalog_price_lists:
     pattern: /adminCatalog/priceLists
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }
 
-price_list:
+admin_catalog_price_list:
     pattern: /adminCatalog/priceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceList, id: null }
 
-create_price_list:
+admin_catalog_price_list_create:
     pattern: /adminCatalog/createPriceList
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:createPriceList }
 
-price_list_aliases:
+admin_catalog_price_list_aliases:
     pattern: /adminCatalog/priceListAliases/{id}
-    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListsAliases }
+    defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceListAliases }
 
-download_price_list:
+admin_catalog_price_list_download:
     pattern: /adminCatalog/downloadPriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:downloadPriceList }
 
-parse_price_list:
+admin_catalog_price_list_parse:
     pattern: /adminCatalog/parsePriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:parsePriceList }
 
-delete_price_list:
+admin_catalog_price_list_delete:
     pattern: /adminCatalog/deletePriceList/{id}
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:deletePriceList }

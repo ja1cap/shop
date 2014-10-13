@@ -4,7 +4,7 @@ namespace Shop\CatalogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Weasty\Doctrine\Entity\AbstractEntity;
+use Weasty\Bundle\DoctrineBundle\Entity\AbstractEntity;
 
 /**
  * Class PriceList
@@ -451,6 +451,16 @@ class PriceList extends AbstractEntity
     public function getManufacturer()
     {
         return $this->manufacturer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUploadDirPath()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return realpath(__DIR__ . '/../../../../web/'.$this->getUploadDirName());
     }
 
 }

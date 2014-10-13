@@ -2,9 +2,15 @@
 
 {% block page_menu %}
 
-    <li class="{{ app.request.get('_route') == 'categories' ? 'active' : '' }}">
-        <a href="{{ path('categories') }}">
+    <li class="{{ 'admin_catalog_cat' in app.request.get('_route') or app.request.get('_route') == 'admin_catalog' ? 'active' : '' }}">
+        <a href="{{ path('admin_catalog_categories') }}">
             Категории
+        </a>
+    </li>
+
+    <li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
+        <a href="{{ path('parameters') }}">
+            Параметры товаров
         </a>
     </li>
 
@@ -14,8 +20,14 @@
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'manufacturers' ? 'active' : '' }}">
-        <a href="{{ path('manufacturers') }}">
+    <li class="{{ 'admin_catalog_price_list' in app.request.get('_route') ? 'active' : '' }}">
+        <a href="{{ path('admin_catalog_price_lists') }}">
+            Прайс-листы
+        </a>
+    </li>
+
+    <li class="{{ 'admin_catalog_manufacturer' in app.request.get('_route') ? 'active' : '' }}">
+        <a href="{{ path('admin_catalog_manufacturers') }}">
             Производители
         </a>
     </li>
@@ -23,18 +35,6 @@
     <li class="{{ app.request.get('_route') == 'contractors' ? 'active' : '' }}">
         <a href="{{ path('contractors') }}">
             Контрагенты
-        </a>
-    </li>
-
-    <li class="{{ app.request.get('_route') == 'price_lists' ? 'active' : '' }}">
-        <a href="{{ path('price_lists') }}">
-            Прайс-листы
-        </a>
-    </li>
-
-    <li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
-        <a href="{{ path('parameters') }}">
-            Базовые параметры
         </a>
     </li>
 

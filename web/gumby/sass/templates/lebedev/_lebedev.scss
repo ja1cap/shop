@@ -1,3 +1,4 @@
+@import "compass";
 @import "settings";
 @import "lebedev-base";
 
@@ -248,7 +249,7 @@ body {
       font-size: 12px;
       font-weight: bold;
       @include border-radius(2px);
-      @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7));
+      @include box-shadow(1px 1px 1px 0 rgba(0, 0, 0, 0.7));
 
       a {
         padding: 0 7px;
@@ -260,7 +261,7 @@ body {
       }
 
       &.active {
-        @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7) inset);
+        @include box-shadow(1px 1px 1px 0 rgba(0, 0, 0, 0.7) inset);
       }
 
       &.primary {
@@ -273,7 +274,7 @@ body {
 
         a, a:hover {
           color: #ffffff;
-          text-shadow: 1.414px 1.414px 0px black;
+          text-shadow: 1.414px 1.414px 0 black;
         }
 
       }
@@ -312,7 +313,7 @@ body {
   .slider-nav-button {
     border-radius: 4px;
     background-color: rgb( 255, 252, 0 );
-    box-shadow: 1.414px 1.414px 0px 0px rgb( 0, 0, 0 );
+    box-shadow: 1.414px 1.414px 0 0 rgb( 0, 0, 0 );
     width: 40px;
     height: 40px;
   }
@@ -376,7 +377,7 @@ body {
 
     .ui-buttons {
 
-      padding: 20px 0px;
+      padding: 20px 0;
       text-align: center;
 
       .btn {
@@ -419,11 +420,11 @@ body {
 
       height: 6px;
       @include background-image(linear-gradient(rgb(160,160,160), rgb(211,211,211)));
-      @include box-shadow(rgba(0, 0, 0, 0.5) 0px 1px 2px 0px inset);
+      @include box-shadow(rgba(0, 0, 0, 0.5) 0 1px 2px 0 inset);
 
       .ui-slider-range {
         @include background-image(linear-gradient(rgb(255,204,0), rgb(255,246,0)));
-        @include box-shadow(rgba(0, 0, 0, 0.5) 0px 1px 1px 0px);
+        @include box-shadow(rgba(0, 0, 0, 0.5) 0 1px 1px 0);
       }
 
       .ui-slider-handle {
@@ -457,7 +458,7 @@ body {
 
         &:after {
           @include border-radius(3px);
-          @include box-shadow(1px 1px 1px 0px rgba(0, 0, 0, 0.7));
+          @include box-shadow(1px 1px 1px 0 rgba(0, 0, 0, 0.7));
           background: url("/img/weasty-sprite.png") no-repeat rgb(255, 243, 67);
           position: absolute;
           top: 50%;

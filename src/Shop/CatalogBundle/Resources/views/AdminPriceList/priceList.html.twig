@@ -1,1 +1,6 @@
-{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
+{% extends "ShopAdminBundle::layout.html.twig" %}
+{% block title %}{{ priceList.name|default(title) }}{% endblock %}
+{% block page_breadcrumb %}
+    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+{% endblock %}
+

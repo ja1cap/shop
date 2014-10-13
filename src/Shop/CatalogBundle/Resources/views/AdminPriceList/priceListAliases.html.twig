@@ -1,4 +1,10 @@
-{% extends "ShopCatalogBundle:AdminCategory:catalogLayout.html.twig" %}
+{% extends "ShopAdminBundle::layout.html.twig" %}
+
+{% block title %}{{ 'Настройка - ' ~ priceList.name|default(title) }}{% endblock %}
+
+{% block page_breadcrumb %}
+    {{ include('ShopCatalogBundle:AdminPriceList:breadcrumb/priceListBreadcrumb.html.twig') }}
+{% endblock %}
 
 {% block page_content %}
 
@@ -19,7 +25,7 @@
                     {% endfor %}
                 </select>
                 <div style="margin: 5px 0 0">
-                    <label for="categoryId" class="primary alert" style="font-size: 14px">
+                    <label for="categoryId" class="alert alert-info" style="font-size: 14px">
                         Категория для всех товаров в прайс листе, для которых не указан столбец с категорией
                     </label>
                 </div>
@@ -42,7 +48,7 @@
                     {% endfor %}
                 </select>
                 <div style="margin: 5px 0 0">
-                    <label for="manufacturerId" class="primary alert" style="font-size: 14px">
+                    <label for="manufacturerId" class="alert alert-info" style="font-size: 14px">
                         Производитель для всех товаров в прайс листе, для которых не указан столбец с производителем
                     </label>
                 </div>

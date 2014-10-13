@@ -130,6 +130,7 @@ class AdminContractorController extends Controller
                 'title' => $isNew ? 'Добавление валюты контрагента' : 'Изменение валюты контрагента',
                 'form' => $form->createView(),
                 'contractor' => $contractor,
+                'contractorCurrency' => $contractorCurrency,
             ));
 
         }

@@ -262,6 +262,7 @@ simple_things_entity_audit:
     audited_entities:
         - Shop\CatalogBundle\Entity\CustomerOrder
         - Shop\CatalogBundle\Entity\CustomerOrderProposal
+
 weasty_catalog:
   category:
     entity:
@@ -273,3 +274,16 @@ weasty_catalog:
       class: %shop_catalog.proposal.entity.class%
     repository:
       class: %shop_catalog.proposal.repository.class%
+
+services:
+    twig.loader.string:
+        class: Twig_Loader_String
+        tags:
+            - { name: templating.loader }
+    weasty.twig.loader.chain:
+        class: Twig_Loader_Chain
+        calls:
+            - [ addLoader, [@twig.loader.filesystem] ]
+            - [ addLoader, [@twig.loader.string] ]
+        tags:
+            - { name: twig.loader }

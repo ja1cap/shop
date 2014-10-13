@@ -41,17 +41,40 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('page_breadcrumbs', [$this, 'getRouteBreadCrumbs'], ['needs_context' => true]),
-            new \Twig_SimpleFunction('page_title', [$this, 'getRouteTitle'], ['needs_context' => true]),
+            new \Twig_SimpleFunction('page_breadcrumbs', [$this, 'getRouteBreadCrumbs'], ['needs_context' => true, 'needs_environment' => true]),
+            new \Twig_SimpleFunction('page_title', [$this, 'getRouteTitle'], ['needs_context' => true, 'needs_environment' => true]),
         ];
     }
 
     /**
+     * @param \Twig_Environment $env
+     * @param $context
+     * @param $routeName
+     * @return null
+     */
+    public function getRouteTitle(\Twig_Environment $env, $context, $routeName){
+
+        if(!$routeName){
+            $routeName = $this->getRequest()->get('_route');
+        }
+
+        $breadcrumb = $this->buildRouteBreadCrumb($routeName, $env, $context);
+
+        if($breadcrumb){
+            return $breadcrumb['title'];
+        }
+
+        return null;
+
+    }
+
+    /**
+     * @param \Twig_Environment $env
      * @param $context
      * @param null $routeName
      * @return array
      */
-    public function getRouteBreadCrumbs($context, $routeName = null){
+    public function getRouteBreadCrumbs(\Twig_Environment $env, $context, $routeName = null){
 
         if(!$routeName){
             $routeName = $this->getRequest()->get('_route');
@@ -64,7 +87,7 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
 
         do {
 
-            $breadcrumb = $this->buildRouteBreadCrumb($currentRouteName, $context);
+            $breadcrumb = $this->buildRouteBreadCrumb($currentRouteName, $env, $context);
 
             if($breadcrumb){
 
@@ -92,32 +115,12 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
     }
 
     /**
-     * @param $context
      * @param $routeName
-     * @return null
-     */
-    public function getRouteTitle($context, $routeName){
-
-        if(!$routeName){
-            $routeName = $this->getRequest()->get('_route');
-        }
-
-        $breadcrumb = $this->buildRouteBreadCrumb($routeName, $context);
-
-        if($breadcrumb){
-            return $breadcrumb['title'];
-        }
-
-        return null;
-
-    }
-
-    /**
-     * @param $routeName
+     * @param \Twig_Environment $env
      * @param $context
-     * @return array|null
+     * @return array|mixed|null
      */
-    protected function buildRouteBreadCrumb($routeName, $context){
+    protected function buildRouteBreadCrumb($routeName, \Twig_Environment $env, $context){
 
         $breadcrumb = $this->getCache()->fetch($routeName);
         if($breadcrumb){
@@ -192,54 +195,62 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
 
             }
 
-            $translationDomain = $route->getOption('translationDomain');
-            if(!$translationDomain){
+            if(strpos($title, '{{') !== false  || strpos($title, '{%') !== false){
 
-                $controller = $route->getDefault('_controller');
-                $controllerParts = explode('\\', $controller);
+                $title = $env->render($title, $context);
 
-                if($controllerParts[1] == 'Bundle'){
-                    $translationDomain = $controllerParts[0] . $controllerParts[2];
-                } else {
-                    $translationDomain = $controllerParts[0] . $controllerParts[1];
+            } else {
+
+                $translationDomain = $route->getOption('translationDomain');
+                if(!$translationDomain){
+
+                    $controller = $route->getDefault('_controller');
+                    $controllerParts = explode('\\', $controller);
+
+                    if($controllerParts[1] == 'Bundle'){
+                        $translationDomain = $controllerParts[0] . $controllerParts[2];
+                    } else {
+                        $translationDomain = $controllerParts[0] . $controllerParts[1];
+                    }
+
                 }
 
-            }
+                $titles = explode('||', $title);
 
-            $titles = explode('||', $title);
+                foreach($titles as $_title){
 
-            foreach($titles as $_title){
+                    $_titleParameters = [];
 
-                $_titleParameters = [];
+                    if($resources){
 
-                if($resources){
+                        preg_match_all("/%(.*)%/", $_title, $matches);
+                        $_titleVars = isset($matches[1]) ? $matches[1] : null;
 
-                    preg_match_all("/%(.*)%/", $_title, $matches);
-                    $_titleVars = isset($matches[1]) ? $matches[1] : null;
+                        if($_titleVars && is_array($_titleVars)){
 
-                    if($_titleVars && is_array($_titleVars)){
+                            foreach($_titleVars as $_titleVar){
 
-                        foreach($_titleVars as $_titleVar){
+                                $_formattedTitleVar = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $_titleVar));
 
-                            $_formattedTitleVar = strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $_titleVar));
-
-                            foreach($resources as $_resourceKey => $_resource){
-                                if(isset($_resource[$_formattedTitleVar])){
-                                    $_titleParameters['%' . $_titleVar . '%'] = $_resource[$_formattedTitleVar];
-                                    break;
+                                foreach($resources as $_resourceKey => $_resource){
+                                    if(isset($_resource[$_formattedTitleVar])){
+                                        $_titleParameters['%' . $_titleVar . '%'] = $_resource[$_formattedTitleVar];
+                                        break;
+                                    }
                                 }
+
                             }
 
                         }
 
+
                     }
 
+                    $title = $this->getTranslator()->trans($_title, $_titleParameters, $translationDomain);
+                    if($title){
+                        break;
+                    }
 
-                }
-
-                $title = $this->getTranslator()->trans($_title, $_titleParameters, $translationDomain);
-                if($title){
-                    break;
                 }
 
             }

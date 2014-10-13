@@ -2,37 +2,39 @@
 
 {% block page_menu %}
 
-    <li class="{{ 'admin_catalog_cat' in app.request.get('_route') or app.request.get('_route') == 'admin_catalog' ? 'active' : '' }}">
+    {% set _breadcrumbs = page_breadcrumbs() %}
+
+    <li class="{{ _breadcrumbs['admin_catalog_categories'] is defined or app.request.get('_route') == 'admin_catalog' ? 'active' : '' }}">
         <a href="{{ path('admin_catalog_categories') }}">
             Категории
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'parameters' ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['parameters'] is defined ? 'active' : '' }}">
         <a href="{{ path('parameters') }}">
             Параметры товаров
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'proposal_collections' ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['proposal_collections'] is defined ? 'active' : '' }}">
         <a href="{{ path('proposal_collections') }}">
             Коллекции
         </a>
     </li>
 
-    <li class="{{ 'admin_catalog_price_list' in app.request.get('_route') ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['admin_catalog_price_lists'] is defined ? 'active' : '' }}">
         <a href="{{ path('admin_catalog_price_lists') }}">
             Прайс-листы
         </a>
     </li>
 
-    <li class="{{ 'admin_catalog_manufacturer' in app.request.get('_route') ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['admin_catalog_manufacturers'] is defined ? 'active' : '' }}">
         <a href="{{ path('admin_catalog_manufacturers') }}">
             Производители
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'contractors' ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['contractors'] is defined ? 'active' : '' }}">
         <a href="{{ path('contractors') }}">
             Контрагенты
         </a>

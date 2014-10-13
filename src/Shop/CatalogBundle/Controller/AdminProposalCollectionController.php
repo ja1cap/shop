@@ -62,7 +62,6 @@ class AdminProposalCollectionController extends Controller
         } else {
 
             return $this->render('ShopCatalogBundle:AdminProposalCollection:collection.html.twig', array(
-                'title' => $isNew ? 'Добавление колекции' : 'Изменение колекции',
                 'form' => $form->createView(),
                 'collection' => $collection,
             ));

@@ -110,13 +110,21 @@ admin_catalog_manufacturer_delete:
     pattern: /adminCatalog/deleteManufacturer/{id}
     defaults: { _controller: ShopCatalogBundle:AdminManufacturer:deleteManufacturer }
 
+#Contractors
 contractors:
     pattern: /admin/contractors
     defaults: { _controller: ShopCatalogBundle:AdminContractor:contractors }
+    options:
+        title: shop.contractors
+        parent: admin_catalog
 
 contractor:
     pattern: /admin/contractor/{id}
     defaults: { _controller: ShopCatalogBundle:AdminContractor:contractor, id: null }
+    options:
+        title: %name%||shop.contractor.add
+        resourceKey: contractor
+        parent: contractors
 
 delete_contractor:
     pattern: /admin/deleteContractor/{id}
@@ -125,11 +133,16 @@ delete_contractor:
 contractor_currency:
     pattern: /admin/contractor/{contractorId}/currency/{id}
     defaults: { _controller: ShopCatalogBundle:AdminContractor:contractorCurrency, id: null }
+    options:
+        title: "{{ contractorCurrency.id ? contractorCurrency.numericCode|weasty_currency_name : 'shop.contractor.currency.add'|trans([], 'ShopCatalogBundle') }}"
+        resourceKey: contractorCurrency
+        parent: contractor
 
 delete_contractor_currency:
     pattern: /admin/contractor/{contractorId}/deleteCurrency/{id}
     defaults: { _controller: ShopCatalogBundle:AdminContractor:deleteContractorCurrency }
 
+#Price lists
 admin_catalog_price_lists:
     pattern: /adminCatalog/priceLists
     defaults: { _controller: ShopCatalogBundle:AdminPriceList:priceLists }

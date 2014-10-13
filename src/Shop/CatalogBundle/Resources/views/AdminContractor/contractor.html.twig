@@ -5,15 +5,13 @@
     {{ form(form) }}
 
     {% if contractor.id %}
-        <hr/>
-        <div class="medium primary btn">
-            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id}) }}">
-                Добавить валюту
+        <h4>{{ 'shop.contractor.currencies'|trans([], 'ShopCatalogBundle') }}</h4>
+        <div class="page-buttons">
+            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id}) }}" class="btn btn-default">
+                {{ 'shop.contractor.currency.add_btn'|trans([], 'ShopCatalogBundle') }}
             </a>
         </div>
-    {% endif %}
-    {% if contractor.currencies and not contractor.currencies.isEmpty %}
-        <table style="margin: 10px 0">
+        <table id="contractor-currencies-table" class="table table-striped table-vmiddle">
             <thead>
             <tr>
                 <th>Код</th>
@@ -29,20 +27,20 @@
                         {{ currency.numericCode }}
                     </td>
                     <td>
-                        {{ currency.numericCode|weasty_currency_name }}
+                        <a href="{{ path('contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}" class="primary-link">
+                            {{ currency.numericCode|weasty_currency_name }}
+                        </a>
                     </td>
                     <td>
-                        1 {{ currency.numericCode|weasty_currency_symbol }} = {{ currency.value|weasty_money(contractor.defaultCurrencyNumericCode) }}
+                        1 {{ currency.numericCode|weasty_currency_symbol }} = {{ currency.value|weasty_money }}
                     </td>
                     <td>
-                        <div class="medium btn default" style="width: 100%">
-                            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}">
-                                Изменить
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ path('contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-pencil"></span> Изменить
                             </a>
-                        </div>
-                        <div class="medium btn danger" style="width: 100%">
-                            <a href="{{ path('delete_contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить
+                            <a href="{{ path('delete_contractor_currency', {'contractorId' : contractor.id, 'id' : currency.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-trash"></span> Удалить
                             </a>
                         </div>
                     </td>
@@ -50,6 +48,17 @@
             {% endfor %}
             </tbody>
         </table>
+        <script>
+            $(function(){
+
+                $('#contractor-currencies-table').dataTable({
+                    "columnDefs": [
+                        { "orderable": false, "targets": 3 }
+                    ]
+                });
+
+            });
+        </script>
     {% endif %}
 
 {% endblock %}

@@ -1,9 +1,0 @@
-{% extends 'ShopCatalogBundle:AdminContractor:breadcrumb/contractorsBreadcrumb.html.twig' %}
-{% block breadcrumb_items %}
-    {{ parent() }}
-    <li>
-        <a href="{{ path('contractor', {'id' : contractor.id}) }}">
-            {{ contractor.name|default(title) }}
-        </a>
-    </li>
-{% endblock %}

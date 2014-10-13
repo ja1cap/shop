@@ -96,10 +96,15 @@
     </route>
     <route id="proposal_collections" pattern="/adminCatalog/proposalCollections">
         <default key="_controller">ShopCatalogBundle:AdminProposalCollection:collections</default>
+        <option key="title">{{ 'shop.proposal.collections'|trans([], 'ShopCatalogBundle') }}</option>
+        <option key="parent">admin_catalog</option>
     </route>
     <route id="proposal_collection" pattern="/adminCatalog/proposalCollection/{id}">
         <default key="_controller">ShopCatalogBundle:AdminProposalCollection:collection</default>
         <default key="id">null</default>
+        <option key="title">{{ collection.id ? collection.name : 'shop.proposal.collection.add'|trans([], 'ShopCatalogBundle') }}</option>
+        <option key="parent">proposal_collections</option>
+        <option key="resourceKey">collection</option>
     </route>
     <route id="delete_proposal_collection" pattern="/adminCatalog/deleteProposalCollection/{id}">
         <default key="_controller">ShopCatalogBundle:AdminProposalCollection:deleteCollection</default>

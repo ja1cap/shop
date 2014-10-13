@@ -10,7 +10,7 @@
     </li>
 {% endif %}
 {% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
-    <li class="{{ _breadcrumbs['admin_catalog'] is defined or _breadcrumbs['admin_catalog'] is defined ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['admin_catalog'] is defined ? 'active' : '' }}">
         <a href="{{ path('admin_catalog') }}" class="">
             Каталог
         </a>

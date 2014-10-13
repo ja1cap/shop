@@ -78,6 +78,38 @@
                 <source>shop.proposal.image</source>
                 <target>Фотография</target>
             </trans-unit>
+            <trans-unit id="shop.proposal.collections">
+                <source>shop.proposal.collections</source>
+                <target>Коллекции</target>
+            </trans-unit>
+            <trans-unit id="shop.proposal.collection.add">
+                <source>shop.proposal.collection.add</source>
+                <target>Добавление колекции</target>
+            </trans-unit>
+            <trans-unit id="shop.contractors">
+                <source>shop.contractors</source>
+                <target>Контрагенты</target>
+            </trans-unit>
+            <trans-unit id="shop.contractor">
+                <source>shop.contractor</source>
+                <target>Контрагент</target>
+            </trans-unit>
+            <trans-unit id="shop.contractor.add">
+                <source>shop.contractor.add</source>
+                <target>Добавление контрагента</target>
+            </trans-unit>
+            <trans-unit id="shop.contractor.currencies">
+                <source>shop.contractor.currencies</source>
+                <target>Валюты контрагента</target>
+            </trans-unit>
+            <trans-unit id="shop.contractor.currency.add">
+                <source>shop.contractor.currency.add</source>
+                <target>Добавление валюты контрагента</target>
+            </trans-unit>
+            <trans-unit id="shop.contractor.currency.add_btn">
+                <source>shop.contractor.currency.add_btn</source>
+                <target>Добавить валюту</target>
+            </trans-unit>
             <trans-unit id="shop.manufacturers">
                 <source>shop.manufacturers</source>
                 <target>Производители</target>

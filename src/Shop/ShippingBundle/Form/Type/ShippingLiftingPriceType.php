@@ -21,7 +21,7 @@ class ShippingLiftingPriceType extends AbstractType {
         $builder
             ->add('priceType', 'choice', array(
                 'expanded' => true,
-                'label' => 'Тип цены',
+                'label' => 'Тариф',
                 'choices' => array(
                     ShippingLiftingPrice::PRICE_TYPE_ANY_FLOOR => 'подъем на любой этаж',
                     ShippingLiftingPrice::PRICE_TYPE_PER_FLOOR => 'цена за этаж',

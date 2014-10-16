@@ -37,3 +37,34 @@ $.extend( $.fn.dataTable.defaults, {
 
     }
 } );
+
+$(function(){
+
+    var $dataTables = $('.data-table');
+
+    $dataTables.each(function(){
+
+        var $dataTable = $(this);
+
+        var $firstRow = $dataTable.find('tbody tr:eq(0)');
+        var $firstRowCells = $firstRow.find('td');
+
+        var columnDefs = [];
+
+        $firstRowCells.each(function(){
+
+            var $cell = $(this);
+
+            if($cell.hasClass('btn-cell')){
+                columnDefs.push({ "orderable": false, "targets": $cell.index() });
+            }
+
+        });
+
+        $dataTable.dataTable({
+            "columnDefs": columnDefs
+        });
+
+    });
+
+});

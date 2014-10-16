@@ -10,47 +10,91 @@
 
     <route id="shipping_methods" pattern="/admin/shippingMethods">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethods</default>
+        <option key="title">shop.shipping.methods</option>
     </route>
 
     <route id="shipping_method" pattern="/admin/shippingMethod/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethod</default>
         <default key="id">null</default>
+        <option key="title">{{ shippingMethod.id ? shippingMethod.name : 'shop.shipping.method.add'|trans([],'ShopShippingBundle') }}</option>
+        <option key="resourceKey">shippingMethod</option>
+        <option key="parent">shipping_methods</option>
     </route>
 
     <route id="delete_shipping_method" pattern="/admin/deleteShippingMethod/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethod</default>
     </route>
 
+    <route id="shipping_method_prices" pattern="/admin/shippingMethodPrice/{shippingMethodId}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodPrices</default>
+        <option key="title">shop.shipping.method.prices</option>
+        <option key="resourceKey">shippingMethod||shippingMethodPrice</option>
+        <option key="parent">shipping_method</option>
+    </route>
+
     <route id="shipping_method_price" pattern="/admin/shippingMethodPrice/{shippingMethodId}/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodPrice</default>
         <default key="id">null</default>
+        <option key="title">{{ (shippingMethodPrice.id ? 'shop.shipping.method.price.edit' : 'shop.shipping.method.price.add')|trans([],'ShopShippingBundle') }}</option>
+        <option key="resourceKey">shippingMethodPrice</option>
+        <option key="parent">shipping_method_prices</option>
     </route>
 
     <route id="delete_shipping_method_price" pattern="/admin/deleteShippingMethodPrice/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodPrice</default>
     </route>
 
+    <route id="shipping_method_lifting_prices" pattern="/admin/shippingMethodLiftingPrices/{shippingMethodId}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodLiftingPrices</default>
+        <option key="title">shop.shipping.method.lifting_prices</option>
+        <option key="resourceKey">shippingMethod||shippingMethodLiftingPrice</option>
+        <option key="parent">shipping_method</option>
+    </route>
+
     <route id="shipping_method_lifting_price" pattern="/admin/shippingMethodLiftingPrice/{shippingMethodId}/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodLiftingPrice</default>
         <default key="id">null</default>
+        <option key="title">{{ (shippingMethodLiftingPrice.id ? 'shop.shipping.method.lifting_price.edit' : 'shop.shipping.method.lifting_price.add')|trans([],'ShopShippingBundle') }}</option>
+        <option key="resourceKey">shippingMethodLiftingPrice</option>
+        <option key="parent">shipping_method_lifting_prices</option>
     </route>
 
     <route id="delete_shipping_method_lifting_price" pattern="/admin/deleteShippingMethodLiftingPrice/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodLiftingPrice</default>
     </route>
 
+    <route id="shipping_method_assembly_prices" pattern="/admin/shippingMethodAssemblyPrices/{shippingMethodId}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodAssemblyPrices</default>
+        <option key="title">shop.shipping.method.assembly_prices</option>
+        <option key="resourceKey">shippingMethod||shippingMethodAssemblyPrice</option>
+        <option key="parent">shipping_method</option>
+    </route>
+
     <route id="shipping_method_assembly_price" pattern="/admin/shippingMethodAssemblyPrice/{shippingMethodId}/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:shippingMethodAssemblyPrice</default>
         <default key="id">null</default>
+        <option key="title">{{ (shippingMethodAssemblyPrice.id ? 'shop.shipping.method.assembly_price.edit' : 'shop.shipping.method.assembly_price.add')|trans([],'ShopShippingBundle') }}</option>
+        <option key="resourceKey">shippingMethodAssemblyPrice</option>
+        <option key="parent">shipping_method_assembly_prices</option>
     </route>
 
     <route id="delete_shipping_method_assembly_price" pattern="/admin/deleteShippingMethodAssemblyPrice/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethod:deleteShippingMethodAssemblyPrice</default>
     </route>
 
+    <route id="shipping_categories" pattern="/admin/shippingCategories/{shippingMethodId}">
+        <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategories</default>
+        <option key="title">shop.shipping.categories</option>
+        <option key="resourceKey">shippingMethod||shippingMethodCategory</option>
+        <option key="parent">shipping_method</option>
+    </route>
+
     <route id="shipping_category" pattern="/admin/shippingCategory/{shippingMethodId}/{id}">
         <default key="_controller">ShopShippingBundle:AdminShippingMethodCategory:shippingCategory</default>
         <default key="id">null</default>
+        <option key="title">{{ (shippingCategory.id ? 'shop.shipping.category' : 'shop.shipping.category.add')|trans([],'ShopShippingBundle') }}</option>
+        <option key="resourceKey">shippingCategory</option>
+        <option key="parent">shipping_categories</option>
     </route>
 
     <route id="delete_shipping_category" pattern="/admin/deleteShippingCategory/{id}">

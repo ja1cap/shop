@@ -1,53 +1,83 @@
-<div style="margin: 10px 0">
-    {% block add_shipping_price_button %}
-        <div class="btn secondary small">
-            <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id}) }}">
-                Добавить стоимость
+{% extends "ShopShippingBundle:AdminShippingMethod:shippingMethodLayout.html.twig" %}
+
+{% block page_content %}
+
+    <div class="page-buttons">
+        {% block add_shipping_price_button %}
+            <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id}) }}" class="btn btn-default">
+                {{ 'shop.shipping.method.price.add_btn'|trans([], 'ShopShippingBundle') }}
             </a>
-        </div>
-    {% endblock %}
-    <div style="margin: 10px 0 5px;">
-        {% for price in shippingPrices %}
-            <div class="" style="margin: 0 0 5px; font-size: 12px">
-                {{ loop.index }}.
-                {% if price.orderPriceType == constant('ORDER_PRICE_TYPE_ANY', price) %}
-                    Любая сумма заказа
-                {% else %}
-                    Сумма заказа
-                    {% if price.minOrderPriceValue %}
-                        от {{ price.minOrderPriceValue|weasty_price(price.minOrderPriceCurrencyNumericCode) }}
-                    {% endif %}
-                    {% if price.maxOrderPriceValue %}
-                        до {{ price.maxOrderPriceValue|weasty_price(price.maxOrderPriceCurrencyNumericCode) }}
-                    {% endif %}
-                {% endif %}
-                -
-                {% if price.value %}
-                    доставка {{ price|weasty_price }}
-                {% else %}
-                    бесплатная доставка
-                {% endif %}
-                {% if price.liftingType %}
-                    , подъем на этаж: {{ price.liftingTextType }}
-                {% endif %}
-                {% if price.assemblyType %}
-                    , сборка: {{ price.assemblyTextType }}
-                {% endif %}
-                {% block shipping_price_buttons %}
-                    <div style="display: inline-block; margin: 0 10px">
-                        <div class="btn default small">
-                            <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}">
-                                Изменить стоимость
-                            </a>
-                        </div>
-                        <div class="btn danger small">
-                            <a href="{{ path('delete_shipping_method_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить стоимость
-                            </a>
-                        </div>
-                    </div>
-                {% endblock %}
-            </div>
-        {% endfor %}
+        {% endblock %}
     </div>
-</div>
+
+    <table class="table table-stripped table-vmiddle data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Сумма заказа</th>
+                <th>Стоимость доставки</th>
+                <th>Подъем на этаж</th>
+                <th>Сборка</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for price in shippingPrices %}
+            <tr>
+                <td>
+                    {#{{ loop.index }}#}
+                    {{ price.id }}
+                </td>
+                <td>
+                    <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}" class="primary-link">
+                        {% if price.orderPriceType == constant('ORDER_PRICE_TYPE_ANY', price) %}
+                            Любая
+                        {% else %}
+                            {% if price.minOrderPriceValue %}
+                                от {{ price.minOrderPriceValue|weasty_price(price.minOrderPriceCurrencyNumericCode) }}
+                            {% endif %}
+                            {% if price.maxOrderPriceValue %}
+                                до {{ price.maxOrderPriceValue|weasty_price(price.maxOrderPriceCurrencyNumericCode) }}
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    {% if price.value %}
+                        {{ price|weasty_price }}
+                    {% else %}
+                        бесплатная
+                    {% endif %}
+                </td>
+                <td>
+                    {% if price.liftingType %}
+                        {{ price.liftingTextType }}
+                    {% else %}
+                        базовый тариф
+                    {% endif %}
+                </td>
+                <td>
+                    {% if price.assemblyType %}
+                        {{ price.assemblyTextType }}
+                    {% else %}
+                        базовый тариф
+                    {% endif %}
+                </td>
+                <td class="btn-cell">
+                    <div class="btn-group btn-group-sm">
+                        {% block shipping_price_buttons %}
+                            <a href="{{ path('shipping_method_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-pencil"></span> Изменить
+                            </a>
+                            <a href="{{ path('delete_shipping_method_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-trash"></span> Удалить
+                            </a>
+                        {% endblock %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

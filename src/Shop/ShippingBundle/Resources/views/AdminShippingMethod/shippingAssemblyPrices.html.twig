@@ -1,36 +1,50 @@
-<div style="margin: 10px 0">
+{% extends "ShopShippingBundle:AdminShippingMethod:shippingMethodLayout.html.twig" %}
+
+{% block page_content %}
     {% if shippingAssemblyPrices|length == 0 %}
-        {% block add_shipping_assembly_price_button %}
-            <div class="btn secondary small">
-                <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id}) }}">
-                    Добавить стоимость сборки
+        <div class="page-buttons">
+            {% block add_shipping_assembly_price_button %}
+                <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id}) }}" class="btn btn-default">
+                    {{ 'shop.shipping.method.assembly_price.add'|trans([], 'ShopShippingBundle') }}
                 </a>
-            </div>
-        {% endblock %}
+            {% endblock %}
+        </div>
     {% endif %}
-    <div style="margin: 10px 0 5px;">
+    <table class="table table-stripped table-vmiddle data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Стоимость сборки</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for price in shippingAssemblyPrices %}
-            <div class="" style="margin: 0 0 5px; font-size: 12px">
-                {% if price.value %}
-                    Стоимость сборки - {{ price|weasty_price }}
-                {% else %}
-                    Бесплатная сборка
-                {% endif %}
-                {% block shipping_assembly_price_buttons %}
-                    <div style="display: inline-block; margin: 0 10px">
-                        <div class="btn default small">
-                            <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}">
-                                Изменить стоимость
+            <tr>
+                <td>
+                    {{ price.id }}
+                </td>
+                <td>
+                    {% if price.value %}
+                        {{ price|weasty_price }}
+                    {% else %}
+                        бесплатно
+                    {% endif %}
+                </td>
+                <td class="btn-cell">
+                    <div class="btn-group btn-group-sm">
+                        {% block shipping_assembly_price_buttons %}
+                            <a href="{{ path('shipping_method_assembly_price', {'shippingMethodId':shippingMethod.id, 'id':price.id}) }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-pencil"></span> Изменить
                             </a>
-                        </div>
-                        <div class="btn danger small">
-                            <a href="{{ path('delete_shipping_method_assembly_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
-                                Удалить стоимость
+                            <a href="{{ path('delete_shipping_method_assembly_price', {'id':price.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-trash"></span> Удалить
                             </a>
-                        </div>
+                        {% endblock %}
                     </div>
-                {% endblock %}
-            </div>
+                </td>
+            </tr>
         {% endfor %}
-    </div>
-</div>
+        </tbody>
+    </table>
+{% endblock %}

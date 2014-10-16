@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="shop.shipping.methods">
+                <source>shop.shipping.methods</source>
+                <target>Shipping methods</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.add">
+                <source>shop.shipping.method.add</source>
+                <target>Add shipping method</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

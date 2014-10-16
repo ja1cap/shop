@@ -34,7 +34,32 @@ class ShippingMethod extends AbstractEntity
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $categories;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     private $assemblyPrices;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $liftingPrices;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $prices;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $countries;
+
+    /**
+     * @var integer
+     */
+    private $status;
 
     /**
      * @var array
@@ -43,6 +68,17 @@ class ShippingMethod extends AbstractEntity
         self::STATUS_ON => 'Вкл',
         self::STATUS_OFF => 'Выкл',
     );
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->countries = new ArrayCollection();
+        $this->prices = new ArrayCollection();
+        $this->liftingPrices = new ArrayCollection();
+        $this->assemblyPrices = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -99,11 +135,6 @@ class ShippingMethod extends AbstractEntity
     {
         return $this->description;
     }
-    /**
-     * @var integer
-     */
-    private $status;
-
 
     /**
      * Set status
@@ -127,20 +158,12 @@ class ShippingMethod extends AbstractEntity
     {
         return $this->status;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $countries;
 
     /**
-     * Constructor
+     * @return mixed
      */
-    public function __construct()
-    {
-        $this->countries = new ArrayCollection();
-        $this->prices = new ArrayCollection();
-        $this->liftingPrices = new ArrayCollection();
-        $this->assemblyPrices = new ArrayCollection();
+    public function getTextStatus(){
+        return self::$statuses[$this->status];
     }
 
     /**
@@ -178,11 +201,6 @@ class ShippingMethod extends AbstractEntity
         }
         return $this->countries;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $prices;
-
 
     /**
      * Add prices
@@ -216,11 +234,6 @@ class ShippingMethod extends AbstractEntity
     {
         return $this->prices;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $liftingPrices;
-
 
     /**
      * Add liftingPrices
@@ -254,11 +267,6 @@ class ShippingMethod extends AbstractEntity
     {
         return $this->liftingPrices;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $categories;
-
 
     /**
      * Add categories

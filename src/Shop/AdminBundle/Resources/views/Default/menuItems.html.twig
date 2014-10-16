@@ -22,7 +22,7 @@
             Курсы валют
         </a>
     </li>
-    <li class="{{ app.request.get('_route') == 'shipping_methods' ? 'active' : '' }}">
+    <li class="{{ _breadcrumbs['shipping_methods'] is defined ? 'active' : '' }}">
         <a href="{{ path('shipping_methods') }}" class="">
             Способы доставки
         </a>

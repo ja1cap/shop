@@ -19,7 +19,7 @@ class ShippingMethodCategoryType extends AbstractType {
 
         $builder
             ->add('categoryIds', 'weasty_catalog_category_id', array(
-                'required' => true,
+                'required' => false,
                 'multiple' => true,
                 'label' => 'Категории',
             ))

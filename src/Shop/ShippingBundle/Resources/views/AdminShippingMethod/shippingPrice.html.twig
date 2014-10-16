@@ -1,8 +1,6 @@
-{% extends "ShopAdminBundle::layout.html.twig" %}
+{% extends "ShopShippingBundle:AdminShippingMethod:shippingMethodLayout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block page_container %}
+{% block page_content %}
     {{ form(form) }}
     <script>
         $(function(){

@@ -21,6 +21,21 @@ class AdminShippingMethodCategoryController extends Controller
 {
 
     /**
+     * @param $shippingMethodId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function shippingCategoriesAction($shippingMethodId){
+
+        $shippingMethod = $this->getShippingMethod($shippingMethodId);
+
+        return $this->render('ShopShippingBundle:AdminShippingMethodCategory:shippingCategories.html.twig', array(
+            'shippingMethod' => $shippingMethod,
+            'shippingCategories' => $shippingMethod->getCategories(),
+        ));
+
+    }
+
+    /**
      * @param $id
      * @param $shippingMethodId
      * @param Request $request
@@ -31,14 +46,7 @@ class AdminShippingMethodCategoryController extends Controller
      */
     public function shippingCategoryAction($id, $shippingMethodId, Request $request){
 
-        $shippingMethodRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod');
-        $shippingMethod = $shippingMethodRepository->findOneBy(array(
-            'id' => $shippingMethodId
-        ));
-
-        if(!$shippingMethod instanceof ShippingMethod){
-            throw $this->createNotFoundException('Shipping method not found');
-        }
+        $shippingMethod = $this->getShippingMethod($shippingMethodId);
 
         $shippingCategoryRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategory');
         $shippingCategory = $shippingCategoryRepository->findOneBy(array(
@@ -64,22 +72,17 @@ class AdminShippingMethodCategoryController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('shipping_methods'));
-
-            /*
-            return $this->redirect($this->generateUrl('shipping_category', [
+            return $this->redirect($this->generateUrl('shipping_categories', [
                 'shippingMethodId' => $shippingMethod->getId(),
                 'id' => $shippingCategory->getId(),
             ]));
-            */
 
         } else {
 
             return $this->render('ShopShippingBundle:AdminShippingMethodCategory:shippingCategory.html.twig', array(
-                'title' => 'Категория доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingMethod,
-                'shippingMethodCategory' => $shippingCategory,
+                'shippingCategory' => $shippingCategory,
             ));
 
         }
@@ -110,6 +113,22 @@ class AdminShippingMethodCategoryController extends Controller
     }
 
     /**
+     * @param $shippingCategoryId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function shippingCategoryPricesAction($shippingCategoryId){
+
+        $shippingCategory = $this->getShippingCategory($shippingCategoryId);
+
+        return $this->render('ShopShippingBundle:AdminShippingMethod:shippingPrices.html.twig', array(
+            'shippingMethod' => $shippingCategory->getShippingMethod(),
+            'shippingCategory' => $shippingCategory,
+            'shippingCategoryPrice' => $shippingCategory->getPrices(),
+        ));
+
+    }
+
+    /**
      * @param $id
      * @param $shippingCategoryId
      * @param Request $request
@@ -120,14 +139,7 @@ class AdminShippingMethodCategoryController extends Controller
      */
     public function shippingCategoryPriceAction($id, $shippingCategoryId, Request $request){
 
-        $shippingCategoryRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategory');
-        $shippingCategory = $shippingCategoryRepository->findOneBy(array(
-            'id' => $shippingCategoryId
-        ));
-
-        if(!$shippingCategory instanceof ShippingMethodCategory){
-            throw $this->createNotFoundException('Shipping category not found');
-        }
+        $shippingCategory = $this->getShippingCategory($shippingCategoryId);
 
         $shippingCategoryPriceRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategoryPrice');
         $shippingCategoryPrice = $shippingCategoryPriceRepository->findOneBy(array(
@@ -159,7 +171,6 @@ class AdminShippingMethodCategoryController extends Controller
         } else {
 
             return $this->render('ShopShippingBundle:AdminShippingMethod:shippingPrice.html.twig', array(
-                'title' => 'Стоимость доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingCategory->getShippingMethod(),
                 'shippingCategory' => $shippingCategory,
@@ -243,7 +254,6 @@ class AdminShippingMethodCategoryController extends Controller
         } else {
 
             return $this->render('ShopShippingBundle:AdminShippingMethod:shippingLiftingPrice.html.twig', array(
-                'title' => 'Стоимость доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingCategory->getShippingMethod(),
                 'shippingCategory' => $shippingCategory,
@@ -327,7 +337,6 @@ class AdminShippingMethodCategoryController extends Controller
         } else {
 
             return $this->render('ShopShippingBundle:AdminShippingMethod:shippingAssemblyPrice.html.twig', array(
-                'title' => 'Стоимость доставки',
                 'form' => $form->createView(),
                 'shippingMethod' => $shippingCategory->getShippingMethod(),
                 'shippingCategory' => $shippingCategory,
@@ -359,6 +368,49 @@ class AdminShippingMethodCategoryController extends Controller
 
         return $this->redirect($this->generateUrl('shipping_methods'));
 
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+    protected function getShippingMethodRepository()
+    {
+        $shippingMethodRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethod');
+        return $shippingMethodRepository;
+    }
+
+    /**
+     * @param $shippingMethodId
+     * @return ShippingMethod
+     */
+    protected function getShippingMethod($shippingMethodId)
+    {
+        $shippingMethodRepository = $this->getShippingMethodRepository();
+        $shippingMethod = $shippingMethodRepository->findOneBy(array(
+            'id' => $shippingMethodId
+        ));
+
+        if (!$shippingMethod instanceof ShippingMethod) {
+            throw $this->createNotFoundException('Shipping method not found');
+        }
+        return $shippingMethod;
+    }
+
+    /**
+     * @param $shippingCategoryId
+     * @return ShippingMethodCategory
+     */
+    protected function getShippingCategory($shippingCategoryId)
+    {
+        $shippingCategoryRepository = $this->getDoctrine()->getRepository('ShopShippingBundle:ShippingMethodCategory');
+        $shippingCategory = $shippingCategoryRepository->findOneBy(array(
+            'id' => $shippingCategoryId
+        ));
+
+        if (!$shippingCategory instanceof ShippingMethodCategory) {
+            throw $this->createNotFoundException('Shipping category not found');
+        }
+        return $shippingCategory;
     }
 
 

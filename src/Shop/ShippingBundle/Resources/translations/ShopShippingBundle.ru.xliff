@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="ShopShippingBundle.en.xliff">
+        <body>
+            <trans-unit id="shop.shipping.methods">
+                <source>shop.shipping.methods</source>
+                <target>Способы доставки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.methods.admin">
+                <source>shop.shipping.methods.admin</source>
+                <target>Управление способами доставки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.add">
+                <source>shop.shipping.method.add</source>
+                <target>Добавление способа доставки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.add_btn">
+                <source>shop.shipping.method.add_btn</source>
+                <target>Добавить способ доставки</target>
+            </trans-unit>
+
+            <trans-unit id="shop.shipping.method.info">
+                <source>shop.shipping.method.info</source>
+                <target>Информация</target>
+            </trans-unit>
+
+            <trans-unit id="shop.shipping.method.prices">
+                <source>shop.shipping.method.prices</source>
+                <target>Стоимость доставки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.price.add">
+                <source>shop.shipping.method.price.add</source>
+                <target>Добавление стоимости</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.price.add_btn">
+                <source>shop.shipping.method.price.add_btn</source>
+                <target>Добавить стоимость</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.price.edit">
+                <source>shop.shipping.method.price.edit</source>
+                <target>Изменение стоимости</target>
+            </trans-unit>
+
+            <trans-unit id="shop.shipping.method.lifting_prices">
+                <source>shop.shipping.method.lifting_prices</source>
+                <target>Подъем на этаж</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.lifting_price.add">
+                <source>shop.shipping.method.lifting_price.add</source>
+                <target>Добавление стоимости подъема на этаж</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.lifting_price.add_btn">
+                <source>shop.shipping.method.lifting_price.add_btn</source>
+                <target>Добавить стоимость подъема на этаж</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.lifting_price.edit">
+                <source>shop.shipping.method.lifting_price.edit</source>
+                <target>Изменение стоимости подъема на этаж</target>
+            </trans-unit>
+
+            <trans-unit id="shop.shipping.method.assembly_prices">
+                <source>shop.shipping.method.assembly_prices</source>
+                <target>Сборка</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.assembly_price.add">
+                <source>shop.shipping.method.assembly_price.add</source>
+                <target>Добавление стоимости сборки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.assembly_price.add_btn">
+                <source>shop.shipping.method.assembly_price.add_btn</source>
+                <target>Добавить стоимость сборки</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.method.assembly_price.edit">
+                <source>shop.shipping.method.assembly_price.edit</source>
+                <target>Изменение стоимости сборки</target>
+            </trans-unit>
+
+            <trans-unit id="shop.shipping.categories">
+                <source>shop.shipping.categories</source>
+                <target>Доставки для категорий</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.category">
+                <source>shop.shipping.category</source>
+                <target>Доставка для категорий</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.category.add">
+                <source>shop.shipping.category.add</source>
+                <target>Добавление доставки для категорий</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.category.add_btn">
+                <source>shop.shipping.category.add_btn</source>
+                <target>Добавить доставку для категорий</target>
+            </trans-unit>
+            <trans-unit id="shop.shipping.category.edit">
+                <source>shop.shipping.category.edit</source>
+                <target>Изменение доставки для категорий</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

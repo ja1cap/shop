@@ -3,8 +3,8 @@
 namespace Shop\CatalogBundle\Controller;
 
 use Shop\CatalogBundle\Entity\Category;
-use Shop\CatalogBundle\Entity\ProposalCollection;
 use Shop\CatalogBundle\Entity\Proposal;
+use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Shop\ShippingBundle\Entity\ShippingLiftingPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,7 +26,8 @@ class DefaultController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function categoriesAction(){
+    public function categoriesAction()
+    {
         return $this->render('ShopCatalogBundle:Default:categories.html.twig');
     }
 
@@ -35,36 +36,22 @@ class DefaultController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function categoryAction($slug, Request $request){
+    public function categoryAction($slug, Request $request)
+    {
 
-        $categoryFilters = null;
         $category = $this->get('shop_catalog.category.repository')->findOneBy(array(
             'slug' => $slug,
         ));
 
-        if(!$category instanceof CategoryInterface){
-
-            $categoryFilters = $this->getDoctrine()->getRepository('ShopCatalogBundle:ProposalCollection')->findOneBy(array(
-                'slug' => $slug,
-            ));
-
-            if($categoryFilters instanceof ProposalCollection){
-                $category = $categoryFilters->getCategory();
-            } else {
-                return $this->redirect($this->generateUrl('shop'));
-            }
-
+        if (!$category instanceof CategoryInterface) {
+            return $this->redirect($this->generateUrl('shop'));
         }
 
         /**
          * @var \Shop\CatalogBundle\Filter\FiltersBuilder $filtersBuilder
          */
         $filtersBuilder = $this->get('shop_catalog.filters_builder');
-        if($categoryFilters){
-            $filtersResource = $filtersBuilder->buildFromCategoryFilters($categoryFilters);
-        } else {
-            $filtersResource = $filtersBuilder->buildFromRequest($request, $category);
-        }
+        $filtersResource = $filtersBuilder->buildFromRequest($request, $category);
 
         $proposals = $this->getProposalRepository()->findProposalsByFilters($filtersResource);
         $proposalsCount = $this->getProposalRepository()->countProposals($filtersResource);
@@ -76,7 +63,7 @@ class DefaultController extends Controller
             'filtersResource' => $filtersResource,
         );
 
-        switch($request->get('format')){
+        switch ($request->get('format')) {
             case 'json':
 
                 $tabsHtml = $this->renderView('ShopCatalogBundle:Default:category-tabs.html.twig', $viewParameters);
@@ -105,45 +92,114 @@ class DefaultController extends Controller
 
     /**
      * @param $slug
+     * @param $priceId
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function proposalAction($slug, Request $request){
+    public function proposalAction($slug, $priceId = null, Request $request)
+    {
 
         $criteria = array();
 
-        if(is_numeric($slug)){
+        if (is_numeric($slug)) {
             $criteria['id'] = (int)$slug;
-        } else if(is_string($slug)) {
+        } else if (is_string($slug)) {
             $criteria['seoSlug'] = (string)$slug;
         }
 
         $proposal = $this->getProposalRepository()->findOneBy($criteria);
 
-        if(!$proposal instanceof Proposal){
+        if (!$proposal instanceof Proposal) {
             throw $this->createNotFoundException('Товар не найден');
         }
 
         $category = $proposal->getCategory();
 
         /**
+         * @var $price ProposalPriceInterface|null
+         */
+        $price = null;
+        if ($priceId) {
+            $price = $this->getProposalPriceRepository()->findOneBy(['id' => $priceId]);
+        }
+
+        $proposalData = null;
+        $proposalPricesData = [];
+        $filteredProposalPriceIds = [];
+
+        /**
          * @var $filtersBuilder \Shop\CatalogBundle\Filter\FiltersBuilder
          */
         $filtersBuilder = $this->get('shop_catalog.filters_builder');
-        $filtersResource = $filtersBuilder->buildFromRequest($request, $category, $proposal);
-        //@TODO add priceId parameter check, if defined get $proposalData by priceId ignoring $filtersResource
+        $filtersResource = $filtersBuilder->buildFromRequest($request, $category, $proposal, $price);
 
-        $proposalData = $this->getProposalRepository()->findProposalPrice($filtersResource);
-        $price = $proposalData ? $proposalData['price'] : null;
-        //@TODO reset filters if $price is null and restart search
+        if(!$price instanceof ProposalPriceInterface){
+
+            $filteredProposalPricesData = $this->getProposalRepository()->findProposalPricesByFilters($filtersResource);
+
+            /**
+             * @var $price \Shop\CatalogBundle\Price\ProposalPriceInterface
+             */
+            if ($filteredProposalPricesData) {
+
+                $proposalData = current($filteredProposalPricesData);
+                $price = $proposalData['price'];
+
+                foreach ($filteredProposalPricesData as $_proposalData) {
+                    $filteredProposalPriceIds[] = $_proposalData['priceId'];
+                    if (!$price || ($price && $price->getId() != $_proposalData['priceId'])) {
+                        $proposalPricesData[] = $_proposalData;
+                    }
+                }
+
+            }
+
+        }
+
+        $defaultManufacturerIds = [$proposal->getManufacturerId()];
+
+        $defaultParametersFilteredOptionIds = [];
+        if($priceId){
+            foreach($price->getParameterValues() as $_parameterValue){
+                $defaultParametersFilteredOptionIds[$_parameterValue->getParameterId()] = [$_parameterValue->getOptionId()];
+            }
+        }
+
+        $defaultFilterResource = $filtersBuilder->build($category, $proposal, $price, $defaultManufacturerIds, $defaultParametersFilteredOptionIds);
+        if(!$filteredProposalPriceIds){
+            $filtersResource = $defaultFilterResource;
+        }
+        $allProposalPricesData = $this->getProposalRepository()->findProposalPricesByFilters($defaultFilterResource);
+
+        if($allProposalPricesData){
+
+            foreach ($allProposalPricesData as $_proposalData) {
+                if ($price && $price->getId() == $_proposalData['priceId']) {
+                    if(!$proposalData){
+                        $proposalData = $_proposalData;
+                        $price = $proposalData['price'];
+                    }
+                    continue;
+                }
+                if (!in_array($_proposalData['priceId'], $filteredProposalPriceIds)) {
+                    $proposalPricesData[$_proposalData['priceId']] = $_proposalData;
+                }
+            }
+
+            if(!$proposalData){
+                reset($allProposalPricesData);
+                $proposalData = current($allProposalPricesData);
+                $price = $proposalData['price'];
+            }
+
+        }
 
         $shippingCalculatorResult = null;
-
-        if($price instanceof ProposalPriceInterface){
+        if ($price instanceof ProposalPriceInterface) {
 
             $customerCity = null;
-            if($request->get('customerCity')){
+            if ($request->get('customerCity')) {
                 $customerCity = $this->get('weasty_geonames.city.repository')->findOneBy(array(
                     'id' => (int)$request->get('customerCity'),
                 ));
@@ -177,10 +233,11 @@ class DefaultController extends Controller
             'proposal' => $proposal,
             'price' => $price,
             'proposalData' => $proposalData,
+            'proposalPricesData' => $proposalPricesData,
             'actions' => $actions,
             'filtersResource' => $filtersResource,
         ));
-        $filtersBuilder->setFiltersCookies($category, $request, $response);
+        //$filtersBuilder->setFiltersCookies($category, $request, $response);
 
         return $response;
 
@@ -242,8 +299,17 @@ class DefaultController extends Controller
     /**
      * @return \Shop\CatalogBundle\Entity\ProposalRepository
      */
-    protected function getProposalRepository(){
+    protected function getProposalRepository()
+    {
         return $this->get('shop_catalog.proposal.repository');
+    }
+
+    /**
+     * @return \Shop\CatalogBundle\Entity\PriceRepository
+     */
+    protected function getProposalPriceRepository()
+    {
+        return $this->get('shop_catalog.price.repository');
     }
 
 }

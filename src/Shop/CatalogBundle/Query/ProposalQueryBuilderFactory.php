@@ -78,6 +78,7 @@ class ProposalQueryBuilderFactory {
 
         $qb
             ->andWhere($qb->expr()->andX(
+                ($filtersResource->getPriceId() ? $qb->expr()->eq('pp.id', $filtersResource->getPriceId()) : null),
                 ($filtersResource->getProposalId() ? $qb->expr()->eq('p.id', $filtersResource->getProposalId()) : null),
                 ($filtersResource->getCategoryId() ? $qb->expr()->eq('p.categoryId', $filtersResource->getCategoryId()) : null),
                 ($filtersResource && $filtersResource->getManufacturerFilter() && $filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)

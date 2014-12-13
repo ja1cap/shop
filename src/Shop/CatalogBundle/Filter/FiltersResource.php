@@ -34,11 +34,6 @@ class FiltersResource {
     );
 
     /**
-     * @var mixed
-     */
-    protected $cacheId;
-
-    /**
      * @var int|null
      */
     protected $categoryId;
@@ -47,6 +42,11 @@ class FiltersResource {
      * @var int|null
      */
     protected $proposalId;
+
+    /**
+     * @var int|null
+     */
+    protected $priceId;
 
     /**
      * @var OptionsFilterInterface
@@ -83,19 +83,6 @@ class FiltersResource {
      */
     protected $hasDiscountFilter;
 
-    function __construct($cacheId)
-    {
-        $this->cacheId = $cacheId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCacheId()
-    {
-        return $this->cacheId;
-    }
-
     /**
      * @return int|null
      */
@@ -130,6 +117,22 @@ class FiltersResource {
     {
         $this->proposalId = $proposalId;
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPriceId()
+    {
+        return $this->priceId;
+    }
+
+    /**
+     * @param int|null $priceId
+     */
+    public function setPriceId($priceId)
+    {
+        $this->priceId = $priceId;
     }
 
     /**

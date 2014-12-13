@@ -1,7 +1,7 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 {% block page_container %}
-    {{ include('ShopCatalogBundle:Proposal:proposals-block.html.twig') }}
-    {{ include('ShopDiscountBundle:Action:actions-block.html.twig') }}
     {{ include('ShopCatalogBundle:Category:categories-block.html.twig') }}
+    {{ include('ShopDiscountBundle:Action:actions-block.html.twig') }}
+    {{ include('ShopCatalogBundle:Proposal:proposals-block.html.twig') }}
     {{ include('ShopCatalogBundle:Manufacturer:manufacturers-block.html.twig') }}
 {% endblock %}

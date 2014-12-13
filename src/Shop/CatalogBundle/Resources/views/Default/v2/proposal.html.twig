@@ -9,6 +9,7 @@
 
 {% set proposal = proposalData.proposal %}
 {% set proposalFeatures = shop_catalog_proposal_features(category, price) %}
+{% set proposalParameterFilters = filtersResource.getProposalParameterFilters %}
 {% set catalogPrice = shop_catalog_price(proposalData) %}
 
 {% block page_container %}
@@ -45,9 +46,44 @@
                             {#</div>#}
                         {% endif %}
 
+                        {#{% if proposalParameterFilters %}#}
+                            {#{% for _parameterValue in proposalData.price.parameterValues %}#}
+                                {#{% if proposalParameterFilters[_parameterValue.parameterId] is defined %}#}
+                                    {#{% set proposalParameterFilter = proposalParameterFilters[_parameterValue.parameterId] %}#}
+                                    {#{{ proposalParameterFilter.name }}#}
+                                    {#-#}
+                                    {#{{ proposalParameterFilter.options[_parameterValue.optionId] }}#}
+                                {#{% endif %}#}
+                            {#{% endfor %}#}
+                        {#{% endif %}#}
+
                         {% if proposal.shortDescription %}
                             <div class="short-description">
                                 {{ proposal.shortDescription|nl2br }}
+                            </div>
+                        {% endif %}
+{#6110961#}
+                        {% if proposalPricesData %}
+                            <div>
+                                {#{{ proposalPricesData|length }}#}
+                                {#<ol>#}
+                                    {#{% for proposalPriceData in proposalPricesData %}#}
+                                        {#<li>#}
+                                            {#{% set _catalogPrice = shop_catalog_price(proposalPriceData) %}#}
+                                            {#{{ _catalog.price(_catalogPrice) }}#}
+                                            {#{% if proposalParameterFilters %}#}
+                                                {#{% for _parameterValue in proposalPriceData.price.parameterValues %}#}
+                                                    {#{% if proposalParameterFilters[_parameterValue.parameterId] is defined %}#}
+                                                        {#{% set proposalParameterFilter = proposalParameterFilters[_parameterValue.parameterId] %}#}
+                                                        {#{{ proposalParameterFilter.name }}#}
+                                                        {#-#}
+                                                        {#{{ proposalParameterFilter.options[_parameterValue.optionId] }}#}
+                                                    {#{% endif %}#}
+                                                {#{% endfor %}#}
+                                            {#{% endif %}#}
+                                        {#</li>#}
+                                    {#{% endfor %}#}
+                                {#</ol>#}
                             </div>
                         {% endif %}
 
@@ -70,9 +106,9 @@
                             {#Посмотреть другие модели#}
                         {#</a>#}
 
-                        {% if filtersResource.getProposalParameterFilters %}
+                        {% if proposalParameterFilters %}
                             <div class="filters-form-container">
-                                <form id="filtersForm">
+                                <form id="filtersForm" action="{{ shop_catalog_proposal_url(proposal) }}">
                                     {% for parameterFilter in filtersResource.getProposalParameterFilters %}
                                         <div class="filter-form-element">
                                             <label for="parameter_{{ parameterFilter.getParameterId }}">
@@ -80,7 +116,7 @@
                                             </label>
                                             <input type="hidden" name="parameters[{{ parameterFilter.getParameterId }}][]" value="-1">
                                             <div class="picker-box">
-                                                <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" multiple="multiple">
+                                                <select id="parameter_{{ parameterFilter.getParameterId }}" name="parameters[{{ parameterFilter.getParameterId }}][]" {#multiple="multiple"#} style="width: 100%">
                                                     {% for option in parameterFilter.getOptions %}
                                                         <option
                                                                 value="{{ option.getId }}"
@@ -95,6 +131,14 @@
                                         </div>
                                     {% endfor %}
                                 </form>
+                                <script>
+                                    $(function(){
+                                        var $filtersForm = $('#filtersForm');
+                                        $(':input', $filtersForm).change(function(){
+                                            $filtersForm.submit();
+                                        });
+                                    })
+                                </script>
                             </div>
                         {% endif %}
 

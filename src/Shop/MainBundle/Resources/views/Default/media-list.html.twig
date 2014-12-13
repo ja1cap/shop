@@ -36,7 +36,18 @@
 
                     {% block media_item %}
 
-                        {% set _item_url = (media_list_options.clickable_items and media_list_options.item_route ? path(media_list_options.item_route, media_item.routeParameters) : null) %}
+                        {% if media_list_options.clickable_items and media_list_options.item_route %}
+                            {% if _item_route is not defined %}
+                                {% set _item_route = media_list_options.item_route %}
+                            {% endif %}
+                            {% if _item_route_parameters is not defined %}
+                                {% set _item_route_parameters = media_item.routeParameters %}
+                            {% endif %}
+                            {% set _item_url = path(_item_route, _item_route_parameters) %}
+                        {% else %}
+                            {% set _item_url = null %}
+                        {% endif %}
+
                         {% set _is_header_item = (media_list_options.header_items_per_row > 0 and loop.index <= media_list_options.header_items_per_row) %}
                         {% set _item_column_class = (_is_header_item ? word_numbers[12 / media_list_options.header_items_per_row] ~ ' header-item' : media_item_column_class) %}
                         {% set _item_image_format = ((_is_header_item and media_list_options.header_items_per_row <= 2) ? (media_list_options.header_items_per_row == 1 ? 'reference' : media_list_options.header_item_image_format) : media_list_options.item_image_format) %}

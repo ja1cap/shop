@@ -114,7 +114,7 @@
                                 {% set price = estimatedProposal.getPrice %}
                                 <td class="proposal-cell {{ loop.last ? 'last' : '' }}">
                                     <div class="media-item">
-                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal) }}">
+                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal, price) }}">
                                             {% if proposal.image is defined and proposal.image %}
                                                 <div class="image-container">
                                                     <img src="{% path proposal.image, 'small_square' %}" alt="{{ proposal.name }}" title="{{ proposal.name }}"/>
@@ -125,7 +125,7 @@
                                                 </div>
                                             {% endif %}
                                             <div class="title-container">
-                                                <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                                <a href="{{ shop_catalog_proposal_url(proposal, price) }}">
                                                     {{ proposal.name }}
                                                 </a>
                                             </div>
@@ -254,9 +254,9 @@
                                     {% set price = estimatedProposal.getPrice %}
                                     {% set actionConditionIds = (estimatedProposal.getActionConditions ? estimatedProposal.getActionConditions.getConditionIds : []) %}
                                     <td class="footer-cell proposal-cell {{ loop.last ? 'last' : '' }}">
-                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal) }}">
+                                        <div class="clickable-block" data-url="{{ shop_catalog_proposal_url(proposal, price) }}">
                                             <div class="title-container">
-                                                <a href="{{ shop_catalog_proposal_url(proposal) }}">
+                                                <a href="{{ shop_catalog_proposal_url(proposal, price) }}">
                                                     {{ proposal.name }}
                                                 </a>
                                             </div>

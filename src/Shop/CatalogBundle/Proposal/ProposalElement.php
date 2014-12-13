@@ -91,6 +91,16 @@ class ProposalElement extends CacheCollectionElement
     }
 
     /**
+     * Get manufacturerId
+     *
+     * @return integer
+     */
+    public function getManufacturerId()
+    {
+        return $this->data['manufacturerId'];
+    }
+
+    /**
      * @return \Shop\CatalogBundle\Category\CategoryInterface
      */
     public function getCategory()

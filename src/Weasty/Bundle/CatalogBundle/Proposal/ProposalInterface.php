@@ -15,6 +15,13 @@ interface ProposalInterface extends RoutableInterface {
     public function getId();
 
     /**
+     * Get manufacturerId
+     *
+     * @return integer
+     */
+    public function getManufacturerId();
+
+    /**
      * @return integer
      */
     public function getCategoryId();

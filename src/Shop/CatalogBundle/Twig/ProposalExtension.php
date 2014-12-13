@@ -1,7 +1,8 @@
 <?php
 namespace Shop\CatalogBundle\Twig;
 
-use Shop\CatalogBundle\Entity\Proposal;
+use Shop\CatalogBundle\Proposal\ProposalInterface;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 
 /**
  * Class ProposalExtension
@@ -69,15 +70,22 @@ class ProposalExtension extends \Twig_Extension {
 
     /**
      * @param $proposal
+     * @param $price
      * @return null|string
      */
-    public function getProposalUrl($proposal){
+    public function getProposalUrl($proposal, $price = null){
 
         $url = null;
 
-        if($proposal instanceof Proposal){
+        if($proposal instanceof ProposalInterface){
 
-            $url = $this->urlGenerator->generate('shop_catalog_proposal', $proposal->getRouteParameters());
+            $routeParameters = $proposal->getRouteParameters();
+
+            if($price instanceof ProposalPriceInterface){
+                $routeParameters['priceId'] = $price->getId();
+            }
+
+            $url = $this->urlGenerator->generate('shop_catalog_proposal', $routeParameters);
 
         }
 
@@ -90,7 +98,7 @@ class ProposalExtension extends \Twig_Extension {
      */
     public function getNewProposals(){
 
-        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, null, [
             'isNew' => true,
         ]);
 
@@ -103,7 +111,7 @@ class ProposalExtension extends \Twig_Extension {
      */
     public function getBestsellers(){
 
-        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, null, [
             'isBestseller' => true,
         ]);
 
@@ -116,7 +124,7 @@ class ProposalExtension extends \Twig_Extension {
      */
     public function getDiscountProposals(){
 
-        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, null, [
             'hasDiscount' => true,
         ]);
 
@@ -129,7 +137,7 @@ class ProposalExtension extends \Twig_Extension {
      */
     public function getActionProposals(){
 
-        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, [
+        $filtersResource = $this->filtersBuilder->build(null, null, null, null, null, null, [
             'hasAction' => true,
         ]);
 

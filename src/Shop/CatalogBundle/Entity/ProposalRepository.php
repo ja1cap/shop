@@ -8,6 +8,7 @@ use Shop\CatalogBundle\Filter\FiltersResource;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilter;
 use Shop\CatalogBundle\Filter\OptionsFilter\OptionsFilterInterface;
 use Shop\CatalogBundle\Filter\SliderFilter\SliderFilter;
+use Shop\CatalogBundle\Price\ProposalPriceInterface;
 use Shop\CatalogBundle\Query\ProposalQueryBuilderFactory;
 use Shop\DiscountBundle\Action\ActionInterface;
 use Shop\DiscountBundle\ActionCondition\ActionConditionData;
@@ -154,7 +155,7 @@ class ProposalRepository extends AbstractRepository {
 
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
-        $existingPriceSteps = $this->getEntityManager()->getConnection()->executeQuery($sql, $queryParameters)->fetchAll(\PDO::FETCH_COLUMN);
+        $existingPriceSteps = $this->fetchAll($sql, $queryParameters, \PDO::FETCH_COLUMN);
 
         $priceIntervals = array();
 
@@ -242,7 +243,7 @@ class ProposalRepository extends AbstractRepository {
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
 
-        $priceStepsAmounts = $this->getEntityManager()->getConnection()->executeQuery($sql, $queryParameters)->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $priceStepsAmounts = $this->fetchAll($sql, $queryParameters, \PDO::FETCH_KEY_PAIR);
         foreach($priceStepsAmounts as $priceRange => $pricesAmount){
 
             if(isset($priceIntervals[$priceRange])){
@@ -268,76 +269,6 @@ class ProposalRepository extends AbstractRepository {
      */
     public function findProposalPrice(FiltersResource $filtersResource){
 
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $pricesFilterSubQb = $this->getEntityManager()->createQueryBuilder();
-        $pricesFilterSubQb
-            ->select('DISTINCT pp.id')
-            ->from('ShopCatalogBundle:Price', 'pp')
-            ->join('ShopCatalogBundle:Proposal', 'p', Expr\Join::WITH, $qb->expr()->eq('p.id', 'pp.proposalId'))
-            ->join('ShopCatalogBundle:Category', 'c', Expr\Join::WITH, $qb->expr()->eq('c.id', 'p.categoryId'))
-            ->andWhere($qb->expr()->andX(
-                $qb->expr()->eq('c.id', ':category_id'),
-                $qb->expr()->eq('c.status', ':category_status'),
-                $qb->expr()->eq('pp.status', ':price_status'),
-                $qb->expr()->eq('p.id', ':proposal_id'),
-                $qb->expr()->eq('p.status', ':proposal_status')
-            ))
-        ;
-
-        $this->applyParametersFilters($filtersResource->getParameterFilters(), $pricesFilterSubQb);
-        $this->applyPriceFilter($filtersResource, $pricesFilterSubQb);
-        $this->convertDqlToSql($pricesFilterSubQb);
-        $pricesFilterSubQuerySql = (string)$pricesFilterSubQb;
-
-        $qb
-            ->select(array(
-                'pp.*',
-                '(CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END) AS price',
-                'MAX((CASE WHEN all_ccu.id IS NOT NULL THEN all_pp.value * all_ccu.value ELSE all_pp.value END)) AS maxPrice',
-            ))
-            ->from('ShopCatalogBundle:Proposal', 'p')
-            ->join('ShopCatalogBundle:Price', 'pp', Expr\Join::WITH, $qb->expr()->in('pp.id', $pricesFilterSubQuerySql))
-            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
-                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
-            ))
-            ->leftJoin('ShopCatalogBundle:Price', 'all_pp', Expr\Join::WITH, $qb->expr()->in('all_pp.id', $pricesFilterSubQuerySql))
-            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'all_ccu', Expr\Join::WITH, $qb->expr()->andX(
-                $qb->expr()->eq('all_ccu.contractorId', 'all_pp.contractorId'),
-                $qb->expr()->eq('all_ccu.numericCode', 'all_pp.currencyNumericCode')
-            ))
-            ->andWhere($qb->expr()->eq('p.id', ':proposal_id'))
-            ->addOrderBy('price', 'ASC')
-            ->addGroupBy('pp.id')
-        ;
-
-        $this->convertDqlToSql($qb);
-        $sql = (string)$qb . ' LIMIT 1';
-
-        $rsm = $this->createResultSetMappingFromMetadata('ShopCatalogBundle:Price', 'pp', 'priceEntity');
-        $rsm->addScalarResult('price', 'price');
-        $rsm->addScalarResult('maxPrice', 'maxPrice');
-
-        $queryParameters = array(
-            'price_status' => Price::STATUS_ON,
-            'proposal_id' => $filtersResource->getProposalId(),
-            'proposal_status' => Proposal::STATUS_ON,
-            'category_id' => $filtersResource->getCategoryId(),
-            'category_status' => Category::STATUS_ON,
-        );
-
-        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
-        $query->setParameters($queryParameters);
-
-//        foreach($queryParameters as $key => $value){
-//            $sql = str_replace(':' . $key, $value, $sql);
-//        }
-//        echo($sql);
-//        echo("<br/>");
-//        die;
-
-//        $result = $query->getResult();
         $result = current($this->findProposalsByFilters($filtersResource, 1, 1));
 
         if($result){
@@ -353,6 +284,90 @@ class ProposalRepository extends AbstractRepository {
 
         return $result;
 
+    }
+
+    /**
+     * @param $proposalId
+     * @return array
+     */
+    public function findProposalPriceIds($proposalId){
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select([
+                'DISTINCT pp.id',
+                'MIN((CASE WHEN ccu.id IS NOT NULL THEN pp.value * ccu.value ELSE pp.value END)) AS price',
+            ])
+            ->from('ShopCatalogBundle:Price', 'pp')
+            ->leftJoin('ShopCatalogBundle:ContractorCurrency', 'ccu', Expr\Join::WITH, $qb->expr()->andX(
+                $qb->expr()->eq('ccu.contractorId', 'pp.contractorId'),
+                $qb->expr()->eq('ccu.numericCode', 'pp.currencyNumericCode')
+            ))
+            ->andWhere($qb->expr()->eq('pp.proposalId', (int)$proposalId))
+            ->andWhere($qb->expr()->eq('pp.status', ProposalPriceInterface::STATUS_ON))
+            ->addGroupBy('pp.id')
+            ->addOrderBy('price', 'ASC')
+        ;
+
+        return $this->fetchAll($qb->getQuery()->getSQL(), [], \PDO::FETCH_COLUMN);
+
+    }
+
+    /**
+     * @param $proposalId
+     * @return array
+     */
+    public function findProposalPrices($proposalId){
+
+        $priceIds = $this->findProposalPriceIds($proposalId);
+
+        $prices = [];
+        $priceCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Price');
+
+        foreach($priceIds as $priceId){
+
+            $price = $priceCollection->get($priceId);
+
+            if($price){
+                $prices[] = $priceCollection->get($priceId);
+            }
+
+        }
+
+        return $prices;
+
+    }
+
+    /**
+     * @param FiltersResource $filtersResource
+     * @return array
+     */
+    public function findProposalPricesByFilters(FiltersResource $filtersResource){
+
+        $result = $this->findProposalsByFilters($filtersResource, null, null, ['price', 'ASC'], ['pp.id']);
+
+        if($result){
+
+            $priceCollection = $this->getCacheCollectionManager()->getCollection('ShopCatalogBundle:Price');
+
+            foreach($result as $i => $proposalData){
+
+                if(isset($proposalData['priceId']) && $proposalData['priceId']){
+
+                    $result[$i]['price'] = $priceCollection->get($proposalData['priceId']);
+
+                } else {
+
+                    unset($result[$i]);
+
+                }
+
+            }
+
+        }
+
+        return $result;
 
     }
 
@@ -411,9 +426,10 @@ class ProposalRepository extends AbstractRepository {
      * @param null $page
      * @param null $perPage
      * @param array $orderBy
+     * @param array $groupBy
      * @return array
      */
-    public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null, $orderBy = ['price', 'ASC']){
+    public function findProposalsByFilters(FiltersResource $filtersResource, $page = null, $perPage = null, $orderBy = ['price', 'ASC'], $groupBy = ['p.id']){
 
         //@TODO cache sql query by FiltersResource::getCacheId()
         $useCacheCollection = true;
@@ -498,7 +514,7 @@ class ProposalRepository extends AbstractRepository {
                     )
                 )
             ))
-            ->groupBy('p.id')
+            ->groupBy(implode(',', $groupBy))
         ;
 
         call_user_func_array([$qb, 'addOrderBy'], $orderBy);
@@ -524,6 +540,13 @@ class ProposalRepository extends AbstractRepository {
             $sql .= ' LIMIT ' . ($page > 1 ? (int)$page . ',' : '') . $perPage;
         }
 
+//        foreach($queryParameters as $key => $value){
+//            $sql = str_replace(':' . $key, $value, $sql);
+//        }
+//        echo($sql);
+//        echo("<br/>");
+//        die;
+//
         if($useCacheCollection){
             $rsm = new ResultSetMapping();
             $rsm->addScalarResult('proposalId', 'proposalId', 'integer');
@@ -562,13 +585,6 @@ class ProposalRepository extends AbstractRepository {
         }
 
 //        var_dump($result);
-//        die;
-
-//        foreach($queryParameters as $key => $value){
-//            $sql = str_replace(':' . $key, $value, $sql);
-//        }
-//        echo($sql);
-//        echo("<br/>");
 //        die;
 
         return $result;
@@ -810,13 +826,11 @@ class ProposalRepository extends AbstractRepository {
 
     /**
      * @param $parameterId
-     * @param $categoryId
-     * @param null $proposalId
      * @param FiltersResource $filtersResource
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function getParameterOptionsPricesAmount($parameterId, $categoryId, $proposalId = null, FiltersResource $filtersResource){
+    public function getParameterOptionsPricesAmount($parameterId, FiltersResource $filtersResource){
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -825,8 +839,8 @@ class ProposalRepository extends AbstractRepository {
             'proposal_status' => Proposal::STATUS_ON,
             'category_status' => Category::STATUS_ON,
             'parameter_id' => (int)$parameterId,
-            'proposal_id' => (int)$proposalId,
-            'category_id' => (int)$categoryId,
+            'category_id' => (int)$filtersResource->getCategoryId(),
+            'proposal_id' => (int)$filtersResource->getProposalId(),
         );
 
         $qb
@@ -881,8 +895,8 @@ class ProposalRepository extends AbstractRepository {
                 $qb->expr()->in('pp.id', $pricesFilterSubQuerySql),
                 $qb->expr()->eq('p.categoryId', ':category_id'),
                 $qb->expr()->eq('po.parameterId', ':parameter_id'),
-                ($proposalId ? $qb->expr()->eq('p.id', ':proposal_id') : null),
-                ($filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
+                ($filtersResource->getProposalId() ? $qb->expr()->eq('p.id', ':proposal_id') : null),
+                ($filtersResource->getManufacturerFilter() && $filtersResource->getManufacturerFilter()->getValue() ? $qb->expr()->in('p.manufacturerId', $filtersResource->getManufacturerFilter()->getValue()) : null)
             ))
             ->groupBy('po.id')
         ;
@@ -905,7 +919,7 @@ class ProposalRepository extends AbstractRepository {
         $this->convertDqlToSql($qb);
         $sql = (string)$qb;
 
-        return $this->getEntityManager()->getConnection()->executeQuery($sql, $queryParameters)->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $this->fetchAll($sql, $queryParameters, \PDO::FETCH_KEY_PAIR);
 
     }
 

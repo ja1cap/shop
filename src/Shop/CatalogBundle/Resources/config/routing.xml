@@ -35,8 +35,9 @@
     <route id="shop_catalog_category" pattern="/catalog/{slug}">
         <default key="_controller">ShopCatalogBundle:Default:category</default>
     </route>
-    <route id="shop_catalog_proposal" pattern="/catalog/{categorySlug}/{slug}">
+    <route id="shop_catalog_proposal" pattern="/catalog/{categorySlug}/{slug}/{priceId}">
         <default key="_controller">ShopCatalogBundle:Default:proposal</default>
+        <default key="priceId">null</default>
     </route>
     <route id="shop_catalog_estimator" path="/estimator">
         <default key="_controller">ShopCatalogBundle:Estimator:estimator</default>

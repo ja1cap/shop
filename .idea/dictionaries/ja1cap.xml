@@ -6,31 +6,39 @@
       <w>acdc</w>
       <w>acdp</w>
       <w>actioncondition</w>
+      <w>assetic</w>
       <w>autocomplete</w>
       <w>bxslider</w>
       <w>ckeditor</w>
       <w>clearfix</w>
       <w>clickable</w>
+      <w>compat</w>
       <w>concat</w>
       <w>datatables</w>
       <w>dbac</w>
       <w>dbal</w>
       <w>defs</w>
       <w>dropdown</w>
+      <w>egeloen</w>
       <w>entityaudit</w>
       <w>fancybox</w>
       <w>fixedheadertable</w>
+      <w>friendsofsymfony</w>
       <w>geoname</w>
       <w>geonames</w>
       <w>github</w>
       <w>glyphicon</w>
+      <w>incenteev</w>
       <w>infieldlabel</w>
       <w>inflector</w>
+      <w>ircmaxell</w>
       <w>kondor</w>
+      <w>leaseweb</w>
       <w>lebedev</w>
       <w>lededev</w>
       <w>maxlength</w>
       <w>menubar</w>
+      <w>monolog</w>
       <w>mousearea</w>
       <w>mouseenter</w>
       <w>mousewheel</w>
@@ -40,18 +48,22 @@
       <w>nullable</w>
       <w>orderable</w>
       <w>paginator</w>
+      <w>phpexcel</w>
       <w>popv</w>
       <w>praepositionalis</w>
       <w>resizer</w>
       <w>routable</w>
+      <w>rutils</w>
       <w>scrollbar</w>
       <w>scrollbars</w>
       <w>scss</w>
+      <w>sensio</w>
       <w>shtumi</w>
       <w>simplethings</w>
       <w>skiplink</w>
       <w>slidee</w>
       <w>submodule</w>
+      <w>swiftmailer</w>
       <w>sylius</w>
       <w>symfony</w>
       <w>tbody</w>
@@ -65,6 +77,7 @@
       <w>vsematrasy</w>
       <w>weasty</w>
       <w>weastyresource</w>
+      <w>willdurand</w>
       <w>xliff</w>
     </words>
   </dictionary>

@@ -28,6 +28,9 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        /**
+         * @var \Doctrine\Bundle\DoctrineBundle\Registry $doctrine
+         */
         $doctrine = $this->getContainer()->get('doctrine');
 
         $mediaCommand = $this->getApplication()->get('sonata:media:add');
@@ -47,18 +50,32 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
          */
         $proposals = $proposalRepository->findAll();
 
+        $uploadDirectoryPath = realpath(__DIR__ . '/../../../../web/uploads');
+
         foreach($proposals as $proposal){
 
-            if(!$proposal->getImages()->isEmpty()){
+            /**
+             * @var \Doctrine\DBAL\Connection $connection
+             */
+            $connection = $doctrine->getConnection();
+            $sql = "
+                SELECT
+                  i.imageFileName,
+                  i.thumbImageFileName
+                FROM ProposalImage AS pi
+                JOIN Image AS i ON i.id = pi.id
+                JOIN Proposal AS p ON p.id = pi.proposalId
+                WHERE p.id = :proposal_id
+                GROUP BY pi.id
+            ";
+            $images = $connection->fetchAll($sql, ['proposal_id'=>$proposal->getId()]);
 
-                /**
-                 * @var \Shop\CatalogBundle\Entity\ProposalImage[] $images
-                 */
-                $images = $proposal->getImages();
+            if($images){
+
                 foreach($images as $image){
 
-                    $thumbImagePath = $image->getFilePath($image->getThumbImageFileName());
-                    $imagePath = file_exists($thumbImagePath) ? $thumbImagePath : $image->getFilePath($image->getImageFileName());
+                    $thumbImagePath = $uploadDirectoryPath . '/' . $image['thumbImageFileName'];
+                    $imagePath = file_exists($thumbImagePath) ? $thumbImagePath : ($uploadDirectoryPath . '/' . $image['imageFileName']);
 
                     if(file_exists($imagePath)){
 
@@ -94,52 +111,6 @@ class UpdateProposalsMediaCommand extends ContainerAwareCommand {
                                 $proposal->getMediaImages()->add($media);
                             }
 
-                        }
-
-                    }
-
-                }
-
-            }
-
-            $mainImage = $proposal->getMainImage();
-            if($mainImage){
-
-                $thumbImagePath = $mainImage->getFilePath($mainImage->getThumbImageFileName());
-                $imagePath = file_exists($thumbImagePath) ? $thumbImagePath : $mainImage->getFilePath($mainImage->getImageFileName());
-
-                if(file_exists($imagePath)){
-
-                    $mediaCommandInput = new ArrayInput(array(
-                        'command' => 'sonata:media:add',
-                        'providerName' => 'sonata.media.provider.image',
-                        'context' => 'image',
-                        'binaryContent' => $imagePath,
-                    ));
-
-                    $media = $mediaManager->findOneBy(array(
-                        'providerName' => $mediaCommandInput->getParameterOption('providerName'),
-                        'context' => $mediaCommandInput->getParameterOption('context'),
-                        'name' => pathinfo($imagePath, PATHINFO_BASENAME),
-                    ));
-
-                    if($media instanceof Media){
-
-                        if($proposal->getMainMediaImageId() != $media->getId()){
-                            $proposal->setMainMediaImage($media);
-                        }
-
-                    } else {
-
-                        $mediaCommand->run($mediaCommandInput, $output);
-                        $media = $mediaManager->findOneBy(array(
-                            'providerName' => $mediaCommandInput->getParameterOption('providerName'),
-                            'context' => $mediaCommandInput->getParameterOption('context'),
-                            'name' => pathinfo($imagePath, PATHINFO_BASENAME),
-                        ));
-
-                        if($media instanceof Media){
-                            $proposal->setMainMediaImage($media);
                         }
 
                     }

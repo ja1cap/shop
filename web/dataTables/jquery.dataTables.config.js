@@ -1,6 +1,6 @@
 $.extend( $.fn.dataTable.defaults, {
-    "lengthChange": false,
-    "searching": false,
+    "lengthChange": true,
+    "searching": true,
     "aaSorting": [],
     "stateSave": true,
     "oLanguage": {

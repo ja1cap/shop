@@ -17,38 +17,41 @@
 
             <div class="row">
 
-                {% set _active_tab = 'new-proposals-tab' %}
 
                 <div class="tabs-container">
                     <ul class="tabs">
                         {% if newProposals %}
+                            {% set _active_tab = 'new-proposals-tab' %}
                             <li class="{{ _active_tab == 'new-proposals-tab' ? 'active' : '' }}">
                                 <a href="#new-proposals-tab">
                                     <span>Новинки</span>
                                 </a>
                             </li>
-                        {% else %}
-                            {% set _active_tab = 'bestsellers-tab' %}
                         {% endif %}
                         {% if bestSellers %}
+                            {% if _active_tab is not defined %}
+                                {% set _active_tab = 'bestsellers-tab' %}
+                            {% endif %}
                             <li class="{{ _active_tab == 'bestsellers-tab' ? 'active' : '' }}">
                                 <a href="#bestsellers-tab">
                                     <span>Хиты продаж</span>
                                 </a>
                             </li>
-                        {% else %}
-                            {% set _active_tab = 'discount-proposals-tab' %}
                         {% endif %}
                         {% if discountProposals %}
+                            {% if _active_tab is not defined %}
+                                {% set _active_tab = 'discount-proposals-tab' %}
+                            {% endif %}
                             <li class="{{ _active_tab == 'discount-proposals-tab' ? 'active' : '' }}">
                                 <a href="#discount-proposals-tab">
                                     <span>Скидки</span>
                                 </a>
                             </li>
-                        {% else %}
-                            {% set _active_tab = 'action-proposals-tab' %}
                         {% endif %}
                         {% if actionProposals %}
+                            {% if _active_tab is not defined %}
+                                {% set _active_tab = 'action-proposals-tab' %}
+                            {% endif %}
                             <li class="{{ _active_tab == 'action-proposals-tab' ? 'active' : '' }}">
                                 <a href="#action-proposals-tab">
                                     <span>Акции</span>

@@ -100,7 +100,7 @@
 
             var items = {};
 
-            $(selectors.selectItem).change(function(){
+            $(document).delegate(selectors.selectItem, 'change', function(){
 
                 var $item = $(this).closest(selectors.item),
                     $itemName = $(selectors.itemName, $item);

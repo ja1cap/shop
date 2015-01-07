@@ -35,7 +35,7 @@
         "sonata-project/admin-bundle": "2.3.0",
         "sonata-project/media-bundle": "2.3.0",
         "shtumi/useful-bundle": "dev-master",
-        "egeloen/ckeditor-bundle": "2.1.0",
+        "egeloen/ckeditor-bundle": "2.3.1",
         "tilleuls/ckeditor-sonata-media-bundle": "dev-master",
         "weasty/resource": "dev-master",
         "weasty/resource-bundle": "dev-master",

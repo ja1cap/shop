@@ -4,7 +4,10 @@
     "type": "project",
     "description": "Weasty Shop",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+            "": "src/",
+            "php_rutils": "lib/"
+        }
     },
     "require": {
         "php": ">=5.3.3",
@@ -21,7 +24,6 @@
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
-        "andre_487/php_rutils": "dev-master",
         "phpexcel/phpexcel" : "*",
         "ircmaxell/password-compat": "~1.0.3",
         "leaseweb/secure-controller-bundle": "*",

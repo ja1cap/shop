@@ -52,9 +52,9 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
      * @param $routeName
      * @return null
      */
-    public function getRouteTitle(\Twig_Environment $env, $context, $routeName){
+    public function getRouteTitle(\Twig_Environment $env, $context, $routeName = null){
 
-        if(!isset($routeName) || (isset($routeName) && !$routeName)){
+        if(!$routeName){
             $routeName = $this->getRequest()->get('_route');
         }
 

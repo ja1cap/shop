@@ -28,6 +28,12 @@ class SettingsType extends AbstractType {
                 'label' => 'Логотип магазина',
                 'required' => false,
             ))
+            ->add('favicon', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'favicon',
+                'label' => 'Favicon магазина',
+                'required' => false,
+            ))
             ->add('title', 'textarea', array(
                 'required' => false,
                 'label' => 'SEO - заголовок',

@@ -108,8 +108,8 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Settings not found');
         }
 
-        $logo = $settings->getLogo();
-        if (!$logo instanceof MediaInterface) {
+        $media = ($settings->getFavicon() ?: $settings->getLogo());
+        if (!$media instanceof MediaInterface) {
             throw $this->createNotFoundException('Favicon not found');
         }
 
@@ -117,10 +117,10 @@ class DefaultController extends Controller
          * @var $mediaService \Sonata\MediaBundle\Provider\Pool
          */
         $mediaService = $this->get('sonata.media.pool');
-        $provider = $mediaService->getProvider($logo->getProviderName());
+        $provider = $mediaService->getProvider($media->getProviderName());
 
-        $format = 'favicon';
-        $format = $provider->getFormatName($logo, $format);
+        $format = ($settings->getFavicon() ? 'medium' : 'favicon');
+        $format = $provider->getFormatName($media, $format);
 
         /**
          * @var $adapter \Sonata\MediaBundle\Filesystem\Local
@@ -128,7 +128,7 @@ class DefaultController extends Controller
         $adapter = $provider->getFilesystem()->getAdapter();
         $filename = sprintf('%s/%s',
           $adapter->getDirectory(),
-          $provider->generatePrivateUrl($logo, $format)
+          $provider->generatePrivateUrl($media, $format)
         );
 
         $response = new BinaryFileResponse($filename);

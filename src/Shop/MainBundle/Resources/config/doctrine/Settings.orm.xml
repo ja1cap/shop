@@ -87,5 +87,15 @@
             </join-columns>
         </one-to-one>
 
+        <one-to-one field="favicon" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="faviconId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
+
     </entity>
 </doctrine-mapping>

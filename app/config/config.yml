@@ -155,6 +155,17 @@ sonata_media:
                 small_square: { width: 220, height: 220, quality: 100 }
                 medium:   { width: 350, quality: 100 }
 
+        favicon:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 16, height: 16, quality: 100 }
+                medium: { width: 32, height: 32, quality: 100 }
+                76: { width: 76, height: 76, quality: 100 }
+                120: { width: 120, height: 120, quality: 100 }
+                152: { width: 152, height: 152, quality: 100 }
+                180: { width: 180, height: 180, quality: 100 }
+
         logo:
             providers:
                 - sonata.media.provider.image

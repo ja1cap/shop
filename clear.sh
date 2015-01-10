@@ -25,3 +25,4 @@ fi
 chmod 0777 -R ${uploadsDirectory}
 
 service apache2 restart
+service memcached restart

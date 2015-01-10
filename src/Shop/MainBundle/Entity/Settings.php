@@ -67,6 +67,11 @@ class Settings extends AbstractEntity
     private $logo;
 
     /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $favicon;
+
+    /**
      * @var string
      */
     private $admin_email;
@@ -1264,6 +1269,29 @@ class Settings extends AbstractEntity
     public function getLogo()
     {
         return $this->logo;
+    }
+
+    /**
+     * Set favicon
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $favicon
+     * @return Settings
+     */
+    public function setFavicon(Media $favicon = null)
+    {
+        $this->favicon = $favicon;
+
+        return $this;
+    }
+
+    /**
+     * Get favicon
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getFavicon()
+    {
+        return $this->favicon;
     }
 
     /**

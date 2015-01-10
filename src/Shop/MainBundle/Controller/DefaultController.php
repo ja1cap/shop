@@ -3,7 +3,10 @@
 namespace Shop\MainBundle\Controller;
 
 use Shop\MainBundle\Entity\Address;
+use Shop\MainBundle\Entity\Settings;
+use Sonata\MediaBundle\Model\MediaInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -92,6 +95,44 @@ class DefaultController extends Controller
 //            'solutions' => $this->getSolutions(),
             'addresses' => $this->getAddresses(),
         ));
+
+    }
+
+    /**
+     * @return BinaryFileResponse
+     */
+    public function faviconAction(){
+
+        $settings = $this->get('shop_main.settings.resource')->getSettings();
+        if(!$settings instanceof Settings){
+            throw $this->createNotFoundException('Settings not found');
+        }
+
+        $logo = $settings->getLogo();
+        if (!$logo instanceof MediaInterface) {
+            throw $this->createNotFoundException('Favicon not found');
+        }
+
+        /**
+         * @var $mediaService \Sonata\MediaBundle\Provider\Pool
+         */
+        $mediaService = $this->get('sonata.media.pool');
+        $provider = $mediaService->getProvider($logo->getProviderName());
+
+        $format = 'favicon';
+        $format = $provider->getFormatName($logo, $format);
+
+        /**
+         * @var $adapter \Sonata\MediaBundle\Filesystem\Local
+         */
+        $adapter = $provider->getFilesystem()->getAdapter();
+        $filename = sprintf('%s/%s',
+          $adapter->getDirectory(),
+          $provider->generatePrivateUrl($logo, $format)
+        );
+
+        $response = new BinaryFileResponse($filename);
+        return $response;
 
     }
 

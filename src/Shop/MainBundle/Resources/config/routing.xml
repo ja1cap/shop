@@ -4,6 +4,9 @@
     <route id="shop" pattern="/">
         <default key="_controller">ShopMainBundle:Default:index</default>
     </route>
+    <route id="shop_favicon" pattern="/favicon.ico">
+        <default key="_controller">ShopMainBundle:Default:favicon</default>
+    </route>
     <route id="process_request" pattern="/processRequest">
         <default key="_controller">ShopMainBundle:Default:processRequest</default>
     </route>

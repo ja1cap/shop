@@ -11,7 +11,7 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 if(extension_loaded('apc')){
 
-    $namespacePrefix = pathinfo(parse_url($_SERVER['SERVER_NAME'], PHP_URL_HOST), PATHINFO_FILENAME);
+    $namespacePrefix = pathinfo($_SERVER['SERVER_NAME'], PATHINFO_FILENAME);
     $apcLoader = new ApcClassLoader($namespacePrefix, $loader);
     $loader->unregister();
     $apcLoader->register(true);
@@ -21,7 +21,7 @@ if(extension_loaded('apc')){
 //require_once __DIR__.'/../app/AppKernel.php';
 require_once __DIR__.'/../app/AppCache.php';
 
-$topLevelDomain = pathinfo(parse_url($_SERVER['SERVER_NAME'], PHP_URL_HOST), PATHINFO_EXTENSION);
+$topLevelDomain = pathinfo($_SERVER['SERVER_NAME'], PATHINFO_EXTENSION);
 $env = ($topLevelDomain == 'local' ? 'dev' : 'prod');
 //$env = 'prod';
 $kernel = new AppKernel($env, ($env == 'dev'));

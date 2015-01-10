@@ -4,14 +4,6 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <entity name="Shop\MainBundle\Entity\Settings">
 
-        <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="preUpload"/>
-            <lifecycle-callback type="preUpdate" method="preUpload"/>
-            <lifecycle-callback type="postPersist" method="upload"/>
-            <lifecycle-callback type="postUpdate" method="upload"/>
-            <lifecycle-callback type="postRemove" method="removeUpload"/>
-        </lifecycle-callbacks>
-
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
@@ -84,6 +76,16 @@
         <field name="where_link_text" type="string" nullable="true"/>
 
         <field name="template_version" type="integer" length="2" column-definition="integer(2) NOT NULL DEFAULT 1"/>
+
+        <one-to-one field="logo" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="logoId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
 
     </entity>
 </doctrine-mapping>

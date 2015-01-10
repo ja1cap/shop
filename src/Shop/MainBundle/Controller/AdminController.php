@@ -781,7 +781,7 @@ class AdminController extends Controller
 
             $em->flush();
 
-            return $this->redirect($this->generateUrl('shop_admin'));
+            return $this->redirect($this->generateUrl('settings'));
 
         } else {
 

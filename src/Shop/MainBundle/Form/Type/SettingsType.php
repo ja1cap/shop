@@ -22,12 +22,14 @@ class SettingsType extends AbstractType {
                 'required' => true,
                 'label' => 'Название магазина',
             ))
-            ->add('logo', 'file', array(
-                'required' => false,
+            ->add('logo', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'logo',
                 'label' => 'Логотип магазина',
+                'required' => false,
             ))
             ->add('title', 'textarea', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'SEO - заголовок',
                 'attr' => array(
                     'class' => 'maxlength',
@@ -35,7 +37,7 @@ class SettingsType extends AbstractType {
                 ),
             ))
             ->add('description', 'textarea', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'SEO - описание',
                 'attr' => array(
                     'class' => 'maxlength',
@@ -43,7 +45,7 @@ class SettingsType extends AbstractType {
                 ),
             ))
             ->add('keywords', 'textarea', array(
-                'required' => true,
+                'required' => false,
                 'label' => 'SEO - ключивые слова',
                 'attr' => array(
                     'class' => 'maxlength',

@@ -2,8 +2,7 @@
 
 namespace Shop\MainBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Application\Sonata\MediaBundle\Entity\Media;
 use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
@@ -56,9 +55,16 @@ class Settings extends AbstractEntity
     private $name;
 
     /**
+     * @TODO remove
+     * @deprecated
      * @var string
      */
     private $logo_file_name;
+
+    /**
+     * @var \Application\Sonata\MediaBundle\Entity\Media
+     */
+    private $logo;
 
     /**
      * @var string
@@ -263,21 +269,6 @@ class Settings extends AbstractEntity
         return $this->address;
     }
 
-    /**
-     * @param UploadedFile $file
-     * @return $this
-     */
-    public function setLogo(UploadedFile $file = null){
-        $this->setFile('logo_file_name', $file);
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLogo(){
-        return $this->getFile('logo_file_name');
-    }
 
     /**
      * Set title
@@ -1229,7 +1220,8 @@ class Settings extends AbstractEntity
 
     /**
      * Set logo_file_name
-     *
+     * @TODO remove
+     * @deprecated
      * @param string $logoFileName
      * @return Settings
      */
@@ -1242,12 +1234,36 @@ class Settings extends AbstractEntity
 
     /**
      * Get logo_file_name
-     *
-     * @return string 
+     * @TODO remove
+     * @deprecated
+     * @return string
      */
     public function getLogoFileName()
     {
         return $this->logo_file_name;
+    }
+
+    /**
+     * Set logo
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $logo
+     * @return Settings
+     */
+    public function setLogo(Media $logo = null)
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * Get logo
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media
+     */
+    public function getLogo()
+    {
+        return $this->logo;
     }
 
     /**

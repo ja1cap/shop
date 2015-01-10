@@ -4,7 +4,11 @@
             <div class="header-logo">
                 <a href="{{ path('shop') }}">
                     <span class="image-wrapper">
-                        <img src="{{ settings.logo_url|default('/img/logo.png') }}">
+                        {% if settings.logo is not null %}
+                            <img src="{% path settings.logo, 'reference' %}">
+                        {% else %}
+                            <img src="{{ settings.logo_url|default('/img/logo.png') }}">
+                        {% endif %}
                     </span>
                 </a>
             </div>

@@ -3,6 +3,8 @@
 echo "Enter environment:"
 read ENV;
 
+chmod 0777 -R app/logs/
+
 chmod 0777 -R app/cache/
 php app/console bazinga:js-translation:dump
 
@@ -16,6 +18,10 @@ rm -rf app/cache/${ENV}
 php app/console cache:clear -e ${ENV}
 chmod 0777 -R app/cache/
 
-chmod 0777 -R web/uploads/
+uploadsDirectory="web/uploads/"
+if [ ! -d "${uploadsDirectory}" ]; then
+  mkdir ${uploadsDirectory}
+fi
+chmod 0777 -R ${uploadsDirectory}
 
 service apache2 restart

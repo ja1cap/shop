@@ -15,7 +15,4 @@
     </option>
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
-  <component name="TaskProjectConfiguration">
-    <server type="Redmine" url="http://weasty.com/redmine" />
-  </component>
 </project>

@@ -21,7 +21,7 @@
         </id>
 
         <field name="status" type="integer"/>
-        <field name="sku" type="string" column="sku"/>
+        <field name="sku" type="string" column="sku" nullable="true"/>
         <field name="manufacturerSku" type="string" column="manufacturerSku" nullable="true"/>
         <field name="proposalId" type="integer" column="proposalId"/>
         <!--@TODO add contractor price-->

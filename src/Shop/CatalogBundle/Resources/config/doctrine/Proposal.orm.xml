@@ -20,7 +20,7 @@
         </id>
 
         <field name="status" type="integer"/>
-        <field name="manufacturerId" type="integer" column="manufacturerId"/>
+        <field name="manufacturerId" type="integer" column="manufacturerId" nullable="true"/>
         <field name="categoryId" type="integer" column="categoryId"/>
         <field name="defaultContractorId" type="integer" column="defaultContractorId" nullable="true"/>
 

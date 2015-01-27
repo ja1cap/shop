@@ -51,6 +51,7 @@ class ProposalExtension extends \Twig_Extension {
     {
         return array(
             new \Twig_SimpleFunction('shop_catalog_proposal_url', array($this, 'getProposalUrl')),
+            new \Twig_SimpleFunction('shop_catalog_proposal_data', array($this, 'getProposalData')),
             new \Twig_SimpleFunction('shop_catalog_new_proposals', array($this, 'getNewProposals')),
             new \Twig_SimpleFunction('shop_catalog_bestsellers', array($this, 'getBestsellers')),
             new \Twig_SimpleFunction('shop_catalog_discount_proposals', array($this, 'getDiscountProposals')),
@@ -90,6 +91,19 @@ class ProposalExtension extends \Twig_Extension {
         }
 
         return $url;
+
+    }
+
+    /**
+     * @param $proposal
+     * @param null $price
+     *
+     * @return mixed
+     */
+    public function getProposalData($proposal, $price = null){
+
+        $filtersResource = $this->filtersBuilder->build(null, $proposal, $price);
+        return current($this->proposalRepository->findProposalsByFilters($filtersResource));
 
     }
 

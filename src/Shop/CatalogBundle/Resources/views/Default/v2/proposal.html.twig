@@ -62,7 +62,6 @@
                                 {{ proposal.shortDescription|nl2br }}
                             </div>
                         {% endif %}
-{#6110961#}
                         {% if proposalPricesData %}
                             <div>
                                 {#{{ proposalPricesData|length }}#}
@@ -94,7 +93,7 @@
                                 <img src="/img/icons/shipping-icon.png" class="shipping-offer-icon"/>
                                 {#@TODO open change location popup on .change-location-btn click#}
                                 Доставка <a href="#" class="change-location-btn">{{ proposalData.shipping.city.getLocaleName(app.request.locale) }}</a>,
-                                {% if proposalPriceShippingSummary.shippingPrice.value %}
+                                {% if proposalPriceShippingSummary and proposalPriceShippingSummary.shippingPrice.value %}
                                     {{ proposalPriceShippingSummary.shippingPrice|weasty_price }}
                                 {% else %}
                                     бесплатно

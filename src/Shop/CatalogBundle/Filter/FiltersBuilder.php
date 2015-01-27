@@ -64,9 +64,9 @@ class FiltersBuilder {
     }
 
     /**
-     * @param CategoryInterface $category
-     * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface $proposal
-     * @param \Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface $price
+     * @param CategoryInterface|int $category
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface|int $proposal
+     * @param \Weasty\Bundle\CatalogBundle\Proposal\Price\ProposalPriceInterface|int $price
      * @param array $manufacturerIds
      * @param array $parametersFilteredOptionIds
      * @param array $priceRangeSteps
@@ -74,19 +74,52 @@ class FiltersBuilder {
      * @return FiltersResource
      */
     public function build(
-        CategoryInterface $category = null,
-        ProposalInterface $proposal = null,
-        ProposalPriceInterface $price = null,
+        $category = null,
+        $proposal = null,
+        $price = null,
         $manufacturerIds = array(),
         $parametersFilteredOptionIds = array(),
         $priceRangeSteps = array(),
         $extraFiltersData = array()
     ){
 
-        $categoryId = ($category ? $category->getId() : null);
-        $proposalId = ($proposal ? $proposal->getId() : null);
-        $priceId = ($price ? $price->getId() : null);
+        //Get category id
+        if(is_numeric($category)) {
+            $categoryId = (int) $category;
+        } elseif($category instanceof CategoryInterface){
+            $categoryId = $category->getId();
+        } else {
+            $categoryId = null;
+        }
 
+        //Get proposal id
+        if(is_numeric($proposal)){
+            $proposalId = (int)$proposal;
+        } elseif($proposal instanceof ProposalInterface){
+            $proposalId = $proposal->getId();
+            if(!$categoryId){
+                $categoryId = $proposal->getCategoryId();
+            }
+        } else {
+            $proposalId = null;
+        }
+
+        //Get price id
+        if(is_numeric($price)){
+            $priceId = (int)$price;
+        } elseif($price instanceof ProposalPriceInterface){
+            $priceId = $price->getId();
+            if(!$categoryId) {
+                $categoryId = $price->getCategoryId();
+            }
+            if(!$proposalId){
+                $proposalId = $price->getProposalId();
+            }
+        } else {
+            $priceId = null;
+        }
+
+        //Build cache id
         $cacheId = 'category_filters_resource_' . md5(serialize(array(
             'categoryId' => $categoryId,
             'proposalId' => $proposalId,
@@ -109,13 +142,13 @@ class FiltersBuilder {
 
             $this->setExtraFilters($extraFiltersData, $filtersResource);
 
-            if($category){
+            if($category instanceof CategoryInterface){
 
                 if(
                     !$proposal
                     ||
                     (
-                        $proposal
+                        $proposal instanceof ProposalInterface
                         && $proposal->getManufacturerId()
                         && in_array($proposal->getManufacturerId(), $manufacturerIds)
                     )

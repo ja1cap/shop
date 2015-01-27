@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Weasty\Bundle\AdBundle\Entity\AbstractBanner" inheritance-type="JOINED">
+
+    <discriminator-column name="type"/>
+    <discriminator-map>
+      <discriminator-mapping value="1" class="Weasty\Bundle\AdBundle\Entity\Banner"/>
+    </discriminator-map>
+
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+
+    <field name="title" type="string" column="title" length="255"/>
+    <field name="imageId" type="integer" column="imageId" nullable="true"/>
+
+    <one-to-one field="image" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+      <cascade>
+        <cascade-persist/>
+        <cascade-remove/>
+      </cascade>
+      <join-columns>
+        <join-column name="imageId" referenced-column-name="id" on-delete="SET NULL"/>
+      </join-columns>
+    </one-to-one>
+
+  </entity>
+</doctrine-mapping>

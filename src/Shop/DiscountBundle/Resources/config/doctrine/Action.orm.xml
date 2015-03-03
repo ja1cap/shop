@@ -17,6 +17,9 @@
         <field name="description" type="text" column="description" nullable="true"/>
         <field name="content" type="text" column="content" nullable="true"/>
 
+        <field name="startDate" type="datetime" column="startDate" nullable="true"/>
+        <field name="endDate" type="datetime" column="endDate" nullable="true"/>
+
         <one-to-one field="basicCondition" target-entity="BasicActionCondition">
             <cascade>
                 <cascade-persist/>

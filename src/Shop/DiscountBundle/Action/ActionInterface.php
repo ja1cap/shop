@@ -77,4 +77,14 @@ interface ActionInterface {
      */
     public function getProposalIds();
 
+    /**
+     * @return \DateTime|null
+     */
+    public function getStartDate();
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getEndDate();
+
 }

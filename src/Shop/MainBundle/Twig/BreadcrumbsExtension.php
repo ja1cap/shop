@@ -43,7 +43,29 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
         return [
             new \Twig_SimpleFunction('page_breadcrumbs', [$this, 'getRouteBreadCrumbs'], ['needs_context' => true, 'needs_environment' => true]),
             new \Twig_SimpleFunction('page_title', [$this, 'getRouteTitle'], ['needs_context' => true, 'needs_environment' => true]),
+            new \Twig_SimpleFunction('is_active_nav_item', [$this, 'isActiveNavigationRoute'], ['needs_context' => true, 'needs_environment' => true]),
         ];
+    }
+
+    /**
+     * @param \Twig_Environment $env
+     * @param $context
+     * @param $routeName
+     *
+     * @return bool
+     */
+    public function isActiveNavigationRoute(\Twig_Environment $env, $context, $routeName){
+
+        $currentRouteName = $this->getRequest()->get('_route');
+        if($routeName == $currentRouteName){
+            $isActive = true;
+        } else {
+            $breadcrumbs = $this->getRouteBreadCrumbs($env, $context, $currentRouteName);
+            $isActive = isset($breadcrumbs[$routeName]);
+        }
+
+        return $isActive;
+
     }
 
     /**
@@ -80,24 +102,34 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
             $routeName = $this->getRequest()->get('_route');
         }
 
+        $cacheKey = 'BREADCRUMBS:'.$routeName;
+        $breadcrumbs = $this->getCache()->fetch($cacheKey);
+        if($breadcrumbs){
+            return $breadcrumbs;
+        }
+
         $breadcrumbs = [];
 
         $checkParentRoute = true;
-        $currentRouteName = $routeName;
+        $iterationRouteName = $routeName;
 
         do {
 
-            $breadcrumb = $this->buildRouteBreadCrumb($currentRouteName, $env, $context);
+            $breadcrumb = $this->buildRouteBreadCrumb($iterationRouteName, $env, $context);
 
             if($breadcrumb){
 
-                $breadcrumbs[$currentRouteName] = $breadcrumb;
                 $parentRouteName = $breadcrumb['parent'];
 
                 if($parentRouteName){
-                    $currentRouteName = $parentRouteName;
+                    $iterationRouteName = $parentRouteName;
                 } else {
                     $checkParentRoute = false;
+                }
+
+                //Include in breadcrumbs only parent routes, exclude current route
+                if($iterationRouteName != $routeName){
+                    $breadcrumbs[$iterationRouteName] = $breadcrumb;
                 }
 
             } else {
@@ -109,6 +141,7 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
         } while($checkParentRoute);
 
         $breadcrumbs = array_reverse($breadcrumbs);
+        $this->getCache()->save($cacheKey, $breadcrumbs);
 
         return $breadcrumbs;
 
@@ -122,7 +155,8 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
      */
     protected function buildRouteBreadCrumb($routeName, \Twig_Environment $env, $context){
 
-        $breadcrumb = $this->getCache()->fetch($routeName);
+        $cacheKey = 'BREADCRUMB:'.$routeName;
+        $breadcrumb = $this->getCache()->fetch($cacheKey);
         if($breadcrumb){
             return $breadcrumb;
         }
@@ -262,7 +296,7 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
                 'parent' => $route->getOption('parent'),
             );
 
-            $this->getCache()->save($routeName, $breadcrumb);
+            $this->getCache()->save($cacheKey, $breadcrumb);
 
             return $breadcrumb;
 

@@ -2,11 +2,9 @@
 
 {% block page_menu %}
 
-    {% set _breadcrumbs = page_breadcrumbs() %}
-
     {% if shippingCategory is defined %}
 
-        <li class="{{ app.request.get('_route') == 'shipping_category' ? 'active' : '' }}">
+        <li class="{{ is_active_nav_item('shipping_category') ? 'active' : '' }}">
             <a href="{{ path('shipping_category', {'shippingMethodId':shippingMethod.id, 'id':shippingCategory.id}) }}">
                 {{ 'shop.shipping.category'|trans([], 'ShopShippingBundle') }}
             </a>
@@ -14,29 +12,29 @@
 
     {% else %}
 
-        <li class="{{ app.request.get('_route') == 'shipping_method' ? 'active' : '' }}">
+        <li class="{{ is_active_nav_item('shipping_method') ? 'active' : '' }}">
             <a href="{{ path('shipping_method', {'id':shippingMethod.id}) }}">
                 {{ 'shop.shipping.method.info'|trans([], 'ShopShippingBundle') }}
             </a>
         </li>
 
         {% if shippingMethod.id %}
-            <li class="{{ _breadcrumbs['shipping_method_prices'] is defined ? 'active' : '' }}">
+            <li class="{{ is_active_nav_item('shipping_method_prices') ? 'active' : '' }}">
                 <a href="{{ path('shipping_method_prices', {'shippingMethodId':shippingMethod.id}) }}">
                     {{ 'shop.shipping.method.prices'|trans([], 'ShopShippingBundle') }}
                 </a>
             </li>
-            <li class="{{ _breadcrumbs['shipping_method_lifting_prices'] is defined ? 'active' : '' }}">
+            <li class="{{ is_active_nav_item('shipping_method_lifting_prices') ? 'active' : '' }}">
                 <a href="{{ path('shipping_method_lifting_prices', {'shippingMethodId':shippingMethod.id}) }}">
                     {{ 'shop.shipping.method.lifting_prices'|trans([], 'ShopShippingBundle') }}
                 </a>
             </li>
-            <li class="{{ _breadcrumbs['shipping_method_assembly_prices'] is defined ? 'active' : '' }}">
+            <li class="{{ is_active_nav_item('shipping_method_assembly_prices') ? 'active' : '' }}">
                 <a href="{{ path('shipping_method_assembly_prices', {'shippingMethodId':shippingMethod.id}) }}">
                     {{ 'shop.shipping.method.assembly_prices'|trans([], 'ShopShippingBundle') }}
                 </a>
             </li>
-            <li class="{{ _breadcrumbs['shipping_categories'] is defined ? 'active' : '' }}">
+            <li class="{{ is_active_nav_item('shipping_categories') ? 'active' : '' }}">
                 <a href="{{ path('shipping_categories', {'shippingMethodId':shippingMethod.id}) }}">
                     {{ 'shop.shipping.categories'|trans([], 'ShopShippingBundle') }}
                 </a>

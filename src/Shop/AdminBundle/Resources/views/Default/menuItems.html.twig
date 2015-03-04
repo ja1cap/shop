@@ -1,4 +1,3 @@
-{% set _breadcrumbs = page_breadcrumbs() %}
 {#{% for role in app.user.roles %}#}
     {#{{ role }}#}
 {#{% endfor %}#}
@@ -10,67 +9,67 @@
     </li>
 {% endif %}
 {% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
-    <li class="{{ _breadcrumbs['admin_catalog'] is defined ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('admin_catalog') ? 'active' : '' }}">
         <a href="{{ path('admin_catalog') }}" class="">
             Каталог
         </a>
     </li>
 {% endif %}
 {% if is_granted(['ROLE_ADMIN']) %}
-    <li class="{{ app.request.get('_route') == 'weasty_money_currency_rates' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('weasty_money_currency_rates') ? 'active' : '' }}">
         <a href="{{ path('weasty_money_currency_rates') }}" class="">
             Курсы валют
         </a>
     </li>
-    <li class="{{ _breadcrumbs['shipping_methods'] is defined ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('shipping_methods') ? 'active' : '' }}">
         <a href="{{ path('shipping_methods') }}" class="">
             Способы доставки
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'shop_discount_admin_actions' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('shop_discount_admin_actions') ? 'active' : '' }}">
         <a href="{{ path('shop_discount_admin_actions') }}" class="">
             Акции
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'benefits' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('benefits') ? 'active' : '' }}">
         <a href="{{ path('benefits') }}" class="">
             Преимущества
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'reviews' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('reviews') ? 'active' : '' }}">
         <a href="{{ path('reviews') }}" class="">
             Отзывы клиентов
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'weasty_news_admin_posts' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('weasty_news_admin_posts') ? 'active' : '' }}">
         <a href="{{ path('weasty_news_admin_posts') }}" class="">
             Новости
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'shop_admin_contacts' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('shop_admin_contacts') ? 'active' : '' }}">
         <a href="{{ path('shop_admin_contacts') }}" class="">
             Контакты
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'mail_templates' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('mail_templates') ? 'active' : '' }}">
         <a href="{{ path('mail_templates') }}" class="">
             Почта
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'settings' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('settings') ? 'active' : '' }}">
         <a href="{{ path('settings') }}" class="">
             Настройки
         </a>
     </li>
 
-    <li class="{{ app.request.get('_route') == 'admin_users' ? 'active' : '' }}">
+    <li class="{{ is_active_nav_item('admin_users') ? 'active' : '' }}">
         <a href="{{ path('admin_users') }}" class="">
             Пользователи
         </a>

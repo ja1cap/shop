@@ -119,17 +119,17 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
 
             if($breadcrumb){
 
+                //Include in breadcrumbs only parent routes, exclude current route
+                if($iterationRouteName != $routeName){
+                    $breadcrumbs[$iterationRouteName] = $breadcrumb;
+                }
+
                 $parentRouteName = $breadcrumb['parent'];
 
                 if($parentRouteName){
                     $iterationRouteName = $parentRouteName;
                 } else {
                     $checkParentRoute = false;
-                }
-
-                //Include in breadcrumbs only parent routes, exclude current route
-                if($iterationRouteName != $routeName){
-                    $breadcrumbs[$iterationRouteName] = $breadcrumb;
                 }
 
             } else {

@@ -85,6 +85,16 @@ class Action extends AbstractEntity
     private $image;
 
     /**
+     * @var \DateTime|null
+     */
+    private $startDate;
+
+    /**
+     * @var \DateTime|null
+     */
+    private $endDate;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -246,6 +256,38 @@ class Action extends AbstractEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param \DateTime|null $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param \DateTime|null $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
     }
 
     /**

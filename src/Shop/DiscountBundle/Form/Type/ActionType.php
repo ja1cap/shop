@@ -35,6 +35,14 @@ class ActionType extends AbstractType {
                 'label' => 'Изображение',
                 'required' => false,
             ))
+            ->add('startDate', 'datetime', array(
+                'required' => false,
+                'label' => 'Дата начала акции',
+            ))
+            ->add('endDate', 'datetime', array(
+                'required' => false,
+                'label' => 'Дата окончния акции',
+            ))
             ->add('description', 'textarea', array(
                 'required' => false,
                 'label' => 'Описание',

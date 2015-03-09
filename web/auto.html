@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Autocomplete - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+    $(function() {
+      var availableTags = [
+        {
+          label:"ActionScript",
+          value:"0"
+        },
+        {
+          label:"Btx",
+          value:"2"
+        },
+        {
+          label:"ActionScript1",
+          value:"1"
+        }
+      ];
+      $( "#tags" ).autocomplete({
+        source: availableTags,
+        focus: function( event, ui ) {
+          event.preventDefault();
+        },
+        select: function( event, ui ) {
+          event.preventDefault();
+          if(event.ctrlKey && event.keyCode == 13){
+            var selectedItems = [];
+            $(this).autocomplete( "widget").find('li').each(function(){
+              var selectedItem = $(this).data('uiAutocompleteItem');
+              selectedItems.push(selectedItem);
+            });
+            console.log(selectedItems);
+          }
+          return false;
+        }
+      });
+      $( "#tags" ).keydown(function(e,ui) {
+        switch(e.which) {
+          case 37: // left
+            break;
+          case 38: // up
+            break;
+          case 39: // right
+            console.log($(this).autocomplete( "widget").find('li.ui-state-focus').text());
+            break;
+          case 40: // down
+            break;
+          default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+      });
+    });
+  </script>
+</head>
+<body>
+
+<div class="ui-widget">
+  <label for="tags">Tags: </label>
+  <textarea id="tags"></textarea>
+</div>
+
+
+</body>
+</html>

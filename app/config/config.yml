@@ -214,6 +214,20 @@ sonata_media:
                 medium_rectangle:   { width: 300, height: 150, quality: 100 }
                 large_rectangle:   { width: 500, height: 150, quality: 100 }
 
+        banner:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                tiny: { width: 100, quality: 100 }
+                tiny_square: { width: 100, height: 100, quality: 100 }
+                small: { width: 220, quality: 100 }
+                small_square: { width: 220, height: 220, quality: 100 }
+                medium:   { width: 350, quality: 100 }
+                medium_square:   { width: 350, height: 350, quality: 100 }
+                large:   { width: 460, quality: 100 }
+                large_square:   { width: 460, height: 460, quality: 100 }
+                xlarge: { width: 940, quality: 100 }
+
         icon:
             providers:
                 - sonata.media.provider.image

@@ -28,7 +28,7 @@ class BannerType extends AbstractType {
             ))
             ->add('image', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'image',
+                'context'  => 'banner',
                 'label' => 'Изображение',
                 'required' => true,
             ))

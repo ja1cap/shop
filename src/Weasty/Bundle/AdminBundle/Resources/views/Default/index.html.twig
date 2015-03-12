@@ -3,8 +3,8 @@
 {% block weasty_admin_content %}
 
     {% block add_button %}
-        <div class="medium primary btn">
-            <a href="{{ path(add_route) }}">
+        <div style="margin: 0 0 10px">
+            <a href="{{ path(add_route) }}" class="btn btn-default">
                 Добавить
             </a>
         </div>
@@ -12,13 +12,13 @@
 
     {% block entities_block %}
         {% if entities %}
-            <div style="margin: 10px 0">
+            <div>
                 <table class="entities-table">
                     <colgroup>
                         <col style="width: 5%">
-                        <col style="width: 20%">
-                        <col style="width: 60%">
-                        <col style="width: 20%">
+                        <col style="width: 30%">
+                        <col style="width: 40%">
+                        <col style="width: 25%">
                     </colgroup>
                     <thead>
                     <tr>
@@ -56,7 +56,13 @@
 
                                 {% if _entity_name %}
                                     <td>
-                                        {{ _entity_name }}
+                                        {% if edit_route %}
+                                            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="primary-link">
+                                                {{ _entity_name }}
+                                            </a>
+                                        {% else %}
+                                            {{ _entity_name }}
+                                        {% endif %}
                                     </td>
                                 {% else %}
                                     <td>
@@ -76,21 +82,18 @@
 
                                 <td>
 
-                                    {% block edit_button %}
-                                        <div class="medium btn default" style="width: 100%">
-                                            <a href="{{ path(edit_route, {'id' : entity.id}) }}">
+                                    <div class="btn-group">
+                                        {% block edit_button %}
+                                            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="btn btn-default btn-sm">
                                                 Изменить
                                             </a>
-                                        </div>
-                                    {% endblock %}
-
-                                    {% block delete_button %}
-                                        <div class="medium btn danger" style="width: 100%">
-                                            <a href="{{ path(delete_route, {'id' : entity.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')">
+                                        {% endblock %}
+                                        {% block delete_button %}
+                                            <a href="{{ path(delete_route, {'id' : entity.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-sm">
                                                 Удалить
                                             </a>
-                                        </div>
-                                    {% endblock %}
+                                        {% endblock %}
+                                    </div>
 
                                 </td>
 
@@ -115,7 +118,7 @@
                 });
             </script>
         {% else %}
-            <div>
+            <div class="well">
                 Ничего не найдено
             </div>
         {% endif %}

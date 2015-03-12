@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Weasty\Bundle\AdBundle\Entity\ProposalBanner">
+    <entity name="Weasty\Bundle\AdBundle\Entity\ProposalBanner" repository-class="Weasty\Bundle\AdBundle\Entity\ProposalBannerRepository">
         <field name="proposalId" type="integer" column="proposalId"/>
         <many-to-one target-entity="Shop\CatalogBundle\Entity\Proposal" field="proposal">
             <join-columns>

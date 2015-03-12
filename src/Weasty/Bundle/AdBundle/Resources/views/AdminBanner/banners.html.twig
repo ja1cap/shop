@@ -1,0 +1,34 @@
+{% extends 'WeastyAdminBundle:Default:index.html.twig' %}
+
+{% block add_button %}
+    <div style="margin: 0 0 10px">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                Добавить баннер <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="{{ path('weasty_ad_admin_banners_add') }}">
+                        Обычный (ссылка)
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('weasty_ad_admin_proposal_banners_add') }}">
+                        Для товара
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block entity_block %}
+    {% if entity.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_URL') %}
+        {% set edit_route = 'weasty_ad_admin_banners_edit' %}
+        {% set delete_route = 'weasty_ad_admin_banners_delete' %}
+    {% elseif entity.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
+        {% set edit_route = 'weasty_ad_admin_proposal_banners_edit' %}
+        {% set delete_route = 'weasty_ad_admin_proposal_banners_delete' %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

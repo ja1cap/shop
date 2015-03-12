@@ -6,11 +6,15 @@
 
     <parameters>
         <parameter key="weasty_ad.form.type.banner.class">Weasty\Bundle\AdBundle\Form\Type\BannerType</parameter>
+        <parameter key="weasty_ad.form.type.proposal_banner.class">Weasty\Bundle\AdBundle\Form\Type\ProposalBannerType</parameter>
     </parameters>
 
     <services>
         <service id="weasty_ad.form.type.banner" class="%weasty_ad.form.type.banner.class%">
             <tag name="form.type" alias="weasty_ad_banner" />
+        </service>
+        <service id="weasty_ad.form.type.proposal_banner" class="%weasty_ad.form.type.proposal_banner.class%">
+            <tag name="form.type" alias="weasty_ad_proposal_banner" />
         </service>
     </services>
 

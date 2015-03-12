@@ -4,9 +4,9 @@ namespace Weasty\Bundle\AdBundle\Entity;
 use Weasty\Doctrine\Entity\AbstractRepository;
 
 /**
- * Class BannerRepository
+ * Class ProposalBannerRepository
  * @package Weasty\Bundle\AdBundle\Entity
  */
-class BannerRepository extends AbstractRepository {
+class ProposalBannerRepository extends AbstractRepository {
 
 }

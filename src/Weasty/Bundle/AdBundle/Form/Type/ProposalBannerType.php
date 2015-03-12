@@ -1,6 +1,7 @@
 <?php
 namespace Weasty\Bundle\AdBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -22,28 +23,34 @@ class ProposalBannerType extends AbstractType {
                 'required' => false,
                 'label' => 'Название',
             ))
+            //@TODO use autocomplete or proposals browser
+            ->add('proposal', 'entity', array(
+                'required' => true,
+                'class' => 'ShopCatalogBundle:Proposal',
+                'multiple' => false,
+                'attr' => array(
+                    'data-placeholder' => 'Выберите',
+                    'class' => 'chosen-select',
+                ),
+                'label' => 'Товар',
+                'query_builder' => function(EntityRepository $er) {
+
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.title', 'ASC');
+
+                },
+            ))
             ->add('image', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'image',
+                'context'  => 'banner',
                 'label' => 'Изображение',
                 'required' => true,
             ))
-            ->add('proposal', 'weasty_admin_browser_type', array(
-                'required' => true,
-                'multiple' => false,
-                'label' => 'Товары',
-                'browser_path' => 'proposals_browser',
-                'item_value_element_class' => 'item-value-element',
-                'options' => array(
-                    'class' => 'ShopCatalogBundle:Proposal',
-                ),
-                'prototype_options' => array(
-                    'attr' => array(
-                        'class' => 'item-value-element',
-                    ),
-                ),
-                'allow_add' => true,
-                'allow_delete' => true,
+        ;
+
+        $builder
+            ->add('save', 'submit', array(
+                'label' => 'Сохранить',
             ))
         ;
 

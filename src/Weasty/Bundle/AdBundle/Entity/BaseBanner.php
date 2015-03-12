@@ -8,10 +8,10 @@ use Weasty\Bundle\AdBundle\Banner\BannerInterface;
 use Weasty\Bundle\DoctrineBundle\Entity\AbstractEntity;
 
 /**
- * Class AbstractBanner
+ * Class BaseBanner
  * @package Weasty\Bundle\AdBundle\Entity
  */
-abstract class AbstractBanner extends AbstractEntity implements BannerInterface
+abstract class BaseBanner extends AbstractEntity implements BannerInterface
 {
     /**
      * @var integer
@@ -47,7 +47,7 @@ abstract class AbstractBanner extends AbstractEntity implements BannerInterface
      * Set title
      *
      * @param string $title
-     * @return AbstractBanner
+     * @return BaseBanner
      */
     public function setTitle($title)
     {
@@ -70,7 +70,7 @@ abstract class AbstractBanner extends AbstractEntity implements BannerInterface
      * Set imageId
      *
      * @param integer $imageId
-     * @return AbstractBanner
+     * @return BaseBanner
      */
     public function setImageId($imageId)
     {
@@ -93,7 +93,7 @@ abstract class AbstractBanner extends AbstractEntity implements BannerInterface
      * Set image
      *
      * @param \Application\Sonata\MediaBundle\Entity\Media $image
-     * @return AbstractBanner
+     * @return BaseBanner
      */
     public function setImage(Media $image = null)
     {

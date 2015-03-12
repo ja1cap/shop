@@ -32,9 +32,6 @@ class DefaultController extends Controller
         $view = $request->get('_view', 'WeastyAdminBundle:Default:index.html.twig');
         $viewParameters = [
             'entities' => $entities,
-            'add_route' => $request->get('_add_route'),
-            'edit_route' => $request->get('_edit_route'),
-            'delete_route' => $request->get('_delete_route'),
         ];
 
         return $this->render($view, $viewParameters);

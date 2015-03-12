@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 class BannerExtension extends \Twig_Extension {
 
     /**
-     * @var \Weasty\Bundle\AdBundle\Entity\BannerRepository
+     * @var \Weasty\Bundle\AdBundle\Entity\BaseBannerRepository
      */
     protected $bannersRepository;
 

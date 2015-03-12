@@ -10,11 +10,7 @@
 
     <route id="weasty_ad_admin_banners" path="/admin/ad/banners">
         <option key="title">weasty.ad.banners</option>
-        <default key="_controller">WeastyAdminBundle:Default:index</default>
-        <default key="_repository_service">weasty_ad.banner.repository</default>
-        <default key="_add_route">weasty_ad_admin_banners_add</default>
-        <default key="_edit_route">weasty_ad_admin_banners_edit</default>
-        <default key="_delete_route">weasty_ad_admin_banners_delete</default>
+        <default key="_controller">WeastyAdBundle:AdminBanner:banners</default>
     </route>
 
     <route id="weasty_ad_admin_banners_add" path="/admin/ad/banners/add">
@@ -24,7 +20,7 @@
         <default key="_controller">WeastyAdminBundle:Default:add</default>
         <default key="_repository_service">weasty_ad.banner.repository</default>
         <default key="_form_type">weasty_ad_banner</default>
-        <default key="_redirect_route">weasty_ad_admin_banners_edit</default>
+        <default key="_redirect_route">weasty_ad_admin_banners</default>
     </route>
 
     <route id="weasty_ad_admin_banners_edit" path="/admin/ad/banners/edit/{id}">
@@ -39,6 +35,31 @@
     <route id="weasty_ad_admin_banners_delete" path="/admin/ad/banners/delete/{id}">
         <default key="_controller">WeastyAdminBundle:Default:delete</default>
         <default key="_repository_service">weasty_ad.banner.repository</default>
+        <default key="_redirect_route">weasty_ad_admin_banners</default>
+    </route>
+
+    <route id="weasty_ad_admin_proposal_banners_add" path="/admin/ad/proposal-banners/add">
+        <option key="title">weasty.ad.banners.add</option>
+        <option key="resourceKey">entity</option>
+        <option key="parent">weasty_ad_admin_banners</option>
+        <default key="_controller">WeastyAdminBundle:Default:add</default>
+        <default key="_repository_service">weasty_ad.proposal.banner.repository</default>
+        <default key="_form_type">weasty_ad_proposal_banner</default>
+        <default key="_redirect_route">weasty_ad_admin_banners</default>
+    </route>
+
+    <route id="weasty_ad_admin_proposal_banners_edit" path="/admin/ad/proposal-banners/edit/{id}">
+        <option key="title">weasty.ad.banners.edit</option>
+        <option key="resourceKey">entity</option>
+        <option key="parent">weasty_ad_admin_banners</option>
+        <default key="_controller">WeastyAdminBundle:Default:edit</default>
+        <default key="_repository_service">weasty_ad.proposal.banner.repository</default>
+        <default key="_form_type">weasty_ad_proposal_banner</default>
+    </route>
+
+    <route id="weasty_ad_admin_proposal_banners_delete" path="/admin/ad/proposal-banners/delete/{id}">
+        <default key="_controller">WeastyAdminBundle:Default:delete</default>
+        <default key="_repository_service">weasty_ad.proposal.banner.repository</default>
         <default key="_redirect_route">weasty_ad_admin_banners</default>
     </route>
 

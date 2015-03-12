@@ -7,7 +7,7 @@ namespace Weasty\Bundle\AdBundle\Banner;
  */
 interface BannerInterface {
 
-  const TYPE_BASE = 1;
+  const TYPE_URL = 1;
   const TYPE_PROPOSAL = 2;
 
   /**

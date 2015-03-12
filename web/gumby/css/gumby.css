@@ -4108,7 +4108,7 @@ body .template-lededev #banners-block .block-title:before, body .template-ledede
 body .template-lededev .banners-list-wrapper .media-list { margin: 0; }
 body .template-lededev .banners-list-wrapper .media-list .media-list-item { margin: 0; }
 body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container { padding: 0; position: relative; }
-body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .image-container { margin: 0; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .image-container { margin: 0; text-align: center; background: white; }
 body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body { position: absolute; bottom: 0; left: 0; background: rgba(0, 0, 0, 0.5); padding: 20px; width: 100%; }
 body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title { margin: 0; padding: 7px; text-align: center; font-size: 30px; line-height: 1; font-weight: bold; }
 body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title, body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title a { color: white; text-shadow: 1px 2px #2E2D2D; }

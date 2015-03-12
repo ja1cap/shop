@@ -4,7 +4,7 @@
 
     {% block add_button %}
         <div style="margin: 0 0 10px">
-            <a href="{{ path(add_route) }}" class="btn btn-default">
+            <a href="{{ path(add_route|default(app.request.get('_add_route'))) }}" class="btn btn-default">
                 Добавить
             </a>
         </div>
@@ -46,6 +46,14 @@
                                 {% set _entity_description = entity.description %}
                             {% else %}
                                 {% set _entity_description = null %}
+                            {% endif %}
+
+                            {% if edit_route is not defined %}
+                                {% set edit_route = app.request.get('_edit_route') %}
+                            {% endif %}
+
+                            {% if delete_route is not defined %}
+                                {% set delete_route = app.request.get('_delete_route') %}
                             {% endif %}
 
                             <tr>

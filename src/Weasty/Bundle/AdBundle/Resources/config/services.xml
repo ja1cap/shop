@@ -5,12 +5,23 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="weasty_ad.base.banner.entity.class">Weasty\Bundle\AdBundle\Entity\BaseBanner</parameter>
+        <parameter key="weasty_ad.base.banner.repository.class">Weasty\Bundle\AdBundle\Entity\BaseBannerRepository</parameter>
         <parameter key="weasty_ad.banner.entity.class">Weasty\Bundle\AdBundle\Entity\Banner</parameter>
         <parameter key="weasty_ad.banner.repository.class">Weasty\Bundle\AdBundle\Entity\BannerRepository</parameter>
+        <parameter key="weasty_ad.proposal.banner.entity.class">Weasty\Bundle\AdBundle\Entity\ProposalBanner</parameter>
+        <parameter key="weasty_ad.proposal.banner.repository.class">Weasty\Bundle\AdBundle\Entity\ProposalBannerRepository</parameter>
         <parameter key="weasty_ad.twig.banner_extension.class">Weasty\Bundle\AdBundle\Twig\BannerExtension</parameter>
     </parameters>
 
     <services>
+
+        <service id="weasty_ad.base.banner.repository" class="%weasty_ad.base.banner.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%weasty_ad.base.banner.entity.class%</argument>
+        </service>
+
 
         <service id="weasty_ad.banner.repository" class="%weasty_ad.banner.repository.class%"
                  factory-service="doctrine.orm.entity_manager"
@@ -18,9 +29,15 @@
             <argument>%weasty_ad.banner.entity.class%</argument>
         </service>
 
+        <service id="weasty_ad.proposal.banner.repository" class="%weasty_ad.proposal.banner.repository.class%"
+                 factory-service="doctrine.orm.entity_manager"
+                 factory-method="getRepository">
+            <argument>%weasty_ad.proposal.banner.entity.class%</argument>
+        </service>
+
         <service id="weasty_ad.twig.banner_extension" class="%weasty_ad.twig.banner_extension.class%">
             <tag name="twig.extension" />
-            <argument type="service" id="weasty_ad.banner.repository"/>
+            <argument type="service" id="weasty_ad.base.banner.repository"/>
         </service>
 
     </services>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Banner
  * @package Weasty\Bundle\AdBundle\Entity
  */
-class Banner extends AbstractBanner
+class Banner extends BaseBanner
 {
 
     /**
@@ -20,7 +20,7 @@ class Banner extends AbstractBanner
      * @return int
      */
     public function getType() {
-        return self::TYPE_BASE;
+        return self::TYPE_URL;
     }
 
     /**

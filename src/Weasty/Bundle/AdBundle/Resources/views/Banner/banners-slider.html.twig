@@ -10,7 +10,11 @@
 
     {#{% set _item_route = 'weasty_ad_banner' %}#}
     {#{% set _item_route_parameters = { 'id' : media_item.getId } %}#}
-    {% set _item_url = media_item.getUrl %}
+    {% if media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_URL') %}
+        {% set _item_url = media_item.getUrl %}
+    {% elseif media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
+        {% set _item_url = shop_catalog_proposal_url(media_item.getProposal) %}
+    {% endif %}
 
     {{ parent() }}
 
@@ -21,6 +25,6 @@
     {#{{ parent() }}#}
 {#{% endblock %}#}
 
-{#{% block media_item_description %}#}
+{% block media_item_description %}
     {#{{ catalog.price(catalogPrice) }}#}
-{#{% endblock %}#}
+{% endblock %}

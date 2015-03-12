@@ -9,13 +9,18 @@ use Weasty\Bundle\CatalogBundle\Proposal\ProposalInterface;
  * Class ProposalBanner
  * @package Weasty\Bundle\AdBundle\Entity
  */
-class ProposalBanner extends AbstractBanner implements  ProposalBannerInterface
+class ProposalBanner extends BaseBanner implements  ProposalBannerInterface
 {
 
     /**
      * @var integer
      */
     private $proposalId;
+
+    /**
+     * @var \Shop\CatalogBundle\Entity\Proposal
+     */
+    private $proposal;
 
     /**
      * @return int
@@ -48,13 +53,6 @@ class ProposalBanner extends AbstractBanner implements  ProposalBannerInterface
         return $this->proposalId;
     }
 
-
-    /**
-     * @var \Shop\CatalogBundle\Entity\Proposal
-     */
-    private $proposal;
-
-
     /**
      * Set proposal
      *
@@ -77,4 +75,12 @@ class ProposalBanner extends AbstractBanner implements  ProposalBannerInterface
     {
         return $this->proposal;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getDescription(){
+        return $this->getProposal() ? $this->getProposal()->getName() : null;
+    }
+
 }

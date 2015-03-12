@@ -51,6 +51,7 @@ class AppKernel extends Kernel
             new Weasty\Bundle\NewsBundle\WeastyNewsBundle(),
             new Weasty\Bundle\PageBundle\WeastyPageBundle(),
             new Weasty\Bundle\AdBundle\WeastyAdBundle(),
+            new Weasty\Bundle\CommonBundle\WeastyCommonBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

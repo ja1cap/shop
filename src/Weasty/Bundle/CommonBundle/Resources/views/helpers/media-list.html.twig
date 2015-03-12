@@ -36,16 +36,18 @@
 
                     {% block media_item %}
 
-                        {% if media_list_options.clickable_items and media_list_options.item_route %}
-                            {% if _item_route is not defined %}
-                                {% set _item_route = media_list_options.item_route %}
+                        {% if _item_url is not defined %}
+                            {% if media_list_options.clickable_items and media_list_options.item_route %}
+                                {% if _item_route is not defined %}
+                                    {% set _item_route = media_list_options.item_route %}
+                                {% endif %}
+                                {% if _item_route_parameters is not defined %}
+                                    {% set _item_route_parameters = media_item.routeParameters %}
+                                {% endif %}
+                                {% set _item_url = path(_item_route, _item_route_parameters) %}
+                            {% else %}
+                                {% set _item_url = null %}
                             {% endif %}
-                            {% if _item_route_parameters is not defined %}
-                                {% set _item_route_parameters = media_item.routeParameters %}
-                            {% endif %}
-                            {% set _item_url = path(_item_route, _item_route_parameters) %}
-                        {% else %}
-                            {% set _item_url = null %}
                         {% endif %}
 
                         {% set _is_header_item = (media_list_options.header_items_per_row > 0 and loop.index <= media_list_options.header_items_per_row) %}
@@ -54,11 +56,13 @@
                         {% set _is_first_in_row = (_is_header_item ? ((loop.index % media_list_options.header_items_per_row) == 1) : (((loop.index - media_list_options.header_items_per_row) % media_list_options.items_per_row) == 1)) %}
                         {% set _is_last_in_row = (_is_header_item ? ((loop.index % media_list_options.header_items_per_row) == 0) : (((loop.index - media_list_options.header_items_per_row) % media_list_options.items_per_row) == 0)) %}
 
-                        {% set _item_title = null %}
-                        {% if media_item.title is defined and media_item.title %}
-                            {% set _item_title = media_item.title %}
-                        {% elseif media_item.name is defined and media_item.name %}
-                            {% set _item_title = media_item.name %}
+                        {% if _item_title is not defined %}
+                            {% set _item_title = null %}
+                            {% if media_item.title is defined and media_item.title %}
+                                {% set _item_title = media_item.title %}
+                            {% elseif media_item.name is defined and media_item.name %}
+                                {% set _item_title = media_item.name %}
+                            {% endif %}
                         {% endif %}
 
                         <div class="media-list-item {{ _item_column_class }} {{ _is_first_in_row  ? 'first-in-row' : '' }} {{ _is_last_in_row  ? 'last-in-row' : '' }} columns">

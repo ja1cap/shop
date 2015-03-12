@@ -50,18 +50,21 @@ class BreadcrumbsExtension extends \Twig_Extension implements ContainerAwareInte
     /**
      * @param \Twig_Environment $env
      * @param $context
-     * @param $routeName
+     * @param string $routeName
+     * @param boolean $onlyCurrentRoute
      *
      * @return bool
      */
-    public function isActiveNavigationRoute(\Twig_Environment $env, $context, $routeName){
+    public function isActiveNavigationRoute(\Twig_Environment $env, $context, $routeName, $onlyCurrentRoute = false){
 
         $currentRouteName = $this->getRequest()->get('_route');
         if($routeName == $currentRouteName){
             $isActive = true;
-        } else {
+        } elseif(!$onlyCurrentRoute) {
             $breadcrumbs = $this->getRouteBreadCrumbs($env, $context, $currentRouteName);
             $isActive = isset($breadcrumbs[$routeName]);
+        } else {
+            $isActive = false;
         }
 
         return $isActive;

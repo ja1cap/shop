@@ -4,6 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="weasty_ad_banner" path="/banner/{id}">
+        <default key="_controller">WeastyAdminBundle:Banner:banner</default>
+    </route>
+
     <route id="weasty_ad_admin_banners" path="/admin/ad/banners">
         <option key="title">weasty.ad.banners</option>
         <default key="_controller">WeastyAdminBundle:Default:index</default>

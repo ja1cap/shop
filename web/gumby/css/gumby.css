@@ -3810,7 +3810,7 @@ body .ui-slider.ui-slider-horizontal .ui-slider-handle { top: -5px; margin-left:
 body .owl-carousel .owl-buttons .owl-prev, body .owl-carousel .owl-buttons .owl-next { text-indent: -99999px; cursor: pointer; position: absolute; display: block; width: 60px; height: 100%; top: 0; }
 body .owl-carousel .owl-buttons .owl-prev:after, body .owl-carousel .owl-buttons .owl-next:after { -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; -webkit-box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.7); -moz-box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.7); box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.7); background: url("/img/weasty-sprite.png") no-repeat #fff343; position: absolute; top: 50%; content: ' '; display: block; width: 40px; height: 40px; margin-top: -20px; margin-left: 10px; color: white; }
 body .owl-carousel .owl-buttons .owl-prev.disabled, body .owl-carousel .owl-buttons .owl-next.disabled { cursor: default; }
-body .owl-carousel .owl-buttons .owl-prev.disabled:after, body .owl-carousel .owl-buttons .owl-next.disabled:after { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; background-color: transparent; border: 1px solid #cacaca; }
+body .owl-carousel .owl-buttons .owl-prev.disabled:after, body .owl-carousel .owl-buttons .owl-next.disabled:after { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; background-color: white; border: 1px solid #cacaca; }
 body .owl-carousel .owl-buttons .owl-prev { left: -62px; }
 body .owl-carousel .owl-buttons .owl-prev:after { background-position: -503px -12px; }
 body .owl-carousel .owl-buttons .owl-prev.disabled:after { background-position: -324px -13px; }
@@ -3890,6 +3890,13 @@ body .proposals-comparison .fht-fixed-column { height: 100% !important; backgrou
 body .proposals-comparison .fht-fixed-column .fht-tbody { margin-top: 0 !important; height: 100% !important; }
 body .proposals-comparison .fht-fixed-body .fht-tbody .fht-table { min-width: 940px; }
 body .template-lededev { color: black; /* Common elements
+*/ /* Header
+*/ /* Blocks
+*/ /* Tabs
+*/ /* Proposals list
+*/ /* Media items list
+*/ /* Information items list
+*/ /* Common elements
 */ /* Header
 */ /* Blocks
 */ /* Tabs
@@ -4095,6 +4102,16 @@ body .template-lededev #proposal-container .order-information-box .ui-buttons .b
 body .template-lededev #proposal-container .order-information-box .ui-buttons .btn a { padding: 10px 7px; font-size: 20px; }
 body .template-lededev #proposal-container .order-information-box .ui-buttons .btn.active a.compare-btn { line-height: 40px; font-size: 14px; }
 body .template-lededev #proposal-container .proposal-description { margin: 0 0 20px 0; }
+body .template-lededev #banners-block { padding: 60px 0; background: #020031; /* Old browsers */ background: -moz-linear-gradient(45deg, #020031 0%, #6d3353 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #020031), color-stop(100%, #6d3353)); /* Chrome,Safari4+ */ background: -webkit-linear-gradient(45deg, #020031 0%, #6d3353 100%); /* Chrome10+,Safari5.1+ */ background: -o-linear-gradient(45deg, #020031 0%, #6d3353 100%); /* Opera 11.10+ */ background: -ms-linear-gradient(45deg, #020031 0%, #6d3353 100%); /* IE10+ */ background: linear-gradient(45deg, #020031 0%, #6d3353 100%); /* W3C */ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#020031', endColorstr='#6d3353',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2); -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2); box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.2), inset 0 -3px 7px rgba(0, 0, 0, 0.2); }
+body .template-lededev #banners-block:before { content: ''; display: block; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: url(/img/masthead-pattern.png) repeat center center; opacity: .4; }
+body .template-lededev #banners-block .block-title:before, body .template-lededev #banners-block .block-title:after { display: none; }
+body .template-lededev .banners-list-wrapper .media-list { margin: 0; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item { margin: 0; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container { padding: 0; position: relative; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .image-container { margin: 0; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body { position: absolute; bottom: 0; left: 0; background: rgba(0, 0, 0, 0.5); padding: 20px; width: 100%; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title { margin: 0; padding: 7px; text-align: center; font-size: 30px; line-height: 1; font-weight: bold; }
+body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title, body .template-lededev .banners-list-wrapper .media-list .media-list-item .inner-container .media-item-body .title a { color: white; text-shadow: 1px 2px #2E2D2D; }
 body .template-lededev .header-container { background-color: white; z-index: 100; position: fixed; left: 0; top: 0; width: 100%; -webkit-transition-property: all; -moz-transition-property: all; -o-transition-property: all; transition-property: all; -webkit-transition-duration: 150ms; -moz-transition-duration: 150ms; -o-transition-duration: 150ms; transition-duration: 150ms; -webkit-transition-timing-function: linear; -moz-transition-timing-function: linear; -o-transition-timing-function: linear; transition-timing-function: linear; }
 body .template-lededev .header-container:before { z-index: 105; content: ' '; display: block; width: 100%; height: 100%; position: absolute; left: 0; bottom: 0; background-color: white; }
 body .template-lededev .header-container:after { z-index: 101; content: ' '; display: block; width: 100%; height: 5px; position: absolute; left: 0; bottom: 0; -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); }

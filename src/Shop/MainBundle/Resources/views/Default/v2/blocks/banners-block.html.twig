@@ -1,0 +1,30 @@
+{% set banners = weasty_ad_banners() %}
+{% if banners %}
+    <div class="banners-block block-container invert-colors" id="banners-block">
+
+        <div class="block-title-container">
+            <h2 class="block-title">
+                {{ 'weasty.ad.banners.block_title'|trans({}, 'WeastyAdBundle') }}
+            </h2>
+        </div>
+
+        <div class="block-description">
+            {{ 'weasty.ad.banners.block_description'|trans({}, 'WeastyAdBundle')|nl2br }}
+        </div>
+
+        <div class="block-body">
+
+            {% include 'WeastyAdBundle:Banner:banners-slider.html.twig' with {
+                'media_list_options' : {
+                    'items' : banners,
+                    'items_per_row' : 1,
+                    'use_slider' : true,
+                    'clickable_items' : true,
+                    'item_image_format' : 'xlarge',
+                }
+            } %}
+
+        </div>
+
+    </div>
+{% endif %}

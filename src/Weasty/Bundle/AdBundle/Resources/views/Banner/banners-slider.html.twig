@@ -1,0 +1,26 @@
+{% extends 'WeastyCommonBundle::helpers/media-list.html.twig' %}
+
+{% block media_list %}
+    <div class="banners-list-wrapper">
+        {{ parent() }}
+    </div>
+{% endblock %}
+
+{% block media_item %}
+
+    {#{% set _item_route = 'weasty_ad_banner' %}#}
+    {#{% set _item_route_parameters = { 'id' : media_item.getId } %}#}
+    {% set _item_url = media_item.getUrl %}
+
+    {{ parent() }}
+
+{% endblock %}
+
+{#{% block media_item_inner_container %}#}
+    {#{{ catalog.proposal_markers(proposalData, catalogPrice) }}#}
+    {#{{ parent() }}#}
+{#{% endblock %}#}
+
+{#{% block media_item_description %}#}
+    {#{{ catalog.price(catalogPrice) }}#}
+{#{% endblock %}#}

@@ -226,7 +226,7 @@ sonata_media:
                 medium_square:   { width: 350, height: 350, quality: 100 }
                 large:   { width: 460, quality: 100 }
                 large_square:   { width: 460, height: 460, quality: 100 }
-                xlarge: { width: 940, quality: 100 }
+                xlarge: { width: 940, height: 460, quality: 100 }
 
         icon:
             providers:

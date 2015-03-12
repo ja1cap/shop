@@ -1,5 +1,6 @@
 {% extends 'ShopMainBundle:Default:layout.html.twig' %}
 {% block page_container %}
+    {{ include('ShopMainBundle:Default:v2/blocks/banners-block.html.twig') }}
     {{ include('ShopCatalogBundle:Proposal:proposals-block.html.twig') }}
     {{ include('ShopDiscountBundle:Action:actions-block.html.twig') }}
     {{ include('ShopCatalogBundle:Manufacturer:manufacturers-block.html.twig') }}

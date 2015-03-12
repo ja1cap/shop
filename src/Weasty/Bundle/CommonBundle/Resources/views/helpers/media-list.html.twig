@@ -37,7 +37,7 @@
                     {% block media_item %}
 
                         {% if _item_url is not defined %}
-                            {% if media_list_options.clickable_items and media_list_options.item_route %}
+                            {% if media_list_options.clickable_items and (media_list_options.item_route or _item_route is defined) %}
                                 {% if _item_route is not defined %}
                                     {% set _item_route = media_list_options.item_route %}
                                 {% endif %}

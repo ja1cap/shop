@@ -8,7 +8,7 @@
             <th>Категория</th>
             <th>Товар</th>
             <th>Описание</th>
-            <th>Приоритет</th>
+            {#<th>Приоритет</th>#}
             <th></th>
         </tr>
         </thead>
@@ -29,7 +29,7 @@
                     </div>
                     {{ _condition.condition_complex(actionProposal) }}
                 </td>
-                <td>{{ actionProposal.priority }}</td>
+                {#<td>{{ actionProposal.priority }}</td>#}
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a href="{{ path('shop_discount_admin_action_proposal', {'actionId' : action.id, 'id' : actionProposal.id }) }}" class="btn btn-default">

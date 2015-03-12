@@ -6,6 +6,14 @@
                 <source>shop.discount</source>
                 <target>Discount</target>
             </trans-unit>
+            <trans-unit id="shop.actions">
+                <source>shop.actions</source>
+                <target>Actions</target>
+            </trans-unit>
+            <trans-unit id="shop.action.add">
+                <source>shop.action.add</source>
+                <target>Add action</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

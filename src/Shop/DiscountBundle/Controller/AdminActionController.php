@@ -68,7 +68,6 @@ class AdminActionController extends Controller
         } else {
 
             return $this->render('ShopDiscountBundle:AdminAction:action.html.twig', [
-                'title' => $action->getId() ? 'Изменение акции' : 'Добавление акции',
                 'form' => $form->createView(),
                 'action' => $action,
             ]);
@@ -114,7 +113,6 @@ class AdminActionController extends Controller
         } else {
 
             return $this->render('ShopDiscountBundle:AdminActionCondition:condition.html.twig', [
-                'title' => $basicActionCondition->getId() ? 'Изменение условия' : 'Добавление условия',
                 'form' => $form->createView(),
                 'action' => $action,
                 'actionCondition' => $basicActionCondition,

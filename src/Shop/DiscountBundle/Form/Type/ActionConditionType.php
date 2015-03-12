@@ -65,14 +65,14 @@ abstract class ActionConditionType extends AbstractType {
                 'allow_add' => true,
                 'allow_delete' => true,
             ))
-            ->add('priority', 'integer', array(
-                'required' => false,
-                'label' => 'Приоритет',
-            ))
-            ->add('isComplex', 'checkbox', array(
-                'required' => false,
-                'label' => 'Применяется с другими акциями в комплексе',
-            ))
+//            ->add('priority', 'hidden', array(
+//                'required' => false,
+//                'label' => 'Приоритет',
+//            ))
+//            ->add('isComplex', 'checkbox', array(
+//                'required' => false,
+//                'label' => 'Применяется с другими акциями в комплексе',
+//            ))
         ;
 
         $builder

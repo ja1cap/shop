@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="shop_discount_homepage" pattern="/hello/{name}">
-        <default key="_controller">ShopDiscountBundle:Default:index</default>
-    </route>
     <route id="shop_discount_admin_actions" pattern="/admin/actions">
+        <option key="title">shop.actions</option>
         <default key="_controller">ShopDiscountBundle:AdminAction:actions</default>
     </route>
     <route id="shop_discount_admin_update_actions_positions" pattern="/admin/actions/updatePositions">
         <default key="_controller">ShopDiscountBundle:AdminAction:updateActionsPosition</default>
     </route>
     <route id="shop_discount_admin_action" pattern="/admin/action/{id}">
+        <option key="title">{{ action.id ? action.title : 'shop.action.add'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">action</option>
+        <option key="parent">shop_discount_admin_actions</option>
         <default key="_controller">ShopDiscountBundle:AdminAction:action</default>
         <default key="id">null</default>
     </route>
@@ -18,9 +19,15 @@
         <default key="_controller">ShopDiscountBundle:AdminAction:deleteAction</default>
     </route>
     <route id="shop_discount_admin_action_conditions" pattern="/admin/actionConditions/{actionId}">
+        <option key="title">{{ 'shop.action.conditions'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">action</option>
+        <option key="parent">shop_discount_admin_action</option>
         <default key="_controller">ShopDiscountBundle:AdminAction:actionConditions</default>
     </route>
     <route id="shop_discount_admin_action_basic_condition" pattern="/admin/actionBasicCondition/{actionId}">
+        <option key="title">{{ 'shop.action.basic_conditions'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">action</option>
+        <option key="parent">shop_discount_admin_action_conditions</option>
         <default key="_controller">ShopDiscountBundle:AdminAction:actionBasicCondition</default>
     </route>
     <route id="shop_discount_admin_action_condition" pattern="/admin/actionCondition/{actionId}/{id}">
@@ -31,16 +38,28 @@
         <default key="_controller">ShopDiscountBundle:AdminAction:deleteActionCondition</default>
     </route>
     <route id="shop_discount_admin_action_categories" path="/admin/actionCategories/{actionId}">
+        <option key="title">{{ 'shop.action.conditions'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">action</option>
+        <option key="parent">shop_discount_admin_action</option>
         <default key="_controller">ShopDiscountBundle:AdminActionCategory:categories</default>
     </route>
     <route id="shop_discount_admin_action_category" path="/admin/actionCategory/{actionId}/{id}">
+        <option key="title">{{ 'shop.action.condition.category'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">actionCondition</option>
+        <option key="parent">shop_discount_admin_action_conditions</option>
         <default key="_controller">ShopDiscountBundle:AdminActionCategory:category</default>
         <default key="id">null</default>
     </route>
     <route id="shop_discount_admin_action_proposals" path="/admin/actionProposals/{actionId}">
+        <option key="title">{{ 'shop.action.conditions'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">action</option>
+        <option key="parent">shop_discount_admin_action</option>
         <default key="_controller">ShopDiscountBundle:AdminActionProposal:proposals</default>
     </route>
     <route id="shop_discount_admin_action_proposal" path="/admin/actionProposal/{actionId}/{id}">
+        <option key="title">{{ 'shop.action.condition.proposal'|trans([], 'ShopDiscountBundle') }}</option>
+        <option key="resourceKey">actionCondition</option>
+        <option key="parent">shop_discount_admin_action_conditions</option>
         <default key="_controller">ShopDiscountBundle:AdminActionProposal:proposal</default>
         <default key="id">null</default>
     </route>

@@ -1,9 +1,5 @@
 {% extends "ShopAdminBundle::layout.html.twig" %}
 
-{% block page_header %}
-    <h3>{{ action and action.title ? 'Акция - ' ~ action.title : (action and action.id ? 'Изменение акции' : 'Добавление акции')}}</h3>
-{% endblock %}
-
 {% block page_menu %}
     {{ include('ShopDiscountBundle:AdminAction:actionMenuListItems.html.twig') }}
 {% endblock %}

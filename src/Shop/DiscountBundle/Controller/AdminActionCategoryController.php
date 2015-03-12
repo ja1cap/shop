@@ -72,7 +72,6 @@ class AdminActionCategoryController extends Controller
         } else {
 
             return $this->render('ShopDiscountBundle:AdminActionCategory:category.html.twig', [
-                'title' => $actionCategory->getId() ? 'Изменение условия' : 'Добавление условия',
                 'form' => $form->createView(),
                 'action' => $action,
                 'actionCondition' => $actionCategory,

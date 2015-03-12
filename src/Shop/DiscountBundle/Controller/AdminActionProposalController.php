@@ -71,7 +71,6 @@ class AdminActionProposalController extends Controller
         } else {
 
             return $this->render('ShopDiscountBundle:AdminActionProposal:proposal.html.twig', [
-                'title' => $actionProposal->getId() ? 'Изменение условия' : 'Добавление условия',
                 'form' => $form->createView(),
                 'action' => $action,
                 'actionCondition' => $actionProposal,

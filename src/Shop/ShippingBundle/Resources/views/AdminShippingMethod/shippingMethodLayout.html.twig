@@ -12,7 +12,7 @@
 
     {% else %}
 
-        <li class="{{ is_active_nav_item('shipping_method') ? 'active' : '' }}">
+        <li class="{{ is_active_nav_item('shipping_method', true) ? 'active' : '' }}">
             <a href="{{ path('shipping_method', {'id':shippingMethod.id}) }}">
                 {{ 'shop.shipping.method.info'|trans([], 'ShopShippingBundle') }}
             </a>

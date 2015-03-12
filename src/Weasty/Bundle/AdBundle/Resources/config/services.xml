@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="weasty_ad.banner.entity.class">Weasty\Bundle\AdBundle\Entity\Banner</parameter>
         <parameter key="weasty_ad.banner.repository.class">Weasty\Bundle\AdBundle\Entity\BannerRepository</parameter>
-        <!--<parameter key="weasty_ad.twig.banner_extension.class">Weasty\Bundle\AdBundle\Twig\BannerExtension</parameter>-->
+        <parameter key="weasty_ad.twig.banner_extension.class">Weasty\Bundle\AdBundle\Twig\BannerExtension</parameter>
     </parameters>
 
     <services>
@@ -18,10 +18,10 @@
             <argument>%weasty_ad.banner.entity.class%</argument>
         </service>
 
-        <!--<service id="weasty_ad.twig.banner_extension" class="%weasty_ad.twig.banner_extension.class%">-->
-            <!--<tag name="twig.extension" />-->
-            <!--<argument type="service" id="weasty_ad.banner.repository"/>-->
-        <!--</service>-->
+        <service id="weasty_ad.twig.banner_extension" class="%weasty_ad.twig.banner_extension.class%">
+            <tag name="twig.extension" />
+            <argument type="service" id="weasty_ad.banner.repository"/>
+        </service>
 
     </services>
 

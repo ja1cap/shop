@@ -9,4 +9,11 @@ use Weasty\Doctrine\Entity\AbstractRepository;
  */
 class BannerRepository extends AbstractRepository {
 
+    /**
+     * @return \Weasty\Bundle\AdBundle\Banner\BannerInterface[]
+     */
+    public function getBanners(){
+        return $this->findAll();
+    }
+
 }

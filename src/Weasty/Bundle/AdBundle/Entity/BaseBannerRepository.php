@@ -17,6 +17,7 @@ class BaseBannerRepository extends AbstractRepository {
         $qb
             ->select('b')
             ->from('WeastyAdBundle:BaseBanner', 'b')
+            ->andWhere($qb->expr()->isNotNull('b.imageId'))
             ->orderBy('b.id', 'DESC')
         ;
         return $qb->getQuery()->getResult();

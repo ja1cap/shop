@@ -84,6 +84,8 @@ class ProposalExtension extends \Twig_Extension {
 
             if($price instanceof ProposalPriceInterface){
                 $routeParameters['priceId'] = $price->getId();
+            } elseif($price && is_numeric($price)){
+                $routeParameters['priceId'] = (int)$price;
             }
 
             $url = $this->urlGenerator->generate('shop_catalog_proposal', $routeParameters);

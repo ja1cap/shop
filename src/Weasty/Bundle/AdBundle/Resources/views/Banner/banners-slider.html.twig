@@ -1,4 +1,5 @@
 {% extends 'WeastyCommonBundle::helpers/media-list.html.twig' %}
+{% import 'ShopCatalogBundle::catalog-macros.html.twig' as catalog %}
 
 {% block media_list %}
     <div class="banners-list-wrapper">
@@ -8,23 +9,48 @@
 
 {% block media_item %}
 
-    {#{% set _item_route = 'weasty_ad_banner' %}#}
-    {#{% set _item_route_parameters = { 'id' : media_item.getId } %}#}
     {% if media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_URL') %}
         {% set _item_url = media_item.getUrl %}
     {% elseif media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
-        {% set _item_url = shop_catalog_proposal_url(media_item.getProposal) %}
+
+        {% set proposal = media_item.getProposal %}
+        {% set proposalData = shop_catalog_proposal_data(proposal) %}
+        {% set catalogPrice = shop_catalog_price(proposalData) %}
+
+        {% set _item_url = shop_catalog_proposal_url(proposal, proposalData.priceId) %}
+        {% set _item_title = media_item.getTitle %}
+
     {% endif %}
 
     {{ parent() }}
 
 {% endblock %}
 
-{#{% block media_item_inner_container %}#}
-    {#{{ catalog.proposal_markers(proposalData, catalogPrice) }}#}
-    {#{{ parent() }}#}
-{#{% endblock %}#}
+{% block media_item_title %}
+    {% if media_item.type != constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block media_item_inner_container %}
+    {% if media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
+        <div class="banner-title">
+            <a href="{{ _item_url }}">
+                {{ _item_title|nl2br }}
+                <span class="proposal-name">
+                    {{ proposal.title }}
+                </span>
+            </a>
+        </div>
+        {{ catalog.proposal_markers(proposalData, catalogPrice) }}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
 
 {% block media_item_description %}
-    {#{{ catalog.price(catalogPrice) }}#}
+
+    {% if media_item.type == constant('\\Weasty\\Bundle\\AdBundle\\Banner\\BannerInterface::TYPE_PROPOSAL') %}
+        {{ catalog.price(catalogPrice) }}
+    {% endif %}
+
 {% endblock %}

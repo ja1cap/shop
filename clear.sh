@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -e -p "Enter environment:" -i "prod" ENV
+read -e -p "Enter environment:" -i "dev" ENV
 
 chmod 0777 -R app/logs/
 

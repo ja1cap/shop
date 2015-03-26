@@ -14,19 +14,19 @@
                     <input type="hidden" name="actions[{{ action.id }}][id]" value="{{ action.id }}">
                     <input type="hidden" class="action_position" name="actions[{{ action.id }}][position]" value="{{ action.position }}">
                     <div class="row">
-                        <div class="{{ word_numbers[3] }} columns">
+                        <div class="col-md-3">
                             <span class="glyphicon glyphicon-move handle"></span>
                             <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}" class="primary-link">{{ action.title }}</a>
                         </div>
-                        <div class="{{ word_numbers[1] }} columns">
+                        <div class="col-md-1">
                             <span class="{% if action.status == constant('STATUS_OFF', action) %}label-danger{% else %}label-success{% endif %} label">
                                 {{ action.textStatus }}
                             </span>
                         </div>
-                        <div class="{{ word_numbers[5] }} columns">
+                        <div class="col-md-5">
                             {{ action.description|nl2br }}
                         </div>
-                        <div class="{{ word_numbers[3] }} columns">
+                        <div class="col-md-3 columns">
                             <div class="center-block btn-group">
                                 <a href="{{ path('shop_discount_admin_action', {'id' : action.id}) }}" class="btn btn-default btn-sm">
                                     <span class="glyphicon glyphicon-pencil"></span> Изменить

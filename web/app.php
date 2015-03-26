@@ -22,7 +22,8 @@ if(extension_loaded('apc')){
 require_once __DIR__.'/../app/AppCache.php';
 
 $topLevelDomain = pathinfo($_SERVER['SERVER_NAME'], PATHINFO_EXTENSION);
-$env = ($topLevelDomain == 'local' ? 'dev' : 'prod');
+$env = (($topLevelDomain == 'local' || $_SERVER['SERVER_NAME'] == '127.0.0.1') ? 'dev' : 'prod');
+//$env = 'prod';
 $kernel = new AppKernel($env, ($env == 'dev'));
 $kernel->loadClassCache();
 $kernel = new AppCache($kernel);

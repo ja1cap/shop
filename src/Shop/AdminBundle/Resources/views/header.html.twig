@@ -1,27 +1,73 @@
-<div class="header-container">
-    <div class="row header-main-row">
-        <div class="header">
-            <div class="header-logo">
-                <a href="{{ path('shop_admin') }}">
-                    <span class="image-wrapper">
-                        <img src="/img/cms-logo.png">
-                    </span>
-                    <span class="title">
-                        {#<span class="glyphicon glyphicon-cog"></span>#}
-                        {#Система управления сайтом#}
-                        Weasty - управление магазином
-                    </span>
-                </a>
-            </div>
-            {% set user_name = app.user and app.user.userName ? app.user.userName : null %}
-            {% if user_name %}
-                <div class="user-container">
-                    Привет, {{ user_name }} |
-                    <a href="{{ path('fos_user_security_logout') }}">
-                        Выйти
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-    </div>
+{% set user_name = app.user and app.user.userName ? app.user.userName : null %}
+<div class="dropdown profile-element">
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+        <span class="clear">
+            <span class="block m-t-xs">
+                <strong class="font-bold">{{ user_name }}</strong>
+            </span>
+            <span class="text-muted text-xs block">
+                Меню<b class="caret"></b>
+            </span>
+        </span>
+    </a>
+    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+        <li>
+            <a href="{{ path('fos_user_security_logout') }}">
+                Выйти
+            </a>
+        </li>
+    </ul>
 </div>
+{#<div class="logo-element">#}
+    {#Weasty#}
+{#</div>#}
+{#<header class="main-header">#}
+    {#<a href="{{ path('shop_admin') }}" class="logo">#}
+        {#&#123;&#35;<span class="image-wrapper">&#35;&#125;#}
+        {#&#123;&#35;<img src="/img/cms-logo.png">&#35;&#125;#}
+        {#&#123;&#35;</span>&#35;&#125;#}
+        {#<span class="logo-title">#}
+            {#Weasty#}
+        {#</span>#}
+    {#</a>#}
+    {#<nav class="navbar navbar-static-top" role="navigation">#}
+        {#<!-- Sidebar toggle button-->#}
+        {#<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">#}
+            {#<span class="sr-only">Меню</span>#}
+            {#<span class="icon-bar"></span>#}
+            {#<span class="icon-bar"></span>#}
+            {#<span class="icon-bar"></span>#}
+        {#</a>#}
+
+        {#<div class="navbar-custom-menu">#}
+            {#<ul class="nav navbar-nav">#}
+                {#<li class="dropdown user user-menu">#}
+                    {#<!-- Menu Toggle Button -->#}
+                    {#<a href="#" class="dropdown-toggle" data-toggle="dropdown">#}
+                        {#<!-- The user image in the navbar-->#}
+                        {#&#123;&#35;<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">&#35;&#125;#}
+                        {#<!-- hidden-xs hides the username on small devices so only the image appears. -->#}
+                        {#<span class="hidden-xs">{{ user_name }}</span>#}
+                    {#</a>#}
+                    {#<ul class="dropdown-menu">#}
+                        {#<!-- The user image in the menu -->#}
+                        {#<li class="user-header">#}
+                            {#&#123;&#35;<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">&#35;&#125;#}
+                            {#<p>#}
+                                {#{{ user_name }}#}
+                            {#</p>#}
+                        {#</li>#}
+                        {#<!-- Menu Footer-->#}
+                        {#<li class="user-footer">#}
+                            {#<div class="pull-right">#}
+                                {#<a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">#}
+                                    {#Выйти#}
+                                {#</a>#}
+                            {#</div>#}
+                        {#</li>#}
+                    {#</ul>#}
+                {#</li>#}
+            {#</ul>#}
+        {#</div>#}
+    {#</nav>#}
+{#</header>#}

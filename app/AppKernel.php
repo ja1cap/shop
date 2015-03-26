@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
             new JJs\Bundle\GeonamesBundle\JJsGeonamesBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new Weasty\Bundle\ResourceBundle\WeastyResourceBundle(),
             new Weasty\Bundle\DoctrineBundle\WeastyDoctrineBundle(),
             new Weasty\Bundle\GeonamesBundle\WeastyGeonamesBundle(),

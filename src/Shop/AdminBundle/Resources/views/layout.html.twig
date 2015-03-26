@@ -9,48 +9,67 @@
 {% set _page_breadcrumb = block('page_breadcrumb') %}
 {% set _page_menu = block('page_menu') %}
 {% set _page_content = block('page_content') %}
-
 {% block body %}
-    <div class="admin-container">
-        {{ include("ShopAdminBundle::header.html.twig") }}
+    <div id="wrapper" class="admin-container">
         {% block content %}
-            <div class="row admin-main-row">
-                <div class="admin-menu-container">
-                    <div class="admin-menu-content">
-                        <ul class="admin-menu">
-                            {{ include("ShopAdminBundle:Default:menuItems.html.twig") }}
-                        </ul>
-                    </div>
+            <nav class="navbar-default navbar-static-side admin-menu-container" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="nav-header">
+                            {{ include("ShopAdminBundle::header.html.twig") }}
+                        </li>
+                        {{ include("ShopAdminBundle:Default:menuItems.html.twig") }}
+                    </ul>
                 </div>
-                <div class="admin-main-container">
-                    {% block page_container %}
-                        {% if _page_breadcrumb %}
-                            {{ _page_breadcrumb|raw }}
-                        {% else %}
-                            {% set _breadcrumbs = page_breadcrumbs() %}
-                            {% if _breadcrumbs %}
-                                <ul class="breadcrumb">
-                                    {% for breadcrumb in _breadcrumbs %}
-                                        {% if breadcrumb.title %}
-                                            <li>
-                                                <a href="{{ path(breadcrumb.routeName, breadcrumb.routeParameters) }}">
-                                                    {{ breadcrumb.title }}
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
+            </nav>
+            <div id="page-wrapper" class="gray-bg admin-main-container">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            {% if app.user %}
+                            <li>
+                                <a href="{{ path('fos_user_security_logout') }}">
+                                    <i class="fa fa-sign-out"></i> Выйти
+                                </a>
+                            </li>
                             {% endif %}
-                        {% endif %}
-                        {% if _page_header or _title %}
-                            <div class="page-header">
+                        </ul>
+                    </nav>
+                </div>
+                {% block page_container %}
+                    <div class="row wrapper border-bottom white-bg page-heading">
+                        <div class="col-lg-12">
+                            {% if _page_header or _title %}
                                 {% if _page_header %}
-                                    {{ _page_header|raw }}
+                                    <h2>{{ _page_header|raw }}</h2>
                                 {% elseif _title %}
-                                    <h3>{{ _title }}</h3>
+                                    <h2>{{ _title }}</h2>
                                 {% endif %}
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                            {% if _page_breadcrumb %}
+                                {{ _page_breadcrumb|raw }}
+                            {% else %}
+                                {% set _breadcrumbs = page_breadcrumbs() %}
+                                {% if _breadcrumbs %}
+                                    <ol class="breadcrumb">
+                                        {% for breadcrumb in _breadcrumbs %}
+                                            {% if breadcrumb.title %}
+                                                <li>
+                                                    <a href="{{ path(breadcrumb.routeName, breadcrumb.routeParameters) }}">
+                                                        {{ breadcrumb.title }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ol>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="wrapper wrapper-content">
                         {% if _page_menu and _page_menu|length %}
                             <ul class="nav nav-tabs page-menu">
                                 {{ _page_menu|raw }}
@@ -59,10 +78,10 @@
                         {% if _page_content %}
                             {{ _page_content|raw }}
                         {% else %}
-                            {{ form(form) }}
+                            {{ form(form, { 'style': 'horizontal' }) }}
                         {% endif %}
-                    {% endblock %}
-                </div>
+                    </div>
+                {% endblock %}
             </div>
         {% endblock %}
     </div>
@@ -92,16 +111,25 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {#<link rel="stylesheet" type="txt/css" href="/bundles/weastyresource/DataTables/media/css/jquery.dataTables.min.css">#}
-    {#<link rel="stylesheet" type="txt/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">#}
     <link rel="stylesheet" type="txt/css" href="/dataTables/dataTables.bootstrap.css">
+
+    <link rel="stylesheet" type="txt/css" href="/bundles/weastyadmin/inspinia/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="txt/css" href="/bundles/weastyadmin/inspinia/css/animate.css">
+    <link rel="stylesheet" type="txt/css" href="/bundles/weastyadmin/inspinia/css/style.min.css">
 {% endblock %}
 
 {% block javascripts %}
 
     <script src="/js/isotope/isotope.pkgd.min.js"></script>
 
-    {#<script src="/bundles/weastyresource/DataTables/media/js/jquery.dataTables.min.js"></script>#}
+    <!-- Mainly scripts -->
+    <script src="/bundles/weastyadmin/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/bundles/weastyadmin/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    {#<script src="/bundles/weastyadmin/inspinia/js/inspinia.js"></script>#}
+    {#<script src="/bundles/weastyadmin/inspinia/js/plugins/pace/pace.min.js"></script>#}
+
     <script src="/dataTables/jquery.dataTables.min.js"></script>
     <script src="/dataTables/dataTables.bootstrap.js"></script>
     <script src="/dataTables/jquery.dataTables.config.js"></script>

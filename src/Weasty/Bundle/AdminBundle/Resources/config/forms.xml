@@ -9,6 +9,7 @@
         <parameter key="weasty_admin.form.type.seo.class">Weasty\Bundle\AdminBundle\Form\Type\SeoType</parameter>
         <parameter key="weasty_admin.form.type.browser.class">Weasty\Bundle\AdminBundle\Form\Type\BrowserType</parameter>
         <parameter key="weasty_admin.form.type.media_image.class">Weasty\Bundle\AdminBundle\Form\Type\MediaImageType</parameter>
+        <parameter key="weasty_admin.form.type.phone.class">Weasty\Bundle\AdminBundle\Form\Type\PhoneType</parameter>
     </parameters>
 
     <services>
@@ -25,6 +26,9 @@
             <tag name="form.type" alias="weasty_admin_media_image_type" />
             <argument type="service" id="sonata.media.pool" />
             <argument>Application\Sonata\MediaBundle\Entity\Media</argument>
+        </service>
+        <service id="weasty_admin.form.type.phone" class="%weasty_admin.form.type.phone.class%">
+            <tag name="form.type" alias="weasty_admin_phone_type" />
         </service>
     </services>
 

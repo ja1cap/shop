@@ -43,29 +43,7 @@ class PhoneController extends Controller
             $phone = new Phone();
         }
 
-        $form = $this->createFormBuilder($phone)
-            ->add('countryCode', 'text', array(
-                'required' => false,
-                'label' => 'Код страны',
-            ))
-            ->add('code', 'text', array(
-                'required' => false,
-                'label' => 'Код оператора',
-            ))
-            ->add('number', 'text', array(
-                'required' => true,
-                'label' => 'Номер',
-            ))
-//            ->add('icon', 'sonata_media_type', array(
-//                'provider' => 'sonata.media.provider.image',
-//                'context'  => 'icon',
-//                'label' => 'Иконка',
-//                'required' => false,
-//            ))
-            ->add('save', 'submit', array(
-                'label' => 'Сохранить',
-            ))
-            ->getForm();
+        $form = $this->createForm('weasty_admin_phone_type', $phone);
 
         $form->handleRequest($request);
 

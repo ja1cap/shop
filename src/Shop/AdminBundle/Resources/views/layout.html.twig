@@ -9,6 +9,13 @@
 {% set _page_breadcrumb = block('page_breadcrumb') %}
 {% set _page_menu = block('page_menu') %}
 {% set _page_content = block('page_content') %}
+
+{% block body_wrapper %}
+    <body class="admin-panel fixed-sidebar">
+    {{ block('body') }}
+    </body>
+{% endblock %}
+
 {% block body %}
     <div id="wrapper" class="admin-container">
         {% block content %}
@@ -69,7 +76,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="wrapper wrapper-content">
+                    <div class="wrapper wrapper-content {#animated fadeInRight#}">
                         {% if _page_menu and _page_menu|length %}
                             <ul class="nav nav-tabs page-menu">
                                 {{ _page_menu|raw }}
@@ -128,11 +135,14 @@
 
     <!-- Custom and plugin javascript -->
     {#<script src="/bundles/weastyadmin/inspinia/js/inspinia.js"></script>#}
-    {#<script src="/bundles/weastyadmin/inspinia/js/plugins/pace/pace.min.js"></script>#}
+    <script src="/bundles/weastyadmin/inspinia/js/plugins/pace/pace.min.js"></script>
 
     <script src="/dataTables/jquery.dataTables.min.js"></script>
     <script src="/dataTables/dataTables.bootstrap.js"></script>
     <script src="/dataTables/jquery.dataTables.config.js"></script>
 
     {{ parent() }}
+
+    <script src="/bundles/shopadmin/js/jquery.admin.js"></script>
+
 {% endblock %}

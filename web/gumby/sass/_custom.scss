@@ -6,12 +6,6 @@
 
 body {
 
-  a {
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
   ul, ol {
     padding: 0;
   }
@@ -48,13 +42,6 @@ body {
     top: 0;
     width: 100%;
     background: url("/img/ajax-loader.gif") no-repeat center #ffffff;
-  }
-  .pull-left {
-    float: left;
-  }
-
-  .pull-right {
-    float: right;
   }
 
   .browser-items-form-element {
@@ -1586,6 +1573,28 @@ body {
   }
 
 
+}
+
+body.admin-panel {
+
+  background: #2f4050;
+  color: #676a6c;
+
+  .form-horizontal  {
+
+    &>div {
+      &>.form-group {
+
+        &>.radio, &>.checkbox {
+          padding: 0 15px;
+          width: 83.33333%;
+          margin-left: 16.66667%;
+        }
+
+      }
+    }
+
+  }
 }
 
 .dark-fancybox {

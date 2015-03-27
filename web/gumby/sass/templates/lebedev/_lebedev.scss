@@ -11,6 +11,18 @@
 
 body {
 
+  a {
+
+    color: $body-font-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: $body-link-hover-color;
+    }
+
+  }
+
   img {
     vertical-align: middle;
   }

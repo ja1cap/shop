@@ -83,9 +83,11 @@
 
         {% block head %}{% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+    {% block body_wrapper %}
+        <body>
+            {% block body %}{% endblock %}
+        </body>
+    {% endblock %}
+    {% block javascripts %}{% endblock %}
     <script type="text/javascript" src="/js/jquery.base.js"></script>
 </html>

@@ -2,36 +2,6 @@ $(function(){
 
     var $body = $('body');
 
-    function SmoothlyMenu() {
-        if (!$body.hasClass('mini-navbar') || $body.hasClass('body-small')) {
-            // Hide menu in order to smoothly turn on when maximize menu
-            $('#side-menu').hide();
-            // For smoothly turn on menu
-            setTimeout(
-                function () {
-                    $('#side-menu').fadeIn(500);
-                }, 100);
-        } else if ($body.hasClass('fixed-sidebar')){
-            $('#side-menu').hide();
-            setTimeout(
-                function () {
-                    $('#side-menu').fadeIn(500);
-                }, 300);
-        } else {
-            // Remove all inline style from jquery fadeIn function to reset menu state
-            $('#side-menu').removeAttr('style');
-        }
-    }
-
-    // MetsiMenu
-    $('#side-menu').metisMenu();
-
-    // minimalize menu
-    $('.navbar-minimalize').click(function () {
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-    });
-
     $(document).on('click', '.dialog-close-btn', function(e){
         e.preventDefault();
         $(this).closest('.ui-dialog-content').dialog('close');

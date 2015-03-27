@@ -7,6 +7,7 @@ use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Weasty\Doctrine\Entity\EntityInterface;
+use Weasty\Doctrine\Mapper\AbstractEntityMapper;
 
 /**
  * Class DefaultController
@@ -18,16 +19,30 @@ class DefaultController extends Controller
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws ORMException
+     * @throws \Exception
      */
     public function indexAction(Request $request)
     {
 
         $repository = $this->getRepository($request);
+        $repositoryRetrieveMethod = $request->get('_repository_retrieve_method');
 
-        //@TODO add $criteria and $orderBy
-        $criteria = [];
-        $orderBy = [];
-        $entities = $repository->findBy($criteria, $orderBy);
+        if($repositoryRetrieveMethod){
+
+            if(!method_exists($repository, $repositoryRetrieveMethod)){
+                throw new \Exception(sprintf('%s repository does not have %s method', $repository->getClassName(), $repositoryRetrieveMethod));
+            }
+
+            $entities = call_user_func(array($repository, $repositoryRetrieveMethod));
+
+        } else {
+
+            $criteria = json_decode($request->get('_repository_retrieve_criteria'), true)?:[];
+            $orderBy = json_decode($request->get('_repository_retrieve_order'), true)?:[];
+            $entities = $repository->findBy($criteria, $orderBy);
+
+        }
 
         $view = $request->get('_view', 'WeastyAdminBundle:Default:index.html.twig');
         $viewParameters = [
@@ -53,7 +68,8 @@ class DefaultController extends Controller
             throw new ORMException(sprintf('Entity mast be instance of \Weasty\Doctrine\Entity\EntityInterface'), 500);
         }
 
-        $form = $this->createEntityForm($request, $entity);
+        $mapper = $this->createEntityFormMapper($request, $entity);
+        $form = $this->createEntityForm($request, $mapper);
 
         $form->handleRequest($request);
 
@@ -105,7 +121,8 @@ class DefaultController extends Controller
             throw new ORMException(sprintf('Entity mast be instance of \Weasty\Doctrine\Entity\EntityInterface'), 500);
         }
 
-        $form = $this->createEntityForm($request, $entity);
+        $mapper = $this->createEntityFormMapper($request, $entity);
+        $form = $this->createEntityForm($request, $mapper);
 
         $form->handleRequest($request);
 
@@ -164,14 +181,34 @@ class DefaultController extends Controller
 
     /**
      * @param Request $request
-     * @param $entity
+     * @param $data
      * @return \Symfony\Component\Form\Form
      */
-    protected function createEntityForm(Request $request, $entity){
+    protected function createEntityForm(Request $request, $data){
 
         $formType = $request->get('_form_type');
-        return $this->createForm($formType, $entity);
+        return $this->createForm($formType, $data);
 
+    }
+
+    /**
+     * @param Request $request
+     * @param $entity
+     * @return AbstractEntityMapper|EntityInterface
+     * @throws ORMException
+     */
+    protected function createEntityFormMapper(Request $request, $entity){
+        if($request->get('_form_mapper_service')){
+            $mapperServiceId = $request->get('_form_mapper_service');
+            $mapper = $this->get($mapperServiceId);
+            if(!$mapper instanceof AbstractEntityMapper){
+                throw new ORMException(sprintf("Service is not valid entity mapper %s", $mapperServiceId), 500);
+            }
+            $mapper->setEntity($entity);
+            return $mapper;
+        } else {
+            return $entity;
+        }
     }
 
     /**

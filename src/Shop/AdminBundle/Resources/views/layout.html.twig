@@ -5,16 +5,12 @@
     {% block title %}{{ (title is defined and title ? title : page_title())|default('Система управления магазином') }}{% endblock %}
 {% endif %}
 
+{% set _body_class = 'admin-panel fixed-sidebar' %}
+
 {% set _page_header = block('page_header') %}
 {% set _page_breadcrumb = block('page_breadcrumb') %}
 {% set _page_menu = block('page_menu') %}
 {% set _page_content = block('page_content') %}
-
-{% block body_wrapper %}
-    <body class="admin-panel fixed-sidebar">
-    {{ block('body') }}
-    </body>
-{% endblock %}
 
 {% block body %}
     <div id="wrapper" class="admin-container">

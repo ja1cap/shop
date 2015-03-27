@@ -84,7 +84,7 @@
         {% block head %}{% endblock %}
     </head>
     {% block body_wrapper %}
-        <body>
+        <body class="{{ _body_class is defined ? _body_class : '' }}">
             {% block body %}{% endblock %}
         </body>
     {% endblock %}

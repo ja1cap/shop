@@ -1277,21 +1277,6 @@ body {
 
     }
 
-    .login-form-container {
-
-      margin-top: 50px;
-      margin-bottom: 50px;
-
-      form {
-
-        input[type='submit']{
-          width: 100%;
-        }
-
-      }
-
-    }
-
     form {
 
       textarea.maxlength {
@@ -1580,6 +1565,10 @@ body.admin-panel {
   background: #2f4050;
   color: #676a6c;
 
+  &.gray-bg {
+    background-color: #f3f3f4;
+  }
+
   .form-horizontal  {
 
     &>div {
@@ -1595,6 +1584,20 @@ body.admin-panel {
     }
 
   }
+
+  .loginscreen.middle-box {
+    width: 600px;
+    margin-left: -300px;
+    margin-top: -330px;
+
+    form {
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+  }
+
 }
 
 .dark-fancybox {

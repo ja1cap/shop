@@ -1,75 +1,117 @@
-{#{% for role in app.user.roles %}#}
-    {#{{ role }}#}
-{#{% endfor %}#}
 {% if is_granted('ROLE_MANAGER') %}
     <li class="{{ app.request.get('_route') == 'orders' ? 'active' : '' }}">
         <a href="{{ path('orders') }}" class="">
-            Заказы
+            <i class="fa fa-shopping-cart"></i>
+            <span class="nav-label">Заказы</span>
         </a>
     </li>
 {% endif %}
 {% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
     <li class="{{ is_active_nav_item('admin_catalog') ? 'active' : '' }}">
         <a href="{{ path('admin_catalog') }}" class="">
-            Каталог
+            <i class="fa fa-cubes"></i>
+            <span class="nav-label">{{ 'shop.catalog'|trans([],'ShopCatalogBundle') }}</span>
         </a>
+        <ul class="nav nav-second-level">
+            <li class="{{ is_active_nav_item('admin_catalog_categories') or app.request.get('_route') == 'admin_catalog' ? 'active' : '' }}">
+                <a href="{{ path('admin_catalog_categories') }}">
+                    Категории
+                </a>
+            </li>
+            <li class="{{ is_active_nav_item('parameters') ? 'active' : '' }}">
+                <a href="{{ path('parameters') }}">
+                    Параметры товаров
+                </a>
+            </li>
+            {#<li class="{{ is_active_nav_item('proposal_collections') ? 'active' : '' }}">#}
+                {#<a href="{{ path('proposal_collections') }}">#}
+                    {#Коллекции#}
+                {#</a>#}
+            {#</li>#}
+            <li class="{{ is_active_nav_item('admin_catalog_price_lists') ? 'active' : '' }}">
+                <a href="{{ path('admin_catalog_price_lists') }}">
+                    Прайс-листы
+                </a>
+            </li>
+            <li class="{{ is_active_nav_item('admin_catalog_manufacturers') ? 'active' : '' }}">
+                <a href="{{ path('admin_catalog_manufacturers') }}">
+                    Производители
+                </a>
+            </li>
+            <li class="{{ is_active_nav_item('contractors') ? 'active' : '' }}">
+                <a href="{{ path('contractors') }}">
+                    Контрагенты
+                </a>
+            </li>
+        </ul>
     </li>
 {% endif %}
 {% if is_granted(['ROLE_ADMIN']) %}
     <li class="{{ is_active_nav_item('shop_discount_admin_actions') ? 'active' : '' }}">
         <a href="{{ path('shop_discount_admin_actions') }}" class="">
-            Акции
+            <i class="fa fa-bolt"></i>
+            <span class="nav-label">Акции</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('weasty_ad_admin_banners') ? 'active' : '' }}">
         <a href="{{ path('weasty_ad_admin_banners') }}" class="">
-            Баннеры
+            <i class="fa fa-picture-o"></i>
+            <span class="nav-label">Баннеры</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('weasty_money_currency_rates') ? 'active' : '' }}">
         <a href="{{ path('weasty_money_currency_rates') }}" class="">
-            Курсы валют
+            <i class="fa fa-money"></i>
+            <span class="nav-label">{{ 'weasty.money.currency_rates'|trans([],'WeastyMoneyBundle') }}</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('shipping_methods') ? 'active' : '' }}">
         <a href="{{ path('shipping_methods') }}" class="">
-            Способы доставки
+            <i class="fa fa-truck"></i>
+            <span class="nav-label">{{ 'shop.shipping.methods'|trans([],'ShopShippingBundle') }}</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('benefits') ? 'active' : '' }}">
         <a href="{{ path('benefits') }}" class="">
-            Преимущества
+            <i class="fa fa-trophy"></i>
+            <span class="nav-label">Преимущества</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('reviews') ? 'active' : '' }}">
         <a href="{{ path('reviews') }}" class="">
-            Отзывы клиентов
+            <i class="fa fa-comments-o"></i>
+            <span class="nav-label">Отзывы клиентов</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('weasty_news_admin_posts') ? 'active' : '' }}">
         <a href="{{ path('weasty_news_admin_posts') }}" class="">
-            Новости
+            <i class="fa fa-newspaper-o"></i>
+            <span class="nav-label">{{ 'weasty.news'|trans([],'WeastyNewsBundle') }}</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('shop_admin_contacts') ? 'active' : '' }}">
         <a href="{{ path('shop_admin_contacts') }}" class="">
-            Контакты
+            <i class="fa fa-phone"></i>
+            <span class="nav-label">Контакты</span>
         </a>
     </li>
 
     <li class="{{ is_active_nav_item('mail_templates') ? 'active' : '' }}">
         <a href="{{ path('mail_templates') }}" class="">
-            Почта
+            <i class="fa fa-envelope"></i>
+            <span class="nav-label">Почта</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('settings') ? 'active' : '' }}">
         <a href="{{ path('settings') }}" class="">
-            Настройки
+            <i class="fa fa-cogs"></i>
+            <span class="nav-label">Настройки</span>
         </a>
     </li>
     <li class="{{ is_active_nav_item('admin_users') ? 'active' : '' }}">
         <a href="{{ path('admin_users') }}" class="">
-            Пользователи
+            <i class="fa fa-users"></i>
+            <span class="nav-label">Пользователи</span>
         </a>
     </li>
 {% endif %}

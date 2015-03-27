@@ -1,5 +1,88 @@
 {% extends "WeastyAdminBundle::layout.html.twig" %}
 
+{% block entity_block_buttons %}
+    <div class="btn-group">
+        {% block edit_button %}
+            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="btn btn-default btn-sm">
+                Изменить
+            </a>
+        {% endblock %}
+        {% block delete_button %}
+            <a href="{{ path(delete_route, {'id' : entity.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-sm">
+                Удалить
+            </a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block entity_block_row %}
+{% spaceless %}
+    <td>
+        {{ entity.id }}
+    </td>
+
+    {% if _entity_name %}
+        <td>
+            {% if edit_route %}
+                <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="primary-link">
+                    {{ _entity_name }}
+                </a>
+            {% else %}
+                {{ _entity_name }}
+            {% endif %}
+        </td>
+    {% else %}
+        <td>
+            -
+        </td>
+    {% endif %}
+
+    {% if _entity_description %}
+        <td>
+            {{ _entity_description|nl2br }}
+        </td>
+    {% else %}
+        <td>
+            -
+        </td>
+    {% endif %}
+
+    <td>
+        {{ block('entity_block_buttons') }}
+    </td>
+{% endspaceless %}
+{% endblock %}
+
+{% block entity_block %}
+{% spaceless %}
+    {% if entity.title is defined %}
+        {% set _entity_name = entity.title %}
+    {% elseif entity.name is defined %}
+        {% set _entity_name = entity.name %}
+    {% else %}
+        {% set _entity_name = null %}
+    {% endif %}
+
+    {% if entity.description is defined %}
+        {% set _entity_description = entity.description %}
+    {% else %}
+        {% set _entity_description = null %}
+    {% endif %}
+
+    {% if edit_route is not defined %}
+        {% set edit_route = app.request.get('_edit_route') %}
+    {% endif %}
+
+    {% if delete_route is not defined %}
+        {% set delete_route = app.request.get('_delete_route') %}
+    {% endif %}
+
+    <tr>
+        {{ block('entity_block_row') }}
+    </tr>
+{% endspaceless %}
+{% endblock %}
+
 {% block weasty_admin_content %}
 
     {% block add_button %}
@@ -14,103 +97,20 @@
         {% if entities %}
             <div>
                 <table class="entities-table">
-                    <colgroup>
-                        <col style="width: 5%">
-                        <col style="width: 30%">
-                        <col style="width: 40%">
-                        <col style="width: 25%">
-                    </colgroup>
                     <thead>
+                    {% block entities_thead %}
                     <tr>
                         <th>#</th>
                         <th>Название</th>
                         <th>Описание</th>
                         <th></th>
                     </tr>
+                    {% endblock %}
                     </thead>
                     <tbody>
-
                     {% for entity in entities %}
-
-                        {% block entity_block %}
-
-                            {% if entity.title is defined %}
-                                {% set _entity_name = entity.title %}
-                            {% elseif entity.name is defined %}
-                                {% set _entity_name = entity.title %}
-                            {% else %}
-                                {% set _entity_name = null %}
-                            {% endif %}
-
-                            {% if entity.description is defined %}
-                                {% set _entity_description = entity.description %}
-                            {% else %}
-                                {% set _entity_description = null %}
-                            {% endif %}
-
-                            {% if edit_route is not defined %}
-                                {% set edit_route = app.request.get('_edit_route') %}
-                            {% endif %}
-
-                            {% if delete_route is not defined %}
-                                {% set delete_route = app.request.get('_delete_route') %}
-                            {% endif %}
-
-                            <tr>
-
-                                <td>
-                                    {{ entity.id }}
-                                </td>
-
-                                {% if _entity_name %}
-                                    <td>
-                                        {% if edit_route %}
-                                            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="primary-link">
-                                                {{ _entity_name }}
-                                            </a>
-                                        {% else %}
-                                            {{ _entity_name }}
-                                        {% endif %}
-                                    </td>
-                                {% else %}
-                                    <td>
-                                        -
-                                    </td>
-                                {% endif %}
-
-                                {% if _entity_description %}
-                                    <td>
-                                        {{ _entity_description|nl2br }}
-                                    </td>
-                                {% else %}
-                                    <td>
-                                        -
-                                    </td>
-                                {% endif %}
-
-                                <td>
-
-                                    <div class="btn-group">
-                                        {% block edit_button %}
-                                            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="btn btn-default btn-sm">
-                                                Изменить
-                                            </a>
-                                        {% endblock %}
-                                        {% block delete_button %}
-                                            <a href="{{ path(delete_route, {'id' : entity.id}) }}" onclick="return confirm('Вы уверены, что хотите удалить?')" class="btn btn-danger btn-sm">
-                                                Удалить
-                                            </a>
-                                        {% endblock %}
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        {% endblock %}
-
+                        {{ block('entity_block') }}
                     {% endfor %}
-
                     </tbody>
                 </table>
             </div>

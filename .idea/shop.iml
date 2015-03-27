@@ -4,6 +4,14 @@
     <option name="compassConfigPath" value="$MODULE_DIR$/web/gumby/config.rb" />
     <option name="compassExecutableFilePath" value="/usr/bin/compass" />
     <option name="compassSupportEnabled" value="true" />
+    <option name="importPaths">
+      <list>
+        <option value="$MODULE_DIR$/web/gumby/sass/extensions/modular-scale/stylesheets" />
+        <option value="$USER_HOME$/.rvm/gems/ruby-2.1.1/gems/compass-0.12.7/frameworks/blueprint/stylesheets" />
+        <option value="$USER_HOME$/.rvm/gems/ruby-2.1.1/gems/compass-0.12.7/frameworks/compass/stylesheets" />
+        <option value="$MODULE_DIR$/web/gumby/sass/extensions/sassy-math/lib/../stylesheets" />
+      </list>
+    </option>
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../../lib/gems/1.9.1/gems/compass-0.12.2" />

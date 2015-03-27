@@ -81,6 +81,8 @@
     <route id="category_parameter" pattern="/adminCatalog/categoryParameter/{categoryId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:parameter</default>
         <default key="id">null</default>
+        <option key="title">shop.category.parameter</option>
+        <option key="parent">category_parameters</option>
     </route>
     <route id="delete_category_parameter" pattern="/adminCatalog/deleteCategoryParameter/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategoryParameter:deleteParameter</default>
@@ -91,6 +93,8 @@
     <route id="category_parameter_group" pattern="/adminCatalog/categoryParameterGroup/{categoryId}/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:categoryParameterGroup</default>
         <default key="id">null</default>
+        <option key="title">shop.category.parameter_group</option>
+        <option key="parent">category_parameters</option>
     </route>
     <route id="delete_category_parameter_group" pattern="/adminCatalog/deleteCategoryParameterGroup/{id}">
         <default key="_controller">ShopCatalogBundle:AdminCategory:deleteCategoryParameterGroup</default>

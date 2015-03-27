@@ -2055,8 +2055,6 @@ body .admin-container .primary-note .icon-box { position: absolute; margin-top: 
 body .admin-container .primary-note .icon-drag { position: absolute; left: 0; top: 0; width: 80px; height: 80px; background: url("/img/packed-1.png") -350px -2357px no-repeat; }
 body .admin-container .dashboard .tiles li { padding-bottom: 2%; }
 body .admin-container .dashboard .tiles li > a { text-align: center; color: white; font-size: 20px; line-height: 160px; background: #3085d6; display: block; }
-body .admin-container .login-form-container { margin-top: 50px; margin-bottom: 50px; }
-body .admin-container .login-form-container form input[type='submit'] { width: 100%; }
 body .admin-container form textarea.maxlength { margin-bottom: 0; }
 body .admin-container form .maxlength-feedback { display: block; margin: 0 0 10px; }
 body .admin-container form .cke { margin-bottom: 10px; }
@@ -2101,7 +2099,10 @@ body .fancybox-nav.fancybox-next { right: -45px; }
 body .fancybox-nav.fancybox-next span { background-position: -395px -428px; }
 
 body.admin-panel { background: #2f4050; color: #676a6c; }
+body.admin-panel.gray-bg { background-color: #f3f3f4; }
 body.admin-panel .form-horizontal > div > .form-group > .radio, body.admin-panel .form-horizontal > div > .form-group > .checkbox { padding: 0 15px; width: 83.33333%; margin-left: 16.66667%; }
+body.admin-panel .loginscreen.middle-box { width: 600px; margin-left: -300px; margin-top: -330px; }
+body.admin-panel .loginscreen.middle-box form { width: 300px; margin-left: auto; margin-right: auto; }
 
 .dark-fancybox .fancybox-close { width: 25px; height: 25px; right: 20px; top: 20px; background: url("/img/sprite.png") no-repeat -9px -265px; }
 .dark-fancybox .fancybox-nav { top: 305px; margin-top: 0; }

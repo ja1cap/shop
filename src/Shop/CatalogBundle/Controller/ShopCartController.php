@@ -201,7 +201,7 @@ class ShopCartController extends Controller
     protected function sendEmail($customerName, $customerPhone, $customerEmail, $customerComment, $orderInformation){
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          * @var $contacts \Shop\MainBundle\Data\ShopContactsResource
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();

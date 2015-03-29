@@ -28,7 +28,7 @@ class AdminPopularProposalController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 

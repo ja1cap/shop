@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="ru" datatype="plaintext" original="WeastyAdminBundle.en.xliff">
+        <body>
+            <trans-unit id="weasty.admin.settings">
+                <source>weasty.admin.settings</source>
+                <target>Настройки</target>
+            </trans-unit>
+            <trans-unit id="weasty.admin.settings.general">
+                <source>weasty.admin.settings.general</source>
+                <target>Основные</target>
+            </trans-unit>
+            <trans-unit id="weasty.admin.phones">
+                <source>weasty.admin.phones</source>
+                <target>Телефоны</target>
+            </trans-unit>
+            <trans-unit id="weasty.admin.phones.add">
+                <source>weasty.admin.phones.add</source>
+                <target>Добавление телефона</target>
+            </trans-unit>
+            <trans-unit id="weasty.admin.phones.edit">
+                <source>weasty.admin.phones.edit</source>
+                <target>Изменение телефона</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

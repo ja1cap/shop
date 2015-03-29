@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Weasty\Bundle\CommonBundle\Entity\Settings">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="name" type="string" nullable="true"/>
+
+        <field name="title" type="string" nullable="true"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="keywords" type="text" nullable="true"/>
+
+        <field name="email" type="text" nullable="true"/>
+
+        <field name="customer_email_template" type="text" nullable="true"/>
+        <field name="admin_email" type="string" nullable="true"/>
+        <field name="admin_email_template" type="text" nullable="true"/>
+        <field name="manager_email" type="string" nullable="true"/>
+        <field name="manager_email_template" type="text" nullable="true"/>
+
+        <field name="mailer_host" type="string" nullable="true"/>
+        <field name="mailer_port" type="string" nullable="true"/>
+        <field name="mailer_user" type="string" nullable="true"/>
+        <field name="mailer_password" type="string" nullable="true"/>
+
+        <field name="vk_url" type="string" nullable="true"/>
+        <field name="fb_url" type="string" nullable="true"/>
+        <field name="google_url" type="string" nullable="true"/>
+
+        <field name="template_version" type="integer" length="2" column-definition="integer(2) NOT NULL DEFAULT 1"/>
+
+        <one-to-one field="logo" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="logoId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
+
+        <one-to-one field="favicon" target-entity="Application\Sonata\MediaBundle\Entity\Media">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-columns>
+                <join-column name="faviconId" referenced-column-name="id" on-delete="SET NULL"/>
+            </join-columns>
+        </one-to-one>
+
+    </entity>
+</doctrine-mapping>

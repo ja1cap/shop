@@ -117,9 +117,10 @@
             <script>
                 $(function(){
 
-                    $('.entities-table').dataTable({
+                    var $entitiesTable = $('.entities-table');
+                    $entitiesTable.dataTable({
                         "columnDefs": [
-                            { "orderable": false, "targets": 3 }
+                            { "orderable": false, "targets": $entitiesTable.find('.btn-group:eq(0)').index() }
                         ]
                     });
 

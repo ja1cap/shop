@@ -24,7 +24,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -145,7 +145,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -250,7 +250,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -386,7 +386,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -507,7 +507,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -701,7 +701,7 @@ class AdminController extends Controller
     public function mailTemplatesAction(Request $request){
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 
@@ -763,7 +763,7 @@ class AdminController extends Controller
     {
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 

@@ -1,0 +1,21 @@
+{% extends "WeastyAdminBundle:Default:index.html.twig" %}
+
+{% block entities_thead %}
+    <tr>
+        <th>Номер</th>
+        <th></th>
+    </tr>
+{% endblock %}
+
+{% block entity_block_row %}
+    {% spaceless %}
+        <td>
+            <a href="{{ path(edit_route, {'id' : entity.id}) }}" class="primary-link">
+                {{ _entity_name }}
+            </a>
+        </td>
+        <td>
+            {{ block('entity_block_buttons') }}
+        </td>
+    {% endspaceless %}
+{% endblock %}

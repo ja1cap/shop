@@ -83,7 +83,4 @@
     <route id="mail_templates" pattern="/admin/mailTemplates">
         <default key="_controller">ShopMainBundle:Admin:mailTemplates</default>
     </route>
-    <route id="settings" pattern="/admin/settings">
-        <default key="_controller">ShopMainBundle:Admin:settings</default>
-    </route>
 </routes>

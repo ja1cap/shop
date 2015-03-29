@@ -199,10 +199,10 @@ class DefaultController extends Controller
      */
     protected function createEntityFormMapper(Request $request, $entity){
         if($request->get('_form_mapper_service')){
-            $mapperServiceId = $request->get('_form_mapper_service');
-            $mapper = $this->get($mapperServiceId);
+            $mapperServiceKey = $request->get('_form_mapper_service');
+            $mapper = $this->get($mapperServiceKey);
             if(!$mapper instanceof AbstractEntityMapper){
-                throw new ORMException(sprintf("Service is not valid entity mapper %s", $mapperServiceId), 500);
+                throw new ORMException(sprintf("Service is not valid entity mapper %s", $mapperServiceKey), 500);
             }
             $mapper->setEntity($entity);
             return $mapper;
@@ -218,10 +218,11 @@ class DefaultController extends Controller
      */
     protected function getRepository(Request $request){
 
-        $repositoryServiceId = $request->get('_repository_service');
-        $repository = $this->get($repositoryServiceId);
+        $repositoryServiceKey = $request->get('_repository_service');
+
+        $repository = $this->get($repositoryServiceKey);
         if(!$repository instanceof ObjectRepository){
-            throw new ORMException(sprintf("Service is not valid entity repository %s", $repositoryServiceId), 500);
+            throw new ORMException(sprintf("Service is not valid entity repository %s", $repositoryServiceKey), 500);
         }
 
         return $repository;

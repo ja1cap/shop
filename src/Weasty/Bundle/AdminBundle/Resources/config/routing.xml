@@ -4,7 +4,47 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="weasty_admin_homepage" pattern="/hello/{name}">
-        <default key="_controller">WeastyAdminBundle:Default:index</default>
+    <route id="weasty_admin_settings" pattern="/admin/settings">
+        <!-- @TODO move settings controller to WeastyAdminBundle-->
+        <option key="title">weasty.admin.settings</option>
+        <default key="_controller">ShopMainBundle:Admin:settings</default>
     </route>
+
+    <route id="weasty_admin_phones" pattern="/admin/phones">
+        <option key="title">weasty.admin.phones</option>
+        <option key="parent">weasty_admin_settings</option>
+        <default key="_controller">WeastyAdminBundle:Default:index</default>
+        <default key="_view">WeastyAdminBundle:Phone:phones.html.twig</default>
+        <default key="_repository_service">weasty_common.phone.repository</default>
+        <default key="_add_route">weasty_admin_phones_add</default>
+        <default key="_edit_route">weasty_admin_phones_edit</default>
+        <default key="_delete_route">weasty_admin_phones_delete</default>
+    </route>
+
+    <route id="weasty_admin_phones_add" pattern="/admin/phones/add">
+        <option key="title">weasty.admin.phones.add</option>
+        <option key="resourceKey">entity</option>
+        <option key="parent">weasty_admin_phones</option>
+        <default key="_controller">WeastyAdminBundle:Default:add</default>
+        <default key="_repository_service">weasty_common.phone.repository</default>
+        <default key="_form_type">weasty_admin_phone_type</default>
+        <default key="_redirect_route">weasty_admin_phones</default>
+    </route>
+
+    <route id="weasty_admin_phones_edit" pattern="/admin/phones/edit/{id}">
+        <option key="title">weasty.admin.phones.edit</option>
+        <option key="resourceKey">entity</option>
+        <option key="parent">weasty_admin_phones</option>
+        <default key="_controller">WeastyAdminBundle:Default:edit</default>
+        <default key="_repository_service">weasty_common.phone.repository</default>
+        <default key="_form_type">weasty_admin_phone_type</default>
+        <default key="_redirect_route">weasty_admin_phones</default>
+    </route>
+
+    <route id="weasty_admin_phones_delete" pattern="/admin/phones/delete/{id}">
+        <default key="_controller">WeastyAdminBundle:Default:delete</default>
+        <default key="_repository_service">weasty_common.phone.repository</default>
+        <default key="_redirect_route">weasty_admin_phones</default>
+    </route>
+
 </routes>

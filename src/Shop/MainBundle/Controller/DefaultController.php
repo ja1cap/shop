@@ -3,7 +3,7 @@
 namespace Shop\MainBundle\Controller;
 
 use Shop\MainBundle\Entity\Address;
-use Shop\MainBundle\Entity\Settings;
+use Weasty\Bundle\CommonBundle\Entity\Settings;
 use Sonata\MediaBundle\Model\MediaInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -180,7 +180,7 @@ class DefaultController extends Controller
     protected function sendEmail(Request $request){
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          * @var $contacts \Shop\MainBundle\Data\ShopContactsResource
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();

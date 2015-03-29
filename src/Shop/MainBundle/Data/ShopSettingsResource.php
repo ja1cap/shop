@@ -2,7 +2,7 @@
 namespace Shop\MainBundle\Data;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Shop\MainBundle\Entity\Settings;
+use Weasty\Bundle\CommonBundle\Entity\Settings;
 
 /**
  * Class ShopSettingsResource

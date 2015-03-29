@@ -21,17 +21,6 @@
         <default key="_controller">ShopAdminBundle:Address:deleteAddress</default>
     </route>
 
-    <route id="shop_admin_phones" pattern="/admin/phones">
-        <default key="_controller">ShopAdminBundle:Phone:phones</default>
-    </route>
-    <route id="shop_admin_phone" pattern="/admin/phone/{id}">
-        <default key="_controller">ShopAdminBundle:Phone:phone</default>
-        <default key="id">null</default>
-    </route>
-    <route id="shop_admin_delete_phone" pattern="/admin/deletePhone/{id}">
-        <default key="_controller">ShopAdminBundle:Phone:deletePhone</default>
-    </route>
-
     <route id="shop_admin_media_browser" pattern="/admin/media/browser">
         <default key="_sonata_admin">sonata.media.admin.media</default>
         <default key="_controller">CoopTilleulsCKEditorSonataMediaBundle:MediaAdmin:browser</default>

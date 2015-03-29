@@ -1,6 +1,6 @@
 {% if is_granted('ROLE_MANAGER') %}
     <li class="{{ app.request.get('_route') == 'orders' ? 'active' : '' }}">
-        <a href="{{ path('orders') }}" class="">
+        <a href="{{ path('orders') }}">
             <i class="fa fa-shopping-cart"></i>
             <span class="nav-label">Заказы</span>
         </a>
@@ -8,7 +8,7 @@
 {% endif %}
 {% if is_granted(['ROLE_CATALOG_ADMIN', 'ROLE_ADMIN']) %}
     <li class="{{ is_active_nav_item('admin_catalog') ? 'active' : '' }}">
-        <a href="{{ path('admin_catalog') }}" class="">
+        <a href="{{ path('admin_catalog') }}">
             <i class="fa fa-cubes"></i>
             <span class="nav-label">{{ 'shop.catalog'|trans([],'ShopCatalogBundle') }}</span>
         </a>
@@ -89,24 +89,35 @@
             <span class="nav-label">{{ 'weasty.news'|trans([],'WeastyNewsBundle') }}</span>
         </a>
     </li>
-    <li class="{{ is_active_nav_item('shop_admin_contacts') ? 'active' : '' }}">
-        <a href="{{ path('shop_admin_contacts') }}" class="">
-            <i class="fa fa-phone"></i>
-            <span class="nav-label">Контакты</span>
-        </a>
-    </li>
-
-    <li class="{{ is_active_nav_item('mail_templates') ? 'active' : '' }}">
-        <a href="{{ path('mail_templates') }}" class="">
-            <i class="fa fa-envelope"></i>
-            <span class="nav-label">Почта</span>
-        </a>
-    </li>
-    <li class="{{ is_active_nav_item('settings') ? 'active' : '' }}">
-        <a href="{{ path('settings') }}" class="">
+    <li class="{{ is_active_nav_item('weasty_admin_settings') ? 'active' : '' }}">
+        <a href="{{ path('weasty_admin_settings') }}" class="">
             <i class="fa fa-cogs"></i>
-            <span class="nav-label">Настройки</span>
+            <span class="nav-label">{{ 'weasty.admin.settings'|trans([],'WeastyAdminBundle') }}</span>
         </a>
+        <ul class="nav nav-second-level">
+            {#@TODO create weasty_admin_settings_general route #}
+            <li class="{{ is_active_nav_item('weasty_admin_settings') ? 'active' : '' }}">
+                <a href="{{ path('weasty_admin_settings') }}" class="">
+                    {{ 'weasty.admin.settings.general'|trans([],'WeastyAdminBundle') }}
+                </a>
+            </li>
+            <li class="{{ is_active_nav_item('weasty_admin_phones') ? 'active' : '' }}">
+                <a href="{{ path('weasty_admin_phones') }}">
+                    {{ 'weasty.admin.phones'|trans([],'WeastyAdminBundle') }}
+                </a>
+            </li>
+            {#@TODO separate shop_admin_contacts #}
+            <li class="{{ is_active_nav_item('shop_admin_contacts') ? 'active' : '' }}">
+                <a href="{{ path('shop_admin_contacts') }}" class="">
+                    Контакты
+                </a>
+            </li>
+            <li class="{{ is_active_nav_item('mail_templates') ? 'active' : '' }}">
+                <a href="{{ path('mail_templates') }}" class="">
+                    Почта
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="{{ is_active_nav_item('admin_users') ? 'active' : '' }}">
         <a href="{{ path('admin_users') }}" class="">

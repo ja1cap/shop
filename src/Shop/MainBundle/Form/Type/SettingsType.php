@@ -58,54 +58,18 @@ class SettingsType extends AbstractType {
                     'data-max'=> 100,
                 )
             ))
-            ->add('request_title', 'textarea', array(
-                'required' => false,
-                'label' => 'Заголовок формы заяки',
-            ))
-            ->add('request_description', 'textarea', array(
-                'required' => false,
-                'label' => 'Описание формы заяки',
-            ))
-//            ->add('request_timer_end_date', 'datetime', array(
+//            ->add('vk_url', 'text', array(
 //                'required' => false,
-//                'label' => 'Дата окончания таймера формы заявки',
+//                'label' => 'Вконтакте',
 //            ))
-//            ->add('main_link_text', 'text', array(
+//            ->add('fb_url', 'text', array(
 //                'required' => false,
-//                'label' => 'Назавние ссылки "ЧТО?"',
+//                'label' => 'facebook',
 //            ))
-            ->add('more_link_text', 'text', array(
-                'required' => false,
-                'label' => 'Название ссылки "КАТАЛОГ"',
-            ))
-            ->add('why_link_text', 'text', array(
-                'required' => false,
-                'label' => 'Название ссылки "ПОЧЕМУ МЫ?"',
-            ))
-            ->add('reviews_link_text', 'text', array(
-                'required' => false,
-                'label' => 'Название ссылки "ОТЗЫВЫ"',
-            ))
-            ->add('where_link_text', 'text', array(
-                'required' => false,
-                'label' => 'Название ссылки "КОНТАКТЫ"',
-            ))
-            ->add('footer_description', 'text', array(
-                'required' => false,
-                'label' => 'Описание внизу страницы',
-            ))
-            ->add('vk_url', 'text', array(
-                'required' => false,
-                'label' => 'Вконтакте',
-            ))
-            ->add('fb_url', 'text', array(
-                'required' => false,
-                'label' => 'facebook',
-            ))
-            ->add('google_url', 'text', array(
-                'required' => false,
-                'label' => 'Google+',
-            ))
+//            ->add('google_url', 'text', array(
+//                'required' => false,
+//                'label' => 'Google+',
+//            ))
             ->add('save', 'submit', array(
                 'label' => 'Сохранить',
             ));

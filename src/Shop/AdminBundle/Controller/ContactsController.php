@@ -19,7 +19,7 @@ class ContactsController extends Controller
     public function indexAction(Request $request){
 
         /**
-         * @var $settings \Shop\MainBundle\Entity\Settings
+         * @var $settings \Weasty\Bundle\CommonBundle\Entity\Settings
          */
         $settings = $this->get('shop_main.settings.resource')->getSettings();
 

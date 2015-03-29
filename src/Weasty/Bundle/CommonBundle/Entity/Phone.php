@@ -1,6 +1,6 @@
 <?php
 
-namespace Shop\MainBundle\Entity;
+namespace Weasty\Bundle\CommonBundle\Entity;
 
 use Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,7 +8,7 @@ use Weasty\Doctrine\Entity\AbstractEntity;
 
 /**
  * Class Phone
- * @package Shop\MainBundle\Entity
+ * @package Weasty\Bundle\CommonBundle\Entity
  */
 class Phone extends AbstractEntity
 {

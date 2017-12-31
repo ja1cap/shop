@@ -1,0 +1,173 @@
+#EXTM3U
+#EXTINF:-1, audio-track="rus" group-title="Общий",43 HD
+http://sochi-strk.ru:1936/strk/43Kanal.stream/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",8 Канал (Красноярск)
+http://80.65.18.213/playlist_bonus_tv_region.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",9 Волна
+http://cdn-01.bonus-tv.ru/btv/9volna/type/user/devname/LG-SmartTV/devid/LG-1466490474/eol/20200101T0000/hash/706a3fe43fbf28dbe6f25d303072235c4a94ef86/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ATR
+http://stream.atr.ua/atr/live/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Кино и сериалы",Akudji HD
+http://hls.goodgame.ru/hls/5346.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",By Home TV
+http://live.buy-home.tv:1935/bhtvlive/live/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Музыкальный",Clubbing TV
+http://stream01.yamgo.com/iPhone/HLS_TS/mptslive/clubbingtv-mobile.3gp.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",Euronews
+http://evronovosti.mediacdn.ru/sr1/evronovosti/chunklist_b2658304.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Новости",France 24
+http://f24hls-i.akamaihd.net/hls/live/221192/F24_FR_LO_HLS/master_900.m3u8?Wse=4577tr
+#EXTINF:-1, audio-track="rus" group-title="Игры и мультики",Gameshow
+http://cdn-01.bonus-tv.ru/btv/gameshow/type/user/devname/LG-SmartTV/devid/LG-1465295888/eol/20200101T0000/hash/87f43f0ab86fbdef780f16689b6318d079ae8d46/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Познавательный",HD Media
+http://62.76.26.81:8081/hdmedia/hdmedia_sd/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Познавательный",HD Media 3D
+http://62.76.26.81:8081/hdmedia/hdmedia_3d/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Религия",Hope TV
+http://tvhope.cdnvideo.ru/tvhope-pull/tvhope_1/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Мода",ID Fashion HD
+http://95.67.8.22/hls/idfashion/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",JuCeTV HD
+http://109.68.190.192:1935/WEB_JuceTV/JuceTV.stream/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",LIFE (480p)
+http://tv.life.ru:80/lifetv/480p/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",LIFE (720p)
+http://tv.life.ru/lifetv/720p/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",LIFE78 (480p)
+http://tv78.life.ru/lifetv/480p/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",LIFE78 (720p)
+http://tv78.life.ru/lifetv/720p/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Кино и сериалы",M Television (Уфа)
+http://81.30.182.82:18092/hls/live.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Спорт и экстрим",MostVideo HD
+http://wow.stib.com.ua:1935/tv/ch1/playlist_b125000.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Music Box
+http://musicbox.cdnvideo.ru/musicbox/musicboxtv.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Muzzone
+http://live.muzzone.cdnvideo.ru/muzzone/muzzone.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Общий",N4 (Moldova)
+http://83.218.202.8/n4.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Познавательный",Nano TV
+http://nano.teleservice.su:8080/hls/nano.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Nebiset
+http://hls.nebiset.tv/nebiset.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Музыкальный",RU TV Moldova
+http://217.12.116.122/hls/rutv_direct.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Познавательный",Renome
+http://85.238.112.40:8810/hls_sec/239.33.116.26-.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Russian Music Box
+http://musicbox.cdnvideo.ru/musicbox/musicbox.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",TVM Channel
+http://cdn-03.bonus-tv.ru/tvm/tvm/type/none/eol/20200101T0000/hash/9ee236eb709eaaba97b5722f1eedae4af79377c7/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Мода",World Fashion RU
+http://cdn-03.bonus-tv.ru/wfc/wfhd/type/none/eol/20200101T0000/hash/9a88dd19442705b52370171ff0c442e002c0e219/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Новости",Беларусь 24
+http://video.tvr.by:1935/belarus24/live/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Домашний
+http://85.112.117.239/streaming/domashny/126/tvrec/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",Дон 24
+http://cdn-03.bonus-tv.ru/donmedia/don24/type/user/devname/LG-SmartTV/devid/LG-1459881171/eol/20200101T000000/hash/6e8b2a0e99ac2f16bf9ce37f8b114a62bc712c7d/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Звезда
+http://cdn-01.bonus-tv.ru/btv/zv/type/user/devname/LG-SmartTV/devid/LG-1469191980/eol/20200101T00/hash/e4eb87c59d6df8f0c492b474de047b6f72186a3d/zvezda.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Калейдоскоп
+http://cdn-01.bonus-tv.ru/btv/kaleidoskop/type/user/devname/LG-SmartTV/devid/LG-1462037961/eol/20200101T000000/hash/23791547a72fbaf9206cbfbb3aa689bbd72d4c8c/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Кино и сериалы",КиноМеню HD
+http://62.76.26.81:8081/hdmedia/menu/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Крик ТВ
+http://cdn-03.bonus-tv.ru/btv/kriktv/type/user/devname/LG-SmartTV/devid/LG-1459265093/eol/20200101T000000/hash/d4bd759a20e4fdfaaa965ca02458790407e6d8b1/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",ЛДПР ТВ
+http://46.46.143.222:1935/live/mp4:ldpr.stream_720p/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Мир
+http://hls.mirtv.cdnvideo.ru/mirtv-parampublish/mirtv_2500/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",Мир 24
+http://hls.mirtv.cdnvideo.ru/mirtv-parampublish/mir24_2500/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",МузСоюз
+http://hls.tvsoyuz.cdnvideo.ru/tvsoyuz2/muzsoyuz.6fw0-58xp-acts-esy0/chunklist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",НАШЕ ТВ
+http://nashetv01.hostingradio.ru:8081/hls/nashetv/nashelive.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",НТВ
+http://msk3.peers.tv/streaming/ntv/126/tvrec/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",О2 ТВ
+http://hls.mycdn0633430096.cdnvideo.ru/mycdn0633430096/stream1_sd.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Общий",ОНТ
+http://93.125.31.151:1935/live/ont.stream/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ОТР
+http://super.iptvbot.biz/iptv/23UVE8AS6NRX9G/705/inde..
+#EXTINF:-1, audio-track="rus" group-title="Общий",Общественное ТВ
+http://85.238.112.40:8810/hls_sec/239.33.75.33-.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Открытый HD
+http://77.232.128.68/bks.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Первый
+http://msk3.peers.tv/streaming/1kanal/126/tvrecw/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Пятница
+http://msk3.peers.tv/streaming/friday/126/tvrec/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",РБК
+http://online.video.rbc.ru/online/rbctv_576p/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",РЖД ТВ
+http://hls.tva.cdnvideo.ru/tva/tvahd.sdp/chunklist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Радио Шансон TV
+http://chanson.hostingradio.ru:8081/hls/chanson/live_aac.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",Россия 1
+http://85.112.117.239/streaming/rossija/126/tvrec/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Новости",Россия 1 HD
+http://cdn-01.bonus-tv.ru/btv/russiahd/type/user/devname/LG-SmartTV/devid/LG-1469703292/eol/20200101T0000/hash/1b7599c0021067fe3590d9ed45db70712b2b1ef8/playlist.m3u8?token=null
+#EXTINF:-1, audio-track="rus" group-title="Игры и мультики",Рыжий
+http://62.76.26.81:8081/detskiy/ryzhiy_08/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Общий",СТВ (Беларусь)
+http://93.125.30.18:1935/ctv/live.stream/manifest.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Скат 24
+http://hls.scattv.cdnvideo.ru/scattv2/IP-CDN_Scat24online_hq.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Религия",Союз
+http://tvsoyuz.cdnvideo.ru/tvsoyuz/soyuz/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Страна FM TV
+http://live.stranafm.cdnvideo.ru/stranafm/stranafm_hd.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ТБН
+http://109.68.190.192:1935/WEB_TBN/TBN.stream/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ТВЦ
+rtmp://tvc.cdnvideo.ru/tvc-p212/rtmp_p11_hq
+#EXTINF:-1, audio-track="rus" group-title="Мода",ТДК
+http://live.tdktv.cdnvideo.ru/tdktv/tdktv.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Новости",ТНВ Планета
+http://cdn-03.bonus-tv.ru/btv/tnv/type/user/devname/LG-SmartTV/devid/LG-1466001454/eol/20200101T0000/hash/466b0e95f9dcf6afeb751391412cccb3a464cf8d/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",ТНТ Music
+http://cdn-01.bonus-tv.ru/btv/tntmusic/type/user/devname/LG-SmartTV/devid/LG-1469013493/eol/20200101T0000/hash/31f1cdfc91072d63a48690432c5baf7c6163c352/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Кино и сериалы",ТРЕЙЛЕР ТВ
+http://wse.planeta-online.tv:1935/live/channel_5/chunklist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Теледом
+http://cdn-01.bonus-tv.ru/btv/teledom/type/user/devname/LG-SmartTV/devid/LG-1449432412/eol/20200101T000000/hash/e9b84f5441a92e411f81ccb44daebe8a5ae7d16c/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Точка
+http://cdn-03.bonus-tv.ru/btv/tochkatv/type/user/devname/LG-SmartTV/devid/LG-1466755238/eol/20200101T0000/hash/633ba69ed269612ab76e3c36001c78bb295e896b/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Игры и мультики",Улыбка Ребенка
+http://109.68.190.192:1935/WEB_SmileTV/SmileTV.stream/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ЧП Инфо
+http://109.68.40.67/life/magnolia.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Юмор",Юмор Box
+http://musicbox.cdnvideo.ru/musicbox/humorbox.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Познавательный",RT Doc
+http://rtmp.api.rt.com/hls/rtdru360.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Царское Село
+http://178.236.131.209:8080/tss/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Hit TV
+http://tst.es.flash.glb.ipercast.net/tst.es-live/live/index.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",NRJ Hits
+http://5.196.138.6:1935/live/nrjbelgique_720p/chunklist_w1562122761.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Игры и мультики",Карусель
+http://msk3.peers.tv/streaming/karusel/16/tvrec/playlist.m3u8
+#EXTINF:-1, audio-track="eng" group-title="Музыкальный",ROCK HD
+rtmp://91.201.78.3:1935/live/rockhd
+#EXTINF:-1, audio-track="eng" group-title="Новости",RT HD
+http://cdn-01.bonus-tv.ru/btv/rttv/type/user/devname/LG-SmartTV/devid/LG-1469118640/eol/20200101T0000/hash/d962836f9b6019fd17a5200dac1973a97044ead2/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Любимое.TV
+http://wse.planeta-online.tv:1935/live/channel_6/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",Про жизнь
+http://82.200.116.222:8080/27kanal.flv
+#EXTINF:-1, audio-track="rus" group-title="Новости",Пятый канал
+rtmp://178.161.154.68/live2/uitv
+#EXTINF:-1, audio-track="rus" group-title="Религия",Спас
+http://spastv.cdnvideo.ru/spastv-live/spastv.sdp/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Общий",ТРО
+http://live2.mediacdn.ru/sr1/tro/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Музыкальный",Шансон ТВ
+http://hls.shansontv.cdnvideo.ru/shansontv/shansontv.smil/playlist.m3u8
+#EXTINF:-1, audio-track="rus" group-title="Кино и сериалы",Трейлеры Ovideo
+http://cdn-10.bonus-tv.ru/ovideo/playlist.m3u8

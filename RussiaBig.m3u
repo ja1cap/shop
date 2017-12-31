@@ -1,0 +1,711 @@
+
+#EXTM3U
+#EXTINF:-1 group-title="Rostelecom" tvg-name=24_ДОК tvg-shift=0 ,24 Док
+http://95.188.0.104:1234/udp/233.7.70.181:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=24_Техно tvg-shift=0 ,24 Техно
+http://95.188.0.104:1234/udp/233.7.70.89:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Канал_2x2 tvg-shift=-5 ,2x2
+http://95.188.0.104:1234/udp/233.7.70.43:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Канал_2x2 tvg-shift=0 ,2x2
+http://95.188.0.104:1234/udp/233.7.70.124:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=365_Дней tvg-shift=0 ,365 Дней
+http://95.188.0.104:1234/udp/233.7.70.182:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,A-ONE
+http://95.188.0.104:1234/udp/233.7.70.52:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=AB_Moteurs tvg-shift=0 ,AB Moteurs
+http://95.188.0.104:1234/udp/233.7.70.183:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=HD_Life tvg-shift=0 ,Amazing Life
+http://95.188.0.104:1234/udp/233.7.70.21:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=AMEDIA_1 tvg-shift=0 tvg-logo=-TV ,Amedia 1
+http://95.188.0.104:1234/udp/233.7.70.214:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=AMEDIA_1 tvg-shift=0 tvg-logo=-TV ,AMEDIA 1 HD
+http://95.188.0.104:1234/udp/233.7.70.222:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=AMEDIA tvg-shift=0 tvg-logo=-TV ,Amedia 2
+http://95.188.0.104:1234/udp/233.7.70.212:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Amedia_Premium_HD tvg-shift=0 tvg-logo=-TV ,Amedia Premium HD
+http://95.188.0.104:1234/udp/233.7.70.244:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Animal_Planet tvg-shift=0 ,Animal Planet
+http://95.188.0.104:1234/udp/233.7.70.30:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Animal_Planet_HD tvg-shift=0 ,Animal planet HD
+http://95.188.0.104:1234/udp/233.7.70.225:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Arirang_TV tvg-shift=0 tvg-logo=-TV ,Arirang TV
+http://95.188.0.104:1234/udp/233.7.70.111:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Baby_TV tvg-shift=0 tvg-logo=-TV ,BabyTV
+http://95.188.0.104:1234/udp/233.7.70.188:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=BBC_World tvg-shift=0 ,BBC World News
+http://95.188.0.104:1234/udp/233.7.70.186:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Bridge_TV tvg-shift=0 ,Bridge TV
+http://95.188.0.104:1234/udp/233.7.70.110:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Cartoon_Network tvg-shift=0 ,Cartoon Network
+http://95.188.0.104:1234/udp/233.7.70.102:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Cartoon_Network tvg-shift=0 tvg-logo="Cartoon Network" ,Cartoonita
+http://95.188.0.104:1234/udp/233.7.70.187:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=CBS_Drama tvg-shift=0 ,CBS Drama
+http://95.188.0.104:1234/udp/233.7.70.232:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=CBS_Reality audio-track=0 tvg-shift=0 ,CBS Reality
+http://95.188.0.104:1234/udp/233.7.70.231:5000,ru
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Da_Vinci tvg-shift=0 ,Da Vinci Learning
+http://95.188.0.104:1234/udp/233.7.70.63:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Deutsche_Welle tvg-shift=0 ,Deutsche Welle
+http://95.188.0.104:1234/udp/233.7.70.191:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Discovery tvg-shift=0 ,Discovery Channel
+http://95.188.0.104:1234/udp/233.7.70.26:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Discovery_HD tvg-shift=0 tvg-logo=Discovery ,Discovery HD
+http://95.188.0.104:1234/udp/233.7.70.253:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Investigation_Discovery audio-track=3 tvg-shift=0 tvg-logo="Investigation Discovery" ,Discovery Investigation
+http://95.188.0.104:1234/udp/233.7.70.192:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Discovery_Science tvg-shift=0 ,Discovery Science
+http://95.188.0.104:1234/udp/233.7.70.27:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Discovery_World tvg-shift=0 ,Discovery World
+http://95.188.0.104:1234/udp/233.7.70.28:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Disney_Channel tvg-shift=0 ,Disney Channel
+http://95.188.0.104:1234/udp/233.7.70.91:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=DIVA_Universal tvg-shift=0 ,Diva Universal
+http://95.188.0.104:1234/udp/233.7.70.72:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=English_Club_TV tvg-shift=0 ,English Club TV
+http://95.188.0.104:1234/udp/233.7.70.96:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Euronews
+http://95.188.0.104:1234/udp/233.7.70.42:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Europa_Plus_TV tvg-shift=0 ,Europa Plus TV
+http://95.188.0.104:1234/udp/233.7.70.196:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,EuroSport
+http://95.188.0.104:1234/udp/233.7.70.45:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Eurosport_2 tvg-shift=0 ,EuroSport 2
+http://95.188.0.104:1234/udp/233.7.70.81:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Eurosport_HD tvg-shift=0 ,Eurosport HD
+http://95.188.0.104:1234/udp/233.7.70.132:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Eurosport News
+http://95.188.0.104:1234/udp/233.7.70.197:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Extreme_Sports tvg-shift=0 ,Extreme Sports
+http://95.188.0.104:1234/udp/233.7.70.147:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Fashion_One_HD tvg-shift=0 ,Fashion One HD
+http://95.188.0.104:1234/udp/233.7.70.162:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Fashion_TV tvg-shift=0 ,Fashion TV
+http://95.188.0.104:1234/udp/233.7.70.47:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Fox
+http://95.188.0.104:1234/udp/233.7.70.154:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Fox_HD tvg-shift=0 ,Fox HD
+http://95.188.0.104:1234/udp/233.7.70.127:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Fox_Life tvg-shift=0 ,Fox Life
+http://95.188.0.104:1234/udp/233.7.70.85:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Fox_Life_HD tvg-shift=0 ,FOX Life HD
+http://95.188.0.104:1234/udp/233.7.70.158:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=France_24 tvg-shift=0 ,France 24
+http://95.188.0.104:1234/udp/233.7.70.149:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Gulli
+http://95.188.0.104:1234/udp/233.7.70.171:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=HD_Life tvg-shift=0 ,HD Life
+http://95.188.0.104:1234/udp/233.7.70.157:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Первый_канал tvg-shift=0 tvg-logo="Первый канал" ,HD Первый
+http://95.188.0.104:1234/udp/233.7.70.200:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0  ,HISTORY
+http://95.188.0.104:1234/udp/233.7.70.185:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,HISTORY HD
+http://95.188.0.104:1234/udp/233.7.70.230:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,JimJam
+http://95.188.0.104:1234/udp/233.7.70.148:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Discovery tvg-shift=0 tvg-logo=KidsCo ,Kids Co
+http://95.188.0.104:1234/udp/233.7.70.98:5000
+#EXTINF:-1 group-title="Rostelecom" ,LiFE News
+http://95.188.0.104:1234/udp/233.7.70.76:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MCM_Top tvg-shift=0 ,MCM TOP
+http://95.188.0.104:1234/udp/233.7.70.109:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Mezzo
+http://95.188.0.104:1234/udp/233.7.70.204:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Mezzo_Live_HD tvg-shift=0 ,Mezzo Live HD
+http://95.188.0.104:1234/udp/233.7.70.125:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,MGM
+http://95.188.0.104:1234/udp/233.7.70.205:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Motors_TV tvg-shift=0 ,Motors TV
+http://95.188.0.104:1234/udp/233.7.70.206:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MTV tvg-shift=0 ,MTV
+http://95.188.0.104:1234/udp/233.7.70.202:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MTV_Dance tvg-shift=0 ,MTV Dance
+http://95.188.0.104:1234/udp/233.7.70.207:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MTV_Hits tvg-shift=0 tvg-logo=MTV ,MTV HD
+http://95.188.0.104:1234/udp/233.7.70.161:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MTV_Hits tvg-shift=0 ,MTV Hits
+http://95.188.0.104:1234/udp/233.7.70.208:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MTV_Rocks tvg-shift=0 ,MTV Rocks
+http://95.188.0.104:1234/udp/233.7.70.209:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Music_Box_RU tvg-shift=0 ,Music Box
+http://95.188.0.104:1234/udp/233.7.70.53:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Music_Box_RU tvg-shift=0 tvg-logo="Music Box Rus" ,Music Box Russian
+http://95.188.0.104:1234/udp/233.7.70.54:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Melody_Zen_TV tvg-shift=0 tvg-logo=MTVNHD ,MyZen HD
+http://95.188.0.104:1234/udp/233.7.70.160:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Nat_Geo_WILD tvg-shift=-1 ,Nat Geo WILD
+http://95.188.0.104:1234/udp/233.7.70.223:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Nat_Geo_Wild_HD tvg-shift=0 ,Nat Geo WILD HD
+http://95.188.0.104:1234/udp/233.7.70.133:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=National_Geographic tvg-shift=0 ,National Geographic
+http://95.188.0.104:1234/udp/233.7.70.32:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=National_Geographic_HD tvg-shift=0 tvg-logo="National Geographic" ,National Geographic HD
+http://95.188.0.104:1234/udp/233.7.70.159:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Nautical channel
+http://95.188.0.104:1234/udp/233.7.70.84:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=NHK_World_TV tvg-shift=0 ,NHK World TV
+http://95.188.0.104:1234/udp/233.7.70.224:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Nick_Jr tvg-shift=0 tvg-logo=Nickelodeon ,Nick Jr.
+http://95.188.0.104:1234/udp/233.7.70.169:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Nickelodeon
+http://95.188.0.104:1234/udp/233.7.70.97:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Nickelodeon_HD tvg-shift=0 tvg-logo=Nickelodeon ,Nickelodeon HD
+http://95.188.0.104:1234/udp/233.7.70.164:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Ocean-TV tvg-shift=0 ,OCEAN TV
+http://95.188.0.104:1234/udp/233.7.70.95:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Outdoor_Channel tvg-shift=0 audio-track=0 tvg-logo="Outdoor Channel" ,Outdoor
+http://95.188.0.104:1234/udp/233.7.70.226:5000,ru
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Outdoor_Channel tvg-shift=0 audio-track=0 tvg-logo="Outdoor Channel" ,Outdoor HD
+http://95.188.0.104:1234/udp/233.7.70.163:5000,ru
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Paramount_Comedy tvg-shift=0 ,Paramount Comedy
+http://95.188.0.104:1234/udp/233.7.70.227:5000
+#EXTINF:-1 group-title="Rostelecom" audio-track=0,Paramount Channel HD
+http://95.188.0.104:1234/udp/233.7.70.114:5000
+#EXTINF:-1 group-title="Rostelecom" ,Paramount Channel
+http://95.188.0.104:1234/udp/233.7.70.113:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=RU_TV tvg-shift=0 tvg-logo=RuTV ,RU-TV
+http://95.188.0.104:1234/udp/233.7.70.83:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Rusong_TV tvg-shift=0 ,RUSONG TV
+http://95.188.0.104:1234/udp/233.7.70.228:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Russia_Today tvg-shift=0 ,Russia Today
+http://95.188.0.104:1234/udp/233.7.70.82:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Russia_Today tvg-shift=0 tvg-logo="Russia Today" ,Russia Today HD
+http://95.188.0.104:1234/udp/233.7.70.217:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Russia_Today tvg-shift=0 tvg-logo="Russia Today" ,Russia Today HD
+http://95.188.0.104:1234/udp/233.7.70.216:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=SONY_ТВ tvg-shift=0 tvg-logo="SONY ТВ" ,SONY HD
+http://95.188.0.104:1234/udp/233.7.70.126:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=AXN_Sci-fi tvg-shift=0 tvg-logo="AXN Sci-Fi" ,SONY Sci-fi
+http://95.188.0.104:1234/udp/233.7.70.184:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Sony_Turbo tvg-shift=0 audio-track=0 tvg-logo="SONY TВ" ,Sony Turbo
+http://95.188.0.104:1234/udp/233.7.70.166:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=SONY_ТВ audio-track=0 tvg-shift=0 ,SONY ТВ
+http://95.188.0.104:1234/udp/233.7.70.70:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Style_TV tvg-shift=0 ,Style TV
+http://95.188.0.104:1234/udp/233.7.70.140:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Tiji_ tvg-shift=0 ,TiJi
+http://95.188.0.104:1234/udp/233.7.70.101:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,TLC
+http://95.188.0.104:1234/udp/233.7.70.29:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Travel audio-track=0 tvg-shift=0 ,Travel Channel
+http://95.188.0.104:1234/udp/233.7.70.119:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Universal_Channel tvg-shift=0 ,Travel Channel HD
+http://95.188.0.104:1234/udp/233.7.70.156:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=MAXXI-TV tvg-shift=0 tvg-logo=TVXXI ,TV XXI
+http://95.188.0.104:1234/udp/233.7.70.35:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,TV1000
+http://95.188.0.104:1234/udp/233.7.70.36:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=TV_1000_Action audio-track=0 tvg-shift=0 ,TV1000 Action
+http://95.188.0.104:1234/udp/233.7.70.59:5000,ru
+#EXTINF:-1 group-title="Rostelecom" tvg-name=TV1000_Comedy_HD tvg-shift=0 ,TV1000 Comedy HD
+http://95.188.0.104:1234/udp/233.7.70.179:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=TV1000_Megahit_HD tvg-shift=0 ,TV1000 Megahit HD
+http://95.188.0.104:1234/udp/233.7.70.178:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=TV1000_Premium_HD tvg-shift=0 ,TV1000 Premium HD
+http://95.188.0.104:1234/udp/233.7.70.193:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=ТВ-1000_Русское_кино tvg-shift=0 ,TV1000 Русское кино
+http://95.188.0.104:1234/udp/233.7.70.67:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Universal_Channel audio-track=0 tvg-shift=0 ,Universal Channel
+http://95.188.0.104:1234/udp/233.7.70.151:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=VH1_Classic tvg-shift=0 ,VH1 Classic
+http://95.188.0.104:1234/udp/233.7.70.229:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=VH1_European tvg-shift=0 tvg-logo="VH1" ,VH1-European
+http://95.188.0.104:1234/udp/233.7.70.152:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Viasat_Explorer tvg-shift=0 ,Viasat Explorer
+http://95.188.0.104:1234/udp/233.7.70.33:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Viasat_History tvg-shift=0 ,Viasat History
+http://95.188.0.104:1234/udp/233.7.70.88:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Viasat_Nature_CEE tvg-shift=0 ,Viasat Nature
+http://95.188.0.104:1234/udp/233.7.70.103:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Viasat_Nature_CEE tvg-shift=0 ,Viasat Nature HD
+http://95.188.0.104:1234/udp/233.7.70.134:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Viasat_Sport tvg-shift=0 ,Viasat Sport
+http://95.188.0.104:1234/udp/233.7.70.138:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Zee_TV tvg-shift=0 ,Zee TV
+http://95.188.0.104:1234/udp/233.7.70.104:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Зоопарк tvg-shift=0 tvg-logo=ZooПАРК ,Zоопарк
+http://95.188.0.104:1234/udp/233.7.70.90:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Авто_Плюс tvg-shift=0 ,Авто плюс
+http://95.188.0.104:1234/udp/233.7.70.79:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Ретро_ТВ tvg-shift=0 ,Агро-ТВ
+http://95.188.0.104:1234/udp/233.7.70.57:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=НТВ-ПЛЮС_Баскетбол tvg-shift=0 ,Баскетбол
+http://95.188.0.104:1234/udp/233.7.70.246:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Боец
+http://95.188.0.104:1234/udp/233.7.70.78:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Бойцовский_клуб tvg-shift=0 ,Бойцовский клуб
+http://95.188.0.104:1234/udp/233.7.70.233:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=СтерхТВ tvg-shift=0 tvg-logo=Вести ,Вместе РФ
+http://95.188.0.104:1234/udp/233.7.70.77:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Твой_ТВ tvg-shift=0 ,Восьмой канал
+http://95.188.0.104:1234/udp/233.7.70.215:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=СТВ tvg-shift=0 tvg-logo=СТВ ,Всё ТВ
+http://95.188.0.104:1234/udp/233.7.70.174:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Юмор_ТВ tvg-shift=0 ,Дед мороз ТВ
+http://95.188.0.104:1234/udp/233.7.70.144:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Детский_канал tvg-shift=0 ,Детский
+http://95.188.0.104:1234/udp/233.7.70.99:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Детский_мир tvg-shift=0 ,Детский мир
+http://95.188.0.104:1234/udp/233.7.70.234:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Дождь
+http://95.188.0.104:1234/udp/233.7.70.106:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Драйв_ТВ tvg-shift=0 tvg-logo=Драйв ,Драйв ТВ
+http://95.188.0.104:1234/udp/233.7.70.31:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,ЕВРОКИНО
+http://95.188.0.104:1234/udp/233.7.70.235:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Живи
+http://95.188.0.104:1234/udp/233.7.70.105:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Закон_ТВ tvg-shift=0 ,Закон ТВ
+http://95.188.0.104:1234/udp/233.7.70.236:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Звезда
+http://95.188.0.104:1234/udp/233.7.70.69:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Здоровое_Телевидение tvg-shift=0 ,Здоровое ТВ
+http://95.188.0.104:1234/udp/233.7.70.49:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Иллюзион__ tvg-shift=0 tvg-logo=Иллюзион+ ,Иллюзион +
+http://95.188.0.104:1234/udp/233.7.70.62:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Инва_Медиа_ТВ tvg-shift=0 ,Инва Медиа ТВ
+http://95.188.0.104:1234/udp/233.7.70.39:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=КХЛ-ТВ tvg-shift=0 ,КХЛ
+http://95.188.0.104:1234/udp/233.7.70.37:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=КХЛ_HD tvg-shift=0 tvg-logo=КХЛ ,КХЛ HD
+http://95.188.0.104:1234/udp/233.7.70.218:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Карусель
+http://95.188.0.104:1234/udp/233.7.70.170:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Карусель
+http://95.188.0.104:1234/udp/233.7.70.40:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Кино_ТВ tvg-shift=0 ,Кино ТВ
+http://95.188.0.104:1234/udp/233.7.70.167:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Кинопоказ
+http://95.188.0.104:1234/udp/233.7.70.238:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Комедия_ТВ tvg-shift=0 ,Комедия ТВ
+http://95.188.0.104:1234/udp/233.7.70.80:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Комсомольская_правда tvg-shift=0 ,Комсомольская правда
+http://95.188.0.104:1234/udp/233.7.70.240:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Комедия_ТВ tvg-shift=0 tvg-logo="Синергия ТВ" ,Конференция ТВ
+http://95.188.0.104:1234/udp/233.7.70.55:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Кто_есть_кто tvg-shift=0 ,Кто есть кто
+http://95.188.0.104:1234/udp/233.7.70.241:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Кухня_ТВ tvg-shift=0 ,Кухня ТВ
+http://95.188.0.104:1234/udp/233.7.70.94:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Ля-Минор
+http://95.188.0.104:1234/udp/233.7.70.108:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Мать_и_Дитя tvg-shift=0 ,Мать и Дитя
+http://95.188.0.104:1234/udp/233.7.70.41:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Мир
+http://95.188.0.104:1234/udp/233.7.70.58:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=МИР_24 tvg-shift=0 tvg-logo=Мир ,Мир 24
+http://95.188.0.104:1234/udp/233.7.70.120:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Моя_Планета tvg-shift=0 ,Моя планета
+http://95.188.0.104:1234/udp/233.7.70.71:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=МУЗ-ТВ tvg-shift=0 ,Муз ТВ
+http://95.188.0.104:1234/udp/233.7.70.137:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Мультимания
+http://95.188.0.104:1234/udp/233.7.70.242:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Настоящее_Страшное_ТВ tvg-shift=0 tvg-logo="НСТВ" ,НСТ страшное
+http://95.188.0.104:1234/udp/233.7.70.74:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,НТВ
+http://95.188.0.104:1234/udp/233.7.70.64:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Кино_ПЛЮС tvg-shift=0 tvg-logo="Кино плюс" ,НТВ+ Кино Плюс
+http://95.188.0.104:1234/udp/233.7.70.247:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Киносоюз tvg-shift=0 tvg-logo=Киносоюз ,НТВ+ Киносоюз
+http://95.188.0.104:1234/udp/233.7.70.248:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Наше_кино tvg-shift=0 tvg-logo="Наше Кино" ,НТВ+ Наше Кино
+http://95.188.0.104:1234/udp/233.7.70.249:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Наше_Новое_Кино tvg-shift=0 tvg-logo="Наше новое кино" ,НТВ+ Наше новое кино
+http://95.188.0.104:1234/udp/233.7.70.250:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Спорт_ПЛЮС tvg-shift=0 tvg-logo="НТВ+ Спорт" ,НТВ+ Спорт Плюс
+http://95.188.0.104:1234/udp/233.7.70.251:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Наука_2_0 tvg-shift=0 ,Наука 2.0
+http://95.188.0.104:1234/udp/233.7.70.243:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Наш_Футбол_HD tvg-shift=0 tvg-logo="НТВ Наш Футбол" ,Наш Футбол HD
+http://95.188.0.104:1234/udp/233.7.70.116:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Ностальгия
+http://95.188.0.104:1234/udp/233.7.70.245:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,ОТР
+http://95.188.0.104:1234/udp/233.7.70.141:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Оружие
+http://95.188.0.104:1234/udp/233.7.70.252:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Охота_и_рыбалка tvg-shift=0 ,Охота и Рыбалка
+http://95.188.0.104:1234/udp/233.7.70.48:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Парк_развлечений tvg-shift=0 ,Парк развлечений
+http://95.188.0.104:1234/udp/233.7.70.142:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Первый_образовательный tvg-shift=0 ,Первый Образовательный
+http://95.188.0.104:1234/udp/233.7.70.23:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Перец
+http://95.188.0.104:1234/udp/233.7.70.165:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Просвещение
+http://95.188.0.104:1234/udp/233.7.70.168:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Пятница
+http://95.188.0.104:1234/udp/233.7.70.175:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Пятый_Канал tvg-shift=0 ,Пятый Канал
+http://95.188.0.104:1234/udp/233.7.70.60:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,РБК
+http://95.188.0.104:1234/udp/233.7.70.22:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Радость_Моя tvg-shift=0 ,Радость моя
+http://95.188.0.104:1234/udp/233.7.70.100:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 tvg-logo="Раз ТВ" ,РазТВ
+http://95.188.0.104:1234/udp/233.7.70.145:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Ретро_ТВ tvg-shift=0 ,Ретро ТВ
+http://95.188.0.104:1234/udp/233.7.70.44:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Россия_2_(Спорт) tvg-shift=0 tvg-logo="Россия_2" ,Россия 2
+http://95.188.0.104:1234/udp/233.7.70.172:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Россия_24 tvg-shift=0 ,Россия 24
+http://95.188.0.104:1234/udp/233.7.70.68:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Россия_HD tvg-shift=0 ,Россия HD
+http://95.188.0.104:1234/udp/233.7.70.201:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Россия_Культура tvg-shift=0 ,Россия Культура
+http://95.188.0.104:1234/udp/233.7.70.61:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Русский_Иллюзион tvg-shift=0 ,Русский Иллюзион
+http://95.188.0.104:1234/udp/233.7.70.155:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Русский_Экстрим tvg-shift=0 tvg-logo="Русский ЭКСТРИМ" ,Русский Экстрим
+http://95.188.0.104:1234/udp/233.7.70.139:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Русский_бестселлер tvg-shift=0 ,Русский бестселлер
+http://95.188.0.104:1234/udp/233.7.70.176:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Русский_роман tvg-shift=0 ,Русский роман
+http://95.188.0.104:1234/udp/233.7.70.153:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Союз
+http://95.188.0.104:1234/udp/233.7.70.24:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Спас_ТВ tvg-shift=0 ,Спас
+http://95.188.0.104:1234/udp/233.7.70.38:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Спорт_2 tvg-shift=0 ,Спорт
+http://95.188.0.104:1234/udp/233.7.70.254:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Спорт_1 tvg-shift=0 ,Спорт 1
+http://95.188.0.104:1234/udp/233.7.70.75:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Спорт_1 tvg-shift=0 ,Спорт 1 HD
+http://95.188.0.104:1234/udp/233.7.70.131:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Страна
+http://95.188.0.104:1234/udp/233.7.70.213:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=ТВ-3 tvg-shift=-6 ,ТВ3
+http://95.188.0.104:1234/udp/233.7.70.221:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=ТВ-3 tvg-shift=-2 ,ТВ3
+http://95.188.0.104:1234/udp/233.7.70.220:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,ТВЦ
+http://95.188.0.104:1234/udp/233.7.70.203:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,ТДК
+http://95.188.0.104:1234/udp/233.7.70.50:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,ТРО
+http://95.188.0.104:1234/udp/233.7.70.143:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Телепутешествия
+http://95.188.0.104:1234/udp/233.7.70.146:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Усадьба
+http://95.188.0.104:1234/udp/233.7.70.51:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Успех
+http://95.188.0.104:1234/udp/233.7.70.34:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Феникс_Кино tvg-shift=0 ,Феникс+Кино
+http://95.188.0.104:1234/udp/233.7.70.86:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 ,Футбол
+http://95.188.0.104:1234/udp/233.7.70.210:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Шансон_ТВ tvg-shift=0 tvg-logo=Шансон ,Шансон ТВ
+http://95.188.0.104:1234/udp/233.7.70.107:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-shift=0 tvg-logo=ВТВ ,Ю-ТВ
+http://95.188.0.104:1234/udp/233.7.70.92:5000
+#EXTINF:-1 group-title="Rostelecom" tvg-name=Юмор_ТВ tvg-shift=0 tvg-logo="Ю" ,ЮМОР BOX
+http://95.188.0.104:1234/udp/233.7.70.46:5000
+#EXTINF:-1 group-title="Novotelecom" tvg-name=24_Техно tvg-shift=0 ,24 Техно
+http://hls.novotelecom.ru/streaming/24techno/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Канал_2x2 tvg-shift=0 ,2x2
+http://hls.novotelecom.ru/streaming/2x2tv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=365_Дней tvg-shift=0 ,365 Дней
+http://hls.novotelecom.ru/streaming/365_days/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=TV5 tvg-shift=0 ,5 Канал
+http://hls.novotelecom.ru/streaming/5kanal/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=8_Канал tvg-shift=0 ,8 Канал
+http://hls.novotelecom.ru/streaming/8_kanal/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Ля-Минор tvg-shift=0 tvg-logo="Ля-Минор" ,Ля-Минор
+http://hls.novotelecom.ru/streaming/la_minor/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,A-One
+http://hls.novotelecom.ru/streaming/aone/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Amazing_Life_(Удивительная_жизнь) tvg-shift=0 ,Amazing Life
+http://hls.novotelecom.ru/streaming/amazing_life/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Animal_Planet tvg-shift=0 ,Animal Planet
+http://hls.novotelecom.ru/streaming/animalplanet/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Bridge_TV tvg-shift=0 ,Bridge TV
+http://hls.novotelecom.ru/streaming/brigge/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=CNN tvg-shift=0 ,CNN
+http://hls.novotelecom.ru/streaming/cnn/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Da_Vinci tvg-shift=0 ,Da Vinci Learning
+http://hls.novotelecom.ru/streaming/da_vinci/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Investigation_Discovery tvg-shift=0 tvg-logo="Investigation Discovery" ,Discovery Investigation
+http://hls.novotelecom.ru/streaming/investigationdiscovery/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Discovery tvg-shift=0 tvg-logo=Discovery ,Discovery Russia
+http://hls.novotelecom.ru/streaming/discovery/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Discovery_Science tvg-shift=0 ,Discovery science
+http://hls.novotelecom.ru/streaming/discoveryscience/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Discovery_World tvg-shift=0 tvg-logo="Discovery World" ,Discovery Word
+http://hls.novotelecom.ru/streaming/discoveryworld/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Disney_Channel tvg-shift=0 ,Disney
+http://hls.novotelecom.ru/streaming/disney/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=DIVA_Universal tvg-shift=0 ,Diva Universal
+http://hls.novotelecom.ru/streaming/diva_universal/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Euronews
+http://hls.novotelecom.ru/streaming/euronews/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Europa_Plus_TV tvg-shift=0 tvg-logo="Europa Plus TV" ,Europa +
+http://hls.novotelecom.ru/streaming/europaplustv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Eurosport
+http://hls.novotelecom.ru/streaming/eurosport/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Eurosport_2 tvg-shift=0 ,Eurosport 2
+http://hls.novotelecom.ru/streaming/eurosport2/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Extreme_Sports tvg-shift=0 ,Extreme Sports
+http://hls.novotelecom.ru/streaming/extreme_sports/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Fashion_TV tvg-shift=0 ,Fashion TV
+http://hls.novotelecom.ru/streaming/fashion/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Fox
+http://hls.novotelecom.ru/streaming/fox/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Fox_Life tvg-shift=0 tvg-logo="Fox Life" ,FoxLife
+http://hls.novotelecom.ru/streaming/foxlife/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,JimJam
+http://hls.novotelecom.ru/streaming/jim_jam/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=MCM_Top tvg-shift=0 tvg-logo="MCM Top" ,MCM Top
+http://hls.novotelecom.ru/streaming/mcmtop/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Mezzo
+http://hls.novotelecom.ru/streaming/mezzo/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=MUSIC_Box_TV tvg-shift=0 tvg-logo="Music Box TV" ,Musicbox
+http://hls.novotelecom.ru/streaming/musboxtv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Music_Box_RU tvg-shift=0 tvg-logo="Music Box RU" ,Musicbox Ru
+http://hls.novotelecom.ru/streaming/musboxru/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Nat_Geo_WILD tvg-shift=0 tvg-logo="Nat Geo Wild" ,Natgeo Wild
+http://hls.novotelecom.ru/streaming/nat_geo_wild/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=National_Geographic tvg-shift=0 ,National Geographic
+http://hls.novotelecom.ru/streaming/natgeo/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Nickelodeon
+http://hls.novotelecom.ru/streaming/nickelodeon/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,49 Канал - Novosibirsk
+http://hls.novotelecom.ru/streaming/49kanal/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=О2ТВ tvg-shift=0 ,О2ТВ
+http://hls.novotelecom.ru/streaming/o2tv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=ОТР tvg-shift=0 tvg-logo=ОТР ,ОТР
+http://hls.novotelecom.ru/streaming/otvrus/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" ,Real Scary
+http://hls.novotelecom.ru/streaming/nstv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=RU_TV tvg-shift=0 ,Ru.TV
+http://hls.novotelecom.ru/streaming/rutv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Russia_Today tvg-shift=0 tvg-logo="Russia Today" ,Russiatoday
+http://hls.novotelecom.ru/streaming/russiatoday/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=SONY TV tvg-shift=0 tvg-logo="SONY ТВ" ,Sony entertainment
+http://hls.novotelecom.ru/streaming/set/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=AXN_Sci-fi tvg-shift=0 tvg-logo="AXN Sci-Fi" ,Sony Sci-Fi
+http://hls.novotelecom.ru/streaming/sonyscifi/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Телекафе tvg-shift=0 tvg-logo=Телекафе ,Telecafe
+http://hls.novotelecom.ru/streaming/telekafe/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Tiji_ tvg-shift=0 ,TiJi
+http://hls.novotelecom.ru/streaming/tiji/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,TLC
+http://hls.novotelecom.ru/streaming/tlc/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Travel_Adventure tvg-shift=0 tvg-logo="Travel And Adventure HD" ,Travel &amp; Adventure
+http://hls.novotelecom.ru/streaming/traveladventure/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=TV1000 tvg-shift=0 ,TV 1000
+http://hls.novotelecom.ru/streaming/tv1000/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=TV_1000_Action tvg-shift=0 ,TV 1000 Action
+http://hls.novotelecom.ru/streaming/tv1000_action/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" ,Интересное ТВ
+http://hls.novotelecom.ru/streaming/interesnoe_tv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=TVXXI tvg-shift=0 tvg-logo=TVXXI ,TV XXI
+http://hls.novotelecom.ru/streaming/tv21/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=ТВ-1000_Русское_кино tvg-shift=0 ,TV1000 Русское кино
+http://hls.novotelecom.ru/streaming/tv_1000_rus_kino/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Universal tvg-shift=0 ,Universal
+http://hls.novotelecom.ru/streaming/universal_channel/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=VH1_Classic tvg-shift=0 ,VH1 Classic
+http://hls.novotelecom.ru/streaming/vh1/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Viasat_Explorer tvg-shift=0 ,Viasat Explorer
+http://hls.novotelecom.ru/streaming/viasat_explorer/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Viasat_History tvg-shift=0 ,Viasat History
+http://hls.novotelecom.ru/streaming/viasat_history/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Viasat_Nature_CEE tvg-shift=0 ,Viasat Nature
+http://hls.novotelecom.ru/streaming/viasat_nature/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Viasat_Sport tvg-shift=0 ,Viasat Sport
+http://hls.novotelecom.ru/streaming/viasat_sport/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Авто_Плюс tvg-shift=0 ,Авто плюс
+http://hls.novotelecom.ru/streaming/auto_plus/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Бойцовский_клуб tvg-shift=0 ,Бойцовский клуб
+http://hls.novotelecom.ru/streaming/fight_club/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=ВРЕМЯ__далекое_и_близкое tvg-shift=0 ,Время
+http://hls.novotelecom.ru/streaming/time/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Детский_канал tvg-shift=0 ,Детский
+http://hls.novotelecom.ru/streaming/forkids/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Телеклуб tvg-shift=0 tvg-logo=Телеклуб ,Детский/Телеклуб
+http://hls.novotelecom.ru/streaming/detskij_mir/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Дождь
+http://hls.novotelecom.ru/streaming/rain/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Дом_кино tvg-shift=0 ,Дом кино
+http://hls.novotelecom.ru/streaming/dom_kino/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Драйв_ТВ tvg-shift=0 ,Драйв
+http://hls.novotelecom.ru/streaming/drive/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Звезда
+http://hls.novotelecom.ru/streaming/jv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Индия
+http://hls.novotelecom.ru/streaming/indiatv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=КХЛ-ТВ tvg-shift=0 ,КХЛ
+http://hls.novotelecom.ru/streaming/khl/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Карусель
+http://hls.novotelecom.ru/streaming/karusel/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Комедия_ТВ tvg-shift=0 ,Комедия
+http://hls.novotelecom.ru/streaming/comedytv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Россия_Культура tvg-shift=0 ,Культура
+http://hls.novotelecom.ru/streaming/kultura/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Кухня_ТВ tvg-shift=0 tvg-logo="Кухня ТВ" ,Кухня TV
+http://hls.novotelecom.ru/streaming/kitchentv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Мать_и_Дитя tvg-shift=0 ,Мать и Дитя
+http://hls.novotelecom.ru/streaming/motherchi/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Мир
+http://hls.novotelecom.ru/streaming/mir/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=МИР_24 tvg-shift=0 tvg-logo=Мир ,Мир24
+http://hls.novotelecom.ru/streaming/mir24/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Моя_Планета tvg-shift=0 ,Моя планета
+http://hls.novotelecom.ru/streaming/my_planet/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=МУЗ-ТВ tvg-shift=0 ,МузТВ
+http://hls.novotelecom.ru/streaming/muz_tvnew/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,НТВ
+http://hls.novotelecom.ru/streaming/ntv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=КИНОЛЮКС tvg-shift=0 tvg-logo=Кинолюкс ,НТВ+ Кинолюкс
+http://hls.novotelecom.ru/streaming/kinolux/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Наука_2_0 tvg-shift=0 ,Наука 2.0
+http://hls.novotelecom.ru/streaming/nauka_20/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Домашний tvg-shift=0 tvg-logo=Домашний ,Домашний - Новосибирск
+http://hls.novotelecom.ru/streaming/domashny/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Ностальгия
+http://hls.novotelecom.ru/streaming/nostalgy/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,ОТС
+http://hls.novotelecom.ru/streaming/ots/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Оружие
+http://hls.novotelecom.ru/streaming/oruzhie/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Охота_и_рыбалка tvg-shift=0 ,Охота и Рыбалка
+http://hls.novotelecom.ru/streaming/hafi/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Первый_канал tvg-shift=0 ,Первый
+http://hls.novotelecom.ru/streaming/1kanal/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Первый_образовательный tvg-shift=0 ,Первый Образовательный
+http://hls.novotelecom.ru/streaming/1_obraz/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Перец
+http://hls.novotelecom.ru/streaming/perec/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Психология21 tvg-shift=0 ,Психология 21
+http://hls.novotelecom.ru/streaming/psych_21/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Пятница
+http://hls.novotelecom.ru/streaming/friday/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,РБК
+http://hls.novotelecom.ru/streaming/rbk/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=РЕН_ТВ tvg-shift=0 tvg-logo=РЕН-ТВ ,РенТВ
+http://hls.novotelecom.ru/streaming/rentv/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Россия_1 tvg-shift=0 tvg-logo="Россия 1" ,Россия1
+http://hls.novotelecom.ru/streaming/rossija/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Россия_24 tvg-shift=0 tvg-logo="Россия 2" ,Россия2
+http://hls.novotelecom.ru/streaming/sport/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Россия_24 tvg-shift=0 tvg-logo="Россия 24" ,Россия24
+http://hls.novotelecom.ru/streaming/vesti/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Русский_Иллюзион tvg-shift=0 ,Русский Иллюзион
+http://hls.novotelecom.ru/streaming/russian_illusion/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Русский_роман tvg-shift=0 ,Русский Роман
+http://hls.novotelecom.ru/streaming/russian_roman/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Русский_бестселлер tvg-shift=0 ,Русский бестселлер
+http://hls.novotelecom.ru/streaming/russia_best/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,СТС
+http://hls.novotelecom.ru/streaming/sts/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Сарафан_ТВ tvg-shift=0 tvg-logo=Сарафан ,Сарафан TV
+http://hls.novotelecom.ru/streaming/sarafan/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Союз
+http://hls.novotelecom.ru/streaming/soyuz/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Спорт_1 tvg-shift=0 ,Спорт1
+http://hls.novotelecom.ru/streaming/sport1/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Спорт_2 tvg-shift=0 ,Спорт2
+http://hls.novotelecom.ru/streaming/sport_2/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Страна
+http://hls.novotelecom.ru/streaming/strana/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=ТВ-3 tvg-shift=0 ,ТВ3
+http://hls.novotelecom.ru/streaming/tv3/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,ТВЦ
+http://hls.novotelecom.ru/streaming/tvc/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,ТНТ
+http://hls.novotelecom.ru/streaming/perec/tnt/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Телепутешествия
+http://hls.novotelecom.ru/streaming/rustravel/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Усадьба
+http://hls.novotelecom.ru/streaming/usadba/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Успех
+http://hls.novotelecom.ru/streaming/uspex/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-shift=0 ,Футбол
+http://hls.novotelecom.ru/streaming/futbol/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Шансон_ТВ tvg-shift=0 ,Шансон
+http://hls.novotelecom.ru/streaming/shanson/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Novotelecom" tvg-name=Ю-ТВ tvg-shift=0 tvg-logo=Ю ,Ю-ТВ
+http://hls.novotelecom.ru/streaming/utv/tvrec/playlist.m3u8
+
+#EXTINF:-1 group-title="InterZet(test)",100 тв
+http://5.19.240.54:1234/udp/235.10.10.179:1234
+#EXTINF:-1 group-title="InterZet(test)",2x2
+http://5.19.240.54:1234/udp/235.10.10.20:1234
+#EXTINF:-1 group-title="InterZet(test)",8 канал
+http://5.19.240.54:1234/udp/235.10.10.194:1234
+#EXTINF:-1 group-title="InterZet(test)",CCTV4 Китай
+http://5.19.240.54:1234/udp/235.10.10.94:1234
+#EXTINF:-1 group-title="InterZet(test)",CCTV9 Documentary (Англ)
+http://5.19.240.54:1234/udp/235.10.10.93:1234
+#EXTINF:-1 group-title="InterZet(test)",Disney
+http://5.19.240.54:1234/udp/235.10.10.4:1234
+#EXTINF:-1 group-title="InterZet(test)",MTV Life HD
+http://5.19.240.54:1234/udp/235.10.10.121:1234
+#EXTINF:-1 group-title="InterZet(test)",Пятница
+http://5.19.240.54:1234/udp/235.10.10.5:1234
+#EXTINF:-1 group-title="InterZet(test)",Nat Geo Wild HD
+http://5.19.240.54:1234/udp/235.10.10.101:1234
+#EXTINF:-1 group-title="InterZet(test)",PIK-TV HD
+http://5.19.240.54:1234/udp/235.10.10.100:1234
+#EXTINF:-1 group-title="InterZet(test)",RT HD
+http://5.19.240.54:1234/udp/235.10.10.49:1234
+#EXTINF:-1 group-title="InterZet(test)",TPO
+http://5.19.240.54:1234/udp/235.10.10.195:1234
+#EXTINF:-1 group-title="InterZet(test)",Trace Sport HD
+http://5.19.240.54:1234/udp/235.10.10.110:1234
+#EXTINF:-1 group-title="InterZet(test)",БСТ Башкирский
+http://5.19.240.54:1234/udp/235.10.10.3:1234
+#EXTINF:-1 group-title="InterZet(test)",Время
+http://5.19.240.54:1234/udp/235.10.10.2:1234
+#EXTINF:-1 group-title="InterZet(test)",LiveNews
+http://5.19.240.54:1234/udp/235.10.10.186:1234
+#EXTINF:-1 group-title="InterZet(test)",Домашний
+http://5.19.240.54:1234/udp/235.10.10.6:1234
+#EXTINF:-1 group-title="InterZet(test)",Карусель
+http://5.19.240.54:1234/udp/235.10.10.64:1234
+#EXTINF:-1 group-title="InterZet(test)",НТВ
+http://5.19.240.54:1234/udp/235.10.10.11:1234
+#EXTINF:-1 group-title="InterZet(test)",ОТР
+http://5.19.240.54:1234/udp/235.10.10.47:1234
+#EXTINF:-1 group-title="InterZet(test)",Охотник и рыболов HD
+http://5.19.240.54:1234/udp/235.10.10.119:1234
+#EXTINF:-1 group-title="InterZet(test)",Первый HD
+http://5.19.240.54:1234/udp/235.10.10.210:1234
+#EXTINF:-1 group-title="InterZet(test)",Первый канал
+http://5.19.240.54:1234/udp/235.10.10.1:1234
+#EXTINF:-1 group-title="InterZet(test)",Перец
+http://5.19.240.54:1234/udp/235.10.10.7:1234
+#EXTINF:-1 group-title="InterZet(test)",Пятый канал
+http://5.19.240.54:1234/udp/235.10.10.12:1234
+#EXTINF:-1 group-title="InterZet(test)",РЕН
+http://5.19.240.54:1234/udp/235.10.10.158:1234
+#EXTINF:-1 group-title="InterZet(test)",Россия 1
+http://5.19.240.54:1234/udp/235.10.10.14:1234
+#EXTINF:-1 group-title="InterZet(test)",Россия 2
+http://5.19.240.54:1234/udp/235.10.10.15:1234
+#EXTINF:-1 group-title="InterZet(test)",Россия 24
+http://5.19.240.54:1234/udp/235.10.10.8:1234
+#EXTINF:-1 group-title="InterZet(test)",Россия HD
+http://5.19.240.54:1234/udp/235.10.10.117:1234
+#EXTINF:-1 group-title="InterZet(test)",Россия К
+http://5.19.240.54:1234/udp/235.10.10.9:1234
+#EXTINF:-1 group-title="InterZet(test)",Санкт-Петербург
+http://5.19.240.54:1234/udp/235.10.10.17:1234
+#EXTINF:-1 group-title="InterZet(test)",СТС
+http://5.19.240.54:1234/udp/235.10.10.205:1234
+#EXTINF:-1 group-title="InterZet(test)",СТС
+http://5.19.240.54:1234/udp/235.10.10.16:1234
+#EXTINF:-1 group-title="InterZet(test)",тв3
+http://5.19.240.54:1234/udp/235.10.10.156:1234
+#EXTINF:-1 group-title="InterZet(test)",ТВЦ
+http://5.19.240.54:1234/udp/235.10.10.18:1234
+#EXTINF:-1 group-title="InterZet(test)",ТНВ Планета
+http://5.19.240.54:1234/udp/235.10.10.41:1234
+#EXTINF:-1 group-title="InterZet(test)",ТНТ
+http://5.19.240.54:1234/udp/235.10.10.19:1234
+#EXTINF:-1 group-title="InterZet(test)",ТНТ
+http://5.19.240.54:1234/udp/235.10.10.206:1234
+#EXTINF:-1 group-title="InterZet(test)",Ю
+http://5.19.240.54:1234/udp/235.10.10.10:1234
